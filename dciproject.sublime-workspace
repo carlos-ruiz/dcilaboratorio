@@ -1,0 +1,320 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"im",
+				"imagen"
+			],
+			[
+				"se",
+				"section	Tag"
+			],
+			[
+				"bo",
+				"border-box"
+			],
+			[
+				"inl",
+				"inline-block"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"tab",
+				"table-cell"
+			],
+			[
+				"alt",
+				"altoHeader"
+			],
+			[
+				"alto",
+				"altoPantalla"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"pad",
+				"padding-top"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"back",
+				"background-color"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 219.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"control",
+				"Package Control: Remove Package"
+			],
+			[
+				"contr",
+				"Package Control: Remove Package"
+			],
+			[
+				"contro",
+				"Package Control: Remove Package"
+			],
+			[
+				"lint",
+				"Preferences: SublimeLinter Settings – Default"
+			],
+			[
+				"css",
+				"SublimeLinter: Choose Mark Style"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"SublimeLinter: Create Linter Plugin"
+			],
+			[
+				"set",
+				"Set Syntax: CSS"
+			],
+			[
+				"in",
+				"Set Syntax: Plain Text"
+			],
+			[
+				"linter",
+				"SublimeLinter: Choose Mark Style"
+			],
+			[
+				"subli",
+				"SublimeLinter: Choose Lint Mode"
+			],
+			[
+				"lin",
+				"SublimeLinter: Next Error"
+			],
+			[
+				"uni",
+				"CSSLint: Run CSSLint"
+			],
+			[
+				"sub",
+				"Preferences: SublimeLinter Settings – Default"
+			],
+			[
+				"sublim",
+				"SublimeLinter: Extract Annotations"
+			]
+		],
+		"width": 416.0
+	},
+	"console":
+	{
+		"height": 125.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/xampp/htdocs/dcilaboratorio"
+	],
+	"file_history":
+	[
+		"/C/Users/Carlos/Downloads/AdminLTE-2.0.4/pages/forms/general.html",
+		"/C/xampp/htdocs/yacqui/index.php",
+		"/C/xampp/htdocs/yacqui/resultado.php",
+		"/C/xampp/htdocs/techinc/techinc/protected/.htaccess",
+		"/C/xampp/htdocs/maquetacion/index.php",
+		"/C/Users/Carlos-Yackie/Desktop/main.java",
+		"/C/Users/Carlos-Yackie/Desktop/newMainActivity.java",
+		"/C/Users/Carlos-Yackie/Documents/canciones viky.php",
+		"/C/xampp/htdocs/cruiz90/index.php",
+		"/C/xampp/htdocs/cruiz90/css/estilo.css",
+		"/C/Users/Carlos-Yackie/Documents/DVD_ROM.dvd",
+		"/C/Users/Carlos-Yackie/Documents/canciones viky",
+		"/C/Users/Carlos-Yackie/AppData/Roaming/Sublime Text 3/Packages/SublimeLinter/SublimeLinter.sublime-settings",
+		"/C/Users/Carlos-Yackie/AppData/Roaming/Sublime Text 2/Packages/SublimeLinter/SublimeLinter.sublime-settings",
+		"/C/Users/Carlos-Yackie/Google Drive/Proyectos/Sistema BOM/bom2.sql",
+		"/C/xampp/htdocs/mipagina/mypagina.sublime-project",
+		"/C/Users/Carlos-Yackie/Documents/Proyectos/Mi pagina/index.php",
+		"/C/Users/Carlos-Yackie/Documents/Proyectos/Mi pagina/css/style.css",
+		"/C/Users/Carlos-Yackie/Desktop/Delivery to the following recipient failed permane.txt",
+		"/C/Users/Carlos-Yackie/Downloads/store.php",
+		"/C/Users/Carlos-Yackie/Downloads/index.php",
+		"/C/Users/Carlos-Yackie/Downloads/sideMenu.php",
+		"/C/xampp/htdocs/cce/css/style.css",
+		"/C/xampp/htdocs/cce/index.html",
+		"/C/Users/Carlos-Yackie/Desktop/Delivery to the following recipient failed permane.eml",
+		"/C/xampp/htdocs/test/public/index.php",
+		"/C/xampp/htdocs/wacoapps/bootstrap/autoload.php",
+		"/C/Users/Carlos-Yackie/Desktop/65RFACSTLELORDSDVD1T/CstlvialordshaDVD1-WWW.JUEGOSPARAWINDOWS.COM/CstlvialordshaDVD1-WWW.JUEGOSPARAWINDOWS.COM.dvd"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"a",
+			"</p>",
+			"<p class=\"linea\">"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.csslint_result_view":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "dciproject.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 285.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
