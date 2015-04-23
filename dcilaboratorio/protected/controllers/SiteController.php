@@ -5,6 +5,8 @@ class SiteController extends Controller
 	/**
 	 * Declares class-based actions.
 	 */
+	public $section = "Home";
+
 	public function actions()
 	{
 		return array(
@@ -29,7 +31,29 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		//$this->render('index');
+		if(Yii::app()->user->isGuest)
+			$this->layout='//layouts/loginForm';
+		$model=new LoginForm;
+
+		// if it is ajax validation request
+		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+		// collect user input data
+		if(isset($_POST['LoginForm']))
+		{
+			$model->attributes=$_POST['LoginForm'];
+			// validate user input and redirect to the previous page if valid
+			if($model->validate() && $model->login())
+				$this->redirect(Yii::app()->user->returnUrl);
+		}
+		// display the login form
+		$this->render('index',array('model'=>$model));
+		
 	}
 
 	/**
@@ -37,6 +61,8 @@ class SiteController extends Controller
 	 */
 	public function actionError()
 	{
+		if(Yii::app()->user->isGuest)
+			$this->layout='//layouts/loginForm';
 		if($error=Yii::app()->errorHandler->error)
 		{
 			if(Yii::app()->request->isAjaxRequest)
@@ -51,6 +77,8 @@ class SiteController extends Controller
 	 */
 	public function actionContact()
 	{
+		if(Yii::app()->user->isGuest)
+			$this->layout='//layouts/loginForm';
 		$model=new ContactForm;
 		if(isset($_POST['ContactForm']))
 		{
@@ -77,6 +105,8 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
+		if(Yii::app()->user->isGuest)
+			$this->layout='//layouts/loginForm';
 		$model=new LoginForm;
 
 		// if it is ajax validation request
@@ -103,6 +133,8 @@ class SiteController extends Controller
 	 */
 	public function actionLogout()
 	{
+		if(Yii::app()->user->isGuest)
+			$this->layout='//layouts/loginForm';
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
