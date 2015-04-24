@@ -72,7 +72,11 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/controller/action">
+							<i class="icon-plus"></i>
+							Submenu</a>
+						</li>
 
 					</ul>
 				</li>
