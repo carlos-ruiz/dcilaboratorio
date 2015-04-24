@@ -29,6 +29,9 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+		//Para inicializar el sistema
+		$this->init();
+
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		//$this->render('index');
@@ -138,4 +141,32 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+
+	public function init(){
+		if(Perfiles::model()->count()==0){
+			$perfil = new Perfiles;
+			$perfil->nombre="Administrador";
+			$perfil->save();
+			//$perfil->edicion=date('Y-m-d H:i:s');
+			//$perfil->usuario_edicion=0;
+			//$perfil->creacion=date('Y-m-d H:i:s');
+			//$perfil->usuario_creacion=0;
+		}
+		else{
+			$perfil=Perfiles::model()->findByName("Administrador");
+		}
+
+		if(Usuarios::model()->count()==0){
+			$nuevoUsuario = new Usuarios;
+			$nuevoUsuario->usuario="admin";
+			$nuevoUsuario->contrasena=md5("admin");
+			$nuevoUsuario->ultima_edicion=date('Y-m-d H:i:s');
+			$nuevoUsuario->usuario_ultima_edicion=0;
+			$nuevoUsuario->creacion=date('Y-m-d H:i:s');
+			$nuevoUsuario->usuario_creacion=0;
+			$nuevoUsuario->id_perfiles=$perfil->id;
+			$nuevoUsuario->save();
+		}
+	}
+
 }

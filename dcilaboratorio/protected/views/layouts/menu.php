@@ -46,12 +46,12 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/users/create">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/usuarios/create">
 							<i class="icon-plus"></i>
 							Registro</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/users/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/usuarios/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>
@@ -77,6 +77,7 @@
 							<i class="icon-plus"></i>
 							Submenu</a>
 						</li>
+						
 
 					</ul>
 				</li>
