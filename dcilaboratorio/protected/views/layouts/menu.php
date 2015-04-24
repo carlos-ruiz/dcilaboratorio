@@ -33,7 +33,7 @@
 				</li>
 
 
-				<li <?php if($this->section=="Users"){ echo 'class="active open"';}?>>
+				<li <?php if($this->section=="Usuarios"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-users"></i>
 					<span class="title">Usuarios</span>
