@@ -19,7 +19,7 @@
 					<!-- END RESPONSIVE QUICK SEARCH FORM 
 				</li>
 				-->
-				<li class="start <?php if($this->section=='Home'){ echo 'active open';}?>">
+				<li <?php if($this->section=='Home'){ echo 'class="startactive open"';}?>>
 					<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php">
 					<i class="icon-home"></i>
 					<span class="title">Inicio</span>
@@ -60,11 +60,11 @@
 				<li class="heading">
 					<h3 class="uppercase">Catálogos</h3>
 				</li>
-				<li <?php if($this->section=="Catalogs"){ echo 'class="active open"';}?>>
+				<li <?php if($this->section=="Users"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-puzzle"></i>
-					<span class="title">Catalogos</span>
-					<?php if($this->section=="Catalogos"){?>
+					<span class="title">Doctores</span>
+					<?php if($this->section=="Especialidades"){?>
 					<span class="selected"></span>
 					<span class="arrow open"></span>
 					<?php } else{ ?>
@@ -75,7 +75,17 @@
 						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/controller/action">
 							<i class="icon-plus"></i>
-							Submenu</a>
+							Nuevo Doctor</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/controller/action">
+							<i class="icon-plus"></i>
+							Listado</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/especialidades/index">
+							<i class="icon-plus"></i>
+							Especialidades</a>
 						</li>
 						
 
