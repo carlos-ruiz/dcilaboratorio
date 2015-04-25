@@ -1,14 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "users".
+ * This is the model class for table "usuarios".
  *
- * The followings are the available columns in table 'users':
- * @property string $id
+ * The followings are the available columns in table 'usuarios':
+ * @property integer $id
  * @property string $usuario
  * @property string $contrasena
+ * @property string $ultima_edicion
+ * @property integer $usuario_ultima_edicion
+ * @property string $creacion
+ * @property integer $usuario_creacion
+ * @property integer $id_perfiles
+ *
+ * The followings are the available model relations:
+ * @property Doctores[] $doctores
+ * @property Pacientes[] $pacientes
+ * @property UnidadesResponsables[] $unidadesResponsables
+ * @property Perfiles $idPerfiles
  */
-class Users extends CActiveRecord
+class Usuarios extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
@@ -26,11 +37,13 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('usuario, contrasena', 'required','message'=>'Este campo es requerido'),
-			array('usuario, contrasena', 'length', 'max'=>65, 'message'=>'Máximo 65 caracteres'),
+			array('usuario, contrasena, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_perfiles', 'required'),
+			array('usuario_ultima_edicion, usuario_creacion, id_perfiles', 'numerical', 'integerOnly'=>true),
+			array('usuario', 'length', 'max'=>45),
+			array('contrasena', 'length', 'max'=>150),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('usuario, contrasena', 'safe', 'on'=>'search'),
+			array('id, usuario, contrasena, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_perfiles', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -42,8 +55,11 @@ class Users extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-            
-        );
+			'doctores' => array(self::HAS_MANY, 'Doctores', 'id_usuarios'),
+			'pacientes' => array(self::HAS_MANY, 'Pacientes', 'id_usuarios'),
+			'unidadesResponsables' => array(self::HAS_MANY, 'UnidadesResponsables', 'id_usuarios'),
+			'perfil' => array(self::BELONGS_TO, 'Perfiles', 'id_perfiles'),
+		);
 	}
 
 	/**
@@ -52,8 +68,14 @@ class Users extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'id' => 'ID',
 			'usuario' => 'Usuario',
-			'contrasena' => 'contrasena',
+			'contrasena' => 'Contraseña',
+			'ultima_edicion' => 'Ultima Edición',
+			'usuario_ultima_edicion' => 'Usuario Ultima Edición',
+			'creacion' => 'Creación',
+			'usuario_creacion' => 'Usuario Creación',
+			'id_perfiles' => 'Perfil',
 		);
 	}
 
@@ -75,10 +97,8 @@ class Users extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('usuario',$this->usuario,true);
-		$criteria->compare('contrasena',$this->contrasena,true);
-		
+
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
@@ -88,10 +108,17 @@ class Users extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Users the static model class
+	 * @return Usuarios the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function count(){
+		$criteria=new CDbCriteria();
+		$criteria->select=count('id');
+		$criteria->compare('id>',0);
+		return Yii::app()->db->commandBuilder->createFindCommand($this->tableName(),$criteria)->queryScalar();
 	}
 }

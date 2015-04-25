@@ -33,7 +33,7 @@
 				</li>
 
 
-				<li <?php if($this->section=="Users"){ echo 'class="active open"';}?>>
+				<li <?php if($this->section=="Usuarios"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-users"></i>
 					<span class="title">Usuarios</span>
@@ -46,12 +46,12 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/users/create">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/usuarios/create">
 							<i class="icon-plus"></i>
 							Registro</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/users/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/usuarios/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>
@@ -87,6 +87,7 @@
 							<i class="glyphicon glyphicon-th-list"></i>
 							Especialidades</a>
 						</li>
+						
 
 					</ul>
 				</li>
