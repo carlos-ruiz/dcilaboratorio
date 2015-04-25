@@ -56,18 +56,66 @@
 	"buffers":
 	[
 		{
-			"file": "dcilaboratorio/protected/config/main.php",
+			"file": "dcilaboratorio/protected/config/database.php",
 			"settings":
 			{
-				"buffer_size": 1986,
+				"buffer_size": 385,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/.htaccess",
+			"file": "dcilaboratorio/protected/views/layouts/menu.php",
 			"settings":
 			{
-				"buffer_size": 202,
+				"buffer_size": 3300,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/controllers/EspecialidadesController.php",
+			"settings":
+			{
+				"buffer_size": 4356,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/especialidades/_form.php",
+			"settings":
+			{
+				"buffer_size": 1854,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/especialidades/index.php",
+			"settings":
+			{
+				"buffer_size": 645,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/especialidades/_view.php",
+			"settings":
+			{
+				"buffer_size": 396,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/users/_form.php",
+			"settings":
+			{
+				"buffer_size": 2262,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/config/main.php",
+			"settings":
+			{
+				"buffer_size": 2062,
 				"line_ending": "Windows"
 			}
 		}
@@ -175,11 +223,25 @@
 	[
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/global",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/global/plugins",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/global/plugins/bootstrap",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/global/plugins/bootstrap/css",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/umodif",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/users"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/index.html",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config/main.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/.htaccess",
 		"/C/xampp/apache/conf/httpd.conf",
 		"/C/Users/Carlos/Downloads/AdminLTE-2.0.4/pages/forms/general.html",
 		"/C/xampp/htdocs/yacqui/index.php",
@@ -216,9 +278,13 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
+			"C:\\xampp\\htdocs\\dcilaboratorio",
+			"C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio",
+			"C:\\xampp\\htdocs\\dcilaboratorio",
+			"C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio"
 		]
 	},
 	"find_state":
@@ -226,6 +292,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"bootstrap.min.css",
+			"bootstrap",
+			"components.css",
+			"portlet-config",
+			"datatable",
+			"data-table",
+			"table",
+			"usuarios",
 			"a",
 			"</p>",
 			"<p class=\"linea\">"
@@ -246,24 +320,52 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 5,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "dcilaboratorio/protected/config/main.php",
+					"file": "dcilaboratorio/protected/config/database.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1986,
+						"buffer_size": 385,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1094,
-								1094
+								265,
+								265
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "dcilaboratorio/protected/views/layouts/menu.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3300,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1039,
+								1039
 							]
 						],
 						"settings":
@@ -272,38 +374,183 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 305.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "dcilaboratorio/.htaccess",
+					"buffer": 2,
+					"file": "dcilaboratorio/protected/controllers/EspecialidadesController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 202,
+						"buffer_size": 4356,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								202,
-								202
+								270,
+								270
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "dcilaboratorio/protected/views/especialidades/_form.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1854,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								385,
+								371
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "dcilaboratorio/protected/views/especialidades/index.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 645,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								638,
+								638
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "dcilaboratorio/protected/views/especialidades/_view.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 396,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								396,
+								396
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "dcilaboratorio/protected/views/users/_form.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2262,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2242,
+								2236
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 450.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "dcilaboratorio/protected/config/main.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2062,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 300.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
 					"type": "text"
 				}
 			]

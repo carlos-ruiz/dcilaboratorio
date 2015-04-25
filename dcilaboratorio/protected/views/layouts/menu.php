@@ -79,12 +79,12 @@
 						</li>
 						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/controller/action">
-							<i class="icon-plus"></i>
+							<i class="glyphicon glyphicon-th-list"></i>
 							Listado</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/especialidades/index">
-							<i class="icon-plus"></i>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/especialidades/admin">
+							<i class="glyphicon glyphicon-th-list"></i>
 							Especialidades</a>
 						</li>
 

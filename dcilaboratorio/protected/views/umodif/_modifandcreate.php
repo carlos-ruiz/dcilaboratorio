@@ -8,7 +8,7 @@ if($model->isNewRecord){
 }
 else{
 	$model->ultima_edicion=date('Y-m-d H:i:s');
-	$model->usuario_edicion=Yii::app()->user->id;
+	$model->usuario_ultima_edicion=Yii::app()->user->id;
 	
 }
 ?>
