@@ -87,9 +87,54 @@
 							<i class="icon-plus"></i>
 							Especialidades</a>
 						</li>
-						
 
+					</ul>
+				<li <?php if($this->section=="Titulos"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-puzzle"></i>
+					<span class="title">Titulos</span>
+					<?php if($this->section=="Titulos"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/titulosForm/admin">
+							<i class="icon-plus"></i>
+							Administración</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/TitulosForm/create">
+							<i class="icon-plus"></i>
+							Nuevo Título</a>
+						</li>
 					</ul>
 				</li>
 				
 				
+				<li <?php if($this->section=="Examenes"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-puzzle"></i>
+					<span class="title">Exámenes</span>
+					<?php if($this->section=="Examenes"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/examenes/admin">
+							<i class="icon-plus"></i>
+							Administración</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/create">
+							<i class="icon-plus"></i>
+							Nuevo Examen</a>
+						</li>
+				</li>

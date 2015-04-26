@@ -1,6 +1,6 @@
 <?php
 if($model->isNewRecord){
-	$model->ultima_edicion='2000-01-01 00:00:00';
+	$model->ultima_edicion=date('Y-m-d H:i:s');
 	$model->usuario_ultima_edicion=Yii::app()->user->id;
 	$model->creacion=date('Y-m-d H:i:s');
 	$model->usuario_creacion=Yii::app()->user->id;
@@ -8,7 +8,7 @@ if($model->isNewRecord){
 }
 else{
 	$model->ultima_edicion=date('Y-m-d H:i:s');
-	$model->usuario_edicion=Yii::app()->user->id;
+	$model->usuario_ultima_edicion=Yii::app()->user->id;
 	
 }
 ?>
