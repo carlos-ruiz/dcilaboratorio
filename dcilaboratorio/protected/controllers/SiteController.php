@@ -6,6 +6,7 @@ class SiteController extends Controller
 	 * Declares class-based actions.
 	 */
 	public $section = "Home";
+	public $subSection;
 
 	public function actions()
 	{

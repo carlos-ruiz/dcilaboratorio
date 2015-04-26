@@ -52,10 +52,11 @@ class Doctores extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('porcentaje, numero_ext, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, porcentaje, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('porcentaje, numero_ext, codigo_postal, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, calle, ciudad, colonia, estado', 'length', 'max'=>45),
 			array('codigo_postal, numero_int', 'length', 'max'=>5),
+			array('correo_electronico', 'email'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, porcentaje, calle, ciudad, colonia, estado, codigo_postal, numero_ext, numero_int, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
@@ -86,9 +87,9 @@ class Doctores extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'nombre' => 'Nombre',
-			'a_paterno' => 'A Paterno',
-			'a_materno' => 'A Materno',
-			'correo_electronico' => 'Correo Electronico',
+			'a_paterno' => 'Apellido Paterno',
+			'a_materno' => 'Apellido Materno',
+			'correo_electronico' => 'Correo Electrónico',
 			'hora_consulta_de' => 'Hora Consulta De',
 			'hora_consulta_hasta' => 'Hora Consulta Hasta',
 			'porcentaje' => 'Porcentaje',
@@ -96,16 +97,16 @@ class Doctores extends CActiveRecord
 			'ciudad' => 'Ciudad',
 			'colonia' => 'Colonia',
 			'estado' => 'Estado',
-			'codigo_postal' => 'Codigo Postal',
-			'numero_ext' => 'Numero Ext',
-			'numero_int' => 'Numero Int',
-			'id_especialidades' => 'Id Especialidades',
-			'id_titulos' => 'Id Titulos',
+			'codigo_postal' => 'Código Postal',
+			'numero_ext' => 'Número Ext',
+			'numero_int' => 'Número Int',
+			'id_especialidades' => 'Especialidad',
+			'id_titulos' => 'Título',
 			'id_usuarios' => 'Id Usuarios',
-			'ultima_edicion' => 'Ultima Edicion',
-			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
-			'creacion' => 'Creacion',
-			'usuario_creacion' => 'Usuario Creacion',
+			'ultima_edicion' => 'Última edición',
+			'usuario_ultima_edicion' => 'Usuario última edición',
+			'creacion' => 'Creación',
+			'usuario_creacion' => 'Usuario creación',
 		);
 	}
 

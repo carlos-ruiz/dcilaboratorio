@@ -7,7 +7,8 @@ class EspecialidadesController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $section = "Especialidades";
+	public $section = "Doctores";
+	public $subSection;
 	/**
 	 * @return array action filters
 	 */
@@ -133,6 +134,7 @@ class EspecialidadesController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection = "Especialidades";
 		$model=new Especialidades('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Especialidades']))

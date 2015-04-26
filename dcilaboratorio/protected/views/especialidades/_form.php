@@ -11,16 +11,6 @@
 		<div class="caption">
 			<i class="fa fa-gift"></i> Especialidad
 		</div>
-		<div class="tools">
-			<a href="" class="collapse" data-original-title="" title="">
-			</a>
-			<a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title="">
-			</a>
-			<a href="" class="reload" data-original-title="" title="">
-			</a>
-			<a href="" class="remove" data-original-title="" title="">
-			</a>
-		</div>
 	</div>
 	<div class="portlet-body form" style="display: block;">
 

@@ -8,6 +8,7 @@ class ProfilesController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "Profiles";
+	public $subSection;
 	/**
 	 * @return array action filters
 	 */
