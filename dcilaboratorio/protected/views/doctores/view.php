@@ -2,18 +2,7 @@
 /* @var $this DoctoresController */
 /* @var $model Doctores */
 
-$this->breadcrumbs=array(
-	'Doctores'=>array('index'),
-	$model->id,
-);
-
-$this->menu=array(
-	array('label'=>'List Doctores', 'url'=>array('index')),
-	array('label'=>'Create Doctores', 'url'=>array('create')),
-	array('label'=>'Update Doctores', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Doctores', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Doctores', 'url'=>array('admin')),
-);
+$this->pageTitle="Doctores";
 ?>
 
 <h1>View Doctores #<?php echo $model->id; ?></h1>

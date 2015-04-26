@@ -2,14 +2,7 @@
 /* @var $this EspecialidadesController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	'Especialidades',
-);
-
-$this->menu=array(
-	array('label'=>'Create Especialidades', 'url'=>array('create')),
-	array('label'=>'Manage Especialidades', 'url'=>array('admin')),
-);
+$this->pageTitle="Especialidades";
 ?>
 
 <h1>Especialidades</h1>

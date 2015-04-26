@@ -2,31 +2,10 @@
 /* @var $this EspecialidadesController */
 /* @var $model Especialidades */
 
-$this->breadcrumbs=array(
-	'Especialidades'=>array('index'),
-	'Manage',
-);
-
-$this->menu=array(
-	array('label'=>'List Especialidades', 'url'=>array('index')),
-	array('label'=>'Create Especialidades', 'url'=>array('create')),
-);
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$('#especialidades-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
+$this->pageTitle="Especialidades";
 ?>
 
-<h1>Administrar Especialidades</h1>
+<h1>Administrar especialidades</h1>
 
 <?php echo CHtml::button('Nueva especialidad', array('class'=>'btn btn-sm green','submit'=>array('especialidades/create'))); ?>
 

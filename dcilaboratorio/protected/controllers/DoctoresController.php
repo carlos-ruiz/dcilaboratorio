@@ -73,8 +73,37 @@ class DoctoresController extends Controller
 		if(isset($_POST['Doctores']))
 		{
 			$model->attributes=$_POST['Doctores'];
+			$usuario = new Usuarios;
+			if($perfil = Perfiles::model()->findByName("Doctor")){
+				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
+				$usuario->contrasena=md5("doctor");
+				$usuario->ultima_edicion=date('Y-m-d H:i:s');
+				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
+				$usuario->creacion=date('Y-m-d H:i:s');
+				$usuario->usuario_creacion=Yii::app()->user->id;
+				$usuario->id_perfiles=$perfil->id;
+				$usuario->save();
+			}
+			else{
+				$perfil = new Perfiles;
+				$perfil->nombre="Doctor";
+				$perfil->save();
+				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
+				$usuario->contrasena=md5("doctor");
+				$usuario->ultima_edicion=date('Y-m-d H:i:s');
+				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
+				$usuario->creacion=date('Y-m-d H:i:s');
+				$usuario->usuario_creacion=Yii::app()->user->id;
+				$usuario->id_perfiles=$perfil->id;
+				$usuario->save();	
+			}
+			$model->id_usuarios=$usuario->id;
+
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
+			else{
+				echo "<script>alert('no se pudo guardar');</script>";
+			}
 		}
 
 		$this->render('create',array(

@@ -2,17 +2,9 @@
 /* @var $this DoctoresController */
 /* @var $model Doctores */
 
-$this->breadcrumbs=array(
-	'Doctores'=>array('index'),
-	'Create',
-);
-
-$this->menu=array(
-	array('label'=>'List Doctores', 'url'=>array('index')),
-	array('label'=>'Manage Doctores', 'url'=>array('admin')),
-);
+$this->pageTitle="Doctores";
 ?>
 
-<h1>Create Doctores</h1>
+<h1>Nuevo doctor</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>
