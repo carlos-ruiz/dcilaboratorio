@@ -137,4 +137,30 @@
 							<i class="icon-plus"></i>
 							Nuevo Examen</a>
 						</li>
+					</ul>
+				</li>
+
+				<li <?php if($this->section=="PalabrasClave"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-puzzle"></i>
+					<span class="title">Palabras Clave</span>
+					<?php if($this->section=="PalabrasClave"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palabrasClave/admin">
+							<i class="icon-plus"></i>
+							Administración</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/palabrasClave/create">
+							<i class="icon-plus"></i>
+							Nueva Palabra Clave</a>
+						</li>
+					</ul>
 				</li>
