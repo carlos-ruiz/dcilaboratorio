@@ -1,14 +1,15 @@
 <?php
 
-class UsuariosController extends Controller
+class DoctoresController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $section = "Usuarios";
+	public $section = "Doctores";
 	public $subSection;
+
 	/**
 	 * @return array action filters
 	 */
@@ -28,11 +29,19 @@ class UsuariosController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view','admin','create','update','delete'),
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view'),
+				'users'=>array('*'),
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
-			array('deny',  // deny all Usuarios
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
+				'users'=>array('admin'),
+			),
+			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
@@ -55,15 +64,15 @@ class UsuariosController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$this->subSection = "Registro";
-		$model=new Usuarios;
+		$this->subSection = "Nuevo";
+		$model=new Doctores;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Usuarios']))
+		if(isset($_POST['Doctores']))
 		{
-			$model->attributes=$_POST['Usuarios'];
+			$model->attributes=$_POST['Doctores'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -85,9 +94,9 @@ class UsuariosController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Usuarios']))
+		if(isset($_POST['Doctores']))
 		{
-			$model->attributes=$_POST['Usuarios'];
+			$model->attributes=$_POST['Doctores'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -116,7 +125,7 @@ class UsuariosController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Usuarios');
+		$dataProvider=new CActiveDataProvider('Doctores');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -127,10 +136,11 @@ class UsuariosController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Usuarios('search');
+		$this->subSection = "Admin";
+		$model=new Doctores('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Usuarios']))
-			$model->attributes=$_GET['Usuarios'];
+		if(isset($_GET['Doctores']))
+			$model->attributes=$_GET['Doctores'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -141,24 +151,24 @@ class UsuariosController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Usuarios the loaded model
+	 * @return Doctores the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Usuarios::model()->findByPk($id);
+		$model=Doctores::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404,'no existe la página solicitada.');
+			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Usuarios $model the model to be validated
+	 * @param Doctores $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='usuarios-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='doctores-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

@@ -20,7 +20,7 @@
 				</li>
 				-->
 				<li <?php if($this->section=='Home'){ echo 'class="startactive open"';}?>>
-					<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php">
+					<a href="<?php echo Yii::app()->request->baseUrl; ?>/">
 					<i class="icon-home"></i>
 					<span class="title">Inicio</span>
 					<?php if($this->section==""){?>
@@ -37,7 +37,7 @@
 					<a href="javascript:;">
 					<i class="icon-users"></i>
 					<span class="title">Usuarios</span>
-					<?php if($this->section=="Users"){?>
+					<?php if($this->section=="Usuarios"){?>
 					<span class="selected"></span>
 					<span class="arrow open"></span>
 					<?php } else{ ?>
@@ -45,13 +45,13 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/usuarios/create">
+						<li <?php if($this->section=="Usuarios" && $this->subSection=="Registro"){ echo 'class="active open"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/create">
 							<i class="icon-plus"></i>
 							Registro</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/usuarios/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>
@@ -60,11 +60,11 @@
 				<li class="heading">
 					<h3 class="uppercase">Catálogos</h3>
 				</li>
-				<li <?php if($this->section=="Users"){ echo 'class="active open"';}?>>
+				<li <?php if($this->section=="Doctores"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-puzzle"></i>
 					<span class="title">Doctores</span>
-					<?php if($this->section=="Especialidades"){?>
+					<?php if($this->section=="Doctores"){?>
 					<span class="selected"></span>
 					<span class="arrow open"></span>
 					<?php } else{ ?>
@@ -72,19 +72,19 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/controller/action">
+						<li <?php if($this->section=="Doctores" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/doctores/create">
 							<i class="icon-plus"></i>
 							Nuevo Doctor</a>
 						</li>
-						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/controller/action">
-							<i class="glyphicon glyphicon-th-list"></i>
+						<li <?php if($this->section=="Doctores" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/doctores/admin">
+							<i class="icon-list"></i>
 							Listado</a>
 						</li>
-						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/especialidades/admin">
-							<i class="glyphicon glyphicon-th-list"></i>
+						<li <?php if($this->section=="Doctores" && $this->subSection=="Especialidades"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/especialidades/admin">
+							<i class="icon-list"></i>
 							Especialidades</a>
 						</li>
 						
