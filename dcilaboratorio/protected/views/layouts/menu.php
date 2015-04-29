@@ -189,3 +189,28 @@
 						</li>
 					</ul>
 				</li>
+
+				<li <?php if($this->section=="UnidadesResponsables"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-puzzle"></i>
+					<span class="title">Unidades Responsables</span>
+					<?php if($this->section=="UnidadesResponsables"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/unidadesResponsables/admin">
+							<i class="icon-plus"></i>
+							Administración</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/create">
+							<i class="icon-plus"></i>
+							Nueva Unidad Responsable</a>
+						</li>
+					</ul>
+				</li>
