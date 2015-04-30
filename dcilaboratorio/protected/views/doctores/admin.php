@@ -1,6 +1,10 @@
 <?php
 /* @var $this DoctoresController */
 /* @var $model Doctores */
+$this->breadcrumbs=array(
+	'Doctores'=>array('index'),
+	'Administrar doctores',
+);
 
 $this->pageTitle="Doctores";
 ?>

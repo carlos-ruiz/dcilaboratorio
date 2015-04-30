@@ -3,12 +3,6 @@
 /* @var $model Doctores */
 /* @var $form CActiveForm */
 
-// Lista de titulos disponibles
-//$titulos = CHtml::listData(Titulos::model()->findAll(), 'id', 'nombre');
-$titulos = array('1' => 'Dr.', '2' => 'Dra.');
-
-//Lista de especialidades disponibles
-$especialidades = CHtml::listData(Especialidades::model()->findAll(), 'id', 'nombre');
 ?>
 
 <br />
@@ -147,7 +141,7 @@ $especialidades = CHtml::listData(Especialidades::model()->findAll(), 'id', 'nom
 			<div class="form-group col-md-6 <?php if($form->error($model,'id_especialidades')!=''){ echo 'has-error'; }?>">
 				<?php echo $form->labelEx($model,'id_especialidades', array('class'=>'control-label')); ?>
 				<div class="input-group">
-					<?php echo $form->dropDownList($model,'id_especialidades',$especialidades, array('class' => 'form-control')); ?>
+					<?php echo $form->dropDownList($model,'id_especialidades',$model->obtenerEspecialidades(), array('class' => 'form-control')); ?>
 					<?php echo $form->error($model,'id_especialidades', array('class'=>'help-block')); ?>
 				</div>
 			</div>
@@ -155,7 +149,7 @@ $especialidades = CHtml::listData(Especialidades::model()->findAll(), 'id', 'nom
 			<div class="form-group col-md-6 <?php if($form->error($model,'id_titulos')!=''){ echo 'has-error'; }?>">
 				<?php echo $form->labelEx($model,'id_titulos', array('class'=>'control-label')); ?>
 				<div class="input-group">
-					<?php echo $form->dropDownList($model,'id_titulos',$titulos, array('class' => 'form-control')); ?>
+					<?php echo $form->dropDownList($model,'id_titulos',$model->obtenerTitulos(), array('class' => 'form-control')); ?>
 					<?php echo $form->error($model,'id_titulos', array('class'=>'help-block')); ?>
 				</div>
 			</div>

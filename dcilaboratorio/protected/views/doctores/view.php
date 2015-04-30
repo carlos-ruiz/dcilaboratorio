@@ -3,6 +3,11 @@
 /* @var $model Doctores */
 
 $this->pageTitle="Doctores";
+
+$this->breadcrumbs=array(
+	'Doctores'=>array('index'),
+	'Doctor '.$model->id,
+);
 ?>
 
 <h1>View Doctores #<?php echo $model->id; ?></h1>

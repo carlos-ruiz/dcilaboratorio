@@ -3,6 +3,11 @@
 /* @var $model Especialidades */
 
 $this->pageTitle="Especialidades";
+
+$this->breadcrumbs=array(
+	'Especialidades'=>array('index'),
+	'Especialidad '.$model->id,
+);
 ?>
 
 <h1>View Especialidades #<?php echo $model->id; ?></h1>

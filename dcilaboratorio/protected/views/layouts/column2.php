@@ -1,5 +1,9 @@
 <?php /* @var $this Controller */ ?>
 <?php $this->beginContent('//layouts/main'); ?>
+<?php $this->widget('zii.widgets.CBreadcrumbs', array(
+    'links'=>$this->breadcrumbs,
+));
+?>
 <div class="span-19">
 	<div id="content">
 		<?php echo $content; ?>
