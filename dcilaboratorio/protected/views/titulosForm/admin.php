@@ -30,9 +30,7 @@ $('.search-form form').submit(function(){
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'nombre',
-			
+		'nombre',			
 		array(
 			'class'=>'CButtonColumn',
 		),

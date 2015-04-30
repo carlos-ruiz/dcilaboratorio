@@ -30,8 +30,8 @@ $usuarios = CHtml::listData(Usuarios::model()->findAll(), 'id', 'usuario');
 	<div class="form-group <?php if($form->error($model,'id_usuarios')!=''){ echo 'has-error'; }?>">
 				<?php echo $form->labelEx($model,'id_usuarios', array('class'=>'control-label')); ?>
 				<div class="input-group">
-					<?php //echo $form->dropDownList($model,'id_usuarios',$model->obtenerUsuarios(), array('class' => 'form-control')); ?>
-					<?php echo $form->dropDownList($model,'id_usuarios',$usuarios, array("empty"=>"Seleccione una opción"));  ?>
+					<?php echo $form->dropDownList($model,'id_usuarios',$model->obtenerUsuarios(), array("empty"=>"Seleccione una opción"));  ?>
+					
 					<?php echo $form->error($model,'id_usuarios', array('class'=>'help-block')); ?>
 				</div>
 	</div>
