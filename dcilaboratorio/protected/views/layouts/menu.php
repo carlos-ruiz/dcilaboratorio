@@ -128,7 +128,7 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/examenes/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/admin">
 							<i class="icon-plus"></i>
 							Administración</a>
 						</li>
@@ -136,6 +136,11 @@
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/create">
 							<i class="icon-plus"></i>
 							Nuevo Examen</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/tarifasActivas/admin">
+							<i class="icon-plus"></i>
+							Tarifas activas</a>
 						</li>
 					</ul>
 				</li>
