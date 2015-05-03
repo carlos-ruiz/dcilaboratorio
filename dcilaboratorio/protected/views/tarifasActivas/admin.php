@@ -6,24 +6,6 @@ $this->breadcrumbs=array(
 	'Exámenes'=>array('examenes/admin'),
 	'Administrar tarifas activas',
 );
-
-$this->menu=array(
-	array('label'=>'List TarifasActivas', 'url'=>array('index')),
-	array('label'=>'Create TarifasActivas', 'url'=>array('create')),
-);
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$('#tarifas-activas-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
 ?>
 
 <h1>Administrar tarifas activas</h1>

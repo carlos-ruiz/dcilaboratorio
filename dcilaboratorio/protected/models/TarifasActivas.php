@@ -116,4 +116,12 @@ class TarifasActivas extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function obtenerMultitarifarios(){
+		return CHtml::listData(Multitarifarios::model()->findAll(), 'id', 'nombre');
+	}
+
+	public function obtenerExamenes(){
+		return CHtml::listData(Examenes::model()->findAll(), 'id', 'nombre');
+	}
 }
