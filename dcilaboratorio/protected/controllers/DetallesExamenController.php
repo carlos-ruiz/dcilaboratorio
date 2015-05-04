@@ -1,13 +1,13 @@
 <?php
 
-class UnidadesResponsablesController extends Controller
+class DetallesExamenController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $section = "UnidadesResponsables";
+	public $section = "DetallesExamenes";
 	/**
 	 * @return array action filters
 	 */
@@ -62,14 +62,14 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new UnidadesResponsables;
+		$model=new DetallesExamen;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['UnidadesResponsables']))
+		if(isset($_POST['DetallesExamen']))
 		{
-			$model->attributes=$_POST['UnidadesResponsables'];
+			$model->attributes=$_POST['DetallesExamen'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -91,9 +91,9 @@ class UnidadesResponsablesController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['UnidadesResponsables']))
+		if(isset($_POST['DetallesExamen']))
 		{
-			$model->attributes=$_POST['UnidadesResponsables'];
+			$model->attributes=$_POST['DetallesExamen'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -122,7 +122,7 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('UnidadesResponsables');
+		$dataProvider=new CActiveDataProvider('DetallesExamen');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -133,10 +133,10 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new UnidadesResponsables('search');
+		$model=new DetallesExamen('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['UnidadesResponsables']))
-			$model->attributes=$_GET['UnidadesResponsables'];
+		if(isset($_GET['DetallesExamen']))
+			$model->attributes=$_GET['DetallesExamen'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -147,12 +147,12 @@ class UnidadesResponsablesController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return UnidadesResponsables the loaded model
+	 * @return DetallesExamen the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=UnidadesResponsables::model()->findByPk($id);
+		$model=DetallesExamen::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -160,15 +160,14 @@ class UnidadesResponsablesController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param UnidadesResponsables $model the model to be validated
+	 * @param DetallesExamen $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='unidades-responsables-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='detalles-examen-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
-
 }

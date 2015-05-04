@@ -117,6 +117,6 @@ class UnidadesResponsables extends CActiveRecord
 	}
 
 	public function obtenerUsuarios(){
-		return CHtml::listData(Usuarios::model()->findAll(), 'id_usuarios', 'usuario');
+		return CHtml::listData(Usuarios::model()->findAll(), 'id', 'usuario');
 	}
 }

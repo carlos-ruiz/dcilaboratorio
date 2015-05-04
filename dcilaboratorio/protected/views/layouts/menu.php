@@ -214,3 +214,52 @@
 						</li>
 					</ul>
 				</li>
+				<li <?php if($this->section=="DetallesExamenes"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-puzzle"></i>
+					<span class="title">Resultado de exámenes</span>
+					<?php if($this->section=="DetallesExamenes"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/detallesExamen/admin">
+							<i class="icon-plus"></i>
+							Administración</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/create">
+							<i class="icon-plus"></i>
+							Nuevo Resultado de Examen</a>
+						</li>
+					</ul>
+				</li>
+					<li <?php if($this->section=="UnidadesMedida"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-puzzle"></i>
+					<span class="title">Unidades de Medida</span>
+					<?php if($this->section=="UnidadesMedida"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/unidadesMedida/admin">
+							<i class="icon-plus"></i>
+							Administración</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesMedida/create">
+							<i class="icon-plus"></i>
+							Nueva Unidad Responsable</a>
+						</li>
+					</ul>
+				</li>
+

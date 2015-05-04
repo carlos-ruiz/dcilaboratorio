@@ -30,8 +30,8 @@
 		<div class="form-group <?php if($form->error($model,'nombre')!=''){ echo 'has-error'; }?>">
 			<?php echo $form->labelEx($model,'nombre', array('class'=>'control-label')); ?>
 			<div class="input-group" >
-				<?php echo $form->textField($model,'nombre',array('size'=>45,'maxlength'=>45,'requear')); ?>
-				<?php echo $form->error($model,'nombre'); ?>
+				<?php echo $form->textField($model,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
+				<?php echo $form->error($model,'nombre', array('class'=>'help-block')); ?>
 			</div>
 		</div>
 		<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
