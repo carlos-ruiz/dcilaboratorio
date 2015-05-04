@@ -137,6 +137,11 @@
 							<i class="icon-plus"></i>
 							Nuevo Examen</a>
 						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/index">
+							<i class="icon-plus"></i>
+							Grupos</a>
+						</li>
 					</ul>
 				</li>
 
