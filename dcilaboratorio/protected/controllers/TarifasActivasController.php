@@ -1,15 +1,14 @@
 <?php
 
-class DoctoresController extends Controller
+class TarifasActivasController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $section = "Doctores";
+	public $section = "Examenes";
 	public $subSection;
-
 	/**
 	 * @return array action filters
 	 */
@@ -64,46 +63,16 @@ class DoctoresController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$this->subSection = "Nuevo";
-		$model=new Doctores;
+		$model=new TarifasActivas;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Doctores']))
+		if(isset($_POST['TarifasActivas']))
 		{
-			$model->attributes=$_POST['Doctores'];
-			$usuario = new Usuarios;
-			if($perfil = Perfiles::model()->findByName("Doctor")){
-				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
-				$usuario->contrasena=md5("doctor");
-				$usuario->ultima_edicion=date('Y-m-d H:i:s');
-				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
-				$usuario->creacion=date('Y-m-d H:i:s');
-				$usuario->usuario_creacion=Yii::app()->user->id;
-				$usuario->id_perfiles=$perfil->id;
-				$usuario->save();
-			}
-			else{
-				$perfil = new Perfiles;
-				$perfil->nombre="Doctor";
-				$perfil->save();
-				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
-				$usuario->contrasena=md5("doctor");
-				$usuario->ultima_edicion=date('Y-m-d H:i:s');
-				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
-				$usuario->creacion=date('Y-m-d H:i:s');
-				$usuario->usuario_creacion=Yii::app()->user->id;
-				$usuario->id_perfiles=$perfil->id;
-				$usuario->save();	
-			}
-			$model->id_usuarios=$usuario->id;
-
+			$model->attributes=$_POST['TarifasActivas'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
-			else{
-				echo "<script>alert('No se pudo guardar');</script>";
-			}
 		}
 
 		$this->render('create',array(
@@ -123,9 +92,9 @@ class DoctoresController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Doctores']))
+		if(isset($_POST['TarifasActivas']))
 		{
-			$model->attributes=$_POST['Doctores'];
+			$model->attributes=$_POST['TarifasActivas'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -154,7 +123,7 @@ class DoctoresController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Doctores');
+		$dataProvider=new CActiveDataProvider('TarifasActivas');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -165,11 +134,11 @@ class DoctoresController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$this->subSection = "Admin";
-		$model=new Doctores('search');
+		$this->subSection = "TarifasActivas";
+		$model=new TarifasActivas('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Doctores']))
-			$model->attributes=$_GET['Doctores'];
+		if(isset($_GET['TarifasActivas']))
+			$model->attributes=$_GET['TarifasActivas'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -180,12 +149,12 @@ class DoctoresController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Doctores the loaded model
+	 * @return TarifasActivas the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Doctores::model()->findByPk($id);
+		$model=TarifasActivas::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -193,25 +162,28 @@ class DoctoresController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Doctores $model the model to be validated
+	 * @param TarifasActivas $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='doctores-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='tarifas-activas-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
 
-	public function obtenerNombreCompletoConTitulo($data, $row){
-		$titulo = TitulosForm::model()->find($data->id_titulos);
-		$completo = $titulo->nombre.' '.$data->nombre.' '.$data->a_paterno.' '.$data->a_materno;
-		return $completo;
+	public function obtenerNombreExamen($data, $row){
+		$examen = Examenes::model()->find($data->id_examenes);
+		return $examen->nombre;
+	} 
+
+	public function obtenerNombreMultitarifario($data, $row){
+		$multitarifario = Multitarifarios::model()->find($data->id_multitarifarios);
+		return $multitarifario->nombre;
 	}
 
-	public function obtenerNombreEspecialidad($data, $row){
-		$especialidad = Especialidades::model()->find($data->id_especialidades);
-		return $especialidad->nombre;
+	public function obtenerPrecioConFormato($data, $row){
+		return Yii::app()->numberFormatter->formatCurrency($data->precio, 'MXN');
 	}
 }

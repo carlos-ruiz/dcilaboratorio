@@ -166,4 +166,13 @@ class Doctores extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+
+	public function obtenerTitulos(){
+		return CHtml::listData(TitulosForm::model()->findAll(), 'id', 'nombre');
+	}
+
+	public function obtenerEspecialidades(){
+		return CHtml::listData(Especialidades::model()->findAll(), 'id', 'nombre');
+	} 
 }

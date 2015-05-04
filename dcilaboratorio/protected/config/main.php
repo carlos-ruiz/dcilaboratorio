@@ -73,8 +73,8 @@ return array(
 
 	),
 	//configuramos el lenguaje
-	'sourceLanguage' => 'es',
-	'language' => 'es',
+	'sourceLanguage' => 'es_mx',
+	'language' => 'es_mx',
 
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']

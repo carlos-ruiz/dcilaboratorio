@@ -3,6 +3,10 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->pageTitle="Doctores";
+
+$this->breadcrumbs=array(
+	'Doctores',
+);
 ?>
 
 <h1>Doctores</h1>

@@ -1,6 +1,9 @@
 <?php
 /* @var $this EspecialidadesController */
 /* @var $dataProvider CActiveDataProvider */
+$this->breadcrumbs=array(
+	'Especialidades'
+);
 
 $this->pageTitle="Especialidades";
 ?>

@@ -1,6 +1,10 @@
 <?php
 /* @var $this EspecialidadesController */
 /* @var $model Especialidades */
+$this->breadcrumbs=array(
+	'Especialidades'=>array('index'),
+	'Administrar especialidades',
+);
 
 $this->pageTitle="Especialidades";
 ?>
@@ -11,15 +15,11 @@ $this->pageTitle="Especialidades";
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'especialidades-grid',
+	'itemsCssClass'=>'table table-hover',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
 		'nombre',
-		'ultima_edicion',
-		'usuario_ultima_edicion',
-		'creacion',
-		'usuario_creacion',
 		array(
 			'class'=>'CButtonColumn',
 		),

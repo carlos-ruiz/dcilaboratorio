@@ -1,6 +1,10 @@
 <?php
 /* @var $this EspecialidadesController */
 /* @var $model Especialidades */
+$this->breadcrumbs=array(
+	'Especialidades'=>array('index'),
+	'Actualizar especialidad',
+);
 
 $this->pageTitle="Especialidades";
 ?>

@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"a_",
+				"a_materno"
+			],
+			[
+				"id",
+				"id_especialidades"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"prin",
+				"print_r"
+			],
+			[
+				"for",
+				"foreach	foreach …"
+			],
+			[
+				"base",
+				"baseUrl"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
+				"nomre",
+				"nombre"
+			],
+			[
 				"array",
 				"array"
 			],
@@ -72,10 +104,18 @@
 	"buffers":
 	[
 		{
-			"file": "dcilaboratorio/protected/views/layouts/menu.php",
+			"file": "dcilaboratorio/protected/views/tarifasActivas/admin.php",
 			"settings":
 			{
-				"buffer_size": 3645,
+				"buffer_size": 906,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
+			"settings":
+			{
+				"buffer_size": 5895,
 				"line_ending": "Windows"
 			}
 		},
@@ -83,25 +123,15 @@
 			"file": "dcilaboratorio/protected/views/doctores/admin.php",
 			"settings":
 			{
-				"buffer_size": 845,
+				"buffer_size": 789,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "Searching 6386 files for \"UserIdentity\"\n\nC:\\xampp\\htdocs\\dcilaboratorio\\CHANGELOG:\n 1212  - Enh #857: Added $exit parameter to CController::forward() (Qiang)\n 1213  - Enh #872: Added CFlexWidget::allowFullScreen (Qiang)\n 1214: - Enh #888: Added CBaseUserIdentity::setPersistentStates (Sam Dark)\n 1215  - Enh #898: Added support to allow defining global yiic commands (Qiang)\n 1216  - Enh #912: Added CModel::onUnsafeAttribute() which will log a warning message when massively assigning unsafe attributes (Qiang)\n ....\n 1479  - New: Added CExistValidator.criteria property (Qiang)\n 1480  - New: Improved CHtml::statefulForm() to make it XHTML-compliant (Qinag)\n 1481: - New: Added CBaseUserIdentity::clearState() (Qiang)\n 1482  - New: Added 'ext' root path alias which points to the directory containing all extensions (Qiang)\n 1483  - New: Added Greek translation of core messages (Vasileios)\n\nC:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\components\\UserIdentity.php:\n    2  \n    3  /**\n    4:  * UserIdentity represents the data needed to identity a user.\n    5   * It contains the authentication method that checks if the provided\n    6   * data can identity the user.\n    7   */\n    8: class UserIdentity extends CUserIdentity\n    9  {\n   10  	private $_id;\n\nC:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\models\\LoginForm.php:\n   49  		if(!$this->hasErrors())\n   50  		{\n   51: 			$this->_identity=new UserIdentity($this->usuario,$this->contrasena);\n   52  			if(!$this->_identity->authenticate())\n   53  				$this->addError('contrasena','Usuario o contraseña incorrectos.');\n   ..\n   63  		if($this->_identity===null)\n   64  		{\n   65: 			$this->_identity=new UserIdentity($this->usuario,$this->contrasena);\n   66  			$this->_identity->authenticate();\n   67  		}\n   68: 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)\n   69  		{\n   70  			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days\n\nC:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\runtime\\application.log:\n  572  ---\n  573  2015/04/24 04:38:36 [error] [system.db.CDbCommand] CDbCommand::fetchAll() fallÃ³: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'dcilaboratorio.usuarios' doesn't exist. La sentencia SQL ejecutada fue: SHOW FULL COLUMNS FROM `usuarios`.\n  574: in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\components\\UserIdentity.php (21)\n  575  in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\models\\LoginForm.php (52)\n  576  in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\controllers\\SiteController.php (51)\n  ...\n  581  #2 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\db\\ar\\CActiveRecord.php(1355): CActiveRecord->getTableSchema()\n  582  #3 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\db\\ar\\CActiveRecord.php(1461): CActiveRecord->query(Object(CDbCriteria))\n  583: #4 C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\components\\UserIdentity.php(21): CActiveRecord->find('LOWER(usuario)=...', Array)\n  584: #5 C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\models\\LoginForm.php(52): UserIdentity->authenticate()\n  585  #6 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\validators\\CInlineValidator.php(42): LoginForm->authenticate('contrasena', Array)\n  586  #7 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\validators\\CValidator.php(201): CInlineValidator->validateAttribute(Object(LoginForm), 'contrasena')\n  ...\n  600  ---\n  601  2015/04/24 04:39:41 [error] [system.db.CDbCommand] CDbCommand::fetchAll() fallÃ³: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'dcilaboratorio.usuarios' doesn't exist. La sentencia SQL ejecutada fue: SHOW FULL COLUMNS FROM `usuarios`.\n  602: in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\components\\UserIdentity.php (21)\n  603  in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\models\\LoginForm.php (52)\n  604  in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\controllers\\SiteController.php (51)\n  ...\n  609  #2 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\db\\ar\\CActiveRecord.php(1355): CActiveRecord->getTableSchema()\n  610  #3 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\db\\ar\\CActiveRecord.php(1461): CActiveRecord->query(Object(CDbCriteria))\n  611: #4 C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\components\\UserIdentity.php(21): CActiveRecord->find('LOWER(usuario)=...', Array)\n  612: #5 C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\models\\LoginForm.php(52): UserIdentity->authenticate()\n  613  #6 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\validators\\CInlineValidator.php(42): LoginForm->authenticate('contrasena', Array)\n  614  #7 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\validators\\CValidator.php(201): CInlineValidator->validateAttribute(Object(LoginForm), 'contrasena')\n  ...\n  637  ---\n  638  2015/04/24 04:39:54 [error] [system.db.CDbCommand] CDbCommand::fetchAll() fallÃ³: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'dcilaboratorio.usuarios' doesn't exist. La sentencia SQL ejecutada fue: SHOW FULL COLUMNS FROM `usuarios`.\n  639: in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\components\\UserIdentity.php (21)\n  640  in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\models\\LoginForm.php (52)\n  641  in C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\controllers\\SiteController.php (51)\n  ...\n  646  #2 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\db\\ar\\CActiveRecord.php(1355): CActiveRecord->getTableSchema()\n  647  #3 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\db\\ar\\CActiveRecord.php(1461): CActiveRecord->query(Object(CDbCriteria))\n  648: #4 C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\components\\UserIdentity.php(21): CActiveRecord->find('LOWER(usuario)=...', Array)\n  649: #5 C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\models\\LoginForm.php(52): UserIdentity->authenticate()\n  650  #6 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\validators\\CInlineValidator.php(42): LoginForm->authenticate('contrasena', Array)\n  651  #7 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\validators\\CValidator.php(201): CInlineValidator->validateAttribute(Object(LoginForm), 'contrasena')\n  ...\n  682  #5 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\db\\ar\\CActiveRecord.php(670): CActiveRecord->getDbConnection()\n  683  #6 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\db\\ar\\CActiveRecord.php(1460): CActiveRecord->getCommandBuilder()\n  684: #7 C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\components\\UserIdentity.php(21): CActiveRecord->find('LOWER(usuario)=...', Array)\n  685: #8 C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\protected\\models\\LoginForm.php(52): UserIdentity->authenticate()\n  686  #9 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\validators\\CInlineValidator.php(42): LoginForm->authenticate('contrasena', Array)\n  687  #10 C:\\xampp\\htdocs\\dcilaboratorio\\framework\\validators\\CValidator.php(201): CInlineValidator->validateAttribute(Object(LoginForm), 'contrasena')\n\nC:\\xampp\\htdocs\\dcilaboratorio\\demos\\blog\\protected\\components\\UserIdentity.php:\n    2  \n    3  /**\n    4:  * UserIdentity represents the data needed to identity a user.\n    5   * It contains the authentication method that checks if the provided\n    6   * data can identity the user.\n    7   */\n    8: class UserIdentity extends CUserIdentity\n    9  {\n   10  	private $_id;\n\nC:\\xampp\\htdocs\\dcilaboratorio\\demos\\blog\\protected\\models\\LoginForm.php:\n   47  	public function authenticate($attribute,$params)\n   48  	{\n   49: 		$this->_identity=new UserIdentity($this->username,$this->password);\n   50  		if(!$this->_identity->authenticate())\n   51  			$this->addError('password','Incorrect username or password.');\n   ..\n   60  		if($this->_identity===null)\n   61  		{\n   62: 			$this->_identity=new UserIdentity($this->username,$this->password);\n   63  			$this->_identity->authenticate();\n   64  		}\n   65: 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)\n   66  		{\n   67  			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days\n\nC:\\xampp\\htdocs\\dcilaboratorio\\demos\\phonebook\\protected\\components\\UserIdentity.php:\n    2  \n    3  /**\n    4:  * UserIdentity represents the data needed to identity a user.\n    5   * It contains the authentication method that checks if the provided\n    6   * data can identity the user.\n    7   */\n    8: class UserIdentity extends CUserIdentity\n    9  {\n   10  	/**\n\nC:\\xampp\\htdocs\\dcilaboratorio\\demos\\phonebook\\protected\\controllers\\SiteController.php:\n   86  	public function login($username,$password)\n   87  	{\n   88: 		$identity=new UserIdentity($username,$password);\n   89  		if($identity->authenticate())\n   90  			Yii::app()->user->login($identity);\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\base\\interfaces.php:\n  235  \n  236  /**\n  237:  * IUserIdentity interface is implemented by a user identity class.\n  238   *\n  239   * An identity represents a way to authenticate a user and retrieve\n  ...\n  245   * @since 1.0\n  246   */\n  247: interface IUserIdentity\n  248  {\n  249  	/**\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\cli\\views\\webapp\\protected\\components\\UserIdentity.php:\n    2  \n    3  /**\n    4:  * UserIdentity represents the data needed to identity a user.\n    5   * It contains the authentication method that checks if the provided\n    6   * data can identity the user.\n    7   */\n    8: class UserIdentity extends CUserIdentity\n    9  {\n   10  	/**\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\cli\\views\\webapp\\protected\\models\\LoginForm.php:\n   49  		if(!$this->hasErrors())\n   50  		{\n   51: 			$this->_identity=new UserIdentity($this->username,$this->password);\n   52  			if(!$this->_identity->authenticate())\n   53  				$this->addError('password','Incorrect username or password.');\n   ..\n   63  		if($this->_identity===null)\n   64  		{\n   65: 			$this->_identity=new UserIdentity($this->username,$this->password);\n   66  			$this->_identity->authenticate();\n   67  		}\n   68: 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)\n   69  		{\n   70  			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\gii\\components\\UserIdentity.php:\n    1  <?php\n    2  \n    3: class UserIdentity extends CUserIdentity\n    4  {\n    5  	/**\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\gii\\models\\LoginForm.php:\n    1  <?php\n    2  \n    3: Yii::import('gii.components.UserIdentity');\n    4  \n    5  class LoginForm extends CFormModel\n    .\n   23  	public function authenticate($attribute,$params)\n   24  	{\n   25: 		$this->_identity=new UserIdentity('yiier',$this->password);\n   26  		if(!$this->_identity->authenticate())\n   27  			$this->addError('password','Incorrect password.');\n   ..\n   36  		if($this->_identity===null)\n   37  		{\n   38: 			$this->_identity=new UserIdentity('yiier',$this->password);\n   39  			$this->_identity->authenticate();\n   40  		}\n   41: 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)\n   42  		{\n   43  			Yii::app()->user->login($this->_identity);\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\web\\auth\\CBaseUserIdentity.php:\n    1  <?php\n    2  /**\n    3:  * CBaseUserIdentity class file\n    4   *\n    5   * @author Qiang Xue <qiang.xue@gmail.com>\n    .\n   10  \n   11  /**\n   12:  * CBaseUserIdentity is a base class implementing {@link IUserIdentity}.\n   13   *\n   14:  * CBaseUserIdentity implements the scheme for representing identity\n   15   * information that needs to be persisted. It also provides the way\n   16   * to represent the authentication errors.\n   17   *\n   18:  * Derived classes should implement {@link IUserIdentity::authenticate}\n   19:  * and {@link IUserIdentity::getId} that are required by the {@link IUserIdentity}\n   20   * interface.\n   21   *\n   ..\n   31   * @since 1.0\n   32   */\n   33: abstract class CBaseUserIdentity extends CComponent implements IUserIdentity\n   34  {\n   35  	const ERROR_NONE=0;\n   ..\n   72  	/**\n   73  	 * Returns the identity states that should be persisted.\n   74: 	 * This method is required by {@link IUserIdentity}.\n   75  	 * @return array the identity states that should be persisted.\n   76  	 */\n   ..\n   92  	/**\n   93  	 * Returns a value indicating whether the identity is authenticated.\n   94: 	 * This method is required by {@link IUserIdentity}.\n   95  	 * @return boolean whether the authentication is successful.\n   96  	 */\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\web\\auth\\CUserIdentity.php:\n    1  <?php\n    2  /**\n    3:  * CUserIdentity class file\n    4   *\n    5   * @author Qiang Xue <qiang.xue@gmail.com>\n    .\n   10  \n   11  /**\n   12:  * CUserIdentity is a base class for representing identities that are authenticated based on a username and a password.\n   13   *\n   14   * Derived classes should implement {@link authenticate} with the actual\n   15   * authentication scheme (e.g. checking username and password against a DB table).\n   16   *\n   17:  * By default, CUserIdentity assumes the {@link username} is a unique identifier\n   18   * and thus use it as the {@link id ID} of the identity.\n   19   *\n   ..\n   25   * @since 1.0\n   26   */\n   27: class CUserIdentity extends CBaseUserIdentity\n   28  {\n   29  	/**\n   ..\n   50  	 * Authenticates a user based on {@link username} and {@link password}.\n   51  	 * Derived classes should override this method, or an exception will be thrown.\n   52: 	 * This method is required by {@link IUserIdentity}.\n   53  	 * @return boolean whether authentication succeeds.\n   54  	 */\n   ..\n   61  	 * Returns the unique identifier for the identity.\n   62  	 * The default implementation simply returns {@link username}.\n   63: 	 * This method is required by {@link IUserIdentity}.\n   64  	 * @return string the unique identifier for the identity.\n   65  	 */\n   ..\n   72  	 * Returns the display name for the identity.\n   73  	 * The default implementation simply returns {@link username}.\n   74: 	 * This method is required by {@link IUserIdentity}.\n   75  	 * @return string the display name for the identity.\n   76  	 */\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\web\\auth\\CWebUser.php:\n   16   * <code>Yii::app()->user</code>.\n   17   *\n   18:  * CWebUser should be used together with an {@link IUserIdentity identity}\n   19   * which implements the actual authentication algorithm.\n   20   *\n   ..\n   22   * <ol>\n   23   * <li>The user provides information needed for authentication.</li>\n   24:  * <li>An {@link IUserIdentity identity instance} is created with the user-provided information.</li>\n   25:  * <li>Call {@link IUserIdentity::authenticate} to check if the identity is valid.</li>\n   26   * <li>If valid, call {@link CWebUser::login} to login the user, and\n   27   *     Redirect the user browser to {@link returnUrl}.</li>\n   ..\n   35   * is a unique identifier for a user that is persistent\n   36   * during the whole user session. It can be a username, or something else,\n   37:  * depending on the implementation of the {@link IUserIdentity identity class}.\n   38   *\n   39   * Both {@link id} and {@link name} are persistent during the user session.\n   ..\n  219  	 * if you want to allow user to be authenticated based on the cookie information.\n  220  	 *\n  221: 	 * @param IUserIdentity $identity the user identity (which should already be authenticated)\n  222  	 * @param integer $duration number of seconds that the user can remain in logged-in status. Defaults to 0, meaning login till the user closes the browser.\n  223  	 * If greater than 0, cookie-based login will be used. In this case, {@link allowAutoLogin}\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\YiiBase.php:\n  825  		'CAuthItem' => '/web/auth/CAuthItem.php',\n  826  		'CAuthManager' => '/web/auth/CAuthManager.php',\n  827: 		'CBaseUserIdentity' => '/web/auth/CBaseUserIdentity.php',\n  828  		'CDbAuthManager' => '/web/auth/CDbAuthManager.php',\n  829  		'CPhpAuthManager' => '/web/auth/CPhpAuthManager.php',\n  830: 		'CUserIdentity' => '/web/auth/CUserIdentity.php',\n  831  		'CWebUser' => '/web/auth/CWebUser.php',\n  832  		'CFilter' => '/web/filters/CFilter.php',\n\nC:\\xampp\\htdocs\\dcilaboratorio\\framework\\yiilite.php:\n  534  		'CAuthItem' => '/web/auth/CAuthItem.php',\n  535  		'CAuthManager' => '/web/auth/CAuthManager.php',\n  536: 		'CBaseUserIdentity' => '/web/auth/CBaseUserIdentity.php',\n  537  		'CDbAuthManager' => '/web/auth/CDbAuthManager.php',\n  538  		'CPhpAuthManager' => '/web/auth/CPhpAuthManager.php',\n  539: 		'CUserIdentity' => '/web/auth/CUserIdentity.php',\n  540  		'CWebUser' => '/web/auth/CWebUser.php',\n  541  		'CFilter' => '/web/filters/CFilter.php',\n  ...\n 10515  	public function renderFile($context,$file,$data,$return);\n 10516  }\n 10517: interface IUserIdentity\n 10518  {\n 10519  	public function authenticate();\n\n76 matches across 18 files\n",
+			"file": "dcilaboratorio/protected/views/doctores/create.php",
 			"settings":
 			{
-				"buffer_size": 16632,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/models/LoginForm.php",
-			"settings":
-			{
-				"buffer_size": 1778,
+				"buffer_size": 265,
 				"line_ending": "Windows"
 			}
 		}
@@ -210,40 +240,54 @@
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/components",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/site",
-		"/C/xampp/htdocs/dcilaboratorio/framework/cli",
-		"/C/xampp/htdocs/dcilaboratorio/framework/cli/views",
-		"/C/xampp/htdocs/dcilaboratorio/framework/cli/views/webapp",
-		"/C/xampp/htdocs/dcilaboratorio/framework/cli/views/webapp/protected",
-		"/C/xampp/htdocs/dcilaboratorio/framework/cli/views/webapp/protected/config"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/unidadesResponsables",
+		"/C/xampp/htdocs/dcilaboratorio/framework",
+		"/C/xampp/htdocs/dcilaboratorio/framework/i18n",
+		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/menu.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/create.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/view.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/view.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/TarifasActivasController.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/admin.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/TarifasActivas.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/_form.php",
+		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data/es_mx.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config/main.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Multitarifarios.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/_form.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/create.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Doctores.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/custom/customStyle.css",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/main.php",
+		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Carlos/Documents/Development/glassfish4.0.1/glassfish/domains/domainZeitek/config/domain.xml",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/TitulosForm.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/column2.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/create.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/view.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/index.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/update.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/view.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/_form.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/multitarifarios/admin.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/multitarifarios/_form.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/admin.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/update.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/index.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/_form.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/DoctoresController.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Doctores.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/column2.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/admin.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/create.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/view.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/index.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/update.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config/main.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/login.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/EspecialidadesController.php",
-		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
-		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
 		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
 		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/Base de Datos/dcilab v3.sql",
 		"/C/Users/Carlos/Desktop/dcilab.sql",
@@ -308,6 +352,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"_numberFormatter",
+			"formatCurrency",
+			"md-6",
+			"customStyle.css",
+			".css",
+			"jdbc:mysql://localhost:3306/",
 			"UserIdentity",
 			"searc",
 			"CGridView",
@@ -354,34 +404,33 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "dcilaboratorio/protected/views/layouts/menu.php",
+					"file": "dcilaboratorio/protected/views/tarifasActivas/admin.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3645,
+						"buffer_size": 906,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2869,
-								2869
+								732,
+								732
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false,
-							"word_wrap": true
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1400.0,
+						"translation.y": 300.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -389,19 +438,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "dcilaboratorio/protected/views/doctores/admin.php",
+					"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 845,
+						"buffer_size": 5895,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								454,
-								454
+								3058,
+								3058
 							]
 						],
 						"settings":
@@ -410,385 +459,67 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1800.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "dcilaboratorio/protected/views/doctores/admin.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 789,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								781,
+								781
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 300.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
+					"file": "dcilaboratorio/protected/views/doctores/create.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16632,
+						"buffer_size": 265,
 						"regions":
 						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										250,
-										262
-									],
-									[
-										685,
-										697
-									],
-									[
-										1008,
-										1020
-									],
-									[
-										1206,
-										1218
-									],
-									[
-										1228,
-										1240
-									],
-									[
-										1426,
-										1438
-									],
-									[
-										1685,
-										1697
-									],
-									[
-										1830,
-										1842
-									],
-									[
-										2359,
-										2371
-									],
-									[
-										2896,
-										2908
-									],
-									[
-										3059,
-										3071
-									],
-									[
-										3722,
-										3734
-									],
-									[
-										4259,
-										4271
-									],
-									[
-										4422,
-										4434
-									],
-									[
-										5085,
-										5097
-									],
-									[
-										5622,
-										5634
-									],
-									[
-										5785,
-										5797
-									],
-									[
-										6413,
-										6425
-									],
-									[
-										6576,
-										6588
-									],
-									[
-										7002,
-										7014
-									],
-									[
-										7200,
-										7212
-									],
-									[
-										7222,
-										7234
-									],
-									[
-										7438,
-										7450
-									],
-									[
-										7690,
-										7702
-									],
-									[
-										7834,
-										7846
-									],
-									[
-										8054,
-										8066
-									],
-									[
-										8252,
-										8264
-									],
-									[
-										8274,
-										8286
-									],
-									[
-										8482,
-										8494
-									],
-									[
-										8695,
-										8707
-									],
-									[
-										8900,
-										8912
-									],
-									[
-										9061,
-										9073
-									],
-									[
-										9259,
-										9271
-									],
-									[
-										9281,
-										9293
-									],
-									[
-										9481,
-										9493
-									],
-									[
-										9735,
-										9747
-									],
-									[
-										9879,
-										9891
-									],
-									[
-										10092,
-										10104
-									],
-									[
-										10114,
-										10126
-									],
-									[
-										10272,
-										10284
-									],
-									[
-										10441,
-										10453
-									],
-									[
-										10673,
-										10685
-									],
-									[
-										10809,
-										10821
-									],
-									[
-										11012,
-										11024
-									],
-									[
-										11136,
-										11148
-									],
-									[
-										11186,
-										11198
-									],
-									[
-										11226,
-										11238
-									],
-									[
-										11473,
-										11485
-									],
-									[
-										11523,
-										11535
-									],
-									[
-										11577,
-										11589
-									],
-									[
-										11687,
-										11699
-									],
-									[
-										11731,
-										11743
-									],
-									[
-										11910,
-										11922
-									],
-									[
-										12149,
-										12161
-									],
-									[
-										12350,
-										12362
-									],
-									[
-										12470,
-										12482
-									],
-									[
-										12799,
-										12811
-									],
-									[
-										12990,
-										13002
-									],
-									[
-										13016,
-										13028
-									],
-									[
-										13270,
-										13282
-									],
-									[
-										13539,
-										13551
-									],
-									[
-										13809,
-										13821
-									],
-									[
-										14072,
-										14084
-									],
-									[
-										14291,
-										14303
-									],
-									[
-										14402,
-										14414
-									],
-									[
-										14821,
-										14833
-									],
-									[
-										15070,
-										15082
-									],
-									[
-										15592,
-										15604
-									],
-									[
-										15625,
-										15637
-									],
-									[
-										15779,
-										15791
-									],
-									[
-										15808,
-										15820
-									],
-									[
-										16104,
-										16116
-									],
-									[
-										16137,
-										16149
-									],
-									[
-										16291,
-										16303
-									],
-									[
-										16320,
-										16332
-									],
-									[
-										16540,
-										16552
-									]
-								],
-								"scope": ""
-							}
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								125,
+								125
 							]
 						],
 						"settings":
 						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 1,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 200.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "dcilaboratorio/protected/models/LoginForm.php",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 1778,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1100.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
 					"type": "text"
 				}
 			]
