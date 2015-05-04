@@ -17,16 +17,20 @@ $this->breadcrumbs=array(
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
-		'id_examenes',
-		'id_multitarifarios',
-		'precio',
-		'ultima_edicion',
-		'usuario_ultima_edicion',
-		/*
-		'creacion',
-		'usuario_creacion',
-		*/
+		array(
+			'name'=>"id_examenes",
+			'header'=>'Exámen',
+			'value'=>array($this, 'obtenerNombreExamen'),
+			),
+		array(
+			'name'=>'id_multitarifarios',
+			'header'=>'Multitarifario',
+			'value'=>array($this, 'obtenerNombreMultitarifario'),
+			),
+		array(
+			'name'=>'precio',
+			'value'=>array($this, 'obtenerPrecioConFormato'),
+			),
 		array(
 			'class'=>'CButtonColumn',
 		),

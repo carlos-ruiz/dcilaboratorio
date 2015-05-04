@@ -172,4 +172,18 @@ class TarifasActivasController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	public function obtenerNombreExamen($data, $row){
+		$examen = Examenes::model()->find($data->id_examenes);
+		return $examen->nombre;
+	} 
+
+	public function obtenerNombreMultitarifario($data, $row){
+		$multitarifario = Multitarifarios::model()->find($data->id_multitarifarios);
+		return $multitarifario->nombre;
+	}
+
+	public function obtenerPrecioConFormato($data, $row){
+		return Yii::app()->numberFormatter->formatCurrency($data->precio, 'MXN');
+	}
 }

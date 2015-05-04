@@ -124,4 +124,5 @@ class TarifasActivas extends CActiveRecord
 	public function obtenerExamenes(){
 		return CHtml::listData(Examenes::model()->findAll(), 'id', 'nombre');
 	}
+
 }

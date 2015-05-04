@@ -3,7 +3,7 @@
 /* @var $model TarifasActivas */
 $this->pageTitle="Tarifas activas";
 $this->breadcrumbs=array(
-	'Tarifas Activas'=>array('index'),
+	'Tarifas Activas'=>array('admin'),
 	'Nueva tarifa',
 );
 ?>
