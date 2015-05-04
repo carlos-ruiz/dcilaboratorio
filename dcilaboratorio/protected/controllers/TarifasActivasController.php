@@ -1,13 +1,14 @@
 <?php
 
-class UnidadesResponsablesController extends Controller
+class TarifasActivasController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $section = "UnidadesResponsables";
+	public $section = "Examenes";
+	public $subSection;
 	/**
 	 * @return array action filters
 	 */
@@ -62,14 +63,14 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new UnidadesResponsables;
+		$model=new TarifasActivas;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['UnidadesResponsables']))
+		if(isset($_POST['TarifasActivas']))
 		{
-			$model->attributes=$_POST['UnidadesResponsables'];
+			$model->attributes=$_POST['TarifasActivas'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -91,9 +92,9 @@ class UnidadesResponsablesController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['UnidadesResponsables']))
+		if(isset($_POST['TarifasActivas']))
 		{
-			$model->attributes=$_POST['UnidadesResponsables'];
+			$model->attributes=$_POST['TarifasActivas'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -122,7 +123,7 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('UnidadesResponsables');
+		$dataProvider=new CActiveDataProvider('TarifasActivas');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -133,10 +134,11 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new UnidadesResponsables('search');
+		$this->subSection = "TarifasActivas";
+		$model=new TarifasActivas('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['UnidadesResponsables']))
-			$model->attributes=$_GET['UnidadesResponsables'];
+		if(isset($_GET['TarifasActivas']))
+			$model->attributes=$_GET['TarifasActivas'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -147,12 +149,12 @@ class UnidadesResponsablesController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return UnidadesResponsables the loaded model
+	 * @return TarifasActivas the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=UnidadesResponsables::model()->findByPk($id);
+		$model=TarifasActivas::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -160,15 +162,28 @@ class UnidadesResponsablesController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param UnidadesResponsables $model the model to be validated
+	 * @param TarifasActivas $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='unidades-responsables-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='tarifas-activas-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
 
+	public function obtenerNombreExamen($data, $row){
+		$examen = Examenes::model()->find($data->id_examenes);
+		return $examen->nombre;
+	} 
+
+	public function obtenerNombreMultitarifario($data, $row){
+		$multitarifario = Multitarifarios::model()->find($data->id_multitarifarios);
+		return $multitarifario->nombre;
+	}
+
+	public function obtenerPrecioConFormato($data, $row){
+		return Yii::app()->numberFormatter->formatCurrency($data->precio, 'MXN');
+	}
 }

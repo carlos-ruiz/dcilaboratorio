@@ -13,8 +13,8 @@ return array (
   'version' => '8245',
   'numberSymbols' => 
   array (
-    'decimal' => ',',
-    'group' => '.',
+    'decimal' => '.',
+    'group' => ',',
     'list' => ';',
     'percentSign' => '%',
     'plusSign' => '+',
@@ -27,7 +27,7 @@ return array (
   'decimalFormat' => '#,##0.###',
   'scientificFormat' => '#E0',
   'percentFormat' => '#,##0%',
-  'currencyFormat' => '#,##0.00 ¤',
+  'currencyFormat' => '¤ #,##0.00',
   'currencySymbols' => 
   array (
     'AUD' => 'AU$',

@@ -1,29 +1,31 @@
 <?php
 
 /**
- * This is the model class for table "multitarifarios".
+ * This is the model class for table "contactos".
  *
- * The followings are the available columns in table 'multitarifarios':
+ * The followings are the available columns in table 'contactos':
  * @property integer $id
- * @property string $nombre
- * @property string $descripcion
+ * @property string $contacto
+ * @property integer $id_tipos_contacto
  * @property string $ultima_edicion
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
+ * @property integer $id_persona
+ * @property integer $id_perfiles
  *
  * The followings are the available model relations:
- * @property Ordenes[] $ordenes
- * @property TarifasActivas[] $tarifasActivases
+ * @property Perfiles $idPerfiles
+ * @property TiposContacto $idTiposContacto
  */
-class Multitarifarios extends CActiveRecord
+class Contactos extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'multitarifarios';
+		return 'contactos';
 	}
 
 	/**
@@ -34,13 +36,13 @@ class Multitarifarios extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, descripcion, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('nombre', 'length', 'max'=>45),
-			array('descripcion', 'length', 'max'=>256),
+			array('contacto, id_tipos_contacto, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_persona, id_perfiles', 'required'),
+			array('id_tipos_contacto, usuario_ultima_edicion, usuario_creacion, id_persona, id_perfiles', 'numerical', 'integerOnly'=>true),
+			array('contacto', 'length', 'max'=>50),
+			array('ultima_edicion', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, descripcion, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, contacto, id_tipos_contacto, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_persona, id_perfiles', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,8 +54,8 @@ class Multitarifarios extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_multitarifarios'),
-			'tarifasActivases' => array(self::HAS_MANY, 'TarifasActivas', 'id_multitarifarios'),
+			'idPerfiles' => array(self::BELONGS_TO, 'Perfiles', 'id_perfiles'),
+			'idTiposContacto' => array(self::BELONGS_TO, 'TiposContacto', 'id_tipos_contacto'),
 		);
 	}
 
@@ -64,12 +66,14 @@ class Multitarifarios extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'nombre' => 'Nombre',
-			'descripcion' => 'Descripción',
+			'contacto' => 'Contacto',
+			'id_tipos_contacto' => 'Id Tipos Contacto',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
+			'id_persona' => 'Id Persona',
+			'id_perfiles' => 'Id Perfiles',
 		);
 	}
 
@@ -92,12 +96,14 @@ class Multitarifarios extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('nombre',$this->nombre,true);
-		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('contacto',$this->contacto,true);
+		$criteria->compare('id_tipos_contacto',$this->id_tipos_contacto);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		$criteria->compare('id_persona',$this->id_persona);
+		$criteria->compare('id_perfiles',$this->id_perfiles);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -108,7 +114,7 @@ class Multitarifarios extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Multitarifarios the static model class
+	 * @return Contactos the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

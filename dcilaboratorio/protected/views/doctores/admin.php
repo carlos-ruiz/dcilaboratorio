@@ -2,7 +2,7 @@
 /* @var $this DoctoresController */
 /* @var $model Doctores */
 $this->breadcrumbs=array(
-	'Doctores'=>array('index'),
+	'Doctores'=>array('admin'),
 	'Administrar doctores',
 );
 
@@ -19,29 +19,16 @@ $this->pageTitle="Doctores";
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'nombre',
-		'a_paterno',
-		'a_materno',
+		array(
+			'name'=>'id_especialidades',
+			'value'=>array($this, 'obtenerNombreEspecialidad'),
+			),
+		array(
+			'name'=>'nombre',
+			'value'=>array($this, 'obtenerNombreCompletoConTitulo'),
+			),
 		'correo_electronico',
-		'hora_consulta_de',
-		/*
-		'hora_consulta_hasta',
-		'porcentaje',
-		'calle',
-		'ciudad',
-		'colonia',
-		'estado',
-		'codigo_postal',
-		'numero_ext',
-		'numero_int',
-		'id_especialidades',
-		'id_titulos',
 		'id_usuarios',
-		'ultima_edicion',
-		'usuario_ultima_edicion',
-		'creacion',
-		'usuario_creacion',
-		*/
 		array(
 			'class'=>'CButtonColumn',
 		),

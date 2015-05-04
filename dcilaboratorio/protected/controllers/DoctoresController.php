@@ -102,7 +102,7 @@ class DoctoresController extends Controller
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 			else{
-				echo "<script>alert('no se pudo guardar');</script>";
+				echo "<script>alert('No se pudo guardar');</script>";
 			}
 		}
 
@@ -202,5 +202,16 @@ class DoctoresController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public function obtenerNombreCompletoConTitulo($data, $row){
+		$titulo = TitulosForm::model()->find($data->id_titulos);
+		$completo = $titulo->nombre.' '.$data->nombre.' '.$data->a_paterno.' '.$data->a_materno;
+		return $completo;
+	}
+
+	public function obtenerNombreEspecialidad($data, $row){
+		$especialidad = Especialidades::model()->find($data->id_especialidades);
+		return $especialidad->nombre;
 	}
 }

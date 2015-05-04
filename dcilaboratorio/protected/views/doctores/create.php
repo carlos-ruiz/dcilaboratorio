@@ -5,7 +5,7 @@
 $this->pageTitle="Doctores";
 
 $this->breadcrumbs=array(
-	'Doctores'=>array('index'),
+	'Doctores'=>array('admin'),
 	'Nuevo doctor',
 );
 ?>
