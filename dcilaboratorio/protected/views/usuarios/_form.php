@@ -4,12 +4,10 @@
 /* @var $form CActiveForm */
 ?>
 
-<br />
-<br />
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-gift"></i> Usuario
+			<i class="fa fa-gift"></i> Nuevo usuario
 		</div>
 		<div class="tools">
 			<a href="" class="collapse" data-original-title="" title="">
