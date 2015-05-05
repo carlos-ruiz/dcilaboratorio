@@ -138,6 +138,12 @@
 							Nuevo Examen</a>
 						</li>
 						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/index">
+							<i class="icon-plus"></i>
+							Grupos</a>
+
+						</li>
+						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/tarifasActivas/admin">
 							<i class="icon-plus"></i>
 							Tarifas activas</a>
