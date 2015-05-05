@@ -3,7 +3,7 @@
 /* @var $model TitulosForm */
 
 $this->breadcrumbs=array(
-	'Titulos Forms'=>array('index'),
+	'Titulos Forms'=>array('admin'),
 	$model->id,
 );
 

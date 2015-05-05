@@ -2,7 +2,10 @@
 /* @var $this UsersController */
 /* @var $model Users */
 $this->pageTitle="Titulos";
-
+$this->breadcrumbs=array(
+	'Titulos'=>array('admin'),
+	'Nuevo',
+);
 
 ?>
 

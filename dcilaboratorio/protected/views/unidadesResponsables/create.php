@@ -3,7 +3,7 @@
 /* @var $model UnidadesResponsables */
 
 $this->breadcrumbs=array(
-	'Unidades Responsables'=>array('index'),
+	'Unidades Responsables'=>array('admin'),
 	'Nueva',
 );
 ?>

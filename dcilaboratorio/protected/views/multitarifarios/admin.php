@@ -3,7 +3,7 @@
 /* @var $model Multitarifarios */
 
 $this->breadcrumbs=array(
-	'Multitarifarios'=>array('index'),
+	'Multitarifarios'=>array('admin'),
 	'Manage',
 );
 

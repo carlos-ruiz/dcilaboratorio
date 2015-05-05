@@ -3,7 +3,7 @@
 /* @var $dataProvider CActiveDataProvider */
 $this->pageTitle="Titulo";
 $this->breadcrumbs=array(
-	'Titulos'=>array('index'),
+	'Titulos'=>array('admin'),
 	'Create',
 );
 

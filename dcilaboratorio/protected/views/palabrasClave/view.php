@@ -3,7 +3,7 @@
 /* @var $model PalabrasClave */
 
 $this->breadcrumbs=array(
-	'Palabras Claves'=>array('index'),
+	'Palabras Claves'=>array('admin'),
 	$model->id,
 );
 ?>

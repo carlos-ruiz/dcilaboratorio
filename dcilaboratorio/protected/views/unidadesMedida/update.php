@@ -3,7 +3,7 @@
 /* @var $model UnidadesMedida */
 
 $this->breadcrumbs=array(
-	'Unidades Medidas'=>array('index'),
+	'Unidades Medidas'=>array('admin'),
 	$model->id=>array('view','id'=>$model->id),
 	'Modificar',
 );

@@ -268,3 +268,29 @@
 					</ul>
 				</li>
 
+				</li>
+					<li <?php if($this->section=="GrupoExamenes"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-puzzle"></i>
+					<span class="title">Grupo de Exámenes</span>
+					<?php if($this->section=="GrupoExamenes"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/gruposExamenes/admin">
+							<i class="icon-plus"></i>
+							Administración</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/gruposExamenes/create">
+							<i class="icon-plus"></i>
+							Nuevo Grupo de Exámenes</a>
+						</li>
+					</ul>
+				</li>
+
