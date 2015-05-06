@@ -65,7 +65,9 @@ class DoctoresController extends Controller
 	public function actionCreate()
 	{
 		$this->subSection = "Nuevo";
-		$model=new Doctores;
+		$model = new Doctores;
+		$contactos = new Contactos;
+		$telefonos = array();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -73,6 +75,7 @@ class DoctoresController extends Controller
 		if(isset($_POST['Doctores']))
 		{
 			$model->attributes=$_POST['Doctores'];
+			$contactos->attributes=$_POST['Contactos'];
 			$usuario = new Usuarios;
 			if($perfil = Perfiles::model()->findByName("Doctor")){
 				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
@@ -99,7 +102,7 @@ class DoctoresController extends Controller
 			}
 			$model->id_usuarios=$usuario->id;
 
-			if($model->save())
+			if($model->save() && $contactos->save())
 				$this->redirect(array('view','id'=>$model->id));
 			else{
 				echo "<script>alert('No se pudo guardar');</script>";
@@ -107,7 +110,9 @@ class DoctoresController extends Controller
 		}
 
 		$this->render('create',array(
-			'model'=>$model,
+			'model'=>$model, 
+			'contactos'=>$contactos, 
+			'telefonos'=>$telefonos,
 		));
 	}
 

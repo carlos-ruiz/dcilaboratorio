@@ -104,26 +104,10 @@
 	"buffers":
 	[
 		{
-			"file": "dcilaboratorio/protected/views/tarifasActivas/admin.php",
-			"settings":
-			{
-				"buffer_size": 906,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
 			"settings":
 			{
-				"buffer_size": 5895,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/views/doctores/admin.php",
-			"settings":
-			{
-				"buffer_size": 789,
+				"buffer_size": 6078,
 				"line_ending": "Windows"
 			}
 		},
@@ -131,7 +115,23 @@
 			"file": "dcilaboratorio/protected/views/doctores/create.php",
 			"settings":
 			{
-				"buffer_size": 265,
+				"buffer_size": 321,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/doctores/_form.php",
+			"settings":
+			{
+				"buffer_size": 10390,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/config/main.php",
+			"settings":
+			{
+				"buffer_size": 2065,
 				"line_ending": "Windows"
 			}
 		}
@@ -245,26 +245,30 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/unidadesResponsables",
 		"/C/xampp/htdocs/dcilaboratorio/framework",
-		"/C/xampp/htdocs/dcilaboratorio/framework/i18n",
 		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/GruposController.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos/_form.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/admin.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config/main.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Contactos.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/create.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/menu.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/create.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/view.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/view.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/TarifasActivasController.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/TarifasActivas.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/_form.php",
 		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data/es_mx.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config/main.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Multitarifarios.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/_form.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/create.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Doctores.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/custom/customStyle.css",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/main.php",
@@ -280,7 +284,6 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/update.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/multitarifarios/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/multitarifarios/_form.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/update.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/index.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/_form.php",
@@ -352,6 +355,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"es\\zii.php",
+			"viendo",
+			"messa",
+			"dis",
+			"Displaying ",
+			"tiene",
+			"examenes",
+			"contactos",
+			"valida",
 			"_numberFormatter",
 			"formatCurrency",
 			"md-6",
@@ -404,24 +416,24 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "dcilaboratorio/protected/views/tarifasActivas/admin.php",
+					"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 906,
+						"buffer_size": 6078,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								732,
-								732
+								3085,
+								3085
 							]
 						],
 						"settings":
@@ -430,7 +442,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 300.0,
+						"translation.y": 1313.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -438,77 +450,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5895,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3058,
-								3058
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1800.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "dcilaboratorio/protected/views/doctores/admin.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 789,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								781,
-								781
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 300.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "dcilaboratorio/protected/views/doctores/create.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 265,
+						"buffer_size": 321,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								125,
-								125
+								292,
+								292
 							]
 						],
 						"settings":
@@ -519,7 +473,65 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "dcilaboratorio/protected/views/doctores/_form.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10390,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5524,
+								5524
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2851.0,
+						"zoom_level": 1.0
+					},
 					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "dcilaboratorio/protected/config/main.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2065,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1841,
+								1841
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1300.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				}
 			]

@@ -102,6 +102,35 @@
 
 				</section>
 
+				<section id="contacto" class="overflow-auto">
+					<div class="heading text-center">
+						<h3>Teléfonos</h3>
+						<hr/>
+					</div>
+
+					<div class="form-group col-md-6 <?php if($form->error($contactos,'contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contactos,'Consultorio', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<?php echo $form->textField($contactos,'contacto',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($contactos,'contacto', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+					<div class="form-group col-md-6 <?php if($form->error($contactos,'contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contactos,'Casa', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<?php echo $form->textField($contactos,'contacto',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($contactos,'contacto', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+					<div class="form-group col-md-6 <?php if($form->error($contactos,'contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contactos,'Celular', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<?php echo $form->textField($contactos,'contacto',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($contactos,'contacto', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+				</section>
+
 				<section id="direccion" class="overflow-auto">
 					<div class="heading text-center">
 						<h3>Dirección</h3>

@@ -12,4 +12,7 @@ $this->breadcrumbs=array(
 
 <h1>Nuevo doctor</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', array(
+	'model'=>$model, 
+	'contactos'=>$contactos, 
+	'telefonos'=>$telefonos)); ?>
