@@ -4,12 +4,16 @@
 
 $this->pageTitle="Doctores";
 
-$this->breadcrumbs=array(
+?>
+
+<h1>Nuevo doctor</h1>
+<?php $this->breadcrumbs=array(
 	'Doctores'=>array('admin'),
 	'Nuevo doctor',
 );
 ?>
 
-<h1>Nuevo doctor</h1>
-
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', array(
+	'model'=>$model, 
+	'contacto'=>$contacto,
+	)); ?>

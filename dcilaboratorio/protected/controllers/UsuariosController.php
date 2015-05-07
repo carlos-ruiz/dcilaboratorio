@@ -9,6 +9,8 @@ class UsuariosController extends Controller
 	public $layout='//layouts/column2';
 	public $section = "Usuarios";
 	public $subSection;
+
+	public $pageTitle="Usuarios";
 	/**
 	 * @return array action filters
 	 */

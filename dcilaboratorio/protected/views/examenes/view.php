@@ -1,11 +1,6 @@
 <?php
 /* @var $this ExamenesController */
 /* @var $model Examenes */
-
-$this->breadcrumbs=array(
-	'Examenes'=>array('index'),
-	$model->id,
-);
 ?>
 
 <h1>Examen: <?php echo $model->nombre; ?></h1>

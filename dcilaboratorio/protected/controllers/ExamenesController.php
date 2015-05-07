@@ -8,6 +8,7 @@ class ExamenesController extends Controller
 	 */
 	public $layout='//layouts/column2';
     public $section = "Examenes";
+    public $pageTitle="Examenes";
 	/**
 	 * @return array action filters
 	 */

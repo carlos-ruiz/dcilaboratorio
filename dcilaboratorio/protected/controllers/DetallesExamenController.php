@@ -8,6 +8,7 @@ class DetallesExamenController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "DetallesExamenes";
+	public $pageTitle="Resultados de Examenes";
 	/**
 	 * @return array action filters
 	 */
@@ -170,4 +171,6 @@ class DetallesExamenController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	
 }

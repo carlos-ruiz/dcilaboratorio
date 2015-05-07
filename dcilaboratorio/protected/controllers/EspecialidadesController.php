@@ -9,6 +9,7 @@ class EspecialidadesController extends Controller
 	public $layout='//layouts/column2';
 	public $section = "Doctores";
 	public $subSection;
+	public $pageTitle="Especialidades";
 	/**
 	 * @return array action filters
 	 */

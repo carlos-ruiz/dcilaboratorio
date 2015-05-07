@@ -8,6 +8,7 @@ class MultitarifariosController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "Multitarifarios";
+	public $pageTitle="Multitarifarios";
 	/**
 	 * @return array action filters
 	 */

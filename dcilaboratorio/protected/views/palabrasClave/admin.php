@@ -2,11 +2,6 @@
 /* @var $this PalabrasClaveController */
 /* @var $model PalabrasClave */
 
-$this->breadcrumbs=array(
-	'Palabras Claves'=>array('index'),
-	'Manage',
-);
-
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -21,7 +16,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Administrar Palabras Claves</h1>
+<h1>Administrar palabras clave</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'palabras-clave-grid',

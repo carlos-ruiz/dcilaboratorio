@@ -9,6 +9,7 @@ class DoctoresController extends Controller
 	public $layout='//layouts/column2';
 	public $section = "Doctores";
 	public $subSection;
+	public $pageTitle="Doctores";
 
 	/**
 	 * @return array action filters
@@ -65,14 +66,25 @@ class DoctoresController extends Controller
 	public function actionCreate()
 	{
 		$this->subSection = "Nuevo";
-		$model=new Doctores;
+		$model = new Doctores;
+		$contacto = new Contactos;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Doctores']))
 		{
+			print_r($_POST['Contactos']);
 			$model->attributes=$_POST['Doctores'];
+			$casa = new Contactos;
+			$consultorio = new Contactos;
+			$celular = new Contactos;
+			$correo = new Contactos;
+
+			$casa->contacto = $_POST['Contactos']['contactoCasa'];
+			$consultorio->contacto = $_POST['Contactos']['contactoCasa'];
+			$celular->contacto = $_POST['Contactos']['contactoCasa'];
+			$correo->contacto = $_POST['Contactos']['contactoCasa'];
 			$usuario = new Usuarios;
 			if($perfil = Perfiles::model()->findByName("Doctor")){
 				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
@@ -99,7 +111,7 @@ class DoctoresController extends Controller
 			}
 			$model->id_usuarios=$usuario->id;
 
-			if($model->save())
+			if($model->save() && $contactos->save())
 				$this->redirect(array('view','id'=>$model->id));
 			else{
 				echo "<script>alert('No se pudo guardar');</script>";
@@ -107,7 +119,8 @@ class DoctoresController extends Controller
 		}
 
 		$this->render('create',array(
-			'model'=>$model,
+			'model'=>$model, 
+			'contacto'=>$contacto,
 		));
 	}
 

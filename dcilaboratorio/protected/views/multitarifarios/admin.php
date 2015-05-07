@@ -2,11 +2,6 @@
 /* @var $this MultitarifariosController */
 /* @var $model Multitarifarios */
 
-$this->breadcrumbs=array(
-	'Multitarifarios'=>array('index'),
-	'Manage',
-);
-
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -22,7 +17,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Administrar  Multitarifarios</h1>
+<h1>Administrar  multitarifarios</h1>
 
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(

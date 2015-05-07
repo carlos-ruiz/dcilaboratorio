@@ -4,6 +4,6 @@
 
 ?>
 
-<h1>Modificar Usuario <?php echo $model->id; ?></h1>
+<h1>Actualizar usuario: <?php echo $model->usuario; ?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

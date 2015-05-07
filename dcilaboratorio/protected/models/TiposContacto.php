@@ -1,29 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "grupo_tiene_examenes".
+ * This is the model class for table "tipos_contacto".
  *
- * The followings are the available columns in table 'grupo_tiene_examenes':
+ * The followings are the available columns in table 'tipos_contacto':
  * @property integer $id
- * @property integer $id_grupos_examenes
- * @property integer $id_examenes
+ * @property string $descripcion
+ * @property string $abreviatura
  * @property string $ultima_edicion
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
  *
  * The followings are the available model relations:
- * @property Examenes $idExamenes
- * @property GruposExamenes $idGruposExamenes
+ * @property Contactos[] $contactoses
  */
-class GrupoExamenes extends CActiveRecord
+class TiposContacto extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'grupo_tiene_examenes';
+		return 'tipos_contacto';
 	}
 
 	/**
@@ -34,11 +33,12 @@ class GrupoExamenes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_grupos_examenes, id_examenes, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('id_grupos_examenes, id_examenes, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('descripcion, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('descripcion, abreviatura', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_grupos_examenes, id_examenes, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, descripcion, abreviatura, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,8 +50,7 @@ class GrupoExamenes extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idExamenes' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
-			'idGruposExamenes' => array(self::BELONGS_TO, 'GruposExamenes', 'id_grupos_examenes'),
+			'contactoses' => array(self::HAS_MANY, 'Contactos', 'id_tipos_contacto'),
 		);
 	}
 
@@ -62,8 +61,8 @@ class GrupoExamenes extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'id_grupos_examenes' => 'Id Grupos Examenes',
-			'id_examenes' => 'Id Examenes',
+			'descripcion' => 'Descripcion',
+			'abreviatura' => 'Abreviatura',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
@@ -90,8 +89,8 @@ class GrupoExamenes extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('id_grupos_examenes',$this->id_grupos_examenes);
-		$criteria->compare('id_examenes',$this->id_examenes);
+		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('abreviatura',$this->abreviatura,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
@@ -106,20 +105,10 @@ class GrupoExamenes extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return GrupoExamenes the static model class
+	 * @return TiposContacto the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
-	}
-
-	public function findExamenesForGrupo($id){
-		$grupoExamenes = $this->model()->findAll('id_grupos_examenes=?',array($id));
-		$ids=array();
-		$i=0;
-		foreach ($grupoExamenes as $grupoExamen) {
-			$ids[$i++]=$grupoExamen->id_examenes;
-		}
-		return Examenes::model()->findExamenesInIds($ids);
 	}
 }

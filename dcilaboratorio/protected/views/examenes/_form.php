@@ -9,7 +9,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-gift"></i> Examen
+			Examen
 		</div>		
 	</div>
 	<div class="portlet-body form" style="display: block;">
@@ -80,7 +80,7 @@
 
 
 	<div class="form-actions">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn green')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

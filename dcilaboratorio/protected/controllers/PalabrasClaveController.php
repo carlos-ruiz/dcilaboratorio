@@ -8,6 +8,7 @@ class PalabrasClaveController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "PalabrasClave";
+	public $pageTitle="Palabras clave";
 	/**
 	 * @return array action filters
 	 */
