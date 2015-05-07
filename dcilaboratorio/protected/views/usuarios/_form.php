@@ -7,17 +7,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-gift"></i> Nuevo usuario
-		</div>
-		<div class="tools">
-			<a href="" class="collapse" data-original-title="" title="">
-			</a>
-			<a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title="">
-			</a>
-			<a href="" class="reload" data-original-title="" title="">
-			</a>
-			<a href="" class="remove" data-original-title="" title="">
-			</a>
+			Usuario
 		</div>
 	</div>
 	<div class="portlet-body form" style="display: block;">
@@ -54,7 +44,7 @@
 		
 
 		<div class="form-actions">
-			<?php echo CHtml::submitButton($model->isNewRecord ? 'Crear' : 'Guardar', array('class'=>'btn green')); ?>
+			<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
 		</div>
 		
 	</div>

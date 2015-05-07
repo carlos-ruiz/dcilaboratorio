@@ -40,6 +40,7 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/custom.css" rel="stylesheet" type="text/css"/>
 	<!-- END THEME STYLES -->
 	<link rel="shortcut icon" href="favicon.ico"/>
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
@@ -207,6 +208,7 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/scripts/demo.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script>
 jQuery(document).ready(function() {    
    Metronic.init(); // init metronic core components

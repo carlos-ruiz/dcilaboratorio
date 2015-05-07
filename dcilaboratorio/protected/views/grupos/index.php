@@ -27,3 +27,9 @@
 		$("#detalles_"+$(this).data('id')).toggle(500);
 	});
 </script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("table").dataTable();
+});
+</script>

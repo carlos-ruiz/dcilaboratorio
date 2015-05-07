@@ -47,8 +47,8 @@
 					<ul class="sub-menu">
 						<li <?php if($this->section=="Usuarios" && $this->subSection=="Registro"){ echo 'class="active open"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/create">
-							<i class="icon-plus"></i>
-							Registro</a>
+							<i class="icon-user-follow"></i>
+							Nuevo</a>
 						</li>
 						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/admin">

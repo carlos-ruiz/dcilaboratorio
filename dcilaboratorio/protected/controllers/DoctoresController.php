@@ -66,16 +66,24 @@ class DoctoresController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new Doctores;
-		$contactos = new Contactos;
-		$telefonos = array();
+		$contacto = new Contactos;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Doctores']))
 		{
+			print_r($_POST['Contactos']);
 			$model->attributes=$_POST['Doctores'];
-			$contactos->attributes=$_POST['Contactos'];
+			$casa = new Contactos;
+			$consultorio = new Contactos;
+			$celular = new Contactos;
+			$correo = new Contactos;
+
+			$casa->contacto = $_POST['Contactos']['contactoCasa'];
+			$consultorio->contacto = $_POST['Contactos']['contactoCasa'];
+			$celular->contacto = $_POST['Contactos']['contactoCasa'];
+			$correo->contacto = $_POST['Contactos']['contactoCasa'];
 			$usuario = new Usuarios;
 			if($perfil = Perfiles::model()->findByName("Doctor")){
 				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
@@ -111,8 +119,7 @@ class DoctoresController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model, 
-			'contactos'=>$contactos, 
-			'telefonos'=>$telefonos,
+			'contacto'=>$contacto,
 		));
 	}
 
