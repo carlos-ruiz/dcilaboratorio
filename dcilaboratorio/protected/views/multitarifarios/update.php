@@ -5,7 +5,7 @@
 $this->breadcrumbs=array(
 	'Multitarifarioses'=>array('admin'),
 	$model->id=>array('view','id'=>$model->id),
-	'Update',
+	'Modificar',
 );
 
 ?>

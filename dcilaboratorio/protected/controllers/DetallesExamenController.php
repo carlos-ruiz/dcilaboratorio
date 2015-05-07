@@ -170,4 +170,6 @@ class DetallesExamenController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	
 }

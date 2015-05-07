@@ -288,12 +288,12 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/gruposExamenes/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/grupos/admin">
 							<i class="icon-plus"></i>
 							Administración</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/gruposExamenes/create">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/create">
 							<i class="icon-plus"></i>
 							Nuevo Grupo de Exámenes</a>
 						</li>

@@ -4,7 +4,7 @@
 
 $this->breadcrumbs=array(
 	'Multitarifarios'=>array('admin'),
-	$model->id,
+	$model->nombre,
 );
 
 ?>

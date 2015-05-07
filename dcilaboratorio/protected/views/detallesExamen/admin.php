@@ -33,7 +33,8 @@ $('.search-form form').submit(function(){
 	'columns'=>array(
 		'id_examenes',
 		'descripcion',
-		'id_unidades_medida',
+		'unidadesMedida.nombre',
+		'examenes.nombre',
 		array(
 			'class'=>'CButtonColumn',
 		),

@@ -1,10 +1,15 @@
 <?php
 /* @var $this GruposExamenesController */
 /* @var $model GruposExamenes */
-
+$this->breadcrumbs=array(
+	'Grupos Examenes'=>array('admin'),
+	'Administración',
+);
 ?>
 
-<h1>Manage Grupos Examenes</h1>
+
+
+<h1>Administrar Grupos Examenes</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'grupos-examenes-grid',
