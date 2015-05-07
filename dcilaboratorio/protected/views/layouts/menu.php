@@ -91,7 +91,7 @@
 					</ul>
 				<li <?php if($this->section=="Titulos"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-puzzle"></i>
+					<i class="icon-trophy"></i>
 					<span class="title">Titulos</span>
 					<?php if($this->section=="Titulos"){?>
 					<span class="selected"></span>
@@ -102,22 +102,22 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/titulosForm/admin">
-							<i class="icon-plus"></i>
-							Administración</a>
-						</li>
-						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/TitulosForm/create">
 							<i class="icon-plus"></i>
-							Nuevo Título</a>
+							Nuevo</a>
 						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/titulosForm/admin">
+							<i class="icon-list"></i>
+							Administración</a>
+						</li>					
 					</ul>
 				</li>
 				
 				
 				<li <?php if($this->section=="Examenes"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-puzzle"></i>
+					<i class="icon-book-open"></i>
 					<span class="title">Exámenes</span>
 					<?php if($this->section=="Examenes"){?>
 					<span class="selected"></span>
@@ -128,18 +128,18 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/admin">
-							<i class="icon-plus"></i>
-							Administración</a>
-						</li>
-						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/create">
 							<i class="icon-plus"></i>
-							Nuevo Examen</a>
+							Nuevo</a>
 						</li>
 						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/admin">
+							<i class="icon-list"></i>
+							Administrar</a>
+						</li>						
+						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/index">
-							<i class="icon-plus"></i>
+							<i class="icon-layers"></i>
 							Grupos</a>
 
 						</li>
@@ -147,6 +147,11 @@
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/tarifasActivas/admin">
 							<i class="icon-plus"></i>
 							Tarifas activas</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/admin">
+							<i class="icon-note"></i>
+							Resultado de examenes</a>
 						</li>
 					</ul>
 				</li>
@@ -164,21 +169,21 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palabrasClave/admin">
-							<i class="icon-plus"></i>
-							Administración</a>
-						</li>
-						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/palabrasClave/create">
 							<i class="icon-plus"></i>
-							Nueva Palabra Clave</a>
+							Nueva</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palabrasClave/admin">
+							<i class="icon-list"></i>
+							Administrar</a>
 						</li>
 					</ul>
 				</li>
 
 				<li <?php if($this->section=="Multitarifarios"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-puzzle"></i>
+					<i class="icon-wallet"></i>
 					<span class="title">Multitarifarios</span>
 					<?php if($this->section=="Multitarifarios"){?>
 					<span class="selected"></span>
@@ -189,21 +194,21 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/multitarifarios/admin">
-							<i class="icon-plus"></i>
-							Administración</a>
-						</li>
-						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/multitarifarios/create">
 							<i class="icon-plus"></i>
-							Nuevo Multitarifario</a>
+							Nuevo</a>
+						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/multitarifarios/admin">
+							<i class="icon-list"></i>
+							Administrar</a>
 						</li>
 					</ul>
 				</li>
 
 				<li <?php if($this->section=="UnidadesResponsables"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-puzzle"></i>
+					<i class="icon-grid"></i>
 					<span class="title">Unidades Responsables</span>
 					<?php if($this->section=="UnidadesResponsables"){?>
 					<span class="selected"></span>
@@ -214,44 +219,21 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/unidadesResponsables/admin">
-							<i class="icon-plus"></i>
-							Administración</a>
-						</li>
-						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/create">
 							<i class="icon-plus"></i>
-							Nueva Unidad Responsable</a>
-						</li>
-					</ul>
-				</li>
-				<li <?php if($this->section=="DetallesExamenes"){ echo 'class="active open"';}?>>
-					<a href="javascript:;">
-					<i class="icon-puzzle"></i>
-					<span class="title">Resultado de exámenes</span>
-					<?php if($this->section=="DetallesExamenes"){?>
-					<span class="selected"></span>
-					<span class="arrow open"></span>
-					<?php } else{ ?>
-					<span class="arrow "></span>
-					<?php }?>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/detallesExamen/admin">
-							<i class="icon-plus"></i>
-							Administración</a>
+							Nueva</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/create">
-							<i class="icon-plus"></i>
-							Nuevo Resultado de Examen</a>
-						</li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/unidadesResponsables/admin">
+							<i class="icon-list"></i>
+							Administrar</a>
+						</li>						
 					</ul>
 				</li>
+
 					<li <?php if($this->section=="UnidadesMedida"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-puzzle"></i>
+					<i class="icon-chemistry"></i>
 					<span class="title">Unidades de Medida</span>
 					<?php if($this->section=="UnidadesMedida"){?>
 					<span class="selected"></span>
@@ -262,41 +244,18 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/unidadesMedida/admin">
-							<i class="icon-plus"></i>
-							Administración</a>
-						</li>
-						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesMedida/create">
 							<i class="icon-plus"></i>
-							Nueva Unidad Responsable</a>
+							Nueva</a>
 						</li>
+						<li>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/unidadesMedida/admin">
+							<i class="icon-list"></i>
+							Administrar</a>
+						</li>
+						
 					</ul>
 				</li>
 
-				</li>
-					<li <?php if($this->section=="GrupoExamenes"){ echo 'class="active open"';}?>>
-					<a href="javascript:;">
-					<i class="icon-puzzle"></i>
-					<span class="title">Grupo de Exámenes</span>
-					<?php if($this->section=="GrupoExamenes"){?>
-					<span class="selected"></span>
-					<span class="arrow open"></span>
-					<?php } else{ ?>
-					<span class="arrow "></span>
-					<?php }?>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/grupos/admin">
-							<i class="icon-plus"></i>
-							Administración</a>
-						</li>
-						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/create">
-							<i class="icon-plus"></i>
-							Nuevo Grupo de Exámenes</a>
-						</li>
-					</ul>
-				</li>
+			
 

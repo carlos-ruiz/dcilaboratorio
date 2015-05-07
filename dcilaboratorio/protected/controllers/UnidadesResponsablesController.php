@@ -8,6 +8,7 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "UnidadesResponsables";
+	public $pageTitle="Unidades Responsables";
 	/**
 	 * @return array action filters
 	 */

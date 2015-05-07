@@ -68,7 +68,7 @@ class DetallesExamen extends CActiveRecord
 			'id' => 'ID',
 			'descripcion' => 'Descripción',
 			'id_unidades_medida' => 'Unidades Medida',
-			'id_examenes' => 'Examenes',
+			'id_examenes' => 'Examen',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',

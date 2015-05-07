@@ -2,11 +2,6 @@
 /* @var $this UnidadesMedidaController */
 /* @var $model UnidadesMedida */
 
-$this->breadcrumbs=array(
-	'Unidades Medidas'=>array('admin'),
-	'Administración',
-);
-
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -21,7 +16,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Administrar Unidades Medidas</h1>
+<h1>Administrar unidades de medidas</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'unidades-medida-grid',

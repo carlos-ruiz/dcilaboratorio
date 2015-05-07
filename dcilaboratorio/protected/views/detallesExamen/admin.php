@@ -2,12 +2,6 @@
 /* @var $this DetallesExamenController */
 /* @var $model DetallesExamen */
 
-$this->breadcrumbs=array(
-	'Resultados de Examens'=>array('index'),
-	'Administración',
-);
-
-
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -23,18 +17,17 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Administrar Resultados de Exámenes</h1>
-
+<h1>Administrar resultados de exámenes</h1>
+<?php echo CHtml::link('<i class="icon-plus"></i> Nuevo resultado de examen', array('detallesExamen/create'), array('class'=>'btn text-right')); ?>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'detalles-examen-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id_examenes',
+		'examenes.nombre',
 		'descripcion',
 		'unidadesMedida.nombre',
-		'examenes.nombre',
 		array(
 			'class'=>'CButtonColumn',
 		),

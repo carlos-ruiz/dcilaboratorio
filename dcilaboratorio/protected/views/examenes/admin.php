@@ -2,11 +2,6 @@
 /* @var $this ExamenesController */
 /* @var $model Examenes */
 
-$this->breadcrumbs=array(
-	'Examenes'=>array('admin'),
-	'Administración',
-);
-
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -22,7 +17,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Administrar Examenes</h1>
+<h1>Administrar exámenes</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'examenes-grid',

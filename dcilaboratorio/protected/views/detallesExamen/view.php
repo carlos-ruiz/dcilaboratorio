@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 );
 ?>
 
-<h1>Resultado de Examen: <?php echo $model->descripcion; ?></h1>
+<h1>Resultado de examen: <?php echo $model->descripcion; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

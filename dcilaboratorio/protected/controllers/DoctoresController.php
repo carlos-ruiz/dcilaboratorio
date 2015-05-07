@@ -9,6 +9,7 @@ class DoctoresController extends Controller
 	public $layout='//layouts/column2';
 	public $section = "Doctores";
 	public $subSection;
+	public $pageTitle="Doctores";
 
 	/**
 	 * @return array action filters

@@ -2,13 +2,6 @@
 /* @var $this TitulosFormController */
 /* @var $model TitulosForm */
 
-$this->breadcrumbs=array(
-	'Titulos'=>array('admin'),
-	'Administración',
-);
-
-
-
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -23,7 +16,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Administrar de Títulos</h1>
+<h1>Administrar títulos</h1>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'titulos-form-grid',

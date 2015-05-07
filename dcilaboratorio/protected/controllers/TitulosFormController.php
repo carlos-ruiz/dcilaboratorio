@@ -8,6 +8,7 @@ class TitulosFormController extends Controller
 	 */
 	public $layout='//layouts/column2';
     public $section = "Titulos";
+    public $pageTitle="Títulos";
 	/**
 	 * @return array action filters
 	 */

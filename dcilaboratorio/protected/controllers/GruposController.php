@@ -8,6 +8,7 @@ class GruposController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section="Grupos";
+	public $pageTitle="Grupos de Exámenes";
 	/**
 	 * @return array action filters
 	 */

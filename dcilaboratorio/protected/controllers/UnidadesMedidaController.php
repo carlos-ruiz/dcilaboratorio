@@ -8,6 +8,7 @@ class UnidadesMedidaController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "UnidadesMedida";
+	public $pageTitle="Unidades de MEdida";
 
 	/**
 	 * @return array action filters
