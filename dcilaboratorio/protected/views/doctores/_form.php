@@ -102,6 +102,53 @@
 
 				</section>
 
+				<section id="contacto" class="overflow-auto">
+					<div class="heading text-center">
+						<h3>Teléfonos</h3>
+						<hr/>
+					</div>
+
+					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contacto,'Casa', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCasa]" id="Contactos_casa" type="text">
+							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+
+					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contacto,'Consultorio', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoConsultorio]" id="Contactos_consultorio" type="text">
+							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+
+					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contacto,'Celular', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCelular]" id="Contactos_celular" type="text">
+							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+
+					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contacto,'Celular', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCelular]" id="Contactos_celular" type="text">
+							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+
+					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contacto,'Correo electrónico', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCorreo]" id="Contactos_correo" type="text">
+							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+				</section>
+
 				<section id="direccion" class="overflow-auto">
 					<div class="heading text-center">
 						<h3>Dirección</h3>

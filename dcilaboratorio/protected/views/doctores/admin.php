@@ -11,8 +11,6 @@ $this->pageTitle="Doctores";
 
 <h1>Administrar doctores</h1>
 
-<?php echo CHtml::button('Nuevo doctor', array('class'=>'btn btn-sm green','submit'=>array('doctores/create'))); ?>
-
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'doctores-grid',
 	'dataProvider'=>$model->search(),

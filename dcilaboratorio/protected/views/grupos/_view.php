@@ -13,8 +13,10 @@ $detalles = GrupoExamenes::model()->findExamenesForGrupo($data->id);
 		<?php echo sizeof($detalles); ?>
 	</td>
 	<td width="55px" class="button-column">
-		<a class="update" title="Actualizar" href="/techinc/dcilaboratorio/grupos/update/<?php echo $data->id;?>"><span><i class="icon-pencil"></i></span> </a> 
-		<a class="delete" title="Borrar" href="/techinc/dcilaboratorio/grupos/delete/<?php echo $data->id;?>"><span><i class="icon-delete">X</i></span></a>
+		<a class="view" title="Ver" href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/view/<?php echo $data->id;?>"><span><i class="fa fa-search"></i></span></a>
+		<a class="update" title="Actualizar" href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/update/<?php echo $data->id;?>"><span><i class="fa fa-pencil"></i></span> </a> 
+		<a class="delete" title="Borrar" href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/delete/<?php echo $data->id;?>"><span><i class="fa fa-trash-o"></i></span></a>
+
 	</td>
 </tr>
 <tr id="detalles_<?php echo $data->id;?>" style="display:none">
