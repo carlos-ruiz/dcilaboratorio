@@ -132,7 +132,8 @@ class DoctoresController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+		$contacto = new Contactos;
+		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -145,6 +146,7 @@ class DoctoresController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
+			'contacto'=>$contacto,
 		));
 	}
 

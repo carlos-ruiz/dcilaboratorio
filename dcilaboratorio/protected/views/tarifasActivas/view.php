@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 );
 ?>
 
-<h1>Datos de la tarifa: <?php echo $model->id; ?></h1>
+<h1>Tarifa activa: <?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
