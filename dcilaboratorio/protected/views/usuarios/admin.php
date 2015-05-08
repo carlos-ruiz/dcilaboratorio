@@ -18,6 +18,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="btn-group tabletools-dropdown-on-portlet">
+						<!--
 						<a class="btn btn-sm default DTTT_button_pdf" id="ToolTables_sample_1_0"><span>PDF</span>
 							<div style="position: absolute; left: 0px; top: 0px; width: 44px; height: 28px; z-index: 99;">
 								<embed id="ZeroClipboard_TableToolsMovie_1" src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="44" height="28" name="ZeroClipboard_TableToolsMovie_1" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=44&amp;height=28" wmode="transparent">
@@ -35,6 +36,7 @@
 						</a>
 						<a class="btn btn-sm default DTTT_button_print" id="ToolTables_sample_1_3" title="View print view"><span>Print</span>
 						</a>
+						-->
 					</div>
 
 					<?php $this->widget('zii.widgets.grid.CGridView', array(
