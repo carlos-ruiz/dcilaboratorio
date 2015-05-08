@@ -8,7 +8,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-globe"></i>Usuarios
+			<i class="fa fa-globe"></i>Usuariossssss
 		</div>
 		<div class="tools">
 		</div>
