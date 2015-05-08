@@ -2,15 +2,8 @@
 /* @var $this DoctoresController */
 /* @var $model Doctores */
 
-$this->pageTitle="Doctores";
-
-$this->breadcrumbs=array(
-	'Doctores'=>array('index'),
-	'Actualizar doctor',
-);
-
 ?>
 
-<h1>Update Doctores <?php echo $model->id; ?></h1>
+<h1>Actualizar doctor: <?php echo $model->nombre.' '.$model->a_paterno.' '.$model->a_materno; ?></h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'contacto'=>$contacto)); ?>

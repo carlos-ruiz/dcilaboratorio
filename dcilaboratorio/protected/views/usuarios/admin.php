@@ -68,7 +68,7 @@
 
 
 <script type="text/javascript">
-$(document).ready(function(){
-	$("table").dataTable();
-});
+	$(document).ready(function(){
+		$("table").dataTable();
+	});
 </script>
