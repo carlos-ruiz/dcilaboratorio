@@ -1,27 +1,24 @@
-<?php
-/* @var $this EspecialidadesController */
-/* @var $model Especialidades */
-$this->breadcrumbs=array(
-	'Especialidades'=>array('index'),
-	'Administrar especialidades',
-);
 
-$this->pageTitle="Especialidades";
-?>
+<div class="text-right">
+	<?php echo CHtml::link('<i class="icon-plus"></i> Nueva especialidad', array('especialidades/create'), array('class'=>'btn')); ?>
+</div>
+<?php $this->renderPartial('/comunes/_comunAdmin', array('CGridViewOptions'=>array(
+						'id'=>'especialidades-grid',
+						'itemsCssClass'=>'table table-striped table-bordered table-hover dataTable no-footer',
+						'dataProvider'=>$model->search(),
+						'enablePagination' => false,
+						'summaryText'=>'',//quitar contador de records
+						'emptyText'=>'Sin resultados',
+						//'filter'=>$model,
+						'columns'=>array(
+							'nombre',
+							array(
+								'class'=>'CButtonColumn',
+							),
+						),
+					))); 
 
-<h1>Administrar especialidades</h1>
+					?>
 
-<?php echo CHtml::link('<i class="icon-plus"></i> Nueva especialidad', array('especialidades/create'), array('class'=>'btn text-right')); ?>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'especialidades-grid',
-	'itemsCssClass'=>'table table-hover',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-	'columns'=>array(
-		'nombre',
-		array(
-			'class'=>'CButtonColumn',
-		),
-	),
-)); ?>
+		

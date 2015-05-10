@@ -97,14 +97,6 @@ class Perfiles extends CActiveRecord
 		return parent::model($className);
 	}
 
-	public function count(){
-		$criteria=new CDbCriteria();
-		$criteria->select=count('id');
-		$criteria->compare('id>',0);
-		return Yii::app()->db->commandBuilder->createFindCommand($this->tableName(),$criteria)->queryScalar();
-
-	}
-
 	public function findByName($name){
 		return $this->model()->find("nombre=?",array($name));
 	}

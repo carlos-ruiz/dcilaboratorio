@@ -38,11 +38,13 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/layout.css" rel="stylesheet" type="text/css"/>
 	<link id="style_color" href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/themes/default.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/custom.css" rel="stylesheet" type="text/css"/>
+	
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
+
 	<!-- END THEME STYLES -->
 	<link rel="shortcut icon" href="favicon.ico"/>
-	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 

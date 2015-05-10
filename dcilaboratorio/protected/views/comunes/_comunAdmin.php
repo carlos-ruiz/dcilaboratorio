@@ -1,19 +1,12 @@
 <?php
-/* @var $this TarifasActivasController */
-/* @var $model TarifasActivas */
+/* @var $this EspecialidadesController */
+/* @var $model Especialidades */
 
 ?>
-
-<h1>Administrar tarifas activas</h1>
-
-<div class="text-right">
-	<?php echo CHtml::link('<i class="icon-plus"></i> Nueva tarifa activa', array('tarifasActivas/create'), array('class'=>'btn')); ?>
-</div>
-
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-globe"></i> Tarifas activas
+			<i class="fa fa-globe"></i> <?php echo "fgdfgd"; ?>
 		</div>
 		<div class="tools">
 		</div>
@@ -42,42 +35,46 @@
 						</a>
 					</div>
 
-					<?php $this->widget('zii.widgets.grid.CGridView', array(
-						'id'=>'tarifas-activas-grid',
-						'itemsCssClass'=>'table table-striped table-bordered table-hover dataTable no-footer',
-						'dataProvider'=>$model->search(),
-						'enablePagination' => false,
-						'summaryText'=>'',//quitar contador de records
-						'emptyText'=>'Sin resultados',
-						//'filter'=>$model,
-						'columns'=>array(
-							array(
-								'name'=>"id_examenes",
-								'header'=>'Exámen',
-								'value'=>array($this, 'obtenerNombreExamen'),
-							),
-							array(
-								'name'=>'id_multitarifarios',
-								'header'=>'Multitarifario',
-								'value'=>array($this, 'obtenerNombreMultitarifario'),
-							),
-							array(
-								'name'=>'precio',
-								'value'=>array($this, 'obtenerPrecioConFormato'),
-							),
-							array(
-								'class'=>'CButtonColumn',
-							),
-						),
-					)); ?>
+					<?php 
+					
+					$this->widget('zii.widgets.grid.CGridView',$CGridViewOptions);?>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
+
+
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("table").dataTable();
+		$("table").dataTable({
+			'dom':'<"table-search"f>tipr',
+			'lengthChange':false,
+			'pageLength':20,
+			"language":{
+				"emptyTable":     "Sin resultados",
+			    "info":           "Mostrando _START_ a _END_ de _TOTAL_",
+			    "infoEmpty":      "Mostrando 0 a 0 de 0",
+			    "infoFiltered":   "(filtrando de _MAX_ registros)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Mostrando _MENU_ registros",
+			    "loadingRecords": "Cargando...",
+			    "processing":     "Procesando...",
+			    "search":         "Buscar:",
+			    "zeroRecords":    "No se encontraron resultados",
+			    "paginate": {
+			        "first":      "Inicio",
+			        "last":       "Fin",
+			        "next":       "Siguiente",
+			        "previous":   "Anterior"
+			    },
+			    "aria": {
+			        "sortAscending":  ": Activar orden ascendente",
+			        "sortDescending": ": Activar orden descendente"
+			    }
+			}
+		});
 	});
 </script>

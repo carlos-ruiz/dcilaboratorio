@@ -62,7 +62,7 @@
 				</li>
 				<li <?php if($this->section=="Doctores"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-puzzle"></i>
+					<i class="icon-users"></i>
 					<span class="title">Doctores</span>
 					<?php if($this->section=="Doctores"){?>
 					<span class="selected"></span>
@@ -74,13 +74,13 @@
 					<ul class="sub-menu">
 						<li <?php if($this->section=="Doctores" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/doctores/create">
-							<i class="icon-plus"></i>
-							Nuevo Doctor</a>
+							<i class="icon-user-follow"></i>
+							Nuevo</a>
 						</li>
 						<li <?php if($this->section=="Doctores" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/doctores/admin">
 							<i class="icon-list"></i>
-							Listado</a>
+							Administrar</a>
 						</li>
 						<li <?php if($this->section=="Doctores" && $this->subSection=="Especialidades"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/especialidades/admin">
@@ -102,12 +102,12 @@
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/TitulosForm/create">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/create">
 							<i class="icon-plus"></i>
 							Nuevo</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/titulosForm/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/admin">
 							<i class="icon-list"></i>
 							Administración</a>
 						</li>					
@@ -145,7 +145,7 @@
 						</li>
 						<li>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/tarifasActivas/admin">
-							<i class="icon-plus"></i>
+							<i class="icon-check"></i>
 							Tarifas activas</a>
 						</li>
 						<li>
@@ -174,7 +174,7 @@
 							Nueva</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palabrasClave/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/palabrasClave/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>
@@ -199,7 +199,7 @@
 							Nuevo</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/multitarifarios/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/multitarifarios/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>
@@ -224,7 +224,7 @@
 							Nueva</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/unidadesResponsables/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>						
@@ -249,7 +249,7 @@
 							Nueva</a>
 						</li>
 						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/unidadesMedida/admin">
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesMedida/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>

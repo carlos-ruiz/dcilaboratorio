@@ -2,20 +2,13 @@
 /* @var $this DoctoresController */
 /* @var $model Doctores */
 
-$this->pageTitle="Doctores";
-
-$this->breadcrumbs=array(
-	'Doctores'=>array('admin'),
-	'Doctor '.$model->id,
-);
 ?>
 
-<h1>Datos del doctor: <?php echo $model->nombre.' '.$model->a_paterno.' '.$model->a_materno; ?></h1>
+<h1>Doctor: <?php echo $model->nombre.' '.$model->a_paterno.' '.$model->a_materno; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
 		'nombre',
 //		array(
 //			'label'=>'Especialidad',

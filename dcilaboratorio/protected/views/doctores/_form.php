@@ -5,12 +5,10 @@
 
 ?>
 
-<br />
-<br />
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-gift"></i> Doctor
+			Doctor
 		</div>
 		
 	</div>
@@ -217,7 +215,7 @@
 				<?php echo $form->errorSummary($model); ?>
 
 				<div class="form-actions">
-					<?php echo CHtml::submitButton($model->isNewRecord ? 'Crear' : 'Guardar', array('class'=>'btn green')); ?>
+					<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
 				</div>
 
 			</div>

@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"con",
+				"contacto2"
+			],
+			[
 				"a_",
 				"a_materno"
 			],
@@ -104,34 +108,77 @@
 	"buffers":
 	[
 		{
+			"contents": "<?php\n\nclass DoctoresController extends Controller\n{\n	/**\n	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning\n	 * using two-column layout. See 'protected/views/layouts/column2.php'.\n	 */\n	public $layout='//layouts/column2';\n	public $section = \"Doctores\";\n	public $subSection;\n\n	/**\n	 * @return array action filters\n	 */\n	public function filters()\n	{\n		return array(\n			'accessControl', // perform access control for CRUD operations\n			'postOnly + delete', // we only allow deletion via POST request\n		);\n	}\n\n	/**\n	 * Specifies the access control rules.\n	 * This method is used by the 'accessControl' filter.\n	 * @return array access control rules\n	 */\n	public function accessRules()\n	{\n		return array(\n			array('allow',  // allow all users to perform 'index' and 'view' actions\n				'actions'=>array('index','view'),\n				'users'=>array('*'),\n			),\n			array('allow', // allow authenticated user to perform 'create' and 'update' actions\n				'actions'=>array('create','update'),\n				'users'=>array('@'),\n			),\n			array('allow', // allow admin user to perform 'admin' and 'delete' actions\n				'actions'=>array('admin','delete'),\n				'users'=>array('admin'),\n			),\n			array('deny',  // deny all users\n				'users'=>array('*'),\n			),\n		);\n	}\n\n	/**\n	 * Displays a particular model.\n	 * @param integer $id the ID of the model to be displayed\n	 */\n	public function actionView($id)\n	{\n		$this->render('view',array(\n			'model'=>$this->loadModel($id),\n		));\n	}\n\n	/**\n	 * Creates a new model.\n	 * If creation is successful, the browser will be redirected to the 'view' page.\n	 */\n	public function actionCreate()\n	{\n		$this->subSection = \"Nuevo\";\n		$model = new Doctores;\n		$contacto = new Contactos;\n\n		// Uncomment the following line if AJAX validation is needed\n		// $this->performAjaxValidation($model);\n\n		if(isset($_POST['Doctores']))\n		{\n			print_r($_POST['Contactos']);\n			$model->attributes=$_POST['Doctores'];\n			$casa = new Contactos;\n			$consultorio = new Contactos;\n			$celular = new Contactos;\n			$correo = new Contactos;\n\n			$casa->contacto = $_POST['Contactos']['contactoCasa'];\n			$casa->id_tipos_contacto = \n			$consultorio->contacto = $_POST['Contactos']['contactoConsultorio'];\n			$celular->contacto = $_POST['Contactos']['contactoCelular'];\n			$correo->contacto = $_POST['Contactos']['contactoCorreo'];\n\n			$casa->contacto = $_POST['Contactos']['contactoCasa'];\n			$consultorio->contacto = $_POST['Contactos']['contactoConsultorio'];\n			$celular->contacto = $_POST['Contactos']['contactoCelular'];\n			$correo->contacto = $_POST['Contactos']['contactoCorreo'];\n\n			$casa->contacto = $_POST['Contactos']['contactoCasa'];\n			$consultorio->contacto = $_POST['Contactos']['contactoConsultorio'];\n			$celular->contacto = $_POST['Contactos']['contactoCelular'];\n			$correo->contacto = $_POST['Contactos']['contactoCorreo'];\n\n			$usuario = new Usuarios;\n			if($perfil = Perfiles::model()->findByName(\"Doctor\")){\n				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);\n				$usuario->contrasena=md5(\"doctor\");\n				$usuario->ultima_edicion=date('Y-m-d H:i:s');\n				$usuario->usuario_ultima_edicion=Yii::app()->user->id;\n				$usuario->creacion=date('Y-m-d H:i:s');\n				$usuario->usuario_creacion=Yii::app()->user->id;\n				$usuario->id_perfiles=$perfil->id;\n				$usuario->save();\n			}\n			else{\n				$perfil = new Perfiles;\n				$perfil->nombre=\"Doctor\";\n				$perfil->save();\n				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);\n				$usuario->contrasena=md5(\"doctor\");\n				$usuario->ultima_edicion=date('Y-m-d H:i:s');\n				$usuario->usuario_ultima_edicion=Yii::app()->user->id;\n				$usuario->creacion=date('Y-m-d H:i:s');\n				$usuario->usuario_creacion=Yii::app()->user->id;\n				$usuario->id_perfiles=$perfil->id;\n				$usuario->save();	\n			}\n			$model->id_usuarios=$usuario->id;\n\n			if($model->save() && $contactos->save())\n				$this->redirect(array('view','id'=>$model->id));\n			else{\n				echo \"<script>alert('No se pudo guardar');</script>\";\n			}\n		}\n\n		$this->render('create',array(\n			'model'=>$model, \n			'contacto'=>$contacto,\n		));\n	}\n\n	/**\n	 * Updates a particular model.\n	 * If update is successful, the browser will be redirected to the 'view' page.\n	 * @param integer $id the ID of the model to be updated\n	 */\n	public function actionUpdate($id)\n	{\n		$model=$this->loadModel($id);\n\n		// Uncomment the following line if AJAX validation is needed\n		// $this->performAjaxValidation($model);\n\n		if(isset($_POST['Doctores']))\n		{\n			$model->attributes=$_POST['Doctores'];\n			if($model->save())\n				$this->redirect(array('view','id'=>$model->id));\n		}\n\n		$this->render('update',array(\n			'model'=>$model,\n		));\n	}\n\n	/**\n	 * Deletes a particular model.\n	 * If deletion is successful, the browser will be redirected to the 'admin' page.\n	 * @param integer $id the ID of the model to be deleted\n	 */\n	public function actionDelete($id)\n	{\n		$this->loadModel($id)->delete();\n\n		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser\n		if(!isset($_GET['ajax']))\n			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));\n	}\n\n	/**\n	 * Lists all models.\n	 */\n	public function actionIndex()\n	{\n		$dataProvider=new CActiveDataProvider('Doctores');\n		$this->render('index',array(\n			'dataProvider'=>$dataProvider,\n		));\n	}\n\n	/**\n	 * Manages all models.\n	 */\n	public function actionAdmin()\n	{\n		$this->subSection = \"Admin\";\n		$model=new Doctores('search');\n		$model->unsetAttributes();  // clear any default values\n		if(isset($_GET['Doctores']))\n			$model->attributes=$_GET['Doctores'];\n\n		$this->render('admin',array(\n			'model'=>$model,\n		));\n	}\n\n	/**\n	 * Returns the data model based on the primary key given in the GET variable.\n	 * If the data model is not found, an HTTP exception will be raised.\n	 * @param integer $id the ID of the model to be loaded\n	 * @return Doctores the loaded model\n	 * @throws CHttpException\n	 */\n	public function loadModel($id)\n	{\n		$model=Doctores::model()->findByPk($id);\n		if($model===null)\n			throw new CHttpException(404,'The requested page does not exist.');\n		return $model;\n	}\n\n	/**\n	 * Performs the AJAX validation.\n	 * @param Doctores $model the model to be validated\n	 */\n	protected function performAjaxValidation($model)\n	{\n		if(isset($_POST['ajax']) && $_POST['ajax']==='doctores-form')\n		{\n			echo CActiveForm::validate($model);\n			Yii::app()->end();\n		}\n	}\n\n	public function obtenerNombreCompletoConTitulo($data, $row){\n		$titulo = TitulosForm::model()->find($data->id_titulos);\n		$completo = $titulo->nombre.' '.$data->nombre.' '.$data->a_paterno.' '.$data->a_materno;\n		return $completo;\n	}\n\n	public function obtenerNombreEspecialidad($data, $row){\n		$especialidad = Especialidades::model()->find($data->id_especialidades);\n		return $especialidad->nombre;\n	}\n}\n",
 			"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
+			"file_size": 6598,
+			"file_write_time": 130754309830586138,
 			"settings":
 			{
-				"buffer_size": 6078,
+				"buffer_size": 6927,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/views/doctores/create.php",
+			"file": "dcilaboratorio/protected/views/contactos/create.php",
 			"settings":
 			{
-				"buffer_size": 321,
+				"buffer_size": 379,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/views/doctores/_form.php",
+			"file": "dcilaboratorio/protected/views/usuarios/update.php",
 			"settings":
 			{
-				"buffer_size": 10390,
+				"buffer_size": 192,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/config/main.php",
+			"file": "dcilaboratorio/protected/views/grupos/view.php",
 			"settings":
 			{
-				"buffer_size": 2065,
+				"buffer_size": 908,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/grupos/index.php",
+			"settings":
+			{
+				"buffer_size": 719,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/especialidades/admin.php",
+			"settings":
+			{
+				"buffer_size": 660,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/usuarios/admin.php",
+			"settings":
+			{
+				"buffer_size": 452,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/grupos/_view.php",
+			"settings":
+			{
+				"buffer_size": 1234,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/layouts/main.php",
+			"settings":
+			{
+				"buffer_size": 10956,
 				"line_ending": "Windows"
 			}
 		}
@@ -239,27 +286,33 @@
 	[
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/global",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/global/plugins/datatables/examples",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/layout4",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/unidadesResponsables",
-		"/C/xampp/htdocs/dcilaboratorio/framework",
-		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios",
+		"/C/xampp/htdocs/dcilaboratorio/framework"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/view.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/create.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/admin.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/UsuariosController.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/_form.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/create.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/_form.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/column2.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/menu.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config/main.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/GruposController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos/_form.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/admin.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config/main.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Contactos.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/create.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/admin.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/menu.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/create.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/view.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/view.php",
@@ -268,7 +321,6 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/tarifasActivas/_form.php",
 		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data/es_mx.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Multitarifarios.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/_form.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Doctores.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/custom/customStyle.css",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/main.php",
@@ -276,7 +328,6 @@
 		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/C/Users/Carlos/Documents/Development/glassfish4.0.1/glassfish/domains/domainZeitek/config/domain.xml",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/TitulosForm.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/column2.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/create.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/view.php",
@@ -297,7 +348,6 @@
 		"/C/xampp/htdocs/dcilaboratorio/framework/cli/views/webapp/protected/config/main.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/SiteController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/ProfilesController.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/UsuariosController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/_view.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/umodif/_modifandcreate.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/_search.php",
@@ -344,6 +394,8 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"C:\\xampp\\htdocs\\dcilaboratorio\\",
+			"C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio\\css\\global\\plugins\\datatables",
 			"C:\\xampp\\htdocs\\dcilaboratorio",
 			"C:\\xampp\\htdocs\\dcilaboratorio\\dcilaboratorio",
 			"C:\\xampp\\htdocs\\dcilaboratorio",
@@ -355,6 +407,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Datatable with TableTools",
+			"table_advanced",
 			"es\\zii.php",
 			"viendo",
 			"messa",
@@ -416,7 +470,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -425,15 +479,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6078,
+						"buffer_size": 6927,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3085,
-								3085
+								2148,
+								2148
 							]
 						],
 						"settings":
@@ -442,27 +496,55 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1313.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "dcilaboratorio/protected/views/doctores/create.php",
+					"file": "dcilaboratorio/protected/views/contactos/create.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 321,
+						"buffer_size": 379,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								292,
-								292
+								314,
+								289
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "dcilaboratorio/protected/views/usuarios/update.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 192,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								91,
+								91
 							]
 						],
 						"settings":
@@ -477,20 +559,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "dcilaboratorio/protected/views/doctores/_form.php",
+					"buffer": 3,
+					"file": "dcilaboratorio/protected/views/grupos/view.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10390,
+						"buffer_size": 908,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5524,
-								5524
+								907,
+								907
 							]
 						],
 						"settings":
@@ -499,27 +581,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2851.0,
+						"translation.y": 244.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "dcilaboratorio/protected/config/main.php",
+					"buffer": 4,
+					"file": "dcilaboratorio/protected/views/grupos/index.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2065,
+						"buffer_size": 719,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1841,
-								1841
+								719,
+								719
 							]
 						],
 						"settings":
@@ -528,10 +610,126 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1300.0,
+						"translation.y": 71.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "dcilaboratorio/protected/views/especialidades/admin.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 660,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								386,
+								386
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "dcilaboratorio/protected/views/usuarios/admin.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 452,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								451,
+								351
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "dcilaboratorio/protected/views/grupos/_view.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								561,
+								561
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "dcilaboratorio/protected/views/layouts/main.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10956,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2174,
+								2217
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 683.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
 					"type": "text"
 				}
 			]

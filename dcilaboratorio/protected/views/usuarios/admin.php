@@ -1,30 +1,15 @@
-<?php
-/* @var $this UsersController */
-/* @var $model Users */
-
-?>
-
-<h1>Administrar usuarios</h1>
-
-
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'users-grid',
-	'dataProvider'=>$model->search(),
-	//'filter'=>$model,
-	'columns'=>array(
-		'usuario',
-		/*
-		'photo',
-		'log',
-		*/
-		array(
-			'class'=>'CButtonColumn',
-		),
-	),
-)); ?>
-
-<script type="text/javascript">
-$(document).ready(function(){
-	$("table").dataTable();
-});
-</script>
+<?php $this->renderPartial('/comunes/_comunAdmin', array('CGridViewOptions'=>array(
+						'id'=>'especialidades-grid',
+						'itemsCssClass'=>'table table-striped table-bordered table-hover dataTable no-footer',
+						'dataProvider'=>$model->search(),
+						'enablePagination' => false,
+						'summaryText'=>'',//quitar contador de records
+						'emptyText'=>'Sin resultados',
+						//'filter'=>$model,
+						'columns'=>array(
+							'nombre',
+							array(
+								'class'=>'CButtonColumn',
+							),
+						),
+					))); ?>
