@@ -8,6 +8,7 @@ class PalabrasClaveController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "PalabrasClave";
+	public $subSection;
 	public $pageTitle="Palabras clave";
 	/**
 	 * @return array action filters
@@ -63,6 +64,7 @@ class PalabrasClaveController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$this->subSection = "Nuevo";
 		$model=new PalabrasClave;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -134,6 +136,7 @@ class PalabrasClaveController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection = "Admin";
 		$model=new PalabrasClave('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['PalabrasClave']))

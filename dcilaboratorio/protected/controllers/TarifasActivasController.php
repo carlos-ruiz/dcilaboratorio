@@ -135,7 +135,7 @@ class TarifasActivasController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$this->subSection = "TarifasActivas";
+		$this->subSection = "Tarifas";
 		$model=new TarifasActivas('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['TarifasActivas']))

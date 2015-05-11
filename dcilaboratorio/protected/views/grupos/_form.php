@@ -3,13 +3,10 @@
 /* @var $model GruposExamenes */
 /* @var $form CActiveForm */
 ?>
-
-<br />
-<br />
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-gift"></i>Grupo de Exámenes
+			Grupo de Exámenes
 		</div>		
 	</div>
 	<div class="portlet-body form" style="display: block;">
@@ -43,7 +40,7 @@
 		</div>
 	</div>
 	<div class="form-actions">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Crear' : 'Guardar',array('class'=>'btn green')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Nuevo' : 'Actualizar',array('class'=>'btn green')); ?>
 	</div>
 </div>
 <?php $this->endWidget(); ?>

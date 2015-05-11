@@ -1,30 +1,27 @@
 <?php
 
 /**
- * This is the model class for table "tarifas_activas".
+ * This is the model class for table "grupos_examenes".
  *
- * The followings are the available columns in table 'tarifas_activas':
+ * The followings are the available columns in table 'grupos_examenes':
  * @property integer $id
- * @property integer $id_examenes
- * @property integer $id_multitarifarios
- * @property double $precio
+ * @property string $nombre
  * @property string $ultima_edicion
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
  *
  * The followings are the available model relations:
- * @property Examenes $idExamenes
- * @property Multitarifarios $idMultitarifarios
+ * @property GrupoTieneExamenes[] $grupoTieneExamenes
  */
-class TarifasActivas extends CActiveRecord
+class GruposExamenes extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'tarifas_activas';
+		return 'grupos_examenes';
 	}
 
 	/**
@@ -35,12 +32,12 @@ class TarifasActivas extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_examenes, id_multitarifarios, precio, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('id_examenes, id_multitarifarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('precio', 'numerical'),
+			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('nombre', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_examenes, id_multitarifarios, precio, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,8 +49,7 @@ class TarifasActivas extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'examenes' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
-			'multitarifarios' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
+			'grupoTieneExamenes' => array(self::HAS_MANY, 'GrupoTieneExamenes', 'id_grupos_examenes'),
 		);
 	}
 
@@ -64,9 +60,7 @@ class TarifasActivas extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'id_examenes' => 'Id Examenes',
-			'id_multitarifarios' => 'Id Multitarifarios',
-			'precio' => 'Precio',
+			'nombre' => 'Nombre',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
@@ -93,9 +87,7 @@ class TarifasActivas extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('id_examenes',$this->id_examenes);
-		$criteria->compare('id_multitarifarios',$this->id_multitarifarios);
-		$criteria->compare('precio',$this->precio);
+		$criteria->compare('nombre',$this->nombre,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
@@ -110,19 +102,14 @@ class TarifasActivas extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return TarifasActivas the static model class
+	 * @return GruposExamenes the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
 
-	public function obtenerMultitarifarios(){
-		return CHtml::listData(Multitarifarios::model()->findAll(), 'id', 'nombre');
-	}
-
 	public function obtenerExamenes(){
 		return CHtml::listData(Examenes::model()->findAll(), 'id', 'nombre');
 	}
-
 }

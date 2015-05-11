@@ -1,3 +1,5 @@
+<h1>Administrar usuarios</h1>
+
 <?php $this->renderPartial('/comunes/_comunAdmin', array('CGridViewOptions'=>array(
 						'id'=>'especialidades-grid',
 						'itemsCssClass'=>'table table-striped table-bordered table-hover dataTable no-footer',

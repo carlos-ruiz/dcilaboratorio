@@ -7,7 +7,8 @@ class GruposController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $section="Grupos";
+	public $section="Examenes";
+	public $subSection;
 	public $pageTitle="Grupos de Exámenes";
 	/**
 	 * @return array action filters
@@ -180,6 +181,7 @@ class GruposController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection = "Grupos";
 		$model=new Grupos('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Grupos']))

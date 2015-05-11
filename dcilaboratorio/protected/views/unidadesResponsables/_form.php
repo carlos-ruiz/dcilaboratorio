@@ -4,12 +4,11 @@
 /* @var $form CActiveForm */
 $usuarios = CHtml::listData(Usuarios::model()->findAll(), 'id', 'usuario');
 ?>
-<br />
-<br />
+
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-gift"></i> Unidad Responsable
+			Unidad Responsable
 		</div>		
 	</div>
 	<div class="portlet-body form" style="display: block;">
@@ -24,8 +23,6 @@ $usuarios = CHtml::listData(Usuarios::model()->findAll(), 'id', 'usuario');
 )); ?>
 
 <div class="form-body">
-
-	
 
 	<div class="form-group <?php if($form->error($model,'id_usuarios')!=''){ echo 'has-error'; }?>">
 				<?php echo $form->labelEx($model,'id_usuarios', array('class'=>'control-label')); ?>
@@ -46,7 +43,7 @@ $usuarios = CHtml::listData(Usuarios::model()->findAll(), 'id', 'usuario');
 		<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
 
 		<div class="form-actions" >
-			<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn green')); ?>
+			<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
 		</div>
 
 	</div>
