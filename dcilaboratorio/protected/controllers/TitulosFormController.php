@@ -8,6 +8,7 @@ class TitulosFormController extends Controller
 	 */
 	public $layout='//layouts/column2';
     public $section = "Titulos";
+    public $subSection;
     public $pageTitle="Títulos";
 	/**
 	 * @return array action filters
@@ -63,6 +64,7 @@ class TitulosFormController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$this->subSection = "Nuevo";
 		$model=new TitulosForm;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -134,6 +136,7 @@ class TitulosFormController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection="Admin";
 		$model=new TitulosForm('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['TitulosForm']))

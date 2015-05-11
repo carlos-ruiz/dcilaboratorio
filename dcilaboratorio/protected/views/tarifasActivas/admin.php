@@ -53,7 +53,7 @@
 						'columns'=>array(
 							array(
 								'name'=>"id_examenes",
-								'header'=>'Exámen',
+								'header'=>'Examen',
 								'value'=>array($this, 'obtenerNombreExamen'),
 							),
 							array(

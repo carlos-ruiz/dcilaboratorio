@@ -50,7 +50,7 @@
 							<i class="icon-user-follow"></i>
 							Nuevo</a>
 						</li>
-						<li>
+						<li <?php if($this->section=="Usuarios" && $this->subSection=="Admin"){ echo 'class="active open"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
@@ -84,7 +84,7 @@
 						</li>
 						<li <?php if($this->section=="Doctores" && $this->subSection=="Especialidades"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/especialidades/admin">
-							<i class="icon-list"></i>
+							<i class="icon-notebook"></i>
 							Especialidades</a>
 						</li>
 
@@ -101,12 +101,12 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li>
+						<li <?php if($this->section=="Titulos" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/create">
 							<i class="icon-plus"></i>
 							Nuevo</a>
 						</li>
-						<li>
+						<li <?php if($this->section=="Titulos" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/admin">
 							<i class="icon-list"></i>
 							Administración</a>
@@ -127,28 +127,28 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li>
+						<li <?php if($this->section=="Examenes" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/create">
 							<i class="icon-plus"></i>
 							Nuevo</a>
 						</li>
-						<li>
+						<li <?php if($this->section=="Examenes" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>						
-						<li>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/index">
+						<li <?php if($this->section=="Examenes" && $this->subSection=="Grupos"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/admin">
 							<i class="icon-layers"></i>
 							Grupos</a>
 
 						</li>
-						<li>
+						<li <?php if($this->section=="Examenes" && $this->subSection=="Tarifas"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/tarifasActivas/admin">
 							<i class="icon-check"></i>
 							Tarifas activas</a>
 						</li>
-						<li>
+						<li <?php if($this->section=="Examenes" && $this->subSection=="Resultados"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/admin">
 							<i class="icon-note"></i>
 							Resultado de examenes</a>
@@ -168,12 +168,12 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li>
+						<li <?php if($this->section=="PalabrasClave" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/palabrasClave/create">
 							<i class="icon-plus"></i>
 							Nueva</a>
 						</li>
-						<li>
+						<li <?php if($this->section=="PalabrasClave" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/palabrasClave/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
@@ -193,12 +193,12 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li>
+						<li <?php if($this->section=="Multitarifarios" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/multitarifarios/create">
 							<i class="icon-plus"></i>
 							Nuevo</a>
 						</li>
-						<li>
+						<li <?php if($this->section=="Multitarifarios" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/multitarifarios/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
@@ -218,12 +218,12 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li>
+						<li <?php if($this->section=="UnidadesResponsables" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/create">
 							<i class="icon-plus"></i>
 							Nueva</a>
 						</li>
-						<li>
+						<li <?php if($this->section=="UnidadesResponsables" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
@@ -243,12 +243,12 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li>
+						<li <?php if($this->section=="UnidadesMedida" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesMedida/create">
 							<i class="icon-plus"></i>
 							Nueva</a>
 						</li>
-						<li>
+						<li <?php if($this->section=="UnidadesMedida" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesMedida/admin">
 							<i class="icon-list"></i>
 							Administrar</a>

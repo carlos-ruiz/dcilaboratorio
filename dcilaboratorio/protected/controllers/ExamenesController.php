@@ -8,6 +8,7 @@ class ExamenesController extends Controller
 	 */
 	public $layout='//layouts/column2';
     public $section = "Examenes";
+    public $subSection;
     public $pageTitle="Examenes";
 	/**
 	 * @return array action filters
@@ -63,6 +64,7 @@ class ExamenesController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$this->subSection = "Nuevo";
 		$model=new Examenes;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -134,6 +136,7 @@ class ExamenesController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection = "Admin";
 		$model=new Examenes('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Examenes']))

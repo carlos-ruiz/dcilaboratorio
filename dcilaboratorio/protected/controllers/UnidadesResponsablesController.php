@@ -8,6 +8,7 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "UnidadesResponsables";
+	public $subSection;
 	public $pageTitle="Unidades Responsables";
 	/**
 	 * @return array action filters
@@ -63,6 +64,7 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$this->subSection="Nuevo";
 		$model=new UnidadesResponsables;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -134,6 +136,7 @@ class UnidadesResponsablesController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection = "Admin";
 		$model=new UnidadesResponsables('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['UnidadesResponsables']))

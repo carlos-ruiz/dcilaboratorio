@@ -129,6 +129,7 @@ class UsuariosController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection = "Admin";
 		$model=new Usuarios('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Usuarios']))
