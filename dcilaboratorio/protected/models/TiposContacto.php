@@ -111,4 +111,14 @@ class TiposContacto extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public static function findByName($name){
+		$tipo_contacto = Yii::app()->db->createCommand()
+		    ->select('id')
+		    ->from('tipos_contacto')
+		    ->where('descripcion=:descripcion', array(':descripcion'=>$name))
+		    ->queryRow();
+
+		return $tipo_contacto; 
+	}
 }
