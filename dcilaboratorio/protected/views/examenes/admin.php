@@ -18,18 +18,19 @@ $('.search-form form').submit(function(){
 ?>
 
 <h1>Administrar exámenes</h1>
+<?php 
+$this->renderPartial(
+	'/comunes/_comunAdmin', 
+	array(
+		'model'=>$model,
+		'titulo'=>'Exámenes',
+		'columnas'=>array(
+			'clave',
+			'nombre',
+			'descripcion',
+			'duracion_dias'
+		)
+	)
+); 
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'examenes-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-	'columns'=>array(
-		'clave',
-		'nombre',
-		'descripcion',
-		'duracion_dias',
-		array(
-			'class'=>'CButtonColumn',
-		),
-	),
-)); ?>
+?>

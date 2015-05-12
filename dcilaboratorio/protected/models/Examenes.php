@@ -71,7 +71,7 @@ class Examenes extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'clave' => 'Clave',
-			'nombre' => 'Nombre',
+			'nombre' => 'Examen',
 			'descripcion' => 'Descripción',
 			'duracion_dias' => 'Duración en días',
 			'indicaciones_paciente' => 'Indicaciones Paciente',
