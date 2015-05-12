@@ -7,7 +7,8 @@ class DetallesExamenController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $section = "DetallesExamenes";
+	public $section = "Examenes";
+	public $subSection;
 	public $pageTitle="Resultados de Examenes";
 	/**
 	 * @return array action filters
@@ -63,6 +64,7 @@ class DetallesExamenController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$this->subSection = "Grupos";
 		$model=new DetallesExamen;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -119,21 +121,11 @@ class DetallesExamenController extends Controller
 	}
 
 	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('DetallesExamen');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-	}
-
-	/**
 	 * Manages all models.
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection = "Resultados";
 		$model=new DetallesExamen('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['DetallesExamen']))

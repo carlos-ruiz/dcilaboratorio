@@ -4,8 +4,6 @@
 /* @var $form CActiveForm */
 ?>
 
-<br />
-<br />
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
@@ -14,8 +12,6 @@
 	</div>
 	<div class="portlet-body form" style="display: block;">
 	
-
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'titulos-form-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -25,8 +21,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-		<div class="form-body">
-		
+		<div class="form-body">		
 		<div class="form-group <?php if($form->error($model,'nombre')!=''){ echo 'has-error'; }?>">
 			<?php echo $form->labelEx($model,'nombre', array('class'=>'control-label')); ?>
 			<div class="input-group" >

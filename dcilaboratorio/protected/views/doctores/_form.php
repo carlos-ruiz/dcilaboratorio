@@ -3,8 +3,10 @@
 /* @var $model Doctores */
 /* @var $form CActiveForm */
 
+// Yii::app()->clientScript->registerScript('timepicker', "
+// 	ComponentsPickers.init();
+// ");
 ?>
-
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
@@ -76,8 +78,11 @@
 
 					<div class="form-group col-md-6 <?php if($form->error($model,'hora_consulta_de')!=''){ echo 'has-error'; }?>">
 						<?php echo $form->labelEx($model,'hora_consulta_de', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<?php echo $form->textField($model,'hora_consulta_de',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+						<div class="input-group bootstrap-timepicker">
+							<?php echo $form->textField($model,'hora_consulta_de',array('size'=>45,'maxlength'=>45, 'class'=>'form-control timepicker timepicker-no-seconds')); ?>
+							<span class="input-group-btn">
+								<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+							</span>
 							<?php echo $form->error($model,'hora_consulta_de', array('class'=>'help-block')); ?>
 						</div>
 					</div>
@@ -85,7 +90,11 @@
 					<div class="form-group col-md-6 <?php if($form->error($model,'hora_consulta_hasta')!=''){ echo 'has-error'; }?>">
 						<?php echo $form->labelEx($model,'hora_consulta_hasta', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'hora_consulta_hasta',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->textField($model,'hora_consulta_hasta',array('size'=>45,'maxlength'=>45, 'class'=>'form-control timepicker timepicker-no-seconds')); ?>
+							<span class="input-group-btn">
+								<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+							</span>
+
 							<?php echo $form->error($model,'hora_consulta_hasta', array('class'=>'help-block')); ?>
 						</div>
 					</div>
@@ -126,22 +135,6 @@
 						<?php echo $form->labelEx($contacto,'Celular', array('class'=>'control-label')); ?>
 						<div class="input-group">
 							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCelular]" id="Contactos_celular" type="text">
-							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
-						</div>
-					</div>
-
-					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($contacto,'Celular', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCelular]" id="Contactos_celular" type="text">
-							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
-						</div>
-					</div>
-
-					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($contacto,'Correo electrónico', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCorreo]" id="Contactos_correo" type="text">
 							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
 						</div>
 					</div>
@@ -213,6 +206,7 @@
 				</section>
 
 				<?php echo $form->errorSummary($model); ?>
+				<?php echo $form->errorSummary($contacto); ?>
 
 				<div class="form-actions">
 					<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
@@ -223,3 +217,8 @@
 			<?php $this->endWidget(); ?>
 		</div>
 </div><!-- form -->
+<script type="text/javascript">
+	$(document).ready(function(){
+		ComponentsPickers.init();
+	});
+</script>

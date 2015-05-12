@@ -8,6 +8,7 @@ class UnidadesMedidaController extends Controller
 	 */
 	public $layout='//layouts/column2';
 	public $section = "UnidadesMedida";
+	public $subSection;
 	public $pageTitle="Unidades de MEdida";
 
 	/**
@@ -64,6 +65,7 @@ class UnidadesMedidaController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$this->subSection = "Nuevo";
 		$model=new UnidadesMedida;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -135,6 +137,7 @@ class UnidadesMedidaController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$this->subSection = "Admin";
 		$model=new UnidadesMedida('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['UnidadesMedida']))

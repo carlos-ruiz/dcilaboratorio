@@ -40,6 +40,7 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/custom.css" rel="stylesheet" type="text/css"/>
 	
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css"/>
 
 	<!-- END THEME STYLES -->
 	<link rel="shortcut icon" href="favicon.ico"/>
@@ -211,6 +212,8 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/scripts/demo.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/components-pickers.js" type="text/javascript"></script>
 <script>
 jQuery(document).ready(function() {    
    Metronic.init(); // init metronic core components

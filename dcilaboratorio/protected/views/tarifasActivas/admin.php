@@ -9,6 +9,7 @@
 <div class="text-right">
 	<?php echo CHtml::link('<i class="icon-plus"></i> Nueva tarifa activa', array('tarifasActivas/create'), array('class'=>'btn')); ?>
 </div>
+
 <?php 
 $this->renderPartial(
 	'/comunes/_comunAdmin', 
@@ -26,3 +27,4 @@ $this->renderPartial(
 	)
 ); 
 ?>
+

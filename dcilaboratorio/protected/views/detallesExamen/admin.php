@@ -2,11 +2,13 @@
 /* @var $this DetallesExamenController */
 /* @var $model DetallesExamen */
 
-
 ?>
 
 <h1>Administrar resultados de exámenes</h1>
-<?php echo CHtml::link('<i class="icon-plus"></i> Nuevo resultado de examen', array('detallesExamen/create'), array('class'=>'btn text-right')); ?>
+<div class="text-right">
+	<?php echo CHtml::link('<i class="icon-plus"></i> Nuevo resultado de examen', array('detallesExamen/create'), array('class'=>'btn')); ?>
+</div>
+
 
 <?php 
 $this->renderPartial(

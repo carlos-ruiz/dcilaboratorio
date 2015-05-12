@@ -4,7 +4,8 @@
 
 ?>
 
-<h1>Administrar Unidades Responsables</h1>
+<h1>Administrar unidades responsables</h1>
+
 <?php 
 $this->renderPartial(
 	'/comunes/_comunAdmin', 
@@ -15,3 +16,5 @@ $this->renderPartial(
 	)
 ); 
 ?>
+
+

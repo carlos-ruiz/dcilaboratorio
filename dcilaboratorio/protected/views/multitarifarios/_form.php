@@ -3,8 +3,6 @@
 /* @var $model Multitarifarios */
 /* @var $form CActiveForm */
 ?>
-<br />
-<br />
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">

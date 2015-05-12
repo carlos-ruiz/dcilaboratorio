@@ -81,38 +81,70 @@ class DoctoresController extends Controller
 			$celular = new Contactos;
 			$correo = new Contactos;
 
-			$casa->contacto = $_POST['Contactos']['contactoCasa'];
-			$consultorio->contacto = $_POST['Contactos']['contactoCasa'];
-			$celular->contacto = $_POST['Contactos']['contactoCasa'];
-			$correo->contacto = $_POST['Contactos']['contactoCasa'];
 			$usuario = new Usuarios;
-			if($perfil = Perfiles::model()->findByName("Doctor")){
-				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
-				$usuario->contrasena=md5("doctor");
-				$usuario->ultima_edicion=date('Y-m-d H:i:s');
-				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
-				$usuario->creacion=date('Y-m-d H:i:s');
-				$usuario->usuario_creacion=Yii::app()->user->id;
+			$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
+			$usuario->contrasena=md5("doctor");
+			$usuario->ultima_edicion=date('Y-m-d H:i:s');
+			$usuario->usuario_ultima_edicion=Yii::app()->user->id;
+			$usuario->creacion=date('Y-m-d H:i:s');
+			$usuario->usuario_creacion=Yii::app()->user->id;
+
+			if($perfil = Perfiles::model()->findByName("Doctor")){			
 				$usuario->id_perfiles=$perfil->id;
-				$usuario->save();
 			}
 			else{
 				$perfil = new Perfiles;
 				$perfil->nombre="Doctor";
 				$perfil->save();
-				$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
-				$usuario->contrasena=md5("doctor");
-				$usuario->ultima_edicion=date('Y-m-d H:i:s');
-				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
-				$usuario->creacion=date('Y-m-d H:i:s');
-				$usuario->usuario_creacion=Yii::app()->user->id;
-				$usuario->id_perfiles=$perfil->id;
-				$usuario->save();	
+				$usuario->id_perfiles=$perfil->id;	
 			}
+			$usuario->save();
+
 			$model->id_usuarios=$usuario->id;
 
-			if($model->save() && $contactos->save())
+			$casa->contacto = $_POST['Contactos']['contactoCasa'];
+			$casa->id_tipos_contacto = TiposContacto::model()->findByName('Casa')['id'];
+			$casa->id_perfiles = $perfil->id;
+			$casa->id_persona = $usuario->id;
+			$casa->ultima_edicion=date('Y-m-d H:i:s');
+			$casa->usuario_ultima_edicion=Yii::app()->user->id;
+			$casa->creacion=date('Y-m-d H:i:s');
+			$casa->usuario_creacion=Yii::app()->user->id;
+
+			$consultorio->contacto = $_POST['Contactos']['contactoConsultorio'];
+			$consultorio->id_tipos_contacto = TiposContacto::model()->findByName('Consultorio')['id'];
+			$consultorio->id_perfiles = $perfil->id;
+			$consultorio->id_persona = $usuario->id;
+			$consultorio->ultima_edicion=date('Y-m-d H:i:s');
+			$consultorio->usuario_ultima_edicion=Yii::app()->user->id;
+			$consultorio->creacion=date('Y-m-d H:i:s');
+			$consultorio->usuario_creacion=Yii::app()->user->id;
+
+			$celular->contacto = $_POST['Contactos']['contactoCelular'];
+			$celular->id_tipos_contacto = TiposContacto::model()->findByName('Celular')['id'];
+			$celular->id_perfiles = $perfil->id;
+			$celular->id_persona = $usuario->id;
+			$celular->ultima_edicion=date('Y-m-d H:i:s');
+			$celular->usuario_ultima_edicion=Yii::app()->user->id;
+			$celular->creacion=date('Y-m-d H:i:s');
+			$celular->usuario_creacion=Yii::app()->user->id;
+
+			$correo->contacto = $_POST['Doctores']['correo_electronico'];
+			$correo->id_tipos_contacto = TiposContacto::model()->findByName('Correo electrónico')['id'];
+			$correo->id_perfiles = $perfil->id;
+			$correo->id_persona = $usuario->id;
+			$correo->ultima_edicion=date('Y-m-d H:i:s');
+			$correo->usuario_ultima_edicion=Yii::app()->user->id;
+			$correo->creacion=date('Y-m-d H:i:s');
+			$correo->usuario_creacion=Yii::app()->user->id;
+
+			if($model->save()){
+				$casa->save();
+				$consultorio->save();
+				$celular->save();
+				$correo->save();
 				$this->redirect(array('view','id'=>$model->id));
+			}
 			else{
 				echo "<script>alert('No se pudo guardar');</script>";
 			}
