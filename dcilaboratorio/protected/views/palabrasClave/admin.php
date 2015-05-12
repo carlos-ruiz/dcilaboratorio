@@ -17,15 +17,16 @@ $('.search-form form').submit(function(){
 ?>
 
 <h1>Administrar palabras clave</h1>
+<?php 
+$this->renderPartial(
+	'/comunes/_comunAdmin', 
+	array(
+		'model'=>$model,
+		'titulo'=>'Palabras clave',
+		'columnas'=>array(
+			'nombre'
+		)
+	)
+); 
+?>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'palabras-clave-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-	'columns'=>array(
-		'nombre',
-		array(
-			'class'=>'CButtonColumn',
-		),
-	),
-)); ?>

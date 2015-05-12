@@ -52,8 +52,8 @@ class TarifasActivas extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'examenes' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
-			'multitarifarios' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
+			'examen' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
+			'multitarifario' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
 		);
 	}
 
