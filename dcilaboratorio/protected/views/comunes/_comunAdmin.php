@@ -72,6 +72,7 @@
 				        "sortDescending": ": Activar orden descendente"
 				    }
 				}
+				
 			});
 		}
 	});
