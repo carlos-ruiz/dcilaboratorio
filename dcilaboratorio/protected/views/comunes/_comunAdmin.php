@@ -6,13 +6,13 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			<i class="fa fa-globe"></i> <?php echo $titulo; ?>
+			 <?php echo $titulo; ?>
 		</div>
 		<div class="tools">
 		</div>
 	</div>
 	<div class="portlet-body">
-		<div id="sample_1_wrapper" class="dataTables_wrapper no-footer">
+		<div id="sample_1_wrapper" class="dataTables_wrapper">
 			<div class="row">
 				<div class="col-md-12">
 					
@@ -23,7 +23,7 @@
 					$this->widget('zii.widgets.grid.CGridView',array(
 						'id'=>'especialidades-grid',
 						'enableSorting'=>false,
-						'itemsCssClass'=>'table table-striped table-bordered table-hover dataTable no-footer',
+						'itemsCssClass'=>'table table-striped table-bordered table-hover',
 						'dataProvider'=>$model->search(),
 						'showTableOnEmpty'=>false,
 						'enablePagination' => false,
