@@ -19,7 +19,7 @@ class DoctoresController extends Controller
 		return array(
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
+			);
 	}
 
 	/**
@@ -33,19 +33,19 @@ class DoctoresController extends Controller
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
-			),
+				),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
 				'users'=>array('@'),
-			),
+				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
-			),
+				),
 			array('deny',  // deny all users
 				'users'=>array('*'),
-			),
-		);
+				),
+			);
 	}
 
 	/**
@@ -56,7 +56,7 @@ class DoctoresController extends Controller
 	{
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
-		));
+			));
 	}
 
 	/**
@@ -68,92 +68,103 @@ class DoctoresController extends Controller
 		$this->subSection = "Nuevo";
 		$model = new Doctores;
 		$contacto = new Contactos;
-
+		$simbolos = array('!', '$', '#', '?');
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Doctores']))
+		$transaction = Yii::app()->db->beginTransaction();
+		try
 		{
-			print_r($_POST['Contactos']);
-			$model->attributes=$_POST['Doctores'];
-			$casa = new Contactos;
-			$consultorio = new Contactos;
-			$celular = new Contactos;
-			$correo = new Contactos;
+			if(isset($_POST['Doctores']))
+			{
+				$model->attributes=$_POST['Doctores'];
+				$casa = new Contactos;
+				$consultorio = new Contactos;
+				$celular = new Contactos;
+				$correo = new Contactos;
 
-			$usuario = new Usuarios;
-			$usuario->usuario=substr($model->nombre, 0, 2).substr($model->a_paterno, 0, 2).substr($model->a_materno, 0, 2);
-			$usuario->contrasena=md5("doctor");
-			$usuario->ultima_edicion=date('Y-m-d H:i:s');
-			$usuario->usuario_ultima_edicion=Yii::app()->user->id;
-			$usuario->creacion=date('Y-m-d H:i:s');
-			$usuario->usuario_creacion=Yii::app()->user->id;
+				$usuario = new Usuarios;
+				$usuario->usuario=substr($model->nombre, 0, 3).$model->id.'dci';
+				$usuario->contrasena=md5("lab".$simbolos[rand(0, count($simbolos)-1)].$model->id);
+				$usuario->ultima_edicion=date('Y-m-d H:i:s');
+				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
+				$usuario->creacion=date('Y-m-d H:i:s');
+				$usuario->usuario_creacion=Yii::app()->user->id;
 
-			if($perfil = Perfiles::model()->findByName("Doctor")){			
-				$usuario->id_perfiles=$perfil->id;
+				if($perfil = Perfiles::model()->findByName("Doctor")){			
+					$usuario->id_perfiles=$perfil->id;
+				}
+				else{
+					$perfil = new Perfiles;
+					$perfil->nombre="Doctor";
+					$perfil->save();
+					$usuario->id_perfiles=$perfil->id;	
+				}
+				$usuario->save();
+
+				$model->id_usuarios=$usuario->id;
+
+				$casa->contacto = $_POST['Contactos']['contactoCasa'];
+				$casa->id_tipos_contacto = TiposContacto::model()->findByName('Casa')['id'];
+				$casa->id_perfiles = $perfil->id;
+				$casa->id_persona = $usuario->id;
+				$casa->ultima_edicion=date('Y-m-d H:i:s');
+				$casa->usuario_ultima_edicion=Yii::app()->user->id;
+				$casa->creacion=date('Y-m-d H:i:s');
+				$casa->usuario_creacion=Yii::app()->user->id;
+
+				$consultorio->contacto = $_POST['Contactos']['contactoConsultorio'];
+				$consultorio->id_tipos_contacto = TiposContacto::model()->findByName('Consultorio')['id'];
+				$consultorio->id_perfiles = $perfil->id;
+				$consultorio->id_persona = $usuario->id;
+				$consultorio->ultima_edicion=date('Y-m-d H:i:s');
+				$consultorio->usuario_ultima_edicion=Yii::app()->user->id;
+				$consultorio->creacion=date('Y-m-d H:i:s');
+				$consultorio->usuario_creacion=Yii::app()->user->id;
+
+				$celular->contacto = $_POST['Contactos']['contactoCelular'];
+				$celular->id_tipos_contacto = TiposContacto::model()->findByName('Celular')['id'];
+				$celular->id_perfiles = $perfil->id;
+				$celular->id_persona = $usuario->id;
+				$celular->ultima_edicion=date('Y-m-d H:i:s');
+				$celular->usuario_ultima_edicion=Yii::app()->user->id;
+				$celular->creacion=date('Y-m-d H:i:s');
+				$celular->usuario_creacion=Yii::app()->user->id;
+
+				$correo->contacto = $_POST['Doctores']['correo_electronico'];
+				$correo->id_tipos_contacto = TiposContacto::model()->findByName('Correo electrónico')['id'];
+				$correo->id_perfiles = $perfil->id;
+				$correo->id_persona = $usuario->id;
+				$correo->ultima_edicion=date('Y-m-d H:i:s');
+				$correo->usuario_ultima_edicion=Yii::app()->user->id;
+				$correo->creacion=date('Y-m-d H:i:s');
+				$correo->usuario_creacion=Yii::app()->user->id;
+
+				if($model->save()){
+					$casa->save();
+					$consultorio->save();
+					$celular->save();
+					$correo->save();
+					$usuario->usuario=substr($model->nombre, 0, 3).$usuario->id.'dci';
+					$usuario->contrasena=md5("lab".$simbolos[rand(0, count($simbolos)-1)].$usuario->id);
+					$usuario->save();
+					$transaction->commit();
+					$this->redirect(array('view','id'=>$model->id));
+				}
+				else{
+					$transaction->rollback();
+					echo "<script>alert('No se pudo guardar');</script>";
+				}
 			}
-			else{
-				$perfil = new Perfiles;
-				$perfil->nombre="Doctor";
-				$perfil->save();
-				$usuario->id_perfiles=$perfil->id;	
-			}
-			$usuario->save();
-
-			$model->id_usuarios=$usuario->id;
-
-			$casa->contacto = $_POST['Contactos']['contactoCasa'];
-			$casa->id_tipos_contacto = TiposContacto::model()->findByName('Casa')['id'];
-			$casa->id_perfiles = $perfil->id;
-			$casa->id_persona = $usuario->id;
-			$casa->ultima_edicion=date('Y-m-d H:i:s');
-			$casa->usuario_ultima_edicion=Yii::app()->user->id;
-			$casa->creacion=date('Y-m-d H:i:s');
-			$casa->usuario_creacion=Yii::app()->user->id;
-
-			$consultorio->contacto = $_POST['Contactos']['contactoConsultorio'];
-			$consultorio->id_tipos_contacto = TiposContacto::model()->findByName('Consultorio')['id'];
-			$consultorio->id_perfiles = $perfil->id;
-			$consultorio->id_persona = $usuario->id;
-			$consultorio->ultima_edicion=date('Y-m-d H:i:s');
-			$consultorio->usuario_ultima_edicion=Yii::app()->user->id;
-			$consultorio->creacion=date('Y-m-d H:i:s');
-			$consultorio->usuario_creacion=Yii::app()->user->id;
-
-			$celular->contacto = $_POST['Contactos']['contactoCelular'];
-			$celular->id_tipos_contacto = TiposContacto::model()->findByName('Celular')['id'];
-			$celular->id_perfiles = $perfil->id;
-			$celular->id_persona = $usuario->id;
-			$celular->ultima_edicion=date('Y-m-d H:i:s');
-			$celular->usuario_ultima_edicion=Yii::app()->user->id;
-			$celular->creacion=date('Y-m-d H:i:s');
-			$celular->usuario_creacion=Yii::app()->user->id;
-
-			$correo->contacto = $_POST['Doctores']['correo_electronico'];
-			$correo->id_tipos_contacto = TiposContacto::model()->findByName('Correo electrónico')['id'];
-			$correo->id_perfiles = $perfil->id;
-			$correo->id_persona = $usuario->id;
-			$correo->ultima_edicion=date('Y-m-d H:i:s');
-			$correo->usuario_ultima_edicion=Yii::app()->user->id;
-			$correo->creacion=date('Y-m-d H:i:s');
-			$correo->usuario_creacion=Yii::app()->user->id;
-
-			if($model->save()){
-				$casa->save();
-				$consultorio->save();
-				$celular->save();
-				$correo->save();
-				$this->redirect(array('view','id'=>$model->id));
-			}
-			else{
-				echo "<script>alert('No se pudo guardar');</script>";
-			}
+		}catch(Exception $e)
+		{
+			$transaction->rollback();
 		}
+
 
 		$this->render('create',array(
 			'model'=>$model, 
 			'contacto'=>$contacto,
-		));
+			));
 	}
 
 	/**
@@ -179,7 +190,7 @@ class DoctoresController extends Controller
 		$this->render('update',array(
 			'model'=>$model,
 			'contacto'=>$contacto,
-		));
+			));
 	}
 
 	/**
@@ -205,7 +216,7 @@ class DoctoresController extends Controller
 		$dataProvider=new CActiveDataProvider('Doctores');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
-		));
+			));
 	}
 
 	/**
@@ -221,7 +232,7 @@ class DoctoresController extends Controller
 
 		$this->render('admin',array(
 			'model'=>$model,
-		));
+			));
 	}
 
 	/**

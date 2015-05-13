@@ -3,9 +3,9 @@
 /* @var $model Doctores */
 /* @var $form CActiveForm */
 
-// Yii::app()->clientScript->registerScript('timepicker', "
-// 	ComponentsPickers.init();
-// ");
+Yii::app()->clientScript->registerScript('timepicker', "
+	ComponentsPickers.init();
+");
 ?>
 <div class="portlet box blue">
 	<div class="portlet-title">
@@ -80,7 +80,7 @@
 						<?php echo $form->labelEx($model,'hora_consulta_de', array('class'=>'control-label')); ?>
 						<div class="input-group bootstrap-timepicker">
 							<?php echo $form->textField($model,'hora_consulta_de',array('size'=>45,'maxlength'=>45, 'class'=>'form-control timepicker timepicker-no-seconds')); ?>
-							<span class="input-group-btn">
+							<span class="input-group-btn fix-clock-icon">
 								<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
 							</span>
 							<?php echo $form->error($model,'hora_consulta_de', array('class'=>'help-block')); ?>
@@ -91,7 +91,7 @@
 						<?php echo $form->labelEx($model,'hora_consulta_hasta', array('class'=>'control-label')); ?>
 						<div class="input-group">
 							<?php echo $form->textField($model,'hora_consulta_hasta',array('size'=>45,'maxlength'=>45, 'class'=>'form-control timepicker timepicker-no-seconds')); ?>
-							<span class="input-group-btn">
+							<span class="input-group-btn fix-clock-icon">
 								<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
 							</span>
 
@@ -102,7 +102,7 @@
 					<div class="form-group col-md-6 <?php if($form->error($model,'porcentaje')!=''){ echo 'has-error'; }?>">
 						<?php echo $form->labelEx($model,'porcentaje', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'porcentaje',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->textField($model,'porcentaje',array('size'=>45,'maxlength'=>3, 'class'=>'form-control')); ?>
 							<?php echo $form->error($model,'porcentaje', array('class'=>'help-block')); ?>
 						</div>
 					</div>
@@ -146,11 +146,11 @@
 						<hr/>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'calle')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'calle', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($model,'estado')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($model,'estado', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'calle',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'calle', array('class'=>'help-block')); ?>
+							<?php echo $form->textField($model,'estado',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($model,'estado', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
@@ -170,19 +170,11 @@
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'estado')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'estado', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($model,'calle')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($model,'calle', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'estado',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'estado', array('class'=>'help-block')); ?>
-						</div>
-					</div>
-
-					<div class="form-group col-md-6 <?php if($form->error($model,'codigo_postal')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'codigo_postal', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<?php echo $form->textField($model,'codigo_postal',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'codigo_postal', array('class'=>'help-block')); ?>
+							<?php echo $form->textField($model,'calle',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($model,'calle', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
@@ -202,6 +194,14 @@
 						</div>
 					</div>
 
+					<div class="form-group col-md-6 <?php if($form->error($model,'codigo_postal')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($model,'codigo_postal', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<?php echo $form->textField($model,'codigo_postal',array('size'=>45,'maxlength'=>5, 'class'=>'form-control')); ?>
+							<?php echo $form->error($model,'codigo_postal', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+
 					<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
 				</section>
 
@@ -217,8 +217,3 @@
 			<?php $this->endWidget(); ?>
 		</div>
 </div><!-- form -->
-<script type="text/javascript">
-	$(document).ready(function(){
-		ComponentsPickers.init();
-	});
-</script>
