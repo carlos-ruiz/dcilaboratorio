@@ -48,6 +48,7 @@
 				'dom':'<"table-search"f>tipr',
 				'lengthChange':false,
 				'pageLength':20,
+				//'sortDescending',
 				"language":{
 					"emptyTable":     "Sin <?php echo $titulo;?> que mostrar",
 				    "info":           "Mostrando _START_ a _END_ de _TOTAL_",
@@ -71,6 +72,7 @@
 				        "sortDescending": ": Activar orden descendente"
 				    }
 				}
+				
 			});
 		}
 	});

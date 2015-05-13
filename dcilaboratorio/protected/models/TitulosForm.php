@@ -96,10 +96,10 @@ class TitulosForm extends CActiveRecord
 			//'condition'=>'activo=0',
 			//'order'=>' nombre asc,activo desc',
             //)
-            'criteria'=>$criteria/*,
+            'criteria'=>$criteria,
             'sort'=>array(
                         'defaultOrder'=>'nombre, activo',
-                    ),*/
+                    ),
 		));
 	}
 
