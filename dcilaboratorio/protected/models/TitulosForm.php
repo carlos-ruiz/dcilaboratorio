@@ -92,14 +92,9 @@ class TitulosForm extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-		//$this->dbCriteria->order='nombre DESC';
-		//$criteria->order = "nombre DESC, activo DES";
+		$this->dbCriteria->order='activo DESC, nombre ASC';
 		return new CActiveDataProvider($this, array(
-			'criteria'=>array(
-			'condition'=>'activo=0',
-			'order'=>' nombre asc,activo desc',
-			'condition'=>'activo=1',
-            )
+			'criteria'=>$criteria,
 		));
 	}
 
