@@ -52,11 +52,15 @@ class Doctores extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, porcentaje, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('porcentaje, numero_ext, codigo_postal, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, porcentaje, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, calle, ciudad, colonia, estado, numero_ext, codigo_postal', 'required'),
+			array('porcentaje, codigo_postal, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, calle, ciudad, colonia, estado', 'length', 'max'=>45),
-			array('codigo_postal, numero_int', 'length', 'max'=>5),
+			array('codigo_postal', 'length', 'max'=>5),
+			array('porcentaje', 'length', 'max'=>3),
 			array('correo_electronico', 'email'),
+			array('correo_electronico', 'unique',
+				'attributeName' => 'correo_electronico',
+				'message'=>'Ya existe un usuario registrado con este correo electrónico.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, porcentaje, calle, ciudad, colonia, estado, codigo_postal, numero_ext, numero_int, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
