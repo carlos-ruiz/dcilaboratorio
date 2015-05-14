@@ -102,7 +102,7 @@ class DetallesExamen extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-		$criteria->order = 'activo DESC, descripcion ASC';
+		$this->dbCriteria->order='activo DESC, descripcion ASC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

@@ -16,6 +16,7 @@ $this->breadcrumbs=array(
 	'attributes'=>array(
 		'id',
 		'nombre',
-		'id_usuarios',
+		'usuarios.usuario',
+		'usuarios.contrasena'
 	),
 )); ?>

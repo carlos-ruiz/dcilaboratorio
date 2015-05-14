@@ -38,6 +38,7 @@ class UnidadesResponsables extends CActiveRecord
 			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios', 'required'),
 			array('usuario_ultima_edicion, usuario_creacion, id_usuarios', 'numerical', 'integerOnly'=>true),
 			array('nombre', 'length', 'max'=>45),
+			array('nombre', 'length', 'min'=>3),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios', 'safe', 'on'=>'search'),
@@ -54,7 +55,7 @@ class UnidadesResponsables extends CActiveRecord
 		return array(
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_unidades_responsables'),
 			'unidadTieneDoctores' => array(self::HAS_MANY, 'UnidadTieneDoctores', 'id_unidades_responsables'),
-			'idUsuarios' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
+			'usuarios' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
 		);
 	}
 
@@ -99,7 +100,7 @@ class UnidadesResponsables extends CActiveRecord
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
 		$criteria->compare('id_usuarios',$this->id_usuarios);
-
+		$this->dbCriteria->order='activo DESC, nombre ASC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
