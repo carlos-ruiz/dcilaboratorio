@@ -53,9 +53,10 @@ class Doctores extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, porcentaje, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, calle, ciudad, colonia, estado, numero_ext, codigo_postal, correo_electronico', 'required'),
-			array('porcentaje, codigo_postal, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('codigo_postal, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, calle, ciudad, colonia, estado', 'length', 'max'=>45),
 			array('codigo_postal', 'length', 'max'=>5),
+			array('porcentaje', 'numerical', 'integerOnly'=>true, 'min'=>0, 'max'=>100),
 			array('porcentaje', 'length', 'max'=>3),
 			array('correo_electronico', 'email'),
 			array('correo_electronico', 'unique',
@@ -111,6 +112,7 @@ class Doctores extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario última edición',
 			'creacion' => 'Creación',
 			'usuario_creacion' => 'Usuario creación',
+			'idEspecialidades.nombre' => 'Especialidad',
 		);
 	}
 

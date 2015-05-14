@@ -118,7 +118,6 @@ class TiposContacto extends CActiveRecord
 		    ->from('tipos_contacto')
 		    ->where('descripcion=:descripcion', array(':descripcion'=>$name))
 		    ->queryRow();
-
 		return $tipo_contacto; 
 	}
 }

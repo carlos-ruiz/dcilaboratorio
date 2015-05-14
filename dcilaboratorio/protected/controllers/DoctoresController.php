@@ -157,6 +157,7 @@ class DoctoresController extends Controller
 			}
 		}catch(Exception $e)
 		{
+			print_r($e);
 			$transaction->rollback();
 		}
 
@@ -272,5 +273,25 @@ class DoctoresController extends Controller
 	public function obtenerNombreEspecialidad($data, $row){
 		$especialidad = Especialidades::model()->find($data->id_especialidades);
 		return $especialidad->nombre;
+	}
+
+	public function obtenerTelefonoConsultorio($data, $row){
+		$contacto = Contactos::model()->findByUser($data->id_usuarios, TiposContacto::model()->findByName('Consultorio')['id']);
+		return $contacto['contacto'];
+	}
+
+	public function obtenerTelefonoCasa($data, $row){
+		$contacto = Contactos::model()->findByUser($data->id_usuarios, TiposContacto::model()->findByName('Casa')['id']);
+		return $contacto['contacto'];
+	}
+
+	public function obtenerTelefonoCelular($data, $row){
+		$contacto = Contactos::model()->findByUser($data->id_usuarios, TiposContacto::model()->findByName('Celular')['id']);
+		return $contacto['contacto'];
+	}
+
+	public function obtenerCorreo($data, $row){
+		$contacto = Contactos::model()->findByUser($data->id_usuarios, TiposContacto::model()->findByName('Correo electrónico')['id']);
+		return $contacto['contacto'];
 	}
 }

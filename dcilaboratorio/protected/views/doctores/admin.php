@@ -13,13 +13,25 @@ $this->renderPartial(
 		'titulo'=>'Doctores',
 		'columnas'=>array(
 			'id',
-			'especialidad.nombre',
+			'idEspecialidades.nombre',
 			array(
 				'name'=>'nombre',
 				'value'=>array($this, 'obtenerNombreCompletoConTitulo'),
 			),
+			array(
+				'name'=>'Tel. consultorio',
+				'value'=>array($this, 'obtenerTelefonoConsultorio'),
+			),
+			array(
+				'name'=>'Tel. casa',
+				'value'=>array($this, 'obtenerTelefonoCasa'),
+			),
+			array(
+				'name'=>'Tel. celular',
+				'value'=>array($this, 'obtenerTelefonoCelular'),
+			),
 			'correo_electronico',
-			'id_usuarios'
+			'id_usuarios',
 		)
 	)
 ); 
