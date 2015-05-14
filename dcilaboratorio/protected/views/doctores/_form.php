@@ -31,7 +31,7 @@ Yii::app()->clientScript->registerScript('timepicker', "
 					<div class="form-group col-md-6 <?php if($form->error($model,'id_especialidades')!=''){ echo 'has-error'; }?>">
 						<?php echo $form->labelEx($model,'id_especialidades', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->dropDownList($model,'id_especialidades',$model->obtenerEspecialidades(), array('class' => 'form-control')); ?>
+							<?php echo $form->dropDownList($model,'id_especialidades',$model->obtenerEspecialidades(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
 							<?php echo $form->error($model,'id_especialidades', array('class'=>'help-block')); ?>
 						</div>
 					</div>
@@ -39,7 +39,7 @@ Yii::app()->clientScript->registerScript('timepicker', "
 					<div class="form-group col-md-6 <?php if($form->error($model,'id_titulos')!=''){ echo 'has-error'; }?>">
 						<?php echo $form->labelEx($model,'id_titulos', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->dropDownList($model,'id_titulos',$model->obtenerTitulos(), array('class' => 'form-control')); ?>
+							<?php echo $form->dropDownList($model,'id_titulos',$model->obtenerTitulos(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
 							<?php echo $form->error($model,'id_titulos', array('class'=>'help-block')); ?>
 						</div>
 					</div>
@@ -111,7 +111,7 @@ Yii::app()->clientScript->registerScript('timepicker', "
 
 				<section id="contacto" class="overflow-auto">
 					<div class="heading text-center">
-						<h3>Teléfonos</h3>
+						<h3 style="color:#1e90ff ">Teléfonos</h3>
 						<hr/>
 					</div>
 
@@ -142,7 +142,7 @@ Yii::app()->clientScript->registerScript('timepicker', "
 
 				<section id="direccion" class="overflow-auto">
 					<div class="heading text-center">
-						<h3>Dirección</h3>
+						<h3 style="color:#1e90ff">Dirección</h3>
 						<hr/>
 					</div>
 

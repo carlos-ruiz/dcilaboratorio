@@ -14,7 +14,6 @@ $this->renderPartial(
 		'columnas'=>array(
 			'clave',
 			'nombre',
-			'descripcion',
 			'duracion_dias'
 		)
 	)

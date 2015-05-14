@@ -12,14 +12,13 @@ $this->renderPartial(
 		'model'=>$model,
 		'titulo'=>'Doctores',
 		'columnas'=>array(
-			'id',
-			'especialidad.nombre',
+			'especialidades.nombre',
 			array(
 				'name'=>'nombre',
 				'value'=>array($this, 'obtenerNombreCompletoConTitulo'),
 			),
 			'correo_electronico',
-			'id_usuarios'
+			
 		)
 	)
 ); 

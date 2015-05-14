@@ -18,7 +18,7 @@ $this->renderPartial(
 		'titulo'=>'Tarifas activas',
 		'columnas'=>array(
 						'examen.nombre',
-						'multitarifario',
+						'multitarifario.nombre',
 						array(
 							'name'=>'precio',
 							'value'=>array($this, 'obtenerPrecioConFormato'),

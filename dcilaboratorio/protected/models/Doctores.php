@@ -52,11 +52,12 @@ class Doctores extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, porcentaje, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, calle, ciudad, colonia, estado, numero_ext, codigo_postal', 'required'),
+			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, porcentaje, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, calle, ciudad, colonia, estado, numero_ext, codigo_postal,correo_electronico', 'required'),
 			array('porcentaje, codigo_postal, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, calle, ciudad, colonia, estado', 'length', 'max'=>45),
 			array('codigo_postal', 'length', 'max'=>5),
 			array('porcentaje', 'length', 'max'=>3),
+			array('nombre', 'length', 'min'=>3),
 			array('correo_electronico', 'email'),
 			array('correo_electronico', 'unique',
 				'attributeName' => 'correo_electronico',
@@ -75,9 +76,9 @@ class Doctores extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idUsuarios' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
-			'idEspecialidades' => array(self::BELONGS_TO, 'Especialidades', 'id_especialidades'),
-			'idTitulos' => array(self::BELONGS_TO, 'Titulos', 'id_titulos'),
+			'usuarios' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
+			'especialidades' => array(self::BELONGS_TO, 'Especialidades', 'id_especialidades'),
+			'titulos' => array(self::BELONGS_TO, 'TitulosForm', 'id_titulos'),
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_doctores'),
 			'unidadTieneDoctores' => array(self::HAS_MANY, 'UnidadTieneDoctores', 'id_doctores'),
 		);
@@ -111,6 +112,8 @@ class Doctores extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario última edición',
 			'creacion' => 'Creación',
 			'usuario_creacion' => 'Usuario creación',
+			'especialidades.nombre'=>'Especialidad',
+			'titulos.nombre'=>'Título',
 		);
 	}
 

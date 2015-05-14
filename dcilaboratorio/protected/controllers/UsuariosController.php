@@ -55,7 +55,7 @@ class UsuariosController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
+	/*public function actionCreate()
 	{
 		$this->subSection = "Registro";
 		$model=new Usuarios;
@@ -73,7 +73,7 @@ class UsuariosController extends Controller
 		$this->render('create',array(
 			'model'=>$model,
 		));
-	}
+	}*/
 
 	/**
 	 * Updates a particular model.
@@ -90,8 +90,13 @@ class UsuariosController extends Controller
 		if(isset($_POST['Usuarios']))
 		{
 			$model->attributes=$_POST['Usuarios'];
+			try {
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
+			}
+			catch(Exception $e){
+			echo "<script>alert('No se pudo guardar ya existe el usuario');</script>";			
+			}
 		}
 
 		$this->render('update',array(

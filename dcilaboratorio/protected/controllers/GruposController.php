@@ -88,7 +88,7 @@ class GruposController extends Controller
 						$error=true;
 				}
 				if(!$error)
-					$this->redirect(array('index'));
+					$this->redirect(array('admin'));
 			}
 		}
 
@@ -140,7 +140,7 @@ class GruposController extends Controller
 						$error=true;
 				}
 				if(!$error)
-					$this->redirect(array('index'));
+					$this->redirect(array('admin'));
 			}
 		}
 

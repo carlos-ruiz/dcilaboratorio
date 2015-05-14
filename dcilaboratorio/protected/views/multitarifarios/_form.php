@@ -33,7 +33,7 @@
 	<div class="form-group <?php if($form->error($model,'descripcion')!=''){ echo 'has-error'; }?>">
 		<?php echo $form->labelEx($model,'descripcion', array('class'=>'control-label')); ?>
 			<div class="input-group" >
-			<?php echo $form->textArea($model,'descripcion',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+			<?php echo $form->textArea($model,'descripcion',array('rows'=>6, 'cols'=>45, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model,'descripcion', array('class'=>'help-block')); ?>
 			</div>
 	</div>

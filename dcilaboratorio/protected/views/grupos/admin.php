@@ -13,7 +13,7 @@ $this->renderPartial(
 	'/comunes/_comunAdmin', 
 	array(
 		'model'=>$model,
-		'titulo'=>'Grupos de exámenes',
+		'titulo'=>'Grupos de ex&aacute;menes',
 		'columnas'=>array(
 			'id',
 			'nombre'

@@ -2,10 +2,6 @@
 /* @var $this UnidadesResponsablesController */
 /* @var $model UnidadesResponsables */
 
-$this->breadcrumbs=array(
-	'Unidades Responsables'=>array('admin'),
-	$model->id,
-);
 ?>
 
 <h1>Unidades Responsables: <?php echo $model->nombre; ?></h1>
@@ -16,7 +12,6 @@ $this->breadcrumbs=array(
 	'attributes'=>array(
 		'id',
 		'nombre',
-		'usuarios.usuario',
-		'usuarios.contrasena'
+		
 	),
 )); ?>

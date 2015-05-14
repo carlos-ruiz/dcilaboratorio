@@ -35,13 +35,13 @@ class UnidadesResponsables extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios', 'required'),
-			array('usuario_ultima_edicion, usuario_creacion, id_usuarios', 'numerical', 'integerOnly'=>true),
+			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre', 'length', 'max'=>45),
 			array('nombre', 'length', 'min'=>3),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios', 'safe', 'on'=>'search'),
+			array('id, nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,7 +71,6 @@ class UnidadesResponsables extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
-			'id_usuarios' => 'Usuario',
 		);
 	}
 
@@ -99,7 +98,6 @@ class UnidadesResponsables extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-		$criteria->compare('id_usuarios',$this->id_usuarios);
 		$this->dbCriteria->order='activo DESC, nombre ASC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -117,7 +115,4 @@ class UnidadesResponsables extends CActiveRecord
 		return parent::model($className);
 	}
 
-	public function obtenerUsuarios(){
-		return CHtml::listData(Usuarios::model()->findAll(), 'id', 'usuario');
-	}
 }
