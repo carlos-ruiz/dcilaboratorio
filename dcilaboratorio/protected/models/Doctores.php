@@ -52,6 +52,7 @@ class Doctores extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+
 			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, porcentaje, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, calle, ciudad, colonia, estado, numero_ext, codigo_postal,correo_electronico', 'required'),
 			array('porcentaje, codigo_postal, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, calle, ciudad, colonia, estado', 'length', 'max'=>45),
