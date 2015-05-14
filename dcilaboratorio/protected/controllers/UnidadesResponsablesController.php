@@ -69,61 +69,19 @@ class UnidadesResponsablesController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new UnidadesResponsables;
-		$contacto = new Contactos;
-		$simbolos = array('!', '$', '#', '?');
+		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-		$transaction = Yii::app()->db->beginTransaction();
-		try
+		if(isset($_POST['UnidadesResponsables']))
 		{
-			if(isset($_POST['UnidadesResponsables']))
-			{
-				$model->attributes=$_POST['UnidadesResponsables'];
-				
-				$usuario = new Usuarios;
-				$usuario->usuario=substr($model->nombre, 0, 3).$model->id.'dci';
-				$usuario->contrasena=md5("lab".$simbolos[rand(0, count($simbolos)-1)].$model->id);
-				$usuario->ultima_edicion=date('Y-m-d H:i:s');
-				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
-				$usuario->creacion=date('Y-m-d H:i:s');
-				$usuario->usuario_creacion=Yii::app()->user->id;
-
-				if($perfil = Perfiles::model()->findByName("Unidad Responsable")){			
-					$usuario->id_perfiles=$perfil->id;
-				}
-				else{
-					$perfil = new Perfiles;
-					$perfil->nombre="Unidad Responsable";
-					$perfil->save();
-					$usuario->id_perfiles=$perfil->id;	
-				}
-				$usuario->save();
-
-				$model->id_usuarios=$usuario->id;
-								
-				
-				if($model->save()){
-					$usuario->usuario=substr($model->nombre, 0, 3).$usuario->id.'dci';
-					$usuario->contrasena="lab".$simbolos[rand(0, count($simbolos)-1)].$usuario->id;
-					$usuario->save();
-					$transaction->commit();
-					$this->redirect(array('view','id'=>$model->id));
-				}
-				else{
-					$transaction->rollback();
-					echo "<script>alert('No se pudo guardar');</script>";
-				}
-			}
-		}catch(Exception $e)
-		{
-			$transaction->rollback();
+			$model->attributes=$_POST['UnidadesResponsables'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
 		}
 
-
 		$this->render('create',array(
-			'model'=>$model, 
-			'contacto'=>$contacto,
-			));
+			'model'=>$model,
+		));
 	}
 
 	/**

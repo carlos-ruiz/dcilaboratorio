@@ -12,8 +12,7 @@ $this->renderPartial(
 		'model'=>$model,
 		'titulo'=>'Doctores',
 		'columnas'=>array(
-			'id',
-			'idEspecialidades.nombre',
+			'especialidades.nombre',
 			array(
 				'name'=>'nombre',
 				'value'=>array($this, 'obtenerNombreCompletoConTitulo'),
@@ -31,7 +30,6 @@ $this->renderPartial(
 				'value'=>array($this, 'obtenerTelefonoCelular'),
 			),
 			'correo_electronico',
-			'id_usuarios',
 		)
 	)
 ); 

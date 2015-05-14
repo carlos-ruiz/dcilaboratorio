@@ -10,14 +10,12 @@
 	'data'=>$model,
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
+		'usuarios.usuario',
+		'titulos.nombre',
 		'nombre',
-//		array(
-//			'label'=>'Especialidad',
-//			'type'=>'raw',
-//			'value'=>'Hola',
-//			),
 		'a_paterno',
 		'a_materno',
+		'especialidades.nombre',
 		'correo_electronico',
 		'hora_consulta_de',
 		'hora_consulta_hasta',
@@ -28,9 +26,6 @@
 		'estado',
 		'codigo_postal',
 		'numero_ext',
-		'numero_int',
-		'id_especialidades',
-		'id_titulos',
-		'id_usuarios',
+		'numero_int',	
 	),
 )); ?>

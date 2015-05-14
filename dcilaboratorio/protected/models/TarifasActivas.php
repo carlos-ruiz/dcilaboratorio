@@ -64,13 +64,14 @@ class TarifasActivas extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'id_examenes' => 'Id Examenes',
-			'id_multitarifarios' => 'Id Multitarifarios',
+			'id_examenes' => 'Examen',
+			'id_multitarifarios' => 'Multitarifario',
 			'precio' => 'Precio',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
+			'multitarifario.nombre'=>'Multitarifario',
 		);
 	}
 

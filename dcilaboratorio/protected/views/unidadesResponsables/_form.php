@@ -2,7 +2,6 @@
 /* @var $this UnidadesResponsablesController */
 /* @var $model UnidadesResponsables */
 /* @var $form CActiveForm */
-$usuarios = CHtml::listData(Usuarios::model()->findAll(), 'id', 'usuario');
 ?>
 
 <div class="portlet box blue">
