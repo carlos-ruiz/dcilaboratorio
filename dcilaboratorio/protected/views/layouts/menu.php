@@ -32,12 +32,11 @@
 					</a>
 				</li>
 
-
-				<li <?php if($this->section=="Usuarios"){ echo 'class="active open"';}?>>
+				<li <?php if($this->section=="Ordenes"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-users"></i>
-					<span class="title">Usuarios</span>
-					<?php if($this->section=="Usuarios"){?>
+					<i class="icon-chemistry"></i>
+					<span class="title">Ordenes</span>
+					<?php if($this->section=="Ordenes"){?>
 					<span class="selected"></span>
 					<span class="arrow open"></span>
 					<?php } else{ ?>
@@ -45,21 +44,51 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li <?php if($this->section=="Usuarios" && $this->subSection=="Registro"){ echo 'class="active open"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/create">
-							<i class="icon-user-follow"></i>
-							Nuevo</a>
+						<li <?php if($this->section=="Orednes" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/ordenes/create">
+							<i class="icon-plus"></i>
+							Nueva</a>
 						</li>
-						<li <?php if($this->section=="Usuarios" && $this->subSection=="Admin"){ echo 'class="active open"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/admin">
+						<li <?php if($this->section=="Ordenes" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/ordenes/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>
 					</ul>
 				</li>
+
+
+				
 				<li class="heading">
 					<h3 class="uppercase">Catálogos</h3>
 				</li>
+
+
+				<li <?php if($this->section=="UnidadesResponsables"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-grid"></i>
+					<span class="title">Unidades Responsables</span>
+					<?php if($this->section=="UnidadesResponsables"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li <?php if($this->section=="UnidadesResponsables" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/create">
+							<i class="icon-plus"></i>
+							Nueva</a>
+						</li>
+						<li <?php if($this->section=="UnidadesResponsables" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/admin">
+							<i class="icon-list"></i>
+							Administrar</a>
+						</li>						
+					</ul>
+				</li>
+
 				<li <?php if($this->section=="Doctores"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-users"></i>
@@ -89,30 +118,7 @@
 						</li>
 
 					</ul>
-				<li <?php if($this->section=="Titulos"){ echo 'class="active open"';}?>>
-					<a href="javascript:;">
-					<i class="icon-trophy"></i>
-					<span class="title">Titulos</span>
-					<?php if($this->section=="Titulos"){?>
-					<span class="selected"></span>
-					<span class="arrow open"></span>
-					<?php } else{ ?>
-					<span class="arrow "></span>
-					<?php }?>
-					</a>
-					<ul class="sub-menu">
-						<li <?php if($this->section=="Titulos" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/create">
-							<i class="icon-plus"></i>
-							Nuevo</a>
-						</li>
-						<li <?php if($this->section=="Titulos" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/admin">
-							<i class="icon-list"></i>
-							Administración</a>
-						</li>					
-					</ul>
-				</li>
+				
 				
 				
 				<li <?php if($this->section=="Examenes"){ echo 'class="active open"';}?>>
@@ -143,15 +149,42 @@
 							Grupos</a>
 
 						</li>
+						<li <?php if($this->section=="Examenes" && $this->subSection=="Resultados"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/admin">
+							<i class="icon-note"></i>
+							Resultado de examenes</a>
+						</li>
 						<li <?php if($this->section=="Examenes" && $this->subSection=="Tarifas"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/tarifasActivas/admin">
 							<i class="icon-check"></i>
 							Tarifas activas</a>
 						</li>
-						<li <?php if($this->section=="Examenes" && $this->subSection=="Resultados"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/admin">
-							<i class="icon-note"></i>
-							Resultado de examenes</a>
+					</ul>
+				</li>
+
+
+
+				<li <?php if($this->section=="Multitarifarios"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-wallet"></i>
+					<span class="title">Multitarifarios</span>
+					<?php if($this->section=="Multitarifarios"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li <?php if($this->section=="Multitarifarios" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/multitarifarios/create">
+							<i class="icon-plus"></i>
+							Nuevo</a>
+						</li>
+						<li <?php if($this->section=="Multitarifarios" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/multitarifarios/admin">
+							<i class="icon-list"></i>
+							Administrar</a>
 						</li>
 					</ul>
 				</li>
@@ -181,11 +214,11 @@
 					</ul>
 				</li>
 
-				<li <?php if($this->section=="Multitarifarios"){ echo 'class="active open"';}?>>
+				<li <?php if($this->section=="Titulos"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-wallet"></i>
-					<span class="title">Multitarifarios</span>
-					<?php if($this->section=="Multitarifarios"){?>
+					<i class="icon-trophy"></i>
+					<span class="title">Titulos</span>
+					<?php if($this->section=="Titulos"){?>
 					<span class="selected"></span>
 					<span class="arrow open"></span>
 					<?php } else{ ?>
@@ -193,43 +226,19 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li <?php if($this->section=="Multitarifarios" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/multitarifarios/create">
+						<li <?php if($this->section=="Titulos" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/create">
 							<i class="icon-plus"></i>
 							Nuevo</a>
 						</li>
-						<li <?php if($this->section=="Multitarifarios" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/multitarifarios/admin">
+						<li <?php if($this->section=="Titulos" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/admin">
 							<i class="icon-list"></i>
-							Administrar</a>
-						</li>
+							Administración</a>
+						</li>					
 					</ul>
 				</li>
 
-				<li <?php if($this->section=="UnidadesResponsables"){ echo 'class="active open"';}?>>
-					<a href="javascript:;">
-					<i class="icon-grid"></i>
-					<span class="title">Unidades Responsables</span>
-					<?php if($this->section=="UnidadesResponsables"){?>
-					<span class="selected"></span>
-					<span class="arrow open"></span>
-					<?php } else{ ?>
-					<span class="arrow "></span>
-					<?php }?>
-					</a>
-					<ul class="sub-menu">
-						<li <?php if($this->section=="UnidadesResponsables" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/create">
-							<i class="icon-plus"></i>
-							Nueva</a>
-						</li>
-						<li <?php if($this->section=="UnidadesResponsables" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/admin">
-							<i class="icon-list"></i>
-							Administrar</a>
-						</li>						
-					</ul>
-				</li>
 
 				<li <?php if($this->section=="UnidadesMedida"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
@@ -254,14 +263,13 @@
 							Administrar</a>
 						</li>
 					</ul>
-					
-						
+				</li>
 
-				<li <?php if($this->section=="Ordenes"){ echo 'class="active open"';}?>>
+				<li <?php if($this->section=="Usuarios"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
-					<i class="icon-chemistry"></i>
-					<span class="title">Ordenes</span>
-					<?php if($this->section=="Ordenes"){?>
+					<i class="icon-users"></i>
+					<span class="title">Usuarios</span>
+					<?php if($this->section=="Usuarios"){?>
 					<span class="selected"></span>
 					<span class="arrow open"></span>
 					<?php } else{ ?>
@@ -269,18 +277,23 @@
 					<?php }?>
 					</a>
 					<ul class="sub-menu">
-						<li <?php if($this->section=="Orednes" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/ordenes/create">
-							<i class="icon-plus"></i>
-							Nueva</a>
+						<li <?php if($this->section=="Usuarios" && $this->subSection=="Registro"){ echo 'class="active open"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/create">
+							<i class="icon-user-follow"></i>
+							Nuevo</a>
 						</li>
-						<li <?php if($this->section=="Ordenes" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
-							<a href="<?php echo Yii::app()->request->baseUrl; ?>/ordenes/admin">
+						<li <?php if($this->section=="Usuarios" && $this->subSection=="Admin"){ echo 'class="active open"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/usuarios/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>
 					</ul>
 				</li>
+
+					
+						
+
+				
 
 			
 
