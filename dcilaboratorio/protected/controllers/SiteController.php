@@ -160,7 +160,7 @@ class SiteController extends Controller
 		if(Usuarios::model()->count()==0){
 			$nuevoUsuario = new Usuarios;
 			$nuevoUsuario->usuario="admin";
-			$nuevoUsuario->contrasena=md5("admin");
+			$nuevoUsuario->contrasena=base64_encode("admin");
 			$nuevoUsuario->ultima_edicion=date('Y-m-d H:i:s');
 			$nuevoUsuario->usuario_ultima_edicion=0;
 			$nuevoUsuario->creacion=date('Y-m-d H:i:s');

@@ -24,7 +24,8 @@
 											    (
 											        'activar' => array
 											        (
-											            'label'=>'<span class="icon-plus"></span>',
+											        	'id'=>'"act_".$data->id',
+											            'label'=>'<span class="fa fa-level-up"></span>',
 											            'visible'=>'isset($data->activo) && $data->activo ==0',
 											            //'url'=>'Yii::app()->controller->createUrl("delete",array("id"=>"")).$data->id',
 											            'options'=>array(  // this is the 'html' array but we specify the 'ajax' element
@@ -36,16 +37,23 @@
 											            //'imageUrl' =>'false',
 											        ),
 											        'view'=>array(
-											        	'label'=>'<span class="icon-eyeglasses"></span>',
+											        	'label'=>'<span class="fa fa-search"></span>',
 								        				'visible'=>'(isset($data->activo) && $data->activo == 1) || !isset($data->activo)',
 								        				'imageUrl'=>false,
+								        				'options'=>array(
+								        					'title'=>'Detalles',
+								        				),
 											        ),
 											        'update'=>array(
 											        	'label'=>'<span class="fa fa-pencil"></span>',
 								        				'visible'=>'(isset($data->activo) && $data->activo == 1) || !isset($data->activo)',
 								        				'imageUrl'=>false,
+								        				'options'=>array(
+								        					'title'=>'Actualizar',
+								        				),
 											        ),
 											        'borrar'=>array(
+
 											        	'label'=>'<span class="fa fa-trash"></span>',
 								        				'visible'=>'!isset($data->activo)',
 								        				'url'=>'"#"',
@@ -56,7 +64,8 @@
        													),
 								        			),
 								        			'desactivar'=>array(
-											        	'label'=>'<span class="fa fa-trash"></span>',
+								        				'id'=>'"des_".$data->id',
+											        	'label'=>'<span class="fa fa-level-down"></span>',
 								        				'visible'=>'(isset($data->activo) && $data->activo == 1)',
 								        				'url'=>'"#"',
 								        				'imageUrl'=>false,
@@ -92,7 +101,7 @@
 
 <script type="text/javascript">
 
-	function activarFuncionesDeBorrado(){
+	function activarFuncionesDeBorrado(cell){
 		$(".borrar").click(function(ev){
 			ev.preventDefault();
 			idModel=$(this).parent().parent().data('id');
@@ -101,47 +110,55 @@
 				$("#row_"+idModel).html(" ");
 			});
 		});
-
-		$(".activar").click(function(ev){
-			ev.preventDefault();
-			idModel=$(this).parent().parent().data('id');
-			column = $(this).parent();
-			$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
-				column.html('<a class="view" title="<span class=&quot;icon-eyeglasses&quot;></span>" href="<?php echo Yii::app()->controller->createUrl("view"); ?>/'+idModel+'"><span class="icon-eyeglasses"></span></a> <a class="update" title="<span class=&quot;fa fa-pencil&quot;></span>" href="#"><span class="fa fa-pencil"></span></a>  <a class="desactivar" title="Desactivar" href="#"><span class="fa fa-trash"></span></a>');
-				$(".desactivar").click(function(ev){
-					ev.preventDefault();
-					idModel=$(this).parent().parent().data('id');
-					column = $(this).parent();
-					$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
-						column.html('<a class="activar" title="Reactivar" href="#"><span class="icon-plus"></span></a>');
-						//activarFuncionesDeBorrado();
-					});
+		if(cell==null){
+			$(".activar").click(function(ev){
+				ev.preventDefault();
+				idModel=$(this).parent().parent().data('id');
+				column = $(this).parent();
+				$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
+					column.html('<a class="view" title="Detalles" href="<?php echo Yii::app()->controller->createUrl("view"); ?>/'+idModel+'"><span class="fa fa-search"></span></a> <a class="update" title="Actualizar" href="<?php echo Yii::app()->controller->createUrl("update"); ?>/'+idModel+'"><span class="fa fa-pencil"></span></a>  <a class="desactivar" title="Desactivar" href="#"><span class="fa fa-level-down"></span></a>');
+					activarFuncionesDeBorrado(column);
+					
 				});
 			});
-		});
-		$(".desactivar").click(function(ev){
-			ev.preventDefault();
-			idModel=$(this).parent().parent().data('id');
-			column = $(this).parent();
-			$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
-				column.html('<a class="activar" title="Reactivar" href="#"><span class="icon-plus"></span></a>');
-				$(".activar").click(function(ev){
-					ev.preventDefault();
-					idModel=$(this).parent().parent().data('id');
-					column = $(this).parent();
-					$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
-						column.html('<a class="view" title="<span class=&quot;icon-eyeglasses&quot;></span>" href="<?php echo Yii::app()->controller->createUrl("view"); ?>/'+idModel+'"><span class="icon-eyeglasses"></span></a> <a class="update" title="<span class=&quot;fa fa-pencil&quot;></span>" href="#"><span class="fa fa-pencil"></span></a>  <a class="desactivar" title="Desactivar" href="#"><span class="fa fa-trash"></span></a>');
-						//activarFuncionesDeBorrado();
-					});
+			$(".desactivar").click(function(ev){
+				ev.preventDefault();
+				idModel=$(this).parent().parent().data('id');
+				column = $(this).parent();
+				$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
+					column.html('<a class="activar" title="Reactivar" href="#"><span class="fa fa-level-up"></span></a>');
+					activarFuncionesDeBorrado(column);
+				
 				});
 			});
-		});
+		}
+		else{
+			cell.find(".activar").click(function(ev){
+				ev.preventDefault();
+				idModel=$(this).parent().parent().data('id');
+				column = $(this).parent();
+				$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
+					column.html('<a class="view" title="Detalles" href="<?php echo Yii::app()->controller->createUrl("view"); ?>/'+idModel+'"><span class="fa fa-search"></span></a> <a class="update" title="Actualizar" href="<?php echo Yii::app()->controller->createUrl("update"); ?>/'+idModel+'"><span class="fa fa-pencil"></span></a>  <a class="desactivar" title="Desactivar" href="#"><span class="fa fa-level-down"></span></a>');
+					activarFuncionesDeBorrado(column);
+	
+				});
+			});
+			cell.find(".desactivar").click(function(ev){
+				ev.preventDefault();
+				idModel=$(this).parent().parent().data('id');
+				column = $(this).parent();
+				$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
+					column.html('<a class="activar" title="Reactivar" href="#"><span class="fa fa-level-up"></span></a>');
+					activarFuncionesDeBorrado(column);
+				});
+			});			
+		}	
 		
 
 	}
 		
 	$(document).ready(function(){
-		activarFuncionesDeBorrado();
+		activarFuncionesDeBorrado(null);
 
 		if($('table')!=null){
 			$('table').dataTable({

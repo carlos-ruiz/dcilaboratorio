@@ -113,11 +113,14 @@ class TarifasActivasController extends Controller
 	public function actionDelete($id)
 	{
 		$model=$this->loadModel($id);
-		$model->activo=0;
-		$model->save();
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		if(isset($model->activo))
+			$model->activo=$model->activo==0?1:0;
+		else
+			$model->delete();
+		$model->save();	
+
+		$status = (!isset($model->activo)?"Eliminado":($model->activo==0?"Desactivado":"Activado"));
+		echo '{id:'.$model->id.', estatus:'.$status.'}';
 	}
 
 	/**

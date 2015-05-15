@@ -84,7 +84,7 @@ class DoctoresController extends Controller
 
 				$usuario = new Usuarios;
 				$usuario->usuario=substr($model->nombre, 0, 3).$model->id.'dci';
-				$usuario->contrasena=md5("lab".$simbolos[rand(0, count($simbolos)-1)].$model->id);
+				$usuario->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$model->id);
 				$usuario->ultima_edicion=date('Y-m-d H:i:s');
 				$usuario->usuario_ultima_edicion=Yii::app()->user->id;
 				$usuario->creacion=date('Y-m-d H:i:s');
@@ -145,7 +145,7 @@ class DoctoresController extends Controller
 					$celular->save();
 					$correo->save();
 					$usuario->usuario=substr($model->nombre, 0, 3).$usuario->id.'dci';
-					$usuario->contrasena=md5("lab".$simbolos[rand(0, count($simbolos)-1)].$usuario->id);
+					$usuario->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$usuario->id);
 					$usuario->save();
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
@@ -202,11 +202,14 @@ class DoctoresController extends Controller
 	public function actionDelete($id)
 	{
 		$model=$this->loadModel($id);
-		$model->activo=0;
-		$model->save();
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		if(isset($model->activo))
+			$model->activo=$model->activo==0?1:0;
+		else
+			$model->delete();
+		$model->save();	
+
+		$status = (!isset($model->activo)?"Eliminado":($model->activo==0?"Desactivado":"Activado"));
+		echo '{id:'.$model->id.', estatus:'.$status.'}';
 	}
 
 	/**
