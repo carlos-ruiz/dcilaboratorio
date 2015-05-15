@@ -88,7 +88,7 @@ class PalabrasClave extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-		$this->dbCriteria->order='activo DESC, nombre ASC';
+		
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

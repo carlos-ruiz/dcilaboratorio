@@ -343,23 +343,8 @@ EOD;
 		$options=isset($button['options']) ? $button['options'] : array();
 		if(!isset($options['title']))
 			$options['title']=$label;
-		if(isset($button['imageUrl']) && is_string($button['imageUrl'])){
-			switch ($options['title']) {
-			 	case 'Ver':
-			 		echo CHtml::link('<i class="icon-eyeglasses"></i>',$url,$options);
-			 		break;
-			 	case 'Actualizar':
-			 		echo CHtml::link('<i class="fa fa-pencil"></i>',$url,$options);
-			 		break;
-			 	case 'Borrar':
-			 		echo CHtml::link('<i class="fa fa-trash"></i>',$url,$options);
-			 		break;
-			 	default:
-			 		echo CHtml::link(CHtml::image($button['imageUrl'],$label),$url,$options);
-			 		break;
-			 } 
-			
-		}
+		if(isset($button['imageUrl']) && is_string($button['imageUrl']))
+			echo CHtml::link(CHtml::image($button['imageUrl'],$label),$url,$options);
 		else
 			echo CHtml::link($label,$url,$options);
 	}

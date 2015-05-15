@@ -12,6 +12,12 @@
 		'id',
 		'nombre'
 	),
+
 )); ?>
 
-
+<h3>Exámenes para el grupo</h3>
+<table class="table table-striped table-bordered dataTable">
+<?php foreach ($model->grupoTiene as $tiene) {
+	echo "<tr><td>".$tiene->examen->nombre."</td></tr>";
+} ?>
+</table>

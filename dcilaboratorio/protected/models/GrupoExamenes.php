@@ -50,8 +50,8 @@ class GrupoExamenes extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idExamenes' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
-			'idGruposExamenes' => array(self::BELONGS_TO, 'GruposExamenes', 'id_grupos_examenes'),
+			'examen' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
+			'grupo' => array(self::BELONGS_TO, 'GruposExamenes', 'id_grupos_examenes'),
 		);
 	}
 

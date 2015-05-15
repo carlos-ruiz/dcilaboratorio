@@ -15,7 +15,7 @@ $this->renderPartial(
 		'model'=>$model,
 		'titulo'=>'Grupos de ex&aacute;menes',
 		'columnas'=>array(
-			'id',
+			//'id',
 			'nombre'
 		)
 	)

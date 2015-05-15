@@ -113,11 +113,15 @@ class PalabrasClaveController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model=$this->loadModel($id);
+		if(isset($model->activo))
+			$model->activo=$model->activo==0?1:0;
+		else
+			$model->delete();
+		$model->save();	
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		$status = (!isset($model->activo)?"Eliminado":($model->activo==0?"Desactivado":"Activado"));
+		echo '{id:'.$model->id.', estatus:'.$status.'}';
 	}
 
 	/**
