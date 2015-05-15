@@ -59,6 +59,7 @@ class Doctores extends CActiveRecord
 			array('codigo_postal', 'length', 'max'=>5),
 			array('porcentaje', 'numerical', 'integerOnly'=>true, 'min'=>0, 'max'=>100),
 			array('porcentaje', 'length', 'max'=>3),
+			array('numero_int', 'safe'),
 			array('nombre', 'length', 'min'=>3),
 			array('correo_electronico', 'email'),
 			array('correo_electronico', 'unique',

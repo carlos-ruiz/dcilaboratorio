@@ -168,6 +168,102 @@ class SiteController extends Controller
 			$nuevoUsuario->id_perfiles=$perfil->id;
 			$nuevoUsuario->save();
 		}
+
+		if (TitulosForm::model()->count()==0) {
+			$dr = new TitulosForm;
+			$dr->nombre = "Dr.";
+			$dr->ultima_edicion=date('Y-m-d H:i:s');
+			$dr->usuario_ultima_edicion=0;
+			$dr->creacion=date('Y-m-d H:i:s');
+			$dr->usuario_creacion=0;
+			$dr->save();
+
+			$dra = new TitulosForm;
+			$dra->nombre = "Dra.";
+			$dra->ultima_edicion=date('Y-m-d H:i:s');
+			$dra->usuario_ultima_edicion=0;
+			$dra->creacion=date('Y-m-d H:i:s');
+			$dra->usuario_creacion=0;
+			$dra->save();
+
+			$sr = new TitulosForm;
+			$sr->nombre = "Sr.";
+			$sr->ultima_edicion=date('Y-m-d H:i:s');
+			$sr->usuario_ultima_edicion=0;
+			$sr->creacion=date('Y-m-d H:i:s');
+			$sr->usuario_creacion=0;
+			$sr->save();
+
+			$sra = new TitulosForm;
+			$sra->nombre = "Sra.";
+			$sra->ultima_edicion=date('Y-m-d H:i:s');
+			$sra->usuario_ultima_edicion=0;
+			$sra->creacion=date('Y-m-d H:i:s');
+			$sra->usuario_creacion=0;
+			$sra->save();
+
+			$srita = new TitulosForm;
+			$srita->nombre = "Srita.";
+			$srita->ultima_edicion=date('Y-m-d H:i:s');
+			$srita->usuario_ultima_edicion=0;
+			$srita->creacion=date('Y-m-d H:i:s');
+			$srita->usuario_creacion=0;
+			$srita->save();
+
+			$quimico = new TitulosForm;
+			$quimico->nombre = "Químico";
+			$quimico->ultima_edicion=date('Y-m-d H:i:s');
+			$quimico->usuario_ultima_edicion=0;
+			$quimico->creacion=date('Y-m-d H:i:s');
+			$quimico->usuario_creacion=0;
+			$quimico->save();
+
+			$quimica = new TitulosForm;
+			$quimica->nombre = "Química";
+			$quimica->ultima_edicion=date('Y-m-d H:i:s');
+			$quimica->usuario_ultima_edicion=0;
+			$quimica->creacion=date('Y-m-d H:i:s');
+			$quimica->usuario_creacion=0;
+			$quimica->save();
+		}
+
+		if (TiposContacto::model()->count()==0) {
+			$casa = new TiposContacto;
+			$casa->descripcion = "Casa";
+			$casa->abreviatura = "Casa";
+			$casa->ultima_edicion=date('Y-m-d H:i:s');
+			$casa->usuario_ultima_edicion=0;
+			$casa->creacion=date('Y-m-d H:i:s');
+			$casa->usuario_creacion=0;
+			$casa->save();
+
+			$consultorio = new TiposContacto;
+			$consultorio->descripcion = "Consultorio";
+			$consultorio->abreviatura = "Consultorio";
+			$consultorio->ultima_edicion=date('Y-m-d H:i:s');
+			$consultorio->usuario_ultima_edicion=0;
+			$consultorio->creacion=date('Y-m-d H:i:s');
+			$consultorio->usuario_creacion=0;
+			$consultorio->save();
+
+			$celular = new TiposContacto;
+			$celular->descripcion = "Celular";
+			$celular->abreviatura = "Cel.";
+			$celular->ultima_edicion=date('Y-m-d H:i:s');
+			$celular->usuario_ultima_edicion=0;
+			$celular->creacion=date('Y-m-d H:i:s');
+			$celular->usuario_creacion=0;
+			$celular->save();
+
+			$correo = new TiposContacto;
+			$correo->descripcion = "Correo electrónico";
+			$correo->abreviatura = "Correo";
+			$correo->ultima_edicion=date('Y-m-d H:i:s');
+			$correo->usuario_ultima_edicion=0;
+			$correo->creacion=date('Y-m-d H:i:s');
+			$correo->usuario_creacion=0;
+			$correo->save();
+		}
 	}
 
 }
