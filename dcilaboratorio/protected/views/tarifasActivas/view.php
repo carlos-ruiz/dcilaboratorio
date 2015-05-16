@@ -1,11 +1,6 @@
 <?php
 /* @var $this TarifasActivasController */
 /* @var $model TarifasActivas */
-
-$this->breadcrumbs=array(
-	'Tarifas Activas'=>array('admin'),
-	$model->id,
-);
 ?>
 
 <h1>Tarifa activa: <?php echo $model->id; ?></h1>
@@ -15,8 +10,8 @@ $this->breadcrumbs=array(
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
 		'id',
-		'id_examenes',
-		'id_multitarifarios',
+		'examen.nombre',
+		'multitarifario.nombre',
 		'precio',
 	),
 )); ?>

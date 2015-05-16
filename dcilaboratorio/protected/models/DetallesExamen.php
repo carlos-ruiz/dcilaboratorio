@@ -120,11 +120,11 @@ class DetallesExamen extends CActiveRecord
 	}
 
 	public function obtenerUnidadesMedida(){
-		return CHtml::listData(UnidadesMedida::model()->findAll(), 'id', 'nombre');
+		return CHtml::listData(UnidadesMedida::model()->findAll('activo=1'), 'id', 'nombre');
 	}
 
 	public function obtenerExamenes(){
-		return CHtml::listData(Examenes::model()->findAll(), 'id', 'nombre');
+		return CHtml::listData(Examenes::model()->findAll('activo=1'), 'id', 'nombre');
 	}
 
 	

@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
 	'attributes'=>array(
 		'id',
 		'descripcion',
-		'id_unidades_medida',
-		'id_examenes',
+		'unidadesMedida.nombre',
+		'examenes.nombre',
 	),
 )); ?>
