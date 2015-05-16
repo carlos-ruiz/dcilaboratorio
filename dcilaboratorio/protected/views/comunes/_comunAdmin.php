@@ -25,7 +25,7 @@
 											        'activar' => array
 											        (
 											        	'id'=>'"act_".$data->id',
-											            'label'=>'<span class="fa fa-level-up"></span>',
+											            'label'=>'<span class="fa fa-upload"></span>',
 											            'visible'=>'isset($data->activo) && $data->activo ==0',
 											            //'url'=>'Yii::app()->controller->createUrl("delete",array("id"=>"")).$data->id',
 											            'options'=>array(  // this is the 'html' array but we specify the 'ajax' element
@@ -65,7 +65,7 @@
 								        			),
 								        			'desactivar'=>array(
 								        				'id'=>'"des_".$data->id',
-											        	'label'=>'<span class="fa fa-level-down"></span>',
+											        	'label'=>'<span class="fa fa-download"></span>',
 								        				'visible'=>'(isset($data->activo) && $data->activo == 1)',
 								        				'url'=>'"#"',
 								        				'imageUrl'=>false,
@@ -116,7 +116,7 @@
 				idModel=$(this).parent().parent().data('id');
 				column = $(this).parent();
 				$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
-					column.html('<a class="view" title="Detalles" href="<?php echo Yii::app()->controller->createUrl("view"); ?>/'+idModel+'"><span class="fa fa-search"></span></a> <a class="update" title="Actualizar" href="<?php echo Yii::app()->controller->createUrl("update"); ?>/'+idModel+'"><span class="fa fa-pencil"></span></a>  <a class="desactivar" title="Desactivar" href="#"><span class="fa fa-level-down"></span></a>');
+					column.html('<a class="view" title="Detalles" href="<?php echo Yii::app()->controller->createUrl("view"); ?>/'+idModel+'"><span class="fa fa-search"></span></a> <a class="update" title="Actualizar" href="<?php echo Yii::app()->controller->createUrl("update"); ?>/'+idModel+'"><span class="fa fa-pencil"></span></a>  <a class="desactivar" title="Desactivar" href="#"><span class="fa fa-download"></span></a>');
 					activarFuncionesDeBorrado(column);
 					
 				});
@@ -126,7 +126,7 @@
 				idModel=$(this).parent().parent().data('id');
 				column = $(this).parent();
 				$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
-					column.html('<a class="activar" title="Reactivar" href="#"><span class="fa fa-level-up"></span></a>');
+					column.html('<a class="activar" title="Reactivar" href="#"><span class="fa fa-upload"></span></a>');
 					activarFuncionesDeBorrado(column);
 				
 				});
@@ -138,7 +138,7 @@
 				idModel=$(this).parent().parent().data('id');
 				column = $(this).parent();
 				$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
-					column.html('<a class="view" title="Detalles" href="<?php echo Yii::app()->controller->createUrl("view"); ?>/'+idModel+'"><span class="fa fa-search"></span></a> <a class="update" title="Actualizar" href="<?php echo Yii::app()->controller->createUrl("update"); ?>/'+idModel+'"><span class="fa fa-pencil"></span></a>  <a class="desactivar" title="Desactivar" href="#"><span class="fa fa-level-down"></span></a>');
+					column.html('<a class="view" title="Detalles" href="<?php echo Yii::app()->controller->createUrl("view"); ?>/'+idModel+'"><span class="fa fa-search"></span></a> <a class="update" title="Actualizar" href="<?php echo Yii::app()->controller->createUrl("update"); ?>/'+idModel+'"><span class="fa fa-pencil"></span></a>  <a class="desactivar" title="Desactivar" href="#"><span class="fa fa-download"></span></a>');
 					activarFuncionesDeBorrado(column);
 	
 				});
@@ -148,7 +148,7 @@
 				idModel=$(this).parent().parent().data('id');
 				column = $(this).parent();
 				$.post("<?php echo Yii::app()->controller->createUrl('delete'); ?>/"+idModel+"",function(data){
-					column.html('<a class="activar" title="Reactivar" href="#"><span class="fa fa-level-up"></span></a>');
+					column.html('<a class="activar" title="Reactivar" href="#"><span class="fa fa-upload"></span></a>');
 					activarFuncionesDeBorrado(column);
 				});
 			});			
