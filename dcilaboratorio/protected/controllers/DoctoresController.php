@@ -68,10 +68,13 @@ class DoctoresController extends Controller
 		$this->subSection = "Nuevo";
 		$model = new Doctores;
 		$contactos = array(new Contactos, new Contactos, new Contactos);
+		$unidadDoctores = new UnidadTieneDoctores;
+		$urs = UnidadesResponsables::model()->findAll();
 
 		$simbolos = array('!', '$', '#', '?');
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+
 		$transaction = Yii::app()->db->beginTransaction();
 		try
 		{
@@ -127,6 +130,20 @@ class DoctoresController extends Controller
 				$correo->usuario_creacion=Yii::app()->user->id;
 
 				if($model->save()){
+					if (isset($_POST['UnidadTieneDoctores'])) {
+						foreach ($_POST['UnidadTieneDoctores'] as $i => $unidad) {
+							foreach ($unidad as $id => $item) {
+								$unidadDoctor = new UnidadTieneDoctores;
+								$unidadDoctor->id_unidades_responsables = $item;
+								$unidadDoctor->id_doctores = $model->id;
+								$unidadDoctor->ultima_edicion=date('Y-m-d H:i:s');
+								$unidadDoctor->usuario_ultima_edicion=Yii::app()->user->id;
+								$unidadDoctor->creacion=date('Y-m-d H:i:s');
+								$unidadDoctor->usuario_creacion=Yii::app()->user->id;
+								$unidadDoctor->save();
+							}
+						}
+					}
 					$correo->save();
 					$usuario->usuario=substr($model->nombre, 0, 3).$usuario->id.'dci';
 					$usuario->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$usuario->id);
@@ -149,6 +166,8 @@ class DoctoresController extends Controller
 		$this->render('create',array(
 			'model'=>$model,
 			'contactos'=>$contactos,
+			'urs'=>$urs,
+			'unidad'=>$unidadDoctores,
 			));
 	}
 
@@ -166,6 +185,14 @@ class DoctoresController extends Controller
 		$contacto_correo_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Correo electrónico')['id'])['id'];
 		$contactos = array(Contactos::model()->findByPk($contacto_casa_id), Contactos::model()->findByPk($contacto_consultorio_id), Contactos::model()->findByPk($contacto_celular_id));
 		$correo = Contactos::model()->findByPk($contacto_correo_id);
+		$unidadDoctores = new UnidadTieneDoctores;
+		$urs = UnidadesResponsables::model()->findAll();
+		// $unidades = Doctores::model()->obtenerUnidadesPorDoctor($id);
+		// echo "Todos";
+		// print_r($urs);
+		// echo "Tiene";
+		// print_r($unidades);
+		// return;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -192,6 +219,25 @@ class DoctoresController extends Controller
 				$correo->save();
 
 				if($model->save()) {
+					if (isset($_POST['UnidadTieneDoctores'])) {
+						$unidades = UnidadTieneDoctores::model()->obtenerUnidadesPorDoctor($model->id);
+						foreach ($unidades as $unidadExistente) {
+							$unidadExistente = UnidadTieneDoctores::model()->findByPk($unidadExistente['id']);
+							$unidadExistente->delete();
+						}
+						foreach ($_POST['UnidadTieneDoctores'] as $i => $unidad) {
+							foreach ($unidad as $id => $item) {
+								$unidadDoctor = new UnidadTieneDoctores;
+								$unidadDoctor->id_unidades_responsables = $item;
+								$unidadDoctor->id_doctores = $model->id;
+								$unidadDoctor->ultima_edicion=date('Y-m-d H:i:s');
+								$unidadDoctor->usuario_ultima_edicion=Yii::app()->user->id;
+								$unidadDoctor->creacion=date('Y-m-d H:i:s');
+								$unidadDoctor->usuario_creacion=Yii::app()->user->id;
+								$unidadDoctor->save();
+							}
+						}
+					}
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
 				}
@@ -204,6 +250,8 @@ class DoctoresController extends Controller
 		$this->render('update',array(
 			'model'=>$model,
 			'contactos'=>$contactos,
+			'urs'=>$urs,
+			'unidad'=>$unidadDoctores,
 			));
 	}
 
@@ -281,7 +329,7 @@ class DoctoresController extends Controller
 	}
 
 	public function obtenerNombreCompletoConTitulo($data, $row){
-		$titulo = TitulosForm::model()->find($data->id_titulos);
+		$titulo = TitulosForm::model()->findByPk($data->id_titulos);
 		$completo = $titulo->nombre.' '.$data->nombre.' '.$data->a_paterno.' '.$data->a_materno;
 		return $completo;
 	}
@@ -310,4 +358,16 @@ class DoctoresController extends Controller
 		$contacto = Contactos::model()->findByUser($data->id_usuarios, TiposContacto::model()->findByName('Correo electrónico')['id']);
 		return $contacto['contacto'];
 	}
+
+	public function obtenerUnidadesResponsables($data, $row){
+		$unidades = UnidadTieneDoctores::model()->obtenerUnidadesPorDoctor($data->id);
+		$resultado = "";
+		foreach ($unidades as $i=>$unidad) {
+			if (!$i==0) {
+				$resultado.=", ";
+			}
+			$resultado.=UnidadesResponsables::model()->findByPk($unidad['id_unidades_responsables'])['nombre'];
+		}
+		return $resultado;
+	} 
 }

@@ -8,4 +8,6 @@
 <?php $this->renderPartial('_form', array(
 	'model'=>$model,
 	'contactos'=>$contactos,
+	'urs'=>$urs,
+	'unidad'=>$unidad,
 	)); ?>

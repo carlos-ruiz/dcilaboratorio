@@ -13,8 +13,12 @@
 	'attributes'=>array(
 		'usuarios.usuario',
 		'especialidades.nombre',
-		'porcentaje',	
-		'unidadTieneDoctores.id_uniad_responsable.nombre'
+		'porcentaje',
+		array(
+            'label'=>'Unidades responsables',
+            'type'=>'raw',
+            'value'=>$this->obtenerUnidadesResponsables($model, $this),
+        ),
 	),
 )); ?>
 
@@ -24,9 +28,21 @@
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
 		'correo_electronico',
-		'telefono',
-		'celular',
-		'casa',				
+		array(
+            'label'=>'Teléfono',
+            'type'=>'raw',
+            'value'=>$this->obtenerTelefonoConsultorio($model, $this),
+        ),
+        array(
+            'label'=>'Celular',
+            'type'=>'raw',
+            'value'=>$this->obtenerTelefonoCelular($model, $this),
+        ),
+        array(
+            'label'=>'Casa',
+            'type'=>'raw',
+            'value'=>$this->obtenerTelefonoCasa($model, $this),
+        ),			
 	),
 )); ?>
 <h5>Horario de consulta</h5>
@@ -39,7 +55,7 @@
 	),
 )); ?>
 
-<h5>Dactos del domicilio</h5>
+<h5>Datos del domicilio</h5>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

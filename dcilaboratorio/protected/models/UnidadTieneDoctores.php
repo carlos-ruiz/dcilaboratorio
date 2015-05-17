@@ -112,4 +112,13 @@ class UnidadTieneDoctores extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function obtenerUnidadesPorDoctor($doctor_id){
+		$urs = Yii::app()->db->createCommand()
+		    ->select('*')
+		    ->from('unidad_tiene_doctores')
+		    ->where('id_doctores=:doctor_id', array(':doctor_id'=>$doctor_id))
+		    ->queryAll();		    
+		return $urs; 
+	}
 }

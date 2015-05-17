@@ -185,5 +185,16 @@ class Doctores extends CActiveRecord
 
 	public function obtenerEspecialidades(){
 		return CHtml::listData(Especialidades::model()->findAll(), 'id', 'nombre');
-	} 
+	}
+
+	public function obtenerUnidadesPorDoctor($doctor_id){
+		$unidades = UnidadTieneDoctores::model()->obtenerUnidadesPorDoctor($doctor_id);
+		$selected = array();
+
+		foreach ($unidades as $unidad) {
+			$selected[] = $unidad['id']." => array('selected'=>'selected')";
+		}
+
+		return $selected;
+	}
 }
