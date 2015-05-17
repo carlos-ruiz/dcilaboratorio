@@ -115,29 +115,15 @@ Yii::app()->clientScript->registerScript('timepicker', "
 						<hr/>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($contacto,'Casa', array('class'=>'control-label')); ?>
+					<?php foreach ($contactos as $i => $contact) { ?>
+					<div class="form-group col-md-6 <?php if($form->error($contact,'[$i]contacto')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($contact,$i==0?'Casa':($i==1?'Consultorio':'Celular'), array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCasa]" id="Contactos_casa" type="text">
-							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
+							<?php echo $form->textField($contact,"[$i]contacto",array('size'=>45,'maxlength'=>20, 'class'=>'form-control')); ?>
+							<?php echo $form->error($contact,"[$i]contacto", array('class'=>'help-block')); ?>
 						</div>
 					</div>
-
-					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($contacto,'Consultorio', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoConsultorio]" id="Contactos_consultorio" type="text">
-							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
-						</div>
-					</div>
-
-					<div class="form-group col-md-6 <?php if($form->error($contacto,'contacto')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($contacto,'Celular', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<input size="45" maxlength="45" class="form-control" name="Contactos[contactoCelular]" id="Contactos_celular" type="text">
-							<?php echo $form->error($contacto,'contacto', array('class'=>'help-block')); ?>
-						</div>
-					</div>
+					<?php } ?>
 				</section>
 
 				<section id="direccion" class="overflow-auto">
@@ -206,7 +192,6 @@ Yii::app()->clientScript->registerScript('timepicker', "
 				</section>
 
 				<?php echo $form->errorSummary($model); ?>
-				<?php echo $form->errorSummary($contacto); ?>
 
 				<div class="form-actions">
 					<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>

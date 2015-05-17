@@ -67,7 +67,8 @@ class DoctoresController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new Doctores;
-		$contacto = new Contactos;
+		$contactos = array(new Contactos, new Contactos, new Contactos);
+
 		$simbolos = array('!', '$', '#', '?');
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -77,9 +78,6 @@ class DoctoresController extends Controller
 			if(isset($_POST['Doctores']))
 			{
 				$model->attributes=$_POST['Doctores'];
-				$casa = new Contactos;
-				$consultorio = new Contactos;
-				$celular = new Contactos;
 				$correo = new Contactos;
 
 				$usuario = new Usuarios;
@@ -103,32 +101,21 @@ class DoctoresController extends Controller
 
 				$model->id_usuarios=$usuario->id;
 
-				$casa->contacto = $_POST['Contactos']['contactoCasa'];
-				$casa->id_tipos_contacto = TiposContacto::model()->findByName('Casa')['id'];
-				$casa->id_perfiles = $perfil->id;
-				$casa->id_persona = $usuario->id;
-				$casa->ultima_edicion=date('Y-m-d H:i:s');
-				$casa->usuario_ultima_edicion=Yii::app()->user->id;
-				$casa->creacion=date('Y-m-d H:i:s');
-				$casa->usuario_creacion=Yii::app()->user->id;
-
-				$consultorio->contacto = $_POST['Contactos']['contactoConsultorio'];
-				$consultorio->id_tipos_contacto = TiposContacto::model()->findByName('Consultorio')['id'];
-				$consultorio->id_perfiles = $perfil->id;
-				$consultorio->id_persona = $usuario->id;
-				$consultorio->ultima_edicion=date('Y-m-d H:i:s');
-				$consultorio->usuario_ultima_edicion=Yii::app()->user->id;
-				$consultorio->creacion=date('Y-m-d H:i:s');
-				$consultorio->usuario_creacion=Yii::app()->user->id;
-
-				$celular->contacto = $_POST['Contactos']['contactoCelular'];
-				$celular->id_tipos_contacto = TiposContacto::model()->findByName('Celular')['id'];
-				$celular->id_perfiles = $perfil->id;
-				$celular->id_persona = $usuario->id;
-				$celular->ultima_edicion=date('Y-m-d H:i:s');
-				$celular->usuario_ultima_edicion=Yii::app()->user->id;
-				$celular->creacion=date('Y-m-d H:i:s');
-				$celular->usuario_creacion=Yii::app()->user->id;
+				if (isset($_POST['Contactos'])) {
+					foreach ($contactos as $i => $contacto) {
+						if (isset($_POST['Contactos'][$i])) {
+							$contacto->attributes=$_POST['Contactos'][$i];
+							$contacto->id_tipos_contacto = TiposContacto::model()->findByName($i==0?'Casa':($i==1?'Consultorio':'Celular'))['id'];
+							$contacto->id_perfiles = $perfil->id;
+							$contacto->id_persona = $usuario->id;
+							$contacto->ultima_edicion=date('Y-m-d H:i:s');
+							$contacto->usuario_ultima_edicion=Yii::app()->user->id;
+							$contacto->creacion=date('Y-m-d H:i:s');
+							$contacto->usuario_creacion=Yii::app()->user->id;
+							$contacto->save();
+						}
+					}
+				}
 
 				$correo->contacto = $_POST['Doctores']['correo_electronico'];
 				$correo->id_tipos_contacto = TiposContacto::model()->findByName('Correo electrónico')['id'];
@@ -140,9 +127,6 @@ class DoctoresController extends Controller
 				$correo->usuario_creacion=Yii::app()->user->id;
 
 				if($model->save()){
-					$casa->save();
-					$consultorio->save();
-					$celular->save();
 					$correo->save();
 					$usuario->usuario=substr($model->nombre, 0, 3).$usuario->id.'dci';
 					$usuario->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$usuario->id);
@@ -163,8 +147,8 @@ class DoctoresController extends Controller
 
 
 		$this->render('create',array(
-			'model'=>$model, 
-			'contacto'=>$contacto,
+			'model'=>$model,
+			'contactos'=>$contactos,
 			));
 	}
 
@@ -176,21 +160,50 @@ class DoctoresController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-		$contacto = new Contactos;
-		
+		$contacto_casa_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Casa')['id'])['id'];
+		$contacto_consultorio_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Consultorio')['id'])['id'];
+		$contacto_celular_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Celular')['id'])['id'];
+		$contacto_correo_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Correo electrónico')['id'])['id'];
+		$contactos = array(Contactos::model()->findByPk($contacto_casa_id), Contactos::model()->findByPk($contacto_consultorio_id), Contactos::model()->findByPk($contacto_celular_id));
+		$correo = Contactos::model()->findByPk($contacto_correo_id);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Doctores']))
 		{
-			$model->attributes=$_POST['Doctores'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$transaction = Yii::app()->db->beginTransaction();
+			try{
+				$model->attributes=$_POST['Doctores'];
+
+				if (isset($_POST['Contactos'])) {
+					foreach ($contactos as $i => $contacto) {
+						if (isset($_POST['Contactos'][$i])) {
+							$contacto->attributes=$_POST['Contactos'][$i];
+							$contacto->ultima_edicion=date('Y-m-d H:i:s');
+							$contacto->usuario_ultima_edicion=Yii::app()->user->id;
+							$contacto->creacion=date('Y-m-d H:i:s');
+							$contacto->usuario_creacion=Yii::app()->user->id;
+							$contacto->save();
+						}
+					}
+				}
+
+				$correo->contacto = $model->correo_electronico;
+				$correo->save();
+
+				if($model->save()) {
+					$transaction->commit();
+					$this->redirect(array('view','id'=>$model->id));
+				}
+				
+			}catch(Exception $ex){
+				$transaction->rollback();
+			}
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
-			'contacto'=>$contacto,
+			'contactos'=>$contactos,
 			));
 	}
 
