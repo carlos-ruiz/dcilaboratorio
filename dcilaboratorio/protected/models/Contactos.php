@@ -130,4 +130,13 @@ class Contactos extends CActiveRecord
 		    ->queryRow();
 		return $contactos; 
 	}
+
+	public function findAllByUser($user_id){
+		$contactos = Yii::app()->db->createCommand()
+		    ->select('id, contacto, id_tipos_contacto')
+		    ->from('contactos')
+		    ->where('id_persona=:user_id', array(':user_id'=>$user_id))
+		    ->queryRow();
+		return $contactos; 
+	}
 }

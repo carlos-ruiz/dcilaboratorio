@@ -49,7 +49,7 @@ class GruposExamenes extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'grupoTieneExamenes' => array(self::HAS_MANY, 'GrupoTieneExamenes', 'id_grupos_examenes'),
+			'grupoTieneExamenes' => array(self::HAS_MANY, 'GrupoTieneExamenes', 'id_grupos_examenes',array( 'condition' => 'grupoTieneExamenes.activo = 1')),
 		);
 	}
 

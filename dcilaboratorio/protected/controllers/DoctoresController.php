@@ -70,7 +70,7 @@ class DoctoresController extends Controller
 		$contactos = array(new Contactos, new Contactos, new Contactos);
 		$unidadDoctores = new UnidadTieneDoctores;
 		$urs = UnidadesResponsables::model()->findAll();
-
+		$unidadesSeleccionadas=array();
 		$simbolos = array('!', '$', '#', '?');
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -168,6 +168,7 @@ class DoctoresController extends Controller
 			'contactos'=>$contactos,
 			'urs'=>$urs,
 			'unidad'=>$unidadDoctores,
+			'unidadesSeleccionadas'=>$unidadesSeleccionadas,
 			));
 	}
 
@@ -214,6 +215,12 @@ class DoctoresController extends Controller
 		$urs = UnidadesResponsables::model()->findAll();
 		$perfil = Perfiles::model()->findByName("Doctor");
 
+		$unidadDoctoresAux = $model->unidadTieneDoctores;
+		//$unidadesSeleccionadas[1] = array('selected'=>'selected');
+		foreach ($unidadDoctoresAux as $unidadDoctor) {
+			$unidadesSeleccionadas[$unidadDoctor->id_unidades_responsables]=array('selected' => 'selected');
+		}
+
 		if(isset($_POST['Doctores']))
 		{
 			$transaction = Yii::app()->db->beginTransaction();
@@ -222,13 +229,11 @@ class DoctoresController extends Controller
 				if (isset($_POST['Contactos'])) {
 					foreach ($contactos as $i => $contacto) {
 						$contactoBorrar = Contactos::model()->findByPk($contacto->id);
-						if ($contactoBorrar) {
-							if (!$contactoBorrar->contacto) {
-								$contactoBorrar->delete();
-								continue;
-							}
+						if (isset($contactoBorrar)) {
+							$contactoBorrar->delete();
 						}
 						if (isset($_POST['Contactos'][$i]) && $_POST['Contactos'][$i]['contacto']) {
+							
 							$contacto->attributes=$_POST['Contactos'][$i];
 							$contacto->id_tipos_contacto = TiposContacto::model()->findByName($i==0?'Casa':($i==1?'Consultorio':'Celular'))['id'];
 							$contacto->id_perfiles = $perfil->id;
@@ -237,7 +242,9 @@ class DoctoresController extends Controller
 							$contacto->usuario_ultima_edicion=Yii::app()->user->id;
 							$contacto->creacion=date('Y-m-d H:i:s');
 							$contacto->usuario_creacion=Yii::app()->user->id;
-							$contacto->save();
+							if($contacto->validate()){
+								$contacto->save();
+							}
 						}
 					}
 				}
@@ -280,6 +287,7 @@ class DoctoresController extends Controller
 			'contactos'=>$contactos,
 			'urs'=>$urs,
 			'unidad'=>$unidadDoctores,
+			'unidadesSeleccionadas'=>$unidadesSeleccionadas,
 			));
 	}
 

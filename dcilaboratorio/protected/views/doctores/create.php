@@ -10,4 +10,5 @@
 	'contactos'=>$contactos,
 	'urs'=>$urs,
 	'unidad'=>$unidad,
+	'unidadesSeleccionadas'=>$unidadesSeleccionadas,
 	)); ?>

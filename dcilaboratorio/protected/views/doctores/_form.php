@@ -6,7 +6,9 @@
 Yii::app()->clientScript->registerScript('timepicker', "
 	ComponentsPickers.init();
 ");
+
 ?>
+
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
@@ -111,7 +113,7 @@ Yii::app()->clientScript->registerScript('timepicker', "
 						<?php echo $form->labelEx($unidad,'Unidades responsables', array('class'=>'control-label')); ?>
 						<!--<?php print_r($model->obtenerUnidadesPorDoctor($model->id)); ?>-->
 						<div class="input-group">
-							<?php echo $form->listBox($unidad,'id_unidades_responsables',CHtml::listData($urs,'id','nombre'), array('class' => 'form-control', 'multiple'=>'true', 'options'=>array('4'=>array('selected' => 'selected')))); ?>
+							<?php echo $form->listBox($unidad,'id_unidades_responsables',CHtml::listData($urs,'id','nombre'), array('class' => 'form-control', 'multiple'=>'true', 'options'=>$unidadesSeleccionadas)); ?>
 							<?php echo $form->error($unidad,'id_unidades_responsables', array('class'=>'help-block')); ?>
 						</div>
 					</div>

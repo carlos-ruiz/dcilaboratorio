@@ -10,7 +10,7 @@ $this->renderPartial(
 	'/comunes/_comunAdmin', 
 	array(
 		'model'=>$model,
-		'titulo'=>'Exámenes',
+		'titulo'=>'Ex&aacute;menes',
 		'columnas'=>array(
 			'clave',
 			'nombre',
