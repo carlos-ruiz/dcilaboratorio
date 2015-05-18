@@ -125,11 +125,10 @@ Yii::app()->clientScript->registerScript('timepicker', "
 					</div>
 
 					<?php foreach ($contactos as $i => $contact) { ?>
-					<div class="form-group col-md-6 <?php if($form->error($contact,'[$i]contacto')!=''){ echo 'has-error'; }?>">
+					<div class="form-group col-md-6">
 						<?php echo $form->labelEx($contact,$i==0?'Casa':($i==1?'Consultorio':'Celular'), array('class'=>'control-label')); ?>
 						<div class="input-group">
 							<?php echo $form->textField($contact,"[$i]contacto",array('size'=>45,'maxlength'=>20, 'class'=>'form-control')); ?>
-							<?php echo $form->error($contact,"[$i]contacto", array('class'=>'help-block')); ?>
 						</div>
 					</div>
 					<?php } ?>

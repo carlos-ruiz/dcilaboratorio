@@ -180,32 +180,59 @@ class DoctoresController extends Controller
 	{
 		$model=$this->loadModel($id);
 		$contacto_casa_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Casa')['id'])['id'];
+
 		$contacto_consultorio_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Consultorio')['id'])['id'];
+
 		$contacto_celular_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Celular')['id'])['id'];
+
 		$contacto_correo_id = Contactos::model()->findByUser($model->id_usuarios, TiposContacto::model()->findByName('Correo electrónico')['id'])['id'];
-		$contactos = array(Contactos::model()->findByPk($contacto_casa_id), Contactos::model()->findByPk($contacto_consultorio_id), Contactos::model()->findByPk($contacto_celular_id));
+
+		$contactos = array();
+		if ($contacto_casa_id) {
+			$contactos[] = Contactos::model()->findByPk($contacto_casa_id);
+		}
+		else{
+			$contactos[] = new Contactos;
+		}
+
+		if ($contacto_consultorio_id) {
+			$contactos[] = Contactos::model()->findByPk($contacto_consultorio_id);
+		}
+		else{
+			$contactos[] = new Contactos;
+		}
+
+		if ($contacto_celular_id) {
+			$contactos[] = Contactos::model()->findByPk($contacto_celular_id);
+		}
+		else{
+			$contactos[] = new Contactos;
+		}
+		
 		$correo = Contactos::model()->findByPk($contacto_correo_id);
 		$unidadDoctores = new UnidadTieneDoctores;
 		$urs = UnidadesResponsables::model()->findAll();
-		// $unidades = Doctores::model()->obtenerUnidadesPorDoctor($id);
-		// echo "Todos";
-		// print_r($urs);
-		// echo "Tiene";
-		// print_r($unidades);
-		// return;
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$perfil = Perfiles::model()->findByName("Doctor");
 
 		if(isset($_POST['Doctores']))
 		{
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
 				$model->attributes=$_POST['Doctores'];
-
 				if (isset($_POST['Contactos'])) {
 					foreach ($contactos as $i => $contacto) {
-						if (isset($_POST['Contactos'][$i])) {
+						$contactoBorrar = Contactos::model()->findByPk($contacto->id);
+						if ($contactoBorrar) {
+							if (!$contactoBorrar->contacto) {
+								$contactoBorrar->delete();
+								continue;
+							}
+						}
+						if (isset($_POST['Contactos'][$i]) && $_POST['Contactos'][$i]['contacto']) {
 							$contacto->attributes=$_POST['Contactos'][$i];
+							$contacto->id_tipos_contacto = TiposContacto::model()->findByName($i==0?'Casa':($i==1?'Consultorio':'Celular'))['id'];
+							$contacto->id_perfiles = $perfil->id;
+							$contacto->id_persona = $model->id_usuarios;
 							$contacto->ultima_edicion=date('Y-m-d H:i:s');
 							$contacto->usuario_ultima_edicion=Yii::app()->user->id;
 							$contacto->creacion=date('Y-m-d H:i:s');
@@ -244,6 +271,7 @@ class DoctoresController extends Controller
 				
 			}catch(Exception $ex){
 				$transaction->rollback();
+				echo "<script>alert('No se pudo guardar');</script>";
 			}
 		}
 

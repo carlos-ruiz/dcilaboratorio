@@ -57,7 +57,7 @@ $form=$this->beginWidget('CActiveForm', array(
 else{
 ?>
 	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-	<center><img src="/dcilaboratorio/dcilaboratorio/css/layout/img/gvia_logo_6.png" alt=""/></center>
+	<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo_6.png" alt=""/></center>
 	<br /><br />
 	<center>En construcción...</center>
 <?php
