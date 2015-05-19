@@ -4,7 +4,7 @@
 
 ?>
 
-<h1>Unidades Responsables: <?php echo $model->nombre; ?></h1>
+<h1>Unidad Responsable: <?php echo $model->nombre; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

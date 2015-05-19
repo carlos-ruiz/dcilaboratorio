@@ -73,6 +73,7 @@ class DetallesExamen extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
+'unidadesMedida.nombre'=>'Unidad Medida',
 		);
 	}
 
@@ -129,4 +130,3 @@ class DetallesExamen extends CActiveRecord
 
 	
 }
-

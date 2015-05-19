@@ -29,7 +29,7 @@
 	'attributes'=>array(
 		'correo_electronico',
 		array(
-            'label'=>'Teléfono',
+            'label'=>'Consultorio',
             'type'=>'raw',
             'value'=>$this->obtenerTelefonoConsultorio($model, $this),
         ),

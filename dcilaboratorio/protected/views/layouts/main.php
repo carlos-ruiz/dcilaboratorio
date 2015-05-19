@@ -87,7 +87,8 @@
 						<i class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
-							<li>
+							
+<!--<li>
 								<a href="#">
 								<i class="icon-user"></i> Mi perfil </a>
 							</li>
@@ -188,8 +189,7 @@
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
 	<div class="page-footer-inner">
-		 Todos los derechos reservados.
-		<?php echo Yii::powered(); 	?>
+		 
 	</div>
 	<div class="scroll-to-top">
 		<i class="icon-arrow-up"></i>

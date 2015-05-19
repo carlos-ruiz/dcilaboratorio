@@ -90,6 +90,7 @@ class UsuariosController extends Controller
 		if(isset($_POST['Usuarios']))
 		{
 			$model->attributes=$_POST['Usuarios'];
+			$model->contrasena = base64_encode($model->contrasena);
 			try {
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));

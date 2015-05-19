@@ -40,6 +40,8 @@ class Examenes extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('clave, nombre, duracion_dias, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
+			array('clave', 'unique'),
 			array('duracion_dias, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('clave, nombre', 'length', 'max'=>45),
 			array('descripcion, indicaciones_paciente, indicaciones_laboratorio', 'safe'),

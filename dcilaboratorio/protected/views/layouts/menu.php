@@ -31,7 +31,7 @@
 					<?php }?>
 					</a>
 				</li>
-
+<!--
 				<li <?php if($this->section=="Ordenes"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-chemistry"></i>
@@ -57,7 +57,7 @@
 					</ul>
 				</li>
 
-
+-->
 				
 				<li class="heading">
 					<h3 class="uppercase">Catálogos</h3>
@@ -67,7 +67,7 @@
 				<li <?php if($this->section=="UnidadesResponsables"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-grid"></i>
-					<span class="title">Unidades Responsables</span>
+					<span class="title">U. Responsables</span>
 					<?php if($this->section=="UnidadesResponsables"){?>
 					<span class="selected"></span>
 					<span class="arrow open"></span>
@@ -148,7 +148,7 @@
 							<i class="icon-layers"></i>
 							Grupos</a>
 
-						</li>
+						</li></li>
 						<li <?php if($this->section=="Examenes" && $this->subSection=="Resultados"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/admin">
 							<i class="icon-note"></i>
@@ -284,11 +284,14 @@
 						</li>
 					</ul>
 				</li>
-
+<li >
+<div style="height:44px">
+</div>
+</li>
+</ul>
 					
 						
 
 				
 
 			
-

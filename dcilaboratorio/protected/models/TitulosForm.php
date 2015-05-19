@@ -33,6 +33,7 @@ class TitulosForm extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+array('nombre', 'unique'),
 			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre', 'length', 'max'=>45),
 			// The following rule is used by search().

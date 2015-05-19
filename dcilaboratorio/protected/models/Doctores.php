@@ -180,11 +180,11 @@ class Doctores extends CActiveRecord
 
 
 	public function obtenerTitulos(){
-		return CHtml::listData(TitulosForm::model()->findAll(), 'id', 'nombre');
+		return CHtml::listData(TitulosForm::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
 	}
 
 	public function obtenerEspecialidades(){
-		return CHtml::listData(Especialidades::model()->findAll(), 'id', 'nombre');
+		return CHtml::listData(Especialidades::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
 	}
 
 	public function obtenerUnidadesPorDoctor($doctor_id){
@@ -192,7 +192,7 @@ class Doctores extends CActiveRecord
 		$selected = array();
 
 		foreach ($unidades as $unidad) {
-			$selected[] = $unidad['id']." => array('selected'=>'selected')";
+			//$selected[] = $unidad['id']." => array('selected'=>'selected')";
 		}
 
 		return $selected;

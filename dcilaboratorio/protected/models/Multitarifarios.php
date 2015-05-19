@@ -37,6 +37,7 @@ class Multitarifarios extends CActiveRecord
 			array('nombre, descripcion, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
 			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre', 'length', 'max'=>45),
+array('nombre', 'unique'),
 			array('descripcion', 'length', 'max'=>256),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

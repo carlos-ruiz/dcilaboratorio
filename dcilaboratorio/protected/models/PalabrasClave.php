@@ -32,6 +32,7 @@ class PalabrasClave extends CActiveRecord
 			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
 			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre', 'length', 'max'=>45),
+array('nombre', 'unique'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
