@@ -122,7 +122,8 @@ class DoctoresController extends Controller
 				}
 
 				$correo->contacto = $_POST['Doctores']['correo_electronico'];
-				$correo->id_tipos_contacto = TiposContacto::model()->findByName('Correo electrónico')->id;
+				$tip = TiposContacto::model()->findByName('Correo electrónico');
+				$correo->id_tipos_contacto = $tip['id'];
 				$correo->id_perfiles = $perfil->id;
 				$correo->id_persona = $usuario->id;
 				$correo->ultima_edicion=date('Y-m-d H:i:s');
