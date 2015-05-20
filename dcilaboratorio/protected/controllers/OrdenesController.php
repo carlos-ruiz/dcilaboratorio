@@ -67,6 +67,10 @@ class OrdenesController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model=new Ordenes;
+		$paciente =new Pacientes;
+		$datosFacturacion=new DatosFacturacion;
+		$examenes=new Examenes;
+		
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -80,6 +84,9 @@ class OrdenesController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model,
+			'paciente'=>$paciente,
+			'datosFacturacion'=>$datosFacturacion,
+			'examenes'=>$examenes,
 		));
 	}
 
@@ -104,6 +111,8 @@ class OrdenesController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
+			'paciente'=>$paciente,
+			'datosFacturacion'=>$datosFacturacion,
 		));
 	}
 

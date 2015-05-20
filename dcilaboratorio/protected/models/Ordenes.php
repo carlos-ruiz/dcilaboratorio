@@ -82,17 +82,17 @@ class Ordenes extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'id_doctores' => 'Id Doctores',
+			'id_doctores' => 'Doctor',
 			'id_pacientes' => 'Id Pacientes',
 			'id_status' => 'Id Status',
 			'id_unidades_responsables' => 'Id Unidades Responsables',
 			'fecha_captura' => 'Fecha Captura',
 			'informacion_clinica_y_terapeutica' => 'Informacion Clinica Y Terapeutica',
 			'comentarios' => 'Comentarios',
-			'requiere_factura' => 'Requiere Factura',
+			'requiere_factura' => '¿Requiere Factura?',
 			'descuento' => 'Descuento',
-			'id_multitarifarios' => 'Id Multitarifarios',
-			'compartir_con_doctor' => 'Compartir Con Doctor',
+			'id_multitarifarios' => 'Multitarifario',
+			'compartir_con_doctor' => '¿Compartir Con Doctor?',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
@@ -152,6 +152,23 @@ class Ordenes extends CActiveRecord
 	}
 
 	public function obtenerDoctores(){
-		return CHtml::listData(Doctores::model()->findAll(), 'id', 'nombre');
+		return CHtml::listData(Doctores::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
 	}
-}
+
+	public function obtenerMultitarifarios(){
+		return CHtml::listData(Multitarifarios::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
+	}
+
+	public function obtenerExamenes(){
+		return CHtml::listData(Examenes::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
+	}
+
+	public function obtenerExamenesClave(){
+		return CHtml::listData(Examenes::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'clave');
+	}
+
+	public function obtenerGrupoExamenes(){
+		return CHtml::listData(Grupos::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
+	}
+
+	}

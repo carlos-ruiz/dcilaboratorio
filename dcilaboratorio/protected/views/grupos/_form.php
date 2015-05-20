@@ -40,7 +40,7 @@
 		</div>
 	</div>
 	<div class="form-actions">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Nuevo' : 'Actualizar',array('class'=>'btn green')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Nuevo' : 'Actualizar',array('class'=>'btn blue-stripe')); ?>
 	</div>
 </div>
 <?php $this->endWidget(); ?>
