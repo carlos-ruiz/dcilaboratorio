@@ -31,7 +31,7 @@
 					<?php }?>
 					</a>
 				</li>
-<!--
+
 				<li <?php if($this->section=="Ordenes"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-chemistry"></i>
@@ -57,7 +57,7 @@
 					</ul>
 				</li>
 
--->
+
 				
 				<li class="heading">
 					<h3 class="uppercase">Catálogos</h3>
