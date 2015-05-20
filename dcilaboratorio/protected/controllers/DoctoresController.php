@@ -263,7 +263,9 @@ class DoctoresController extends Controller
 					}
 				}
 
+
 				//$correo->contacto = $model->correo_electronico;
+
 				//$correo->save();
 
 				if($model->save()) {
