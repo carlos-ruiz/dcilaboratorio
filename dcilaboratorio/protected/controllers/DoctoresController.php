@@ -264,7 +264,7 @@ class DoctoresController extends Controller
 				}
 
 				$correo->contacto = $model->correo_electronico;
-				$correo->save();
+				//$correo->save();
 
 				if($model->save()) {
 					if (isset($_POST['UnidadTieneDoctores'])) {
