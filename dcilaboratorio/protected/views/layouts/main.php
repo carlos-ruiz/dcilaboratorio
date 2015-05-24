@@ -24,6 +24,14 @@
 	<meta content="" name="author"/>
 	<!-- ESTILOS PERSONALIZADOS -->
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/custom/customStyle.css" rel="stylesheet" type="text/css"/>
+	<!--
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/media/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/media/css/style-metro.css" rel="stylesheet" type="text/css"/>
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/media/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/media/css/jquery-ui-1.10.1.custom.min.css" rel="stylesheet" type="text/css"/>
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/media/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+	-->
+
 	<!-- BEGIN GLOBAL MANDATORY STYLES -->
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
@@ -60,7 +68,7 @@
 		<!-- BEGIN LOGO -->
 		<div class="page-logo" >
 			<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php" >
-			<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo_small.png" alt="logo" height="30" width="150" class="logo-default"/>
+			<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo_small.png" alt="logo" height="30" width="50" class="logo-default"/></center>
 			</a>
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -214,6 +222,14 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/components-pickers.js" type="text/javascript"></script>
+
+<!--
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/media/js/jquery.cookie.min.js" type="text/javascript"></script>
+-->
+
 <script>
 jQuery(document).ready(function() {    
    Metronic.init(); // init metronic core components

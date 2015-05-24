@@ -268,7 +268,7 @@
 
 				</section>
 
-				<section id="examenes" class="overflow-auto">
+				<section id="examenes" >
 
 					<?php 
 						$this->renderPartial(
@@ -277,7 +277,6 @@
 								'model'=>$model,
 								'titulo'=>'Examenes',
 								'columnas'=>array(
-									//'id',
 									'nombre'
 								)
 							)
@@ -287,12 +286,37 @@
 
 				<section id="examenes" class="overflow-auto">
 
-				<div class="form-group col-md-6  <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'descuento', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
-							<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
+					<div class="form-group col-md-8"></div>
+					<div class="form-group col-md-4">
+						
+
+						<div class="form-group col-md-6  <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
+								<?php echo $form->labelEx($model,'descuento', array('class'=>'control-label')); ?>
+								<div class="input-group">
+									<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45,'class'=>'form-control', 'onchange' => 'javascript:$("#descuentoAplicado").toggle()')); ?>							
+									<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
+								</div>
 						</div>
+						
+
+						<div class="form-group col-md-6  <?php if($form->error($model,'costo_emergencia')!=''){ echo 'has-error'; }?>">
+								<?php echo $form->labelEx($model,'costo_emergencia', array('class'=>'control-label')); ?>
+								<div class="input-group">
+									<?php echo $form->textField($model,'costo_emergencia',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+									<?php echo $form->error($model,'costo_emergencia', array('class'=>'help-block')); ?>
+								</div>
+						</div>
+						
+							<div class="form-group col-md-6 "> <center> Total $</center></div>
+							<div class="form-group col-md-6 align-right">999.00 <?php $total ?></div>						
+						
+
+							<div id="descuentoAplicado" style="display:none;">	
+								<div class="form-group col-md-6"> <center> Con descuento $</center></div>
+								<div class="col-md-6 align-right"> 888.00<?php $totalDesc ?></div>
+							</div>
+							
+
 					</div>
 
 

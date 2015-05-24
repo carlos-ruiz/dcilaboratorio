@@ -53,7 +53,7 @@ class Ordenes extends CActiveRecord
 			array('informacion_clinica_y_terapeutica, comentarios', 'length', 'max'=>256),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_doctores, id_pacientes, id_status, id_unidades_responsables, fecha_captura, informacion_clinica_y_terapeutica, comentarios, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, id_doctores, id_pacientes, id_status, id_unidades_responsables, fecha_captura, informacion_clinica_y_terapeutica, comentarios, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, costo_emergencia', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -97,6 +97,7 @@ class Ordenes extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
+			'costo_emergencia'=>'Costo emergencia',
 		);
 	}
 
@@ -134,7 +135,7 @@ class Ordenes extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-
+		
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
