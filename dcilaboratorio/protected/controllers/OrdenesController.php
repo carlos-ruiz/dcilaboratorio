@@ -70,6 +70,7 @@ class OrdenesController extends Controller
 		$paciente =new Pacientes;
 		$datosFacturacion=new DatosFacturacion;
 		$examenes=new Examenes;
+		$pagos=new Pagos;
 		
 
 		// Uncomment the following line if AJAX validation is needed
@@ -87,6 +88,7 @@ class OrdenesController extends Controller
 			'paciente'=>$paciente,
 			'datosFacturacion'=>$datosFacturacion,
 			'examenes'=>$examenes,
+			'pagos'=>$pagos,
 		));
 	}
 
@@ -98,6 +100,10 @@ class OrdenesController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+		$paciente =new Pacientes;
+		$datosFacturacion=new DatosFacturacion;
+		$examenes=new Examenes;
+		$pagos=new Pagos;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -113,6 +119,8 @@ class OrdenesController extends Controller
 			'model'=>$model,
 			'paciente'=>$paciente,
 			'datosFacturacion'=>$datosFacturacion,
+			'examenes'=>$examenes,
+			'pagos'=>$pagos,
 		));
 	}
 

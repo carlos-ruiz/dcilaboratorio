@@ -9,4 +9,5 @@
  	'paciente'=>$paciente,
  	'datosFacturacion'=>$datosFacturacion,
 	'examenes'=>$examenes,
+	'pagos'=>$pagos,
  	)); ?>
