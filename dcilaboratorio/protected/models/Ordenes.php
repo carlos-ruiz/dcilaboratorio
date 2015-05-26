@@ -48,7 +48,7 @@ class Ordenes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_doctores, id_pacientes, id_status, id_unidades_responsables, fecha_captura, id_multitarifarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('doctor, id_pacientes, id_status, id_unidades_responsables, fecha_captura, id_multitarifarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
 			array('id_doctores, id_pacientes, id_status, id_unidades_responsables, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('informacion_clinica_y_terapeutica, comentarios', 'length', 'max'=>256),
 			// The following rule is used by search().
@@ -66,12 +66,12 @@ class Ordenes extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'ordenTieneExamenes' => array(self::HAS_MANY, 'OrdenTieneExamenes', 'id_ordenes'),
-			'idDoctores' => array(self::BELONGS_TO, 'Doctores', 'id_doctores'),
-			'idMultitarifarios' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
-			'idPacientes' => array(self::BELONGS_TO, 'Pacientes', 'id_pacientes'),
-			'idStatus' => array(self::BELONGS_TO, 'Status', 'id_status'),
+			'doctor' => array(self::BELONGS_TO, 'Doctores', 'id_doctores'),
+			'multitarifarios' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
+			'pacientes' => array(self::BELONGS_TO, 'Pacientes', 'id_pacientes'),
+			'status' => array(self::BELONGS_TO, 'Status', 'id_status'),
 			'idUnidadesResponsables' => array(self::BELONGS_TO, 'UnidadesResponsables', 'id_unidades_responsables'),
-			'pagoses' => array(self::HAS_MANY, 'Pagos', 'id_ordenes'),
+			'pagos' => array(self::HAS_MANY, 'Pagos', 'id_ordenes'),
 		);
 	}
 
@@ -81,12 +81,12 @@ class Ordenes extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => 'Folio',
 			'id_doctores' => 'Doctor',
-			'id_pacientes' => 'Id Pacientes',
-			'id_status' => 'Id Status',
-			'id_unidades_responsables' => 'Id Unidades Responsables',
-			'fecha_captura' => 'Fecha Captura',
+			'id_pacientes' => 'Paciente',
+			'id_status' => 'Estatus',
+			'id_unidades_responsables' => 'Unidades Responsables',
+			'fecha_captura' => 'Fecha',
 			'informacion_clinica_y_terapeutica' => 'Informacion Clinica Y Terapeutica',
 			'comentarios' => 'Comentarios',
 			'requiere_factura' => '¿Requiere Factura?',
@@ -98,6 +98,8 @@ class Ordenes extends CActiveRecord
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
 			'costo_emergencia'=>'Costo emergencia',
+			'status.descripcion'=>'Estatus de la orden',
+			'multitarifarios.nombre'=>'Multitarifario',
 		);
 	}
 

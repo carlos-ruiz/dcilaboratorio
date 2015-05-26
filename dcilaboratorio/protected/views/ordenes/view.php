@@ -1,42 +1,120 @@
 <?php
 /* @var $this OrdenesController */
 /* @var $model Ordenes */
-
-$this->breadcrumbs=array(
-	'Ordenes'=>array('index'),
-	$model->id,
-);
-
-$this->menu=array(
-	array('label'=>'List Ordenes', 'url'=>array('index')),
-	array('label'=>'Create Ordenes', 'url'=>array('create')),
-	array('label'=>'Update Ordenes', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Ordenes', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Ordenes', 'url'=>array('admin')),
-);
 ?>
 
-<h1>View Ordenes #<?php echo $model->id; ?></h1>
+
+<h1>Orden con folio: <?php echo $model->id; ?></h1>
+<div class="form-group col-md-4">
+
+	<div class="heading text-center">
+		<h3 style="color:#1e90ff ">Datos de la orden</h3>
+		<hr/>
+	</div>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
-		'id',
-		'id_doctores',
-		'id_pacientes',
-		'id_status',
-		'id_unidades_responsables',
+		'status.descripcion',
 		'fecha_captura',
-		'informacion_clinica_y_terapeutica',
-		'comentarios',
-		'requiere_factura',
+		'multitarifarios.nombre',
 		'descuento',
-		'id_multitarifarios',
-		'compartir_con_doctor',
-		'ultima_edicion',
-		'usuario_ultima_edicion',
-		'creacion',
-		'usuario_creacion',
 	),
 )); ?>
+
+<?php $this->widget('zii.widgets.CDetailView', array(
+	'data'=>$model,
+	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
+	'attributes'=>array(		
+		array(
+            'label'=>'Nombre del paciente',
+            'type'=>'raw',
+            'value'=>$this->obtenerPaciente($model, $this),
+        ),
+        'pacientes.fecha_nacimiento',
+        array(
+            'label'=>'Sexo',
+            'type'=>'raw',
+            'value'=>$this->obtenerGenero($model, $this),
+        ),
+        
+
+	),
+)); 
+
+
+?>
+
+<?php $this->widget('zii.widgets.CDetailView', array(
+	'data'=>$model,
+	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
+	'attributes'=>array(
+		array(
+            'label'=>'Doctor',
+            'type'=>'raw',
+            'value'=>$this->obtenerNombreCompletoDoctor($model, $this),
+        ),
+		array(
+            'label'=>'Comparte inf. con Dr.',
+            'type'=>'raw',
+            'value'=>$this->obtenerSioNoComparteDr($model, $this),
+        ),
+		'informacion_clinica_y_terapeutica',
+		'comentarios',        
+	),
+)); ?>
+</div>
+
+<div class="form-group col-md-4">
+
+	<div class="heading text-center">
+		<h3 style="color:#1e90ff ">Examenes</h3>
+		<hr/>
+	</div>
+
+	<?php $this->widget('zii.widgets.CDetailView', array(
+	'data'=>$model,
+	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
+	'attributes'=>array(
+		'examenes.nombre',
+		      
+	),
+)); ?>
+
+
+</div>
+
+<div class="form-group col-md-4">
+	
+<?php 
+
+/*$this->widget('zii.widgets.grid.CGridView', array(
+	'id'=>'pagos-grid',
+	'dataProvider'=>$pagos->search(),
+	'columns'=>array(
+		'efectivo',
+		'tarjeta',
+		'cheque',
+		'fecha',
+	),
+)); */
+
+$this->renderPartial(
+	'/comunes/_comunAdmin', 
+	array(
+		'model'=>$pagos,
+		'titulo'=>'Pagos',
+		'columnas'=>array(
+			'efectivo',
+			'tarjeta',
+			'cheque',
+			'fecha',
+		)
+	)
+); ?>
+
+
+</div>
+
+

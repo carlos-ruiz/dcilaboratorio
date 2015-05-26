@@ -54,8 +54,16 @@ class OrdenesController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$pagos=new Pagos('search');
+		$datosFacturacion=new DatosFacturacion('search');
+		$paciente =new Pacientes;
+		$examenes=new Examenes('search');
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
+			'paciente'=>$paciente,
+			'pagos'=>$pagos,
+			'datosFacturacion'=>$datosFacturacion,
+			'examenes'=>$examenes,
 		));
 	}
 
@@ -158,14 +166,18 @@ class OrdenesController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$paciente =new Pacientes('search');;
 		$this->subSection = "Admin";
 		$model=new Ordenes('search');
+		
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Ordenes']))
 			$model->attributes=$_GET['Ordenes'];
 
 		$this->render('admin',array(
 			'model'=>$model,
+			'paciente'=>$paciente,
+
 		));
 	}
 
@@ -196,4 +208,52 @@ class OrdenesController extends Controller
 			Yii::app()->end();
 		}
 	}
+	public function obtenerPaciente($data, $row){
+		$paciente =Pacientes::model()->findByAttributes(array('id'=>$data['id_pacientes']));
+		$completo =$paciente->nombre.' '.$paciente->a_paterno.' '.$paciente->a_materno;
+		return $completo;
+	}
+
+	public function obtenerNombreCompletoDoctor($data, $row){		
+		$doctor =Doctores::model()->findByAttributes(array('id'=>$data['id_doctores']));
+		$titulo = TitulosForm::model()->findByPk($doctor->id_titulos);
+		$completo = $titulo->nombre.' '.$doctor->nombre.' '.$doctor->a_paterno.' '.$doctor->a_materno;
+		return $completo;
+	}
+
+	public function obtenerSioNoComparteDr($data, $row){		
+		if ($data['requiere_factura'] = 0)
+			$var = "Sí";
+		else
+			$var = "No";
+		return $var;
+	}
+
+	public function obtenerGenero($data, $row){		
+		$paciente =Pacientes::model()->findByAttributes(array('id'=>$data['id_pacientes']));
+		if ($paciente['sexo'] = 1)
+			$var = "Mujer";
+		else
+			$var = "Hombre";
+		return $var;
+	}
+
+	public function obtenerNombreNombreFactura($data, $row){		
+		$doctor =DatosFacturacion::model()->findByAttributes(array('id'=>$data['id_pacientes']));
+		$completo = $doctor->nombre.' '.$doctor->a_paterno.' '.$doctor->a_materno;
+		return $completo;
+	}
+
+	public function obtenerExamenes($data, $row){		
+		$examen =OrdenTieneExamenes::model()->findByAttributes(array('id_ordenes'=>$data['id']));
+		$exam = $examen->nombre;
+		return $exam;
+	}
+
+	public function obtenerPagos($data, $row){		
+		$pagos =Pagos::model()->findByAttributes(array('id_ordenes'=>$data['id']));
+		return $pagos;
+	}
+	
+
 }

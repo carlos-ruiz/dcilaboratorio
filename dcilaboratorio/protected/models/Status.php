@@ -1,36 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "pacientes".
+ * This is the model class for table "status".
  *
- * The followings are the available columns in table 'pacientes':
+ * The followings are the available columns in table 'status':
  * @property integer $id
  * @property string $nombre
- * @property string $a_paterno
- * @property string $a_materno
- * @property string $fecha_nacimiento
- * @property integer $sexo
- * @property string $email
+ * @property string $descripcion
  * @property string $ultima_edicion
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
- * @property integer $id_usuarios
- * @property integer $activo
  *
  * The followings are the available model relations:
- * @property DatosFacturacion[] $datosFacturacions
  * @property Ordenes[] $ordenes
- * @property Usuarios $idUsuarios
  */
-class Pacientes extends CActiveRecord
+class Status extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'pacientes';
+		return 'status';
 	}
 
 	/**
@@ -41,13 +33,13 @@ class Pacientes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, a_paterno, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios, email', 'required'),
-			array('sexo, usuario_ultima_edicion, usuario_creacion, id_usuarios, activo', 'numerical', 'integerOnly'=>true),
-			array('nombre, a_paterno, a_materno, email', 'length', 'max'=>45),
-			array('fecha_nacimiento', 'safe'),
+			array('nombre, descripcion, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('nombre', 'length', 'max'=>45),
+			array('descripcion', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, a_paterno, a_materno, fecha_nacimiento, sexo, email, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios, activo', 'safe', 'on'=>'search'),
+			array('id, nombre, descripcion, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,9 +51,7 @@ class Pacientes extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'datosFacturacions' => array(self::HAS_MANY, 'DatosFacturacion', 'id_pacientes'),
-			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_pacientes'),
-			'idUsuarios' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
+			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_status'),
 		);
 	}
 
@@ -73,17 +63,11 @@ class Pacientes extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'nombre' => 'Nombre',
-			'a_paterno' => 'Apellido Paterno',
-			'a_materno' => 'Apellido Materno',
-			'fecha_nacimiento' => 'Fecha Nacimiento',
-			'sexo' => 'Sexo',
-			'email' => 'Correo electrónico',
+			'descripcion' => 'Descripcion',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
-			'id_usuarios' => 'Id Usuarios',
-			'activo' => 'Activo',
 		);
 	}
 
@@ -107,17 +91,11 @@ class Pacientes extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('nombre',$this->nombre,true);
-		$criteria->compare('a_paterno',$this->a_paterno,true);
-		$criteria->compare('a_materno',$this->a_materno,true);
-		$criteria->compare('fecha_nacimiento',$this->fecha_nacimiento,true);
-		$criteria->compare('sexo',$this->sexo);
-		$criteria->compare('email',$this->email,true);
+		$criteria->compare('descripcion',$this->descripcion,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-		$criteria->compare('id_usuarios',$this->id_usuarios);
-		$criteria->compare('activo',$this->activo);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -128,12 +106,10 @@ class Pacientes extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Pacientes the static model class
+	 * @return Status the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-
-	
 }

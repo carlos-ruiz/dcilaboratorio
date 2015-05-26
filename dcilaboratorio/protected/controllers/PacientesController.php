@@ -170,4 +170,5 @@ class PacientesController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }
