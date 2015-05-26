@@ -16,6 +16,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'ext.YiiMailer.YiiMailer',
 	),
 
 	'modules'=>array(
@@ -80,6 +81,6 @@ return array(
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
+		'adminEmail'=>'cruiz90@live.com',
 	),
 );
