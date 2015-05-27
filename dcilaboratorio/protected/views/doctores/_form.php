@@ -101,17 +101,8 @@ Yii::app()->clientScript->registerScript('timepicker', "
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'porcentaje')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'porcentaje', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<?php echo $form->textField($model,'porcentaje',array('size'=>45,'maxlength'=>3, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'porcentaje', array('class'=>'help-block')); ?>
-						</div>
-					</div>
-
 					<div class="form-group col-md-6 <?php if($form->error($unidad,'id_unidades_responsables')!=''){ echo 'has-error'; }?>">
 						<?php echo $form->labelEx($unidad,'Unidades responsables', array('class'=>'control-label')); ?>
-						<!--<?php print_r($model->obtenerUnidadesPorDoctor($model->id)); ?>-->
 						<div class="input-group">
 							<?php echo $form->listBox($unidad,'id_unidades_responsables',CHtml::listData($urs,'id','nombre'), array('class' => 'form-control', 'multiple'=>'true', 'options'=>$unidadesSeleccionadas)); ?>
 							<?php echo $form->error($unidad,'id_unidades_responsables', array('class'=>'help-block')); ?>
@@ -142,63 +133,65 @@ Yii::app()->clientScript->registerScript('timepicker', "
 						<hr/>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'estado')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'estado', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($direccion,'id_estados')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'id_estados', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'estado',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'estado', array('class'=>'help-block')); ?>
+							<?php echo $form->dropDownList($direccion,'id_estados',$direccion->obtenerEstados(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
+							<?php echo $form->error($direccion,'id_estados', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'ciudad')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'ciudad', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($direccion,'id_municipio')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'id_municipio', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'ciudad',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'ciudad', array('class'=>'help-block')); ?>
+							<?php echo $form->dropDownList($direccion,'id_municipio',$direccion->obtenerMunicipios(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
+							<?php echo $form->error($direccion,'id_municipio', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'colonia')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'colonia', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($direccion,'colonia')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'colonia', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'colonia',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'colonia', array('class'=>'help-block')); ?>
+							<?php echo $form->textField($direccion,'colonia',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($direccion,'colonia', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'calle')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'calle', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($direccion,'calle')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'calle', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'calle',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'calle', array('class'=>'help-block')); ?>
+							<?php echo $form->textField($direccion,'calle',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($direccion,'calle', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'numero_ext')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'numero_ext', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($direccion,'numero_ext')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'numero_ext', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'numero_ext',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'numero_ext', array('class'=>'help-block')); ?>
+							<?php echo $form->textField($direccion,'numero_ext',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($direccion,'numero_ext', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'numero_int')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'numero_int', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($direccion,'num_int')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'num_int', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'numero_int',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'numero_int', array('class'=>'help-block')); ?>
+							<?php echo $form->textField($direccion,'num_int',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($direccion,'num_int', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($model,'codigo_postal')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($model,'codigo_postal', array('class'=>'control-label')); ?>
+					<div class="form-group col-md-6 <?php if($form->error($direccion,'codigo_postal')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'codigo_postal', array('class'=>'control-label')); ?>
 						<div class="input-group">
-							<?php echo $form->textField($model,'codigo_postal',array('size'=>45,'maxlength'=>5, 'class'=>'form-control')); ?>
-							<?php echo $form->error($model,'codigo_postal', array('class'=>'help-block')); ?>
+							<?php echo $form->textField($direccion,'codigo_postal',array('size'=>45,'maxlength'=>5, 'class'=>'form-control')); ?>
+							<?php echo $form->error($direccion,'codigo_postal', array('class'=>'help-block')); ?>
 						</div>
 					</div>
 
 					<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
+
+					<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$direccion)); ?>
 				</section>
 
 				<?php echo $form->errorSummary($model); ?>

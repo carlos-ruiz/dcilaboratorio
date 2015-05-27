@@ -11,14 +11,6 @@
  * @property string $correo_electronico
  * @property string $hora_consulta_de
  * @property string $hora_consulta_hasta
- * @property integer $porcentaje
- * @property string $calle
- * @property string $ciudad
- * @property string $colonia
- * @property string $estado
- * @property string $codigo_postal
- * @property integer $numero_ext
- * @property string $numero_int
  * @property integer $id_especialidades
  * @property integer $id_titulos
  * @property integer $id_usuarios
@@ -26,11 +18,14 @@
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
+ * @property integer $activo
+ * @property integer $id_direccion
  *
  * The followings are the available model relations:
- * @property Usuarios $idUsuarios
- * @property Especialidades $idEspecialidades
- * @property Titulos $idTitulos
+ * @property Usuarios $usuario
+ * @property Direccion $direccion
+ * @property Especialidades $especialidad
+ * @property Titulos $titulo
  * @property Ordenes[] $ordenes
  * @property UnidadTieneDoctores[] $unidadTieneDoctores
  */
@@ -52,14 +47,9 @@ class Doctores extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-
-			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, porcentaje, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, calle, ciudad, colonia, estado, numero_ext, codigo_postal, correo_electronico', 'required'),
-			array('codigo_postal, id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, calle, ciudad, colonia, estado', 'length', 'max'=>45),
-			array('codigo_postal', 'length', 'max'=>5),
-			array('porcentaje', 'numerical', 'integerOnly'=>true, 'min'=>0, 'max'=>100),
-			array('porcentaje', 'length', 'max'=>3),
-			array('numero_int', 'safe'),
+			array('nombre, a_paterno, hora_consulta_de, hora_consulta_hasta, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_direccion', 'required'),
+			array('id_especialidades, id_titulos, id_usuarios, usuario_ultima_edicion, usuario_creacion, activo, id_direccion', 'numerical', 'integerOnly'=>true),
+			array('nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta', 'length', 'max'=>45),
 			array('nombre', 'length', 'min'=>3),
 			array('correo_electronico', 'email'),
 			array('correo_electronico', 'unique',
@@ -67,7 +57,7 @@ class Doctores extends CActiveRecord
 				'message'=>'Ya existe un usuario registrado con este correo electrónico.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, porcentaje, calle, ciudad, colonia, estado, codigo_postal, numero_ext, numero_int, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, nombre, a_paterno, a_materno, correo_electronico, hora_consulta_de, hora_consulta_hasta, id_especialidades, id_titulos, id_usuarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo, id_direccion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,9 +69,10 @@ class Doctores extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'usuarios' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
-			'especialidades' => array(self::BELONGS_TO, 'Especialidades', 'id_especialidades'),
-			'titulos' => array(self::BELONGS_TO, 'TitulosForm', 'id_titulos'),
+			'usuario' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
+			'direccion' => array(self::BELONGS_TO, 'Direccion', 'id_direccion'),
+			'especialidad' => array(self::BELONGS_TO, 'Especialidades', 'id_especialidades'),
+			'titulo' => array(self::BELONGS_TO, 'Titulos', 'id_titulos'),
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_doctores'),
 			'unidadTieneDoctores' => array(self::HAS_MANY, 'UnidadTieneDoctores', 'id_doctores'),
 		);
@@ -95,28 +86,22 @@ class Doctores extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'nombre' => 'Nombre',
-			'a_paterno' => 'Apellido Paterno',
-			'a_materno' => 'Apellido Materno',
-			'correo_electronico' => 'Correo Electrónico',
-			'hora_consulta_de' => 'Hora Consulta De',
-			'hora_consulta_hasta' => 'Hora Consulta Hasta',
-			'porcentaje' => 'Porcentaje',
-			'calle' => 'Calle',
-			'ciudad' => 'Ciudad',
-			'colonia' => 'Colonia',
-			'estado' => 'Estado',
-			'codigo_postal' => 'Código Postal',
-			'numero_ext' => 'Número Ext',
-			'numero_int' => 'Número Int',
+			'a_paterno' => 'Apellido paterno',
+			'a_materno' => 'Apellido materno',
+			'correo_electronico' => 'Correo electrónico',
+			'hora_consulta_de' => 'Hora consulta de',
+			'hora_consulta_hasta' => 'Hora consulta hasta',
 			'id_especialidades' => 'Especialidad',
 			'id_titulos' => 'Título',
 			'id_usuarios' => 'Id Usuarios',
-			'ultima_edicion' => 'Última edición',
-			'usuario_ultima_edicion' => 'Usuario última edición',
-			'creacion' => 'Creación',
-			'usuario_creacion' => 'Usuario creación',
-			'especialidades.nombre'=>'Especialidad',
-			'titulos.nombre'=>'Título',
+			'ultima_edicion' => 'Ultima Edicion',
+			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
+			'creacion' => 'Creacion',
+			'usuario_creacion' => 'Usuario Creacion',
+			'activo' => 'Activo',
+			'id_direccion' => 'Id Direccion',
+			'especialidad.nombre' => 'Especialidad',
+			'titulo.nombre' => 'Título',
 		);
 	}
 
@@ -145,14 +130,6 @@ class Doctores extends CActiveRecord
 		$criteria->compare('correo_electronico',$this->correo_electronico,true);
 		$criteria->compare('hora_consulta_de',$this->hora_consulta_de,true);
 		$criteria->compare('hora_consulta_hasta',$this->hora_consulta_hasta,true);
-		$criteria->compare('porcentaje',$this->porcentaje);
-		$criteria->compare('calle',$this->calle,true);
-		$criteria->compare('ciudad',$this->ciudad,true);
-		$criteria->compare('colonia',$this->colonia,true);
-		$criteria->compare('estado',$this->estado,true);
-		$criteria->compare('codigo_postal',$this->codigo_postal,true);
-		$criteria->compare('numero_ext',$this->numero_ext);
-		$criteria->compare('numero_int',$this->numero_int,true);
 		$criteria->compare('id_especialidades',$this->id_especialidades);
 		$criteria->compare('id_titulos',$this->id_titulos);
 		$criteria->compare('id_usuarios',$this->id_usuarios);
@@ -160,6 +137,8 @@ class Doctores extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		$criteria->compare('activo',$this->activo);
+		$criteria->compare('id_direccion',$this->id_direccion);
 		$this->dbCriteria->order='activo DESC, nombre ASC';
 
 		return new CActiveDataProvider($this, array(
@@ -178,23 +157,11 @@ class Doctores extends CActiveRecord
 		return parent::model($className);
 	}
 
-
 	public function obtenerTitulos(){
 		return CHtml::listData(TitulosForm::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
 	}
 
 	public function obtenerEspecialidades(){
 		return CHtml::listData(Especialidades::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
-	}
-
-	public function obtenerUnidadesPorDoctor($doctor_id){
-		$unidades = UnidadTieneDoctores::model()->obtenerUnidadesPorDoctor($doctor_id);
-		$selected = array();
-
-		foreach ($unidades as $unidad) {
-			//$selected[] = $unidad['id']." => array('selected'=>'selected')";
-		}
-
-		return $selected;
 	}
 }

@@ -69,6 +69,7 @@ class DoctoresController extends Controller
 		$model = new Doctores;
 		$contactos = array(new Contactos, new Contactos, new Contactos);
 		$unidadDoctores = new UnidadTieneDoctores;
+		$direccion = new Direccion;
 		$urs = UnidadesResponsables::model()->findAll();
 		$unidadesSeleccionadas=array();
 		$simbolos = array('!', '$', '#', '?');
@@ -171,6 +172,7 @@ class DoctoresController extends Controller
 			'urs'=>$urs,
 			'unidad'=>$unidadDoctores,
 			'unidadesSeleccionadas'=>$unidadesSeleccionadas,
+			'direccion' => $direccion,
 			));
 	}
 
