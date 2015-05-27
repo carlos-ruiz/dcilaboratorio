@@ -39,6 +39,8 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+
 	<!-- END GLOBAL MANDATORY STYLES -->
 	<!-- BEGIN THEME STYLES -->
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css"/>
@@ -158,20 +160,21 @@
 	<div class="page-content-wrapper">
 		<div class="page-content">
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal fade draggable-modal" id="modal" tabindex="-1" role="basic" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title">Título</h4>
+							<h4 id="modalTitle" class="modal-title">Titulo</h4>
 						</div>
 						<div class="modal-body">
-							 
+							 Cargando...
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn blue">boton de accion</button>
-							<button type="button" class="btn default" data-dismiss="modal">Cerrar</button>
-						</div>
+							<button type="button" id="modalCancelar" class="btn default" style="display:none" data-dismiss="modal">Cerrar</button>
+							<button type="button" id="modalGuardar" class="btn green" style="display:none" data-dismiss="modal">Guardar</button>
+							<button type="button" id="modalAceptar" class="btn red" style="display:none" data-dismiss="modal">Aceptar</button>
+						</div> 
 					</div>
 					<!-- /.modal-content -->
 				</div>
@@ -214,6 +217,8 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/scripts/layout.js" type="text/javascript"></script>
@@ -222,7 +227,7 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/components-pickers.js" type="text/javascript"></script>
-
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/ui-extended-modals.js" type="text/javascript"></script>
 <!--
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>

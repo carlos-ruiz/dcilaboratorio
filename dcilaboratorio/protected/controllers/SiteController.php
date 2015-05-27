@@ -28,6 +28,11 @@ class SiteController extends Controller
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
 	 */
+
+	public function actionLoadModalContent(){
+		$this->renderPartial("_modalContent");
+	}
+
 	public function actionIndex()
 	{
 		//Para inicializar el sistema
