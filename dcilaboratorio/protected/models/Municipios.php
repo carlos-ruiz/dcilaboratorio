@@ -1,25 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "municipio".
+ * This is the model class for table "municipios".
  *
- * The followings are the available columns in table 'municipio':
+ * The followings are the available columns in table 'municipios':
  * @property integer $id_municipio
  * @property string $nombre
- * @property integer $estados_id
+ * @property integer $id_estados
  *
  * The followings are the available model relations:
- * @property Direccion[] $direccions
- * @property Estados $estados
+ * @property Direcciones[] $direcciones
+ * @property Estados $idEstados
  */
-class Municipio extends CActiveRecord
+class Municipios extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'municipio';
+		return 'municipios';
 	}
 
 	/**
@@ -30,12 +30,12 @@ class Municipio extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_municipio, estados_id', 'required'),
-			array('id_municipio, estados_id', 'numerical', 'integerOnly'=>true),
+			array('nombre, id_estados', 'required'),
+			array('id_estados', 'numerical', 'integerOnly'=>true),
 			array('nombre', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_municipio, nombre, estados_id', 'safe', 'on'=>'search'),
+			array('id_municipio, nombre, id_estados', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,8 +47,8 @@ class Municipio extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'direcciones' => array(self::HAS_MANY, 'Direccion', 'id_municipio'),
-			'estados' => array(self::BELONGS_TO, 'Estados', 'estados_id'),
+			'direcciones' => array(self::HAS_MANY, 'Direcciones', 'id_municipio'),
+			'estado' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
 		);
 	}
 
@@ -58,9 +58,9 @@ class Municipio extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_municipio' => 'Municipio',
+			'id_municipio' => 'ID',
 			'nombre' => 'Nombre',
-			'estados_id' => 'Estado',
+			'id_estados' => 'Estado',
 		);
 	}
 
@@ -84,7 +84,7 @@ class Municipio extends CActiveRecord
 
 		$criteria->compare('id_municipio',$this->id_municipio);
 		$criteria->compare('nombre',$this->nombre,true);
-		$criteria->compare('estados_id',$this->estados_id);
+		$criteria->compare('id_estados',$this->id_estados);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -95,7 +95,7 @@ class Municipio extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Municipio the static model class
+	 * @return Municipios the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -8,8 +8,8 @@
  * @property string $nombre
  *
  * The followings are the available model relations:
- * @property Direccion[] $direccions
- * @property Municipio[] $municipios
+ * @property Direcciones[] $direcciones
+ * @property Municipios[] $municipioses
  */
 class Estados extends CActiveRecord
 {
@@ -29,8 +29,7 @@ class Estados extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id', 'required'),
-			array('id', 'numerical', 'integerOnly'=>true),
+			array('nombre', 'required'),
 			array('nombre', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -46,8 +45,8 @@ class Estados extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'direccions' => array(self::HAS_MANY, 'Direccion', 'id_estados'),
-			'municipios' => array(self::HAS_MANY, 'Municipio', 'estados_id'),
+			'direcciones' => array(self::HAS_MANY, 'Direcciones', 'id_estados'),
+			'municipioses' => array(self::HAS_MANY, 'Municipios', 'id_estados'),
 		);
 	}
 

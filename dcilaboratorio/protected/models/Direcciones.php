@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "direccion".
+ * This is the model class for table "direcciones".
  *
- * The followings are the available columns in table 'direccion':
+ * The followings are the available columns in table 'direcciones':
  * @property integer $id
  * @property string $calle
  * @property string $colonia
@@ -20,18 +20,18 @@
  * The followings are the available model relations:
  * @property DatosFacturacion[] $datosFacturacions
  * @property Estados $idEstados
- * @property Municipio $idMunicipio
+ * @property Municipios $idMunicipio
  * @property Doctores[] $doctores
  * @property UnidadesResponsables[] $unidadesResponsables
  */
-class Direccion extends CActiveRecord
+class Direcciones extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'direccion';
+		return 'direcciones';
 	}
 
 	/**
@@ -42,8 +42,8 @@ class Direccion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, calle, colonia, numero_ext, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipio', 'required'),
-			array('id, codigo_postal, usuario_ultima_edicion, usuario_creacion, id_estados, id_municipio', 'numerical', 'integerOnly'=>true),
+			array('calle, colonia, numero_ext, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipio', 'required'),
+			array('codigo_postal, usuario_ultima_edicion, usuario_creacion, id_estados, id_municipio', 'numerical', 'integerOnly'=>true),
 			array('calle, colonia, numero_ext, num_int', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -60,8 +60,8 @@ class Direccion extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'datosFacturacions' => array(self::HAS_MANY, 'DatosFacturacion', 'id_direccion'),
-			'idEstados' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
-			'idMunicipio' => array(self::BELONGS_TO, 'Municipio', 'id_municipio'),
+			'estado' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
+			'municipio' => array(self::BELONGS_TO, 'Municipios', 'id_municipio'),
 			'doctores' => array(self::HAS_MANY, 'Doctores', 'id_direccion'),
 			'unidadesResponsables' => array(self::HAS_MANY, 'UnidadesResponsables', 'id_direccion'),
 		);
@@ -76,9 +76,9 @@ class Direccion extends CActiveRecord
 			'id' => 'ID',
 			'calle' => 'Calle',
 			'colonia' => 'Colonia',
-			'numero_ext' => 'Numero Ext',
-			'num_int' => 'Num Int',
-			'codigo_postal' => 'Codigo Postal',
+			'numero_ext' => 'Número Ext',
+			'num_int' => 'Número Int',
+			'codigo_postal' => 'Código Postal',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
@@ -128,7 +128,7 @@ class Direccion extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Direccion the static model class
+	 * @return Direcciones the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -140,6 +140,6 @@ class Direccion extends CActiveRecord
 	}
 
 	public function obtenerMunicipios(){
-		return CHtml::listData(Municipio::model()->findAll(array('order'=>'nombre')), 'id', 'nombre');
+		return CHtml::listData(Municipios::model()->findAll(array('order'=>'nombre')), 'id', 'nombre');
 	}
 }
