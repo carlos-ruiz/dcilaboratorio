@@ -1,30 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "orden_tiene_examenes".
+ * This is the model class for table "estados".
  *
- * The followings are the available columns in table 'orden_tiene_examenes':
+ * The followings are the available columns in table 'estados':
  * @property integer $id
- * @property integer $id_ordenes
- * @property string $resultado
- * @property integer $id_detalles_examen
- * @property string $ultima_edicion
- * @property integer $usuario_ultima_edicion
- * @property string $creacion
- * @property integer $usuario_creacion
+ * @property string $nombre
  *
  * The followings are the available model relations:
- * @property DetallesExamen $idDetallesExamen
- * @property Ordenes $idOrdenes
+ * @property Direccion[] $direccions
+ * @property Municipio[] $municipios
  */
-class OrdenTieneExamenes extends CActiveRecord
+class Estados extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'orden_tiene_examenes';
+		return 'estados';
 	}
 
 	/**
@@ -35,12 +29,12 @@ class OrdenTieneExamenes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_ordenes, id_detalles_examen, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('id_ordenes, id_detalles_examen, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('resultado', 'length', 'max'=>45),
+			array('id', 'required'),
+			array('id', 'numerical', 'integerOnly'=>true),
+			array('nombre', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_ordenes, resultado, id_detalles_examen, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, nombre', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,8 +46,8 @@ class OrdenTieneExamenes extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'detalleExamen' => array(self::BELONGS_TO, 'DetallesExamen', 'id_detalles_examen','order'=>'detalleExamen.id_examen' ASC),
-			'orden' => array(self::BELONGS_TO, 'Ordenes', 'id_ordenes'),
+			'direccions' => array(self::HAS_MANY, 'Direccion', 'id_estados'),
+			'municipios' => array(self::HAS_MANY, 'Municipio', 'estados_id'),
 		);
 	}
 
@@ -64,13 +58,7 @@ class OrdenTieneExamenes extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'id_ordenes' => 'Id Ordenes',
-			'resultado' => 'Resultado',
-			'id_detalles_examen' => 'Id Detalles Examen',
-			'ultima_edicion' => 'Ultima Edicion',
-			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
-			'creacion' => 'Creacion',
-			'usuario_creacion' => 'Usuario Creacion',
+			'nombre' => 'Nombre',
 		);
 	}
 
@@ -93,13 +81,7 @@ class OrdenTieneExamenes extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('id_ordenes',$this->id_ordenes);
-		$criteria->compare('resultado',$this->resultado,true);
-		$criteria->compare('id_detalles_examen',$this->id_detalles_examen);
-		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
-		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
-		$criteria->compare('creacion',$this->creacion,true);
-		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		$criteria->compare('nombre',$this->nombre,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -110,7 +92,7 @@ class OrdenTieneExamenes extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return OrdenTieneExamenes the static model class
+	 * @return Estados the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

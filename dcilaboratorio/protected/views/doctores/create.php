@@ -11,4 +11,5 @@
 	'urs'=>$urs,
 	'unidad'=>$unidad,
 	'unidadesSeleccionadas'=>$unidadesSeleccionadas,
+	'direccion'=>$direccion,
 	)); ?>
