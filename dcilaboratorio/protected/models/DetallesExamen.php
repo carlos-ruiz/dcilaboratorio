@@ -8,10 +8,13 @@
  * @property string $descripcion
  * @property integer $id_unidades_medida
  * @property integer $id_examenes
+ * @property string $rango_inferior
+ * @property string $rango_superior
  * @property string $ultima_edicion
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
+ * @property integer $activo
  *
  * The followings are the available model relations:
  * @property Examenes $idExamenes
@@ -37,11 +40,12 @@ class DetallesExamen extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('descripcion, id_unidades_medida, id_examenes, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('id_unidades_medida, id_examenes, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('id_unidades_medida, id_examenes, usuario_ultima_edicion, usuario_creacion, activo', 'numerical', 'integerOnly'=>true),
 			array('descripcion', 'length', 'max'=>250),
+			array('rango_inferior, rango_superior', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, descripcion, id_unidades_medida, id_examenes, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, descripcion, id_unidades_medida, id_examenes, rango_inferior, rango_superior, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,14 +70,17 @@ class DetallesExamen extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'descripcion' => 'Descripción',
-			'id_unidades_medida' => 'Unidades Medida',
+			'descripcion' => 'Descripcion',
+			'id_unidades_medida' => 'Unidad Medida',
 			'id_examenes' => 'Examen',
+			'rango_inferior' => 'Rango Inferior',
+			'rango_superior' => 'Rango Superior',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
-'unidadesMedida.nombre'=>'Unidad Medida',
+			'activo' => 'Activo',
+			'unidadesMedida.nombre'=>'Unidad Medida',
 		);
 	}
 
@@ -99,10 +106,13 @@ class DetallesExamen extends CActiveRecord
 		$criteria->compare('descripcion',$this->descripcion,true);
 		$criteria->compare('id_unidades_medida',$this->id_unidades_medida);
 		$criteria->compare('id_examenes',$this->id_examenes);
+		$criteria->compare('rango_inferior',$this->rango_inferior,true);
+		$criteria->compare('rango_superior',$this->rango_superior,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		$criteria->compare('activo',$this->activo);
 		$this->dbCriteria->order='activo DESC, descripcion ASC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -128,5 +138,4 @@ class DetallesExamen extends CActiveRecord
 		return CHtml::listData(Examenes::model()->findAll('activo=1'), 'id', 'nombre');
 	}
 
-	
 }

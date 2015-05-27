@@ -16,7 +16,7 @@ $this->renderPartial(
 	array(
 		'model'=>$model,
 		'titulo'=>'Resultados de examenes',
-		'columnas'=>array('examenes.nombre','descripcion','unidadesMedida.nombre')
+		'columnas'=>array('examenes.nombre','descripcion','unidadesMedida.nombre', 'rango_inferior','rango_superior')
 	)
 ); 
 

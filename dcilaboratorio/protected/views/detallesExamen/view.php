@@ -15,8 +15,10 @@ $this->breadcrumbs=array(
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
 		'id',
+		'examenes.nombre',
 		'descripcion',
 		'unidadesMedida.nombre',
-		'examenes.nombre',
+		'rango_inferior',
+		'rango_superior',		
 	),
 )); ?>
