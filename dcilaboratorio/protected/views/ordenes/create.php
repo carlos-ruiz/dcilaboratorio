@@ -10,4 +10,5 @@
  	'datosFacturacion'=>$datosFacturacion,
 	'examenes'=>$examenes,
 	'pagos'=>$pagos,
+	'direccion' => $direccion,
  	)); ?>

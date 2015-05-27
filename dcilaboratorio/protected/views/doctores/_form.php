@@ -194,7 +194,7 @@ Yii::app()->clientScript->registerScript('timepicker', "
 					<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$direccion)); ?>
 				</section>
 
-				<?php echo $form->errorSummary($model); ?>
+				
 
 				<div class="form-actions">
 					<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>

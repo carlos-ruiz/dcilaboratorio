@@ -79,6 +79,7 @@ class OrdenesController extends Controller
 		$datosFacturacion=new DatosFacturacion;
 		$examenes=new Examenes;
 		$pagos=new Pagos;
+		$direccion = new Direcciones;
 		
 
 		// Uncomment the following line if AJAX validation is needed
@@ -97,6 +98,7 @@ class OrdenesController extends Controller
 			'datosFacturacion'=>$datosFacturacion,
 			'examenes'=>$examenes,
 			'pagos'=>$pagos,
+			'direccion' => $direccion,
 		));
 	}
 

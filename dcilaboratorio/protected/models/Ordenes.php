@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'ordenes':
  * @property integer $id
  * @property integer $id_doctores
- * @property integer $id_pacientes
  * @property integer $id_status
  * @property integer $id_unidades_responsables
  * @property string $fecha_captura
@@ -16,6 +15,7 @@
  * @property integer $descuento
  * @property integer $id_multitarifarios
  * @property integer $compartir_con_doctor
+ * @property string $costo_emergencia
  * @property string $ultima_edicion
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
@@ -25,9 +25,9 @@
  * @property OrdenTieneExamenes[] $ordenTieneExamenes
  * @property Doctores $idDoctores
  * @property Multitarifarios $idMultitarifarios
- * @property Pacientes $idPacientes
  * @property Status $idStatus
  * @property UnidadesResponsables $idUnidadesResponsables
+ * @property OrdenesFacturacion[] $ordenesFacturacions
  * @property Pagos[] $pagoses
  */
 class Ordenes extends CActiveRecord
@@ -48,12 +48,13 @@ class Ordenes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('doctor, id_pacientes, id_status, id_unidades_responsables, fecha_captura, id_multitarifarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('id_doctores, id_pacientes, id_status, id_unidades_responsables, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
+			array('id_status, id_unidades_responsables, fecha_captura, id_multitarifarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('id_doctores, id_status, id_unidades_responsables, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('informacion_clinica_y_terapeutica, comentarios', 'length', 'max'=>256),
+			array('costo_emergencia', 'length', 'max'=>8),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_doctores, id_pacientes, id_status, id_unidades_responsables, fecha_captura, informacion_clinica_y_terapeutica, comentarios, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, costo_emergencia', 'safe', 'on'=>'search'),
+			array('id, id_doctores, id_status, id_unidades_responsables, fecha_captura, informacion_clinica_y_terapeutica, comentarios, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, costo_emergencia, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,9 +69,9 @@ class Ordenes extends CActiveRecord
 			'ordenTieneExamenes' => array(self::HAS_MANY, 'OrdenTieneExamenes', 'id_ordenes'),
 			'doctor' => array(self::BELONGS_TO, 'Doctores', 'id_doctores'),
 			'multitarifarios' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
-			'pacientes' => array(self::BELONGS_TO, 'Pacientes', 'id_pacientes'),
 			'status' => array(self::BELONGS_TO, 'Status', 'id_status'),
 			'idUnidadesResponsables' => array(self::BELONGS_TO, 'UnidadesResponsables', 'id_unidades_responsables'),
+			'ordenesFacturacions' => array(self::HAS_MANY, 'OrdenesFacturacion', 'id_ordenes'),
 			'pagos' => array(self::HAS_MANY, 'Pagos', 'id_ordenes'),
 		);
 	}
@@ -81,24 +82,22 @@ class Ordenes extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'Folio',
+			'id' => 'ID',
 			'id_doctores' => 'Doctor',
-			'id_pacientes' => 'Paciente',
-			'id_status' => 'Estatus',
-			'id_unidades_responsables' => 'Unidades Responsables',
-			'fecha_captura' => 'Fecha',
-			'informacion_clinica_y_terapeutica' => 'Informacion Clinica Y Terapeutica',
+			'id_status' => 'Id Status',
+			'id_unidades_responsables' => 'Id Unidades Responsables',
+			'fecha_captura' => 'Fecha Captura',
+			'informacion_clinica_y_terapeutica' => 'Informacion Clinica y Terapeutica',
 			'comentarios' => 'Comentarios',
-			'requiere_factura' => '¿Requiere Factura?',
+			'requiere_factura' => '¿Requiere factura?',
 			'descuento' => 'Descuento',
 			'id_multitarifarios' => 'Multitarifario',
-			'compartir_con_doctor' => '¿Compartir Con Doctor?',
+			'compartir_con_doctor' => '¿Comparte con doctor?',
+			'costo_emergencia' => 'Costo Emergencia',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
-			'costo_emergencia'=>'Costo emergencia',
-			'status.descripcion'=>'Estatus de la orden',
 			'multitarifarios.nombre'=>'Multitarifario',
 		);
 	}
@@ -123,7 +122,6 @@ class Ordenes extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('id_doctores',$this->id_doctores);
-		$criteria->compare('id_pacientes',$this->id_pacientes);
 		$criteria->compare('id_status',$this->id_status);
 		$criteria->compare('id_unidades_responsables',$this->id_unidades_responsables);
 		$criteria->compare('fecha_captura',$this->fecha_captura,true);
@@ -133,11 +131,12 @@ class Ordenes extends CActiveRecord
 		$criteria->compare('descuento',$this->descuento);
 		$criteria->compare('id_multitarifarios',$this->id_multitarifarios);
 		$criteria->compare('compartir_con_doctor',$this->compartir_con_doctor);
+		$criteria->compare('costo_emergencia',$this->costo_emergencia,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-		
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
@@ -174,4 +173,4 @@ class Ordenes extends CActiveRecord
 		return CHtml::listData(Grupos::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
 	}
 
-	}
+}

@@ -5,17 +5,24 @@
  *
  * The followings are the available columns in table 'unidades_responsables':
  * @property integer $id
+ * @property string $clave
  * @property string $nombre
+ * @property string $hora_inicial
+ * @property string $hora_final
+ * @property string $responsable_sanitario
+ * @property string $responsable_administrativo
+ * @property string $sugerencias
  * @property string $ultima_edicion
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
- * @property integer $id_usuarios
+ * @property integer $activo
+ * @property integer $id_direccion
  *
  * The followings are the available model relations:
  * @property Ordenes[] $ordenes
  * @property UnidadTieneDoctores[] $unidadTieneDoctores
- * @property Usuarios $idUsuarios
+ * @property Direcciones $idDireccion
  */
 class UnidadesResponsables extends CActiveRecord
 {
@@ -35,14 +42,14 @@ class UnidadesResponsables extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('nombre', 'length', 'max'=>45),
-			array('nombre', 'length', 'min'=>3),
-array('nombre', 'unique'),
+			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_direccion', 'required'),
+			array('usuario_ultima_edicion, usuario_creacion, activo, id_direccion', 'numerical', 'integerOnly'=>true),
+			array('clave, nombre, hora_inicial, hora_final', 'length', 'max'=>45),
+			array('responsable_sanitario, responsable_administrativo', 'length', 'max'=>250),
+			array('sugerencias', 'length', 'max'=>300),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, clave, nombre, hora_inicial, hora_final, responsable_sanitario, responsable_administrativo, sugerencias, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo, id_direccion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,7 +63,7 @@ array('nombre', 'unique'),
 		return array(
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_unidades_responsables'),
 			'unidadTieneDoctores' => array(self::HAS_MANY, 'UnidadTieneDoctores', 'id_unidades_responsables'),
-			'usuarios' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
+			'idDireccion' => array(self::BELONGS_TO, 'Direcciones', 'id_direccion'),
 		);
 	}
 
@@ -67,11 +74,19 @@ array('nombre', 'unique'),
 	{
 		return array(
 			'id' => 'ID',
+			'clave' => 'Clave',
 			'nombre' => 'Nombre',
+			'hora_inicial' => 'Hora Inicial',
+			'hora_final' => 'Hora Final',
+			'responsable_sanitario' => 'Responsable Sanitario',
+			'responsable_administrativo' => 'Responsable Administrativo',
+			'sugerencias' => 'Sugerencias',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
+			'activo' => 'Activo',
+			'id_direccion' => 'Direccion',
 		);
 	}
 
@@ -94,11 +109,19 @@ array('nombre', 'unique'),
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('clave',$this->clave,true);
 		$criteria->compare('nombre',$this->nombre,true);
+		$criteria->compare('hora_inicial',$this->hora_inicial,true);
+		$criteria->compare('hora_final',$this->hora_final,true);
+		$criteria->compare('responsable_sanitario',$this->responsable_sanitario,true);
+		$criteria->compare('responsable_administrativo',$this->responsable_administrativo,true);
+		$criteria->compare('sugerencias',$this->sugerencias,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		$criteria->compare('activo',$this->activo);
+		$criteria->compare('id_direccion',$this->id_direccion);
 		$this->dbCriteria->order='activo DESC, nombre ASC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -115,5 +138,4 @@ array('nombre', 'unique'),
 	{
 		return parent::model($className);
 	}
-
 }

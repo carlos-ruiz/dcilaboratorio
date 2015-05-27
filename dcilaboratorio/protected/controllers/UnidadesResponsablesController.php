@@ -69,6 +69,7 @@ class UnidadesResponsablesController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new UnidadesResponsables;
+		$direccion = new Direcciones;
 		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -81,6 +82,7 @@ class UnidadesResponsablesController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model,
+			'direccion' => $direccion,
 		));
 	}
 
@@ -105,6 +107,7 @@ class UnidadesResponsablesController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
+			'direccion' => $direccion,
 		));
 	}
 
