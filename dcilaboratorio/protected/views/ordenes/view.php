@@ -10,6 +10,8 @@
 	<div class="heading text-center">
 		<h3 style="color:#1e90ff ">Datos de la orden</h3>
 		<hr/>
+		<?php echo Yii::app()->dateFormatter->formatDateTime(CDateTimeParser::parse($classified->create_date, 'yyyy-MM-dd'),'medium',null);
+
 	</div>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
@@ -18,6 +20,7 @@
 	'attributes'=>array(
 		'status.descripcion',
 		'fecha_captura',
+
 		'multitarifarios.nombre',
 		'descuento',
 	),

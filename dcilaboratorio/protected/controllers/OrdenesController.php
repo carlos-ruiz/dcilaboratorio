@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','loadModalContent'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -208,6 +208,31 @@ class OrdenesController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	/**
+	*Modal 
+	*/
+
+	public function actionLoadModalContent(){
+		$pagos=new Pagos;
+		$form=$this->beginWidget('CActiveForm', array(
+		'id'=>'pagos-form',
+		// Please note: When you enable ajax validation, make sure the corresponding
+		// controller action is handling ajax validation correctly.
+		// There is a call to performAjaxValidation() commented in generated controller code.
+		// See class documentation of CActiveForm for details on this.
+		'enableAjaxValidation'=>false,
+	)); 
+		$this->renderPartial("_modalPagos",
+			array('pagos'=>$pagos,'form'=>$form)
+			);
+		$this->endWidget();
+	}
+
+
+
+
+
 	public function obtenerPaciente($data, $row){
 		$paciente =Pacientes::model()->findByAttributes(array('id'=>$data['id_pacientes']));
 		$completo =$paciente->nombre.' '.$paciente->a_paterno.' '.$paciente->a_materno;
