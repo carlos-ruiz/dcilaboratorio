@@ -97,21 +97,32 @@ Yii::app()->clientScript->registerScript('timepicker', "
 		<hr/>
 	</div>
 
+	<?php
+		$htmlOptions=array("ajax"=>array(
+			"url"=>$this->createUrl("DireccionesController/municipiosPorEstado"),
+			"type"=>"POST",
+			"update"=>"#Direcciones_id_municipio",
+						),
+		'class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")
+
+	?>
 	<div class="form-group col-md-6 <?php if($form->error($direccion,'id_estados')!=''){ echo 'has-error'; }?>">
 		<?php echo $form->labelEx($direccion,'id_estados', array('class'=>'control-label')); ?>
 		<div class="input-group">
-			<?php echo $form->dropDownList($direccion,'id_estados',$direccion->obtenerEstados(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
+			<?php echo $form->dropDownList($direccion,'id_estados',$direccion->obtenerEstados(),$htmlOptions); ?>
 			<?php echo $form->error($direccion,'id_estados', array('class'=>'help-block')); ?>
 		</div>
 	</div>
 
-	<div class="form-group col-md-6 <?php if($form->error($direccion,'id_municipio')!=''){ echo 'has-error'; }?>">
-		<?php echo $form->labelEx($direccion,'id_municipio', array('class'=>'control-label')); ?>
+	<div class="form-group col-md-6 <?php if($form->error($direccion,'id_municipios')!=''){ echo 'has-error'; }?>">
+		<?php echo $form->labelEx($direccion,'id_municipios', array('class'=>'control-label')); ?>
 		<div class="input-group">
-			<?php echo $form->dropDownList($direccion,'id_municipio',$direccion->obtenerMunicipios(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
-			<?php echo $form->error($direccion,'id_municipio', array('class'=>'help-block')); ?>
+			<?php echo $form->dropDownList($direccion,'id_municipios',$direccion->obtenerMunicipios(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
+			<?php echo $form->error($direccion,'id_municipios', array('class'=>'help-block')); ?>
 		</div>
 	</div>
+
+	
 
 	<div class="form-group col-md-6 <?php if($form->error($direccion,'colonia')!=''){ echo 'has-error'; }?>">
 		<?php echo $form->labelEx($direccion,'colonia', array('class'=>'control-label')); ?>

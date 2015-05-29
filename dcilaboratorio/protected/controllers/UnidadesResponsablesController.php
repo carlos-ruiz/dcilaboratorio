@@ -34,7 +34,7 @@ class UnidadesResponsablesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'municipiosPorEstado'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -77,6 +77,7 @@ class UnidadesResponsablesController extends Controller
 		{
 			$model->attributes=$_POST['UnidadesResponsables'];
 			if($model->save())
+				$direccion->save();
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
@@ -182,6 +183,14 @@ class UnidadesResponsablesController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public function municipiosPorEstado()
+	{
+		
+		$list=Municipios::model()->findAll("id_muncipio",array($_POST["UnidadesResponsables"]["id_estado"]));
+		foreach($list as $data)
+			echo "<option value=\"{$data->id}\">{$data->name}</option>";
 	}
 
 }

@@ -15,12 +15,12 @@
  * @property string $creacion
  * @property integer $usuario_creacion
  * @property integer $id_estados
- * @property integer $id_municipio
+ * @property integer $id_municipios
  *
  * The followings are the available model relations:
  * @property DatosFacturacion[] $datosFacturacions
  * @property Estados $idEstados
- * @property Municipios $idMunicipio
+ * @property Municipios $idMunicipios
  * @property Doctores[] $doctores
  * @property UnidadesResponsables[] $unidadesResponsables
  */
@@ -42,12 +42,12 @@ class Direcciones extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('calle, colonia, numero_ext, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipio', 'required'),
-			array('codigo_postal, usuario_ultima_edicion, usuario_creacion, id_estados, id_municipio', 'numerical', 'integerOnly'=>true),
+			array('calle, colonia, numero_ext, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipios', 'required'),
+			array('codigo_postal, usuario_ultima_edicion, usuario_creacion, id_estados, id_municipios', 'numerical', 'integerOnly'=>true),
 			array('calle, colonia, numero_ext, num_int', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, calle, colonia, numero_ext, num_int, codigo_postal, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipio', 'safe', 'on'=>'search'),
+			array('id, calle, colonia, numero_ext, num_int, codigo_postal, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipios', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,8 +60,8 @@ class Direcciones extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'datosFacturacions' => array(self::HAS_MANY, 'DatosFacturacion', 'id_direccion'),
-			'estado' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
-			'municipio' => array(self::BELONGS_TO, 'Municipios', 'id_municipio'),
+			'idEstados' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
+			'idMunicipios' => array(self::BELONGS_TO, 'Municipios', 'id_municipios'),
 			'doctores' => array(self::HAS_MANY, 'Doctores', 'id_direccion'),
 			'unidadesResponsables' => array(self::HAS_MANY, 'UnidadesResponsables', 'id_direccion'),
 		);
@@ -84,7 +84,7 @@ class Direcciones extends CActiveRecord
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
 			'id_estados' => 'Estado',
-			'id_municipio' => 'Municipio',
+			'id_municipios' => 'Municipio',
 		);
 	}
 
@@ -117,7 +117,7 @@ class Direcciones extends CActiveRecord
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
 		$criteria->compare('id_estados',$this->id_estados);
-		$criteria->compare('id_municipio',$this->id_municipio);
+		$criteria->compare('id_municipios',$this->id_municipios);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -136,10 +136,13 @@ class Direcciones extends CActiveRecord
 	}
 
 	public function obtenerEstados(){
-		return CHtml::listData(Estados::model()->findAll(array('order'=>'nombre')), 'id', 'nombre');
+		$estados=Estados::model()->findAll();
+		return CHtml::listData($estados, 'id', 'nombre');
 	}
 
-	public function obtenerMunicipios(){
-		return CHtml::listData(Municipios::model()->findAll(array('order'=>'nombre')), 'id', 'nombre');
+	public function obtenerMunicipios($defaultEstado=1){
+		$municipios=Municipios::model()->findAll("id_estados=?", array($defaultEstado));
+		return CHtml::listData($municipios, 'id', 'nombre');
 	}
+
 }
