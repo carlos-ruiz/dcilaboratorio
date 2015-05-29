@@ -127,61 +127,73 @@
 						</div>
 					</div>
 
-					<div class="form-group col-md-6 <?php if($form->error($direccion,'id_estados')!=''){ echo 'has-error'; }?>">
-		<?php echo $form->labelEx($direccion,'id_estados', array('class'=>'control-label')); ?>
-		<div class="input-group">
-			<?php echo $form->dropDownList($direccion,'id_estados',$direccion->obtenerEstados(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
-			<?php echo $form->error($direccion,'id_estados', array('class'=>'help-block')); ?>
-		</div>
-	</div>
+				<div class="form-group col-md-6 <?php if($form->error($direccion,'id_estados')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'id_estados', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<?php
+								$htmlOptions = array(
+									"ajax"=>array(
+										"url"=>$this->createUrl("direcciones/municipiosPorEstado"),
+										"type"=>"POST",
+										"update"=>"#Direcciones_id_municipios"
+									),
+									"class" => "form-control",
+									"empty"=>"Seleccione una opci&oacute;n",
+								);
+							?>
+							<?php echo $form->dropDownList($direccion,'id_estados',$direccion->obtenerEstados(), $htmlOptions); ?>
+							<?php echo $form->error($direccion,'id_estados', array('class'=>'help-block')); ?>
+						</div>
+					</div>
 
-	<div class="form-group col-md-6 <?php if($form->error($direccion,'id_municipios')!=''){ echo 'has-error'; }?>">
-		<?php echo $form->labelEx($direccion,'id_municipios', array('class'=>'control-label')); ?>
-		<div class="input-group">
-			<?php echo $form->dropDownList($direccion,'id_municipios',$direccion->obtenerMunicipios(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
-			<?php echo $form->error($direccion,'id_municipios', array('class'=>'help-block')); ?>
-		</div>
-	</div>
+					<div class="form-group col-md-6 <?php if($form->error($direccion,'id_municipios')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($direccion,'id_municipios', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<?php echo $form->dropDownList($direccion,'id_municipios',$direccion->obtenerMunicipios(), array('class' => 'form-control',"empty"=>"Seleccione una opci&oacute;n")); ?>
+							<?php echo $form->error($direccion,'id_municipios', array('class'=>'help-block')); ?>
+						</div>
+					</div>
 
-	<div class="form-group col-md-6 <?php if($form->error($direccion,'colonia')!=''){ echo 'has-error'; }?>">
-		<?php echo $form->labelEx($direccion,'colonia', array('class'=>'control-label')); ?>
-		<div class="input-group">
-			<?php echo $form->textField($direccion,'colonia',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-			<?php echo $form->error($direccion,'colonia', array('class'=>'help-block')); ?>
-		</div>
-	</div>
 
-	<div class="form-group col-md-6 <?php if($form->error($direccion,'calle')!=''){ echo 'has-error'; }?>">
-		<?php echo $form->labelEx($direccion,'calle', array('class'=>'control-label')); ?>
-		<div class="input-group">
-			<?php echo $form->textField($direccion,'calle',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-			<?php echo $form->error($direccion,'calle', array('class'=>'help-block')); ?>
-		</div>
-	</div>
+				<div class="form-group col-md-6 <?php if($form->error($direccion,'colonia')!=''){ echo 'has-error'; }?>">
+					<?php echo $form->labelEx($direccion,'colonia', array('class'=>'control-label')); ?>
+					<div class="input-group">
+						<?php echo $form->textField($direccion,'colonia',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+						<?php echo $form->error($direccion,'colonia', array('class'=>'help-block')); ?>
+					</div>
+				</div>
 
-	<div class="form-group col-md-6 <?php if($form->error($direccion,'numero_ext')!=''){ echo 'has-error'; }?>">
-		<?php echo $form->labelEx($direccion,'numero_ext', array('class'=>'control-label')); ?>
-		<div class="input-group">
-			<?php echo $form->textField($direccion,'numero_ext',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-			<?php echo $form->error($direccion,'numero_ext', array('class'=>'help-block')); ?>
-		</div>
-	</div>
+				<div class="form-group col-md-6 <?php if($form->error($direccion,'calle')!=''){ echo 'has-error'; }?>">
+					<?php echo $form->labelEx($direccion,'calle', array('class'=>'control-label')); ?>
+					<div class="input-group">
+						<?php echo $form->textField($direccion,'calle',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+						<?php echo $form->error($direccion,'calle', array('class'=>'help-block')); ?>
+					</div>
+				</div>
 
-	<div class="form-group col-md-6 <?php if($form->error($direccion,'num_int')!=''){ echo 'has-error'; }?>">
-		<?php echo $form->labelEx($direccion,'num_int', array('class'=>'control-label')); ?>
-		<div class="input-group">
-			<?php echo $form->textField($direccion,'num_int',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-			<?php echo $form->error($direccion,'num_int', array('class'=>'help-block')); ?>
-		</div>
-	</div>
+				<div class="form-group col-md-6 <?php if($form->error($direccion,'numero_ext')!=''){ echo 'has-error'; }?>">
+					<?php echo $form->labelEx($direccion,'numero_ext', array('class'=>'control-label')); ?>
+					<div class="input-group">
+						<?php echo $form->textField($direccion,'numero_ext',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+						<?php echo $form->error($direccion,'numero_ext', array('class'=>'help-block')); ?>
+					</div>
+				</div>
 
-	<div class="form-group col-md-6 <?php if($form->error($direccion,'codigo_postal')!=''){ echo 'has-error'; }?>">
-		<?php echo $form->labelEx($direccion,'codigo_postal', array('class'=>'control-label')); ?>
-		<div class="input-group">
-			<?php echo $form->textField($direccion,'codigo_postal',array('size'=>45,'maxlength'=>5, 'class'=>'form-control')); ?>
-			<?php echo $form->error($direccion,'codigo_postal', array('class'=>'help-block')); ?>
-		</div>
-	</div>
+				<div class="form-group col-md-6 <?php if($form->error($direccion,'num_int')!=''){ echo 'has-error'; }?>">
+					<?php echo $form->labelEx($direccion,'num_int', array('class'=>'control-label')); ?>
+					<div class="input-group">
+						<?php echo $form->textField($direccion,'num_int',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+						<?php echo $form->error($direccion,'num_int', array('class'=>'help-block')); ?>
+					</div>
+				</div>
+
+				<div class="form-group col-md-6 <?php if($form->error($direccion,'codigo_postal')!=''){ echo 'has-error'; }?>">
+					<?php echo $form->labelEx($direccion,'codigo_postal', array('class'=>'control-label')); ?>
+					<div class="input-group">
+						<?php echo $form->textField($direccion,'codigo_postal',array('size'=>45,'maxlength'=>5, 'class'=>'form-control')); ?>
+						<?php echo $form->error($direccion,'codigo_postal', array('class'=>'help-block')); ?>
+					</div>
+				</div>
 
 					
 
@@ -330,30 +342,43 @@
 
 		<section id="pagos" class="overflow-auto">
 
-		<div class="form-group <?php if($form->error($pagos,'efectivo')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($pagos,'efectivo', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<?php echo $form->textField($pagos,'efectivo',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
-							<?php echo $form->error($pagos,'efectivo', array('class'=>'help-block')); ?>
+			<div class="heading text-center">
+				<h3 style="color:#1e90ff ">Métodos de pago</h3>
+				<hr/>
+			</div>
+
+						<div class="form-group  col-md-4 <?php if($form->error($pagos,'efectivo')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($pagos,'efectivo', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($pagos,'efectivo',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->error($pagos,'efectivo', array('class'=>'help-block')); ?>
+							</div>
 						</div>
-					</div>
-					<div class="form-group <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($pagos,'tarjeta', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<?php echo $form->textField($pagos,'tarjeta',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
-							<?php echo $form->error($pagos,'tarjeta', array('class'=>'help-block')); ?>
+						<div class="form-group   col-md-4 <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($pagos,'tarjeta', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($pagos,'tarjeta',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->error($pagos,'tarjeta', array('class'=>'help-block')); ?>
+							</div>
 						</div>
-					</div>
-					<div class="form-group <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
-						<?php echo $form->labelEx($pagos,'cheque', array('class'=>'control-label')); ?>
-						<div class="input-group">
-							<?php echo $form->textField($pagos,'cheque',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
-							<?php echo $form->error($pagos,'cheque', array('class'=>'help-block')); ?>
+						<div class="form-group  col-md-4 <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($pagos,'cheque', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($pagos,'cheque',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->error($pagos,'cheque', array('class'=>'help-block')); ?>
+							</div>
 						</div>
-					</div>
-					<div class="form-group "> Total $ 1111.00 <? //$total?></div>
-					<div class="form-group align-right">Pago $999.00 <?php $sumatoria ?></div>
-				
+
+							<div class="form-group col-md-8"></div>
+								<div class="form-group col-md-4">
+									<div class="form-group "> <h3 style="color:#1e90ff ">Total $ 1111.00 <? //$total?></h3></div>
+									<div class="form-group align-right"><h3 style="color:#1e90ff ">Pago $999.00 <?php $sumatoria ?></h3></div>
+									<!-- Sólo si no paga completo-->
+									<div class="form-group align-right"><h3 style="color:#FE2E64 ">Debe<?php $sumatoria ?></h3></div>
+								</div>
+
+							
+
 		</section>
 
 	
