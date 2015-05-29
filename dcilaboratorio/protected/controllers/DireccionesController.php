@@ -32,7 +32,7 @@ class DireccionesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','municipiosPorEstado'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -178,5 +178,14 @@ class DireccionesController extends Controller
 		$list=Municipios::model()->findAll("id_muncipio",array($_POST["UnidadesResponsables"]["id_estado"]));
 		foreach($list as $data)
 			echo "<option value=\"{$data->id}\">{$data->name}</option>";
+	}
+
+	public function actionMunicipiosPorEstado($value='')
+	{
+		$list = Municipios::model()->findAll('id_estados=?', array($_POST['Direcciones']['id_estados']));
+		foreach ($list as $data) {
+			echo "<option value=\"{$data->id}\">{$data->nombre}</option>";
+		}
+
 	}
 }
