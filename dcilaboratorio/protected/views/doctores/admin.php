@@ -12,7 +12,7 @@ $this->renderPartial(
 		'model'=>$model,
 		'titulo'=>'Doctores',
 		'columnas'=>array(
-			'especialidades.nombre',
+			'especialidad.nombre',
 			array(
 				'name'=>'nombre',
 				'value'=>array($this, 'obtenerNombreCompletoConTitulo'),

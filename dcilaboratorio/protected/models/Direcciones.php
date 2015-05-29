@@ -42,7 +42,7 @@ class Direcciones extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('calle, colonia, numero_ext, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipios', 'required'),
+			array('calle, colonia, numero_ext, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipios, codigo_postal', 'required'),
 			array('codigo_postal, usuario_ultima_edicion, usuario_creacion, id_estados, id_municipios', 'numerical', 'integerOnly'=>true),
 			array('calle, colonia, numero_ext, num_int', 'length', 'max'=>45),
 			// The following rule is used by search().
@@ -61,7 +61,7 @@ class Direcciones extends CActiveRecord
 		return array(
 			'datosFacturacions' => array(self::HAS_MANY, 'DatosFacturacion', 'id_direccion'),
 			'estado' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
-			'idMunicipios' => array(self::BELONGS_TO, 'Municipios', 'id_municipios'),
+			'municipio' => array(self::BELONGS_TO, 'Municipios', 'id_municipios'),
 			'doctores' => array(self::HAS_MANY, 'Doctores', 'id_direccion'),
 			'unidadesResponsables' => array(self::HAS_MANY, 'UnidadesResponsables', 'id_direccion'),
 		);

@@ -60,13 +60,13 @@
 	'data'=>$model,
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
-		'estado',
-		'colonia',
-		'ciudad',
-		'calle',
-		'numero_ext',
-		'numero_int',		
-		'codigo_postal',			
+		'direccion.estado.nombre',
+		'direccion.municipio.nombre',
+		'direccion.colonia',
+		'direccion.calle',
+		'direccion.numero_ext',
+		'direccion.numero_int',		
+		'direccion.codigo_postal',			
 	),
 )); ?>
 

@@ -70,7 +70,7 @@ class Doctores extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'usuario' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
-			'direccion' => array(self::BELONGS_TO, 'Direccion', 'id_direccion'),
+			'direccion' => array(self::BELONGS_TO, 'Direcciones', 'id_direccion'),
 			'especialidad' => array(self::BELONGS_TO, 'Especialidades', 'id_especialidades'),
 			'titulo' => array(self::BELONGS_TO, 'Titulos', 'id_titulos'),
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_doctores'),
@@ -102,6 +102,8 @@ class Doctores extends CActiveRecord
 			'id_direccion' => 'Id Direccion',
 			'especialidad.nombre' => 'Especialidad',
 			'titulo.nombre' => 'Título',
+			'direccion.estado.nombre' => 'Estado',
+			'direccion.municipio.nombre' => 'Municipio',
 		);
 	}
 
