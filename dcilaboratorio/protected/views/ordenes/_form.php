@@ -279,17 +279,22 @@
 				</section>
 				<br />
 				<section id="examenes" >
-					<?php 
-						$this->renderPartial(
-							'/comunes/_comunAdmin', 
-							array(
-								'model'=>$model,
-								'titulo'=>'Examenes',
-								'columnas'=>array(
-									'nombre'
-								)
-							)
-						); ?>
+					<table class="table table-striped table-bordered dataTable">
+						<thead >
+							<tr>
+								<th>Clave</th>
+								<th>Examen</th>
+								<th>Precio</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
 				</section>
 				<br />
 				<section id="sumatorias">
