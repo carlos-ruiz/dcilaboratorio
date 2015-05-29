@@ -40,7 +40,7 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
-
+	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
 	<!-- END GLOBAL MANDATORY STYLES -->
 	<!-- BEGIN THEME STYLES -->
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css"/>
@@ -50,10 +50,13 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/custom.css" rel="stylesheet" type="text/css"/>
 	
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
-	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css"/>
-
+	<!-- DATE TIME PICKERS-->
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datepicker/css/datepicker3.css"/>
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-colorpicker/css/colorpicker.css"/>
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+	
 	<!-- END THEME STYLES -->
-	<link rel="shortcut icon" href="favicon.ico"/>
+	<link rel="shortcut icon" href="fav	icon.ico"/>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
@@ -219,7 +222,15 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/select2/select2.min.js" type="text/javascript"></script>
+
 <!-- END CORE PLUGINS -->
+
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
@@ -228,6 +239,7 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/components-pickers.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/ui-extended-modals.js" type="text/javascript"></script>
+
 <!--
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
@@ -237,10 +249,11 @@
 
 <script>
 jQuery(document).ready(function() {    
-   Metronic.init(); // init metronic core components
-Layout.init(); // init current layout
-QuickSidebar.init(); // init quick sidebar
-Demo.init(); // init demo features
+   	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	QuickSidebar.init(); // init quick sidebar
+	Demo.init(); // init demo features
+	ComponentsPickers.init();
 });
 
 </script>
