@@ -4,7 +4,7 @@
  * This is the model class for table "municipios".
  *
  * The followings are the available columns in table 'municipios':
- * @property integer $id_municipio
+ * @property integer $id
  * @property string $nombre
  * @property integer $id_estados
  *
@@ -35,7 +35,7 @@ class Municipios extends CActiveRecord
 			array('nombre', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_municipio, nombre, id_estados', 'safe', 'on'=>'search'),
+			array('id, nombre, id_estados', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,7 +47,7 @@ class Municipios extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'direcciones' => array(self::HAS_MANY, 'Direcciones', 'id_municipio'),
+			'direcciones' => array(self::HAS_MANY, 'Direcciones', 'id_municipios'),
 			'estado' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
 		);
 	}
@@ -58,7 +58,7 @@ class Municipios extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_municipio' => 'ID',
+			'id' => 'ID',
 			'nombre' => 'Nombre',
 			'id_estados' => 'Estado',
 		);
@@ -82,7 +82,7 @@ class Municipios extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_municipio',$this->id_municipio);
+		$criteria->compare('id',$this->id);
 		$criteria->compare('nombre',$this->nombre,true);
 		$criteria->compare('id_estados',$this->id_estados);
 
