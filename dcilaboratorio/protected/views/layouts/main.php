@@ -51,6 +51,7 @@
 	
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
 	<!-- DATE TIME PICKERS-->
+    <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datepicker/css/datepicker3.css"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-colorpicker/css/colorpicker.css"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
