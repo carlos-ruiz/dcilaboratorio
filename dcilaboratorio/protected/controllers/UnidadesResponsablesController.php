@@ -73,13 +73,22 @@ class UnidadesResponsablesController extends Controller
 		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-		if(isset($_POST['UnidadesResponsables']))
-		{
-			$model->attributes=$_POST['UnidadesResponsables'];
-			if($model->save())
-				$direccion->save();
-				$this->redirect(array('view','id'=>$model->id));
+
+		$transaction = Yii::app()->db->beginTransaction();
+		try
+			{
+				if(isset($_POST['UnidadesResponsables']))
+				{
+					$model->attributes=$_POST['UnidadesResponsables'];
+					if($model->save())
+						$direccion->save();
+						$this->redirect(array('view','id'=>$model->id));
+				}
+			}
+		if($model->save()){
+
 		}
+
 
 		$this->render('create',array(
 			'model'=>$model,
@@ -99,17 +108,38 @@ class UnidadesResponsablesController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['UnidadesResponsables']))
+		$transaction = Yii::app()->db->beginTransaction();
+		try
+			{
+				if(isset($_POST['UnidadesResponsables']))
+				{
+					$model->attributes=$_POST['UnidadesResponsables'];
+					if($model->save())
+						$this->redirect(array('view','id'=>$model->id));
+				}
+			}
+
+		if($model->save()){
+
+		}
+		else{
+					$transaction->rollback();
+					echo "<script>alert('No se pudo guardar');</script>";
+				}
+			}
+		} catch(Exception $e)
 		{
-			$model->attributes=$_POST['UnidadesResponsables'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			print_r($e);
+			$transaction->rollback();
 		}
 
-		$this->render('update',array(
-			'model'=>$model,
-			'direccion' => $direccion,
-		));
+
+	$this->render('update',array(
+		'model'=>$model,
+		'direccion' => $direccion,
+	));
+
+
 	}
 
 	/**
