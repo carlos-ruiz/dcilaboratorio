@@ -11,9 +11,8 @@
 	'data'=>$model,
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
-		'usuarios.usuario',
-		'especialidades.nombre',
-		'porcentaje',
+		'usuario.usuario',
+		'especialidad.nombre',
 		array(
             'label'=>'Unidades responsables',
             'type'=>'raw',

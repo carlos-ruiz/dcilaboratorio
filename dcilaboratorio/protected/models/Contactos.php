@@ -121,21 +121,23 @@ class Contactos extends CActiveRecord
 		return parent::model($className);
 	}
 
-	public static function findByUser($user_id, $tipo_id){
+	public static function findByUser($user_id, $tipo_id, $perfil_id){
 		$contactos = Yii::app()->db->createCommand()
 		    ->select('id, contacto, id_tipos_contacto')
 		    ->from('contactos')
 		    ->where('id_persona=:user_id', array(':user_id'=>$user_id))
 		    ->andWhere('id_tipos_contacto=:tipo_id', array(':tipo_id'=>$tipo_id))
+		    ->andWhere('id_perfiles=:perfil', array('perfil'=>$perfil_id))
 		    ->queryRow();
 		return $contactos; 
 	}
 
-	public function findAllByUser($user_id){
+	public function findAllByUser($user_id, $perfil_id){
 		$contactos = Yii::app()->db->createCommand()
 		    ->select('id, contacto, id_tipos_contacto')
 		    ->from('contactos')
 		    ->where('id_persona=:user_id', array(':user_id'=>$user_id))
+		    ->andWhere('id_perfiles=:perfil', array('perfil'=>$perfil_id))
 		    ->queryRow();
 		return $contactos; 
 	}

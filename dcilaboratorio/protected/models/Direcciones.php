@@ -60,7 +60,7 @@ class Direcciones extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'datosFacturacions' => array(self::HAS_MANY, 'DatosFacturacion', 'id_direccion'),
-			'idEstados' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
+			'estado' => array(self::BELONGS_TO, 'Estados', 'id_estados'),
 			'idMunicipios' => array(self::BELONGS_TO, 'Municipios', 'id_municipios'),
 			'doctores' => array(self::HAS_MANY, 'Doctores', 'id_direccion'),
 			'unidadesResponsables' => array(self::HAS_MANY, 'UnidadesResponsables', 'id_direccion'),

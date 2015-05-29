@@ -105,32 +105,16 @@ class DoctoresController extends Controller
 
 				$model->id_usuarios=$usuario->id;
 
-				if (isset($_POST['Contactos'])) {
-					foreach ($contactos as $i => $contacto) {
-						if (isset($_POST['Contactos'][$i])) {
-							$contacto->attributes=$_POST['Contactos'][$i];
-							$tip = TiposContacto::model()->findByName($i==0?'Casa':($i==1?'Consultorio':'Celular'));
-							$contacto->id_tipos_contacto = $tip['id'];
-							$contacto->id_perfiles = $perfil->id;
-							$contacto->id_persona = $usuario->id;
-							$contacto->ultima_edicion=date('Y-m-d H:i:s');
-							$contacto->usuario_ultima_edicion=Yii::app()->user->id;
-							$contacto->creacion=date('Y-m-d H:i:s');
-							$contacto->usuario_creacion=Yii::app()->user->id;
-							$contacto->save();
-						}
-					}
+				if(isset($_POST['Direcciones'])){
+					$direccion->attributes = $_POST['Direcciones'];
+					$direccion->ultima_edicion=date('Y-m-d H:i:s');
+					$direccion->usuario_ultima_edicion=Yii::app()->user->id;
+					$direccion->creacion=date('Y-m-d H:i:s');
+					$direccion->usuario_creacion=Yii::app()->user->id;
+					$direccion->save();
 				}
 
-				$correo->contacto = $_POST['Doctores']['correo_electronico'];
-				$tip = TiposContacto::model()->findByName('Correo electrónico');
-				$correo->id_tipos_contacto = $tip['id'];
-				$correo->id_perfiles = $perfil->id;
-				$correo->id_persona = $usuario->id;
-				$correo->ultima_edicion=date('Y-m-d H:i:s');
-				$correo->usuario_ultima_edicion=Yii::app()->user->id;
-				$correo->creacion=date('Y-m-d H:i:s');
-				$correo->usuario_creacion=Yii::app()->user->id;
+				$model->id_direccion=$direccion->id;
 
 				if($model->save()){
 					if (isset($_POST['UnidadTieneDoctores'])) {
@@ -147,11 +131,41 @@ class DoctoresController extends Controller
 							}
 						}
 					}
+
+					if (isset($_POST['Contactos'])) {
+						foreach ($contactos as $i => $contacto) {
+							if (isset($_POST['Contactos'][$i])) {
+								$contacto->attributes=$_POST['Contactos'][$i];
+								$tip = TiposContacto::model()->findByName($i==0?'Casa':($i==1?'Consultorio':'Celular'));
+								$contacto->id_tipos_contacto = $tip['id'];
+								$contacto->id_perfiles = $perfil->id;
+								$contacto->id_persona = $model->id;
+								$contacto->ultima_edicion=date('Y-m-d H:i:s');
+								$contacto->usuario_ultima_edicion=Yii::app()->user->id;
+								$contacto->creacion=date('Y-m-d H:i:s');
+								$contacto->usuario_creacion=Yii::app()->user->id;
+								$contacto->save();
+							}
+						}
+					}
+
+					$correo->contacto = $_POST['Doctores']['correo_electronico'];
+					$tip = TiposContacto::model()->findByName('Correo electrónico');
+					$correo->id_tipos_contacto = $tip['id'];
+					$correo->id_perfiles = $perfil->id;
+					$correo->id_persona = $model->id;
+					$correo->ultima_edicion=date('Y-m-d H:i:s');
+					$correo->usuario_ultima_edicion=Yii::app()->user->id;
+					$correo->creacion=date('Y-m-d H:i:s');
+					$correo->usuario_creacion=Yii::app()->user->id;
 					$correo->save();
+
 					$usuario->usuario=substr($model->nombre, 0, 3).$usuario->id.'dci';
 					$usuario->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$usuario->id);
 					$usuario->save();
+
 					$transaction->commit();
+
 					$this->redirect(array('view','id'=>$model->id));
 				}
 				else{
@@ -392,26 +406,30 @@ class DoctoresController extends Controller
 	}
 
 	public function obtenerTelefonoConsultorio($data, $row){
+		$perfil = Perfiles::model()->findByName("Doctor");
 		$tipo = TiposContacto::model()->findByName('Consultorio');
-		$contacto = Contactos::model()->findByUser($data->id_usuarios, $tipo['id']);
+		$contacto = Contactos::model()->findByUser($data->id, $tipo['id'], $perfil->id);
 		return $contacto['contacto'];
 	}
 
 	public function obtenerTelefonoCasa($data, $row){
+		$perfil = Perfiles::model()->findByName("Doctor");
 		$tipo = TiposContacto::model()->findByName('Casa');
-		$contacto = Contactos::model()->findByUser($data->id_usuarios, $tipo['id']);
+		$contacto = Contactos::model()->findByUser($data->id, $tipo['id'], $perfil->id);
 		return $contacto['contacto'];
 	}
 
 	public function obtenerTelefonoCelular($data, $row){
+		$perfil = Perfiles::model()->findByName("Doctor");
 		$tipo = TiposContacto::model()->findByName('Celular');
-		$contacto = Contactos::model()->findByUser($data->id_usuarios, $tipo['id']);
+		$contacto = Contactos::model()->findByUser($data->id, $tipo['id'], $perfil->id);
 		return $contacto['contacto'];
 	}
 
 	public function obtenerCorreo($data, $row){
+		$perfil = Perfiles::model()->findByName("Doctor");
 		$tipo = TiposContacto::model()->findByName('Correo electrónico');
-		$contacto = Contactos::model()->findByUser($data->id_usuarios, $tipo['id']);
+		$contacto = Contactos::model()->findByUser($data->id, $tipo['id'], $perfil->id);
 		return $contacto['contacto'];
 	}
 
