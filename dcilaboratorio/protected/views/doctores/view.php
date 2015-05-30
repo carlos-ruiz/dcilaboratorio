@@ -65,7 +65,7 @@
 		'direccion.colonia',
 		'direccion.calle',
 		'direccion.numero_ext',
-		'direccion.numero_int',		
+		'direccion.num_int',		
 		'direccion.codigo_postal',			
 	),
 )); ?>
