@@ -1,75 +1,159 @@
-Date: Tue, 26 May 2015 21:24:12 +0200
-To: cruiz90@live.com
-From: Carlos Ruiz <carlos@techinc.com>
-Subject: Mail subject
-Message-ID: <03417440f131edb8fb6dece4e53d37ce@localhost>
+Date: Sun, 31 May 2015 19:25:04 +0200
+To: bjkbjkb@jbskj.com
+From: DCI Laboratorio <clientes@dcilaboratorio.com>
+Subject: Bienvenido a DCI Laboratorio
+Message-ID: <857b5038988fd9b0cedceaae1f916754@localhost>
 X-Priority: 3
 X-Mailer: PHPMailer 5.2.8 (https://github.com/PHPMailer/PHPMailer/)
 MIME-Version: 1.0
 Content-Type: multipart/alternative;
-	boundary="b1_03417440f131edb8fb6dece4e53d37ce"
+	boundary="b1_857b5038988fd9b0cedceaae1f916754"
 Content-Transfer-Encoding: 8bit
 
 
---b1_03417440f131edb8fb6dece4e53d37ce
-Content-Type: text/plain; charset=us-ascii
+--b1_857b5038988fd9b0cedceaae1f916754
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-DCI Laboratorio            
+DCI Laboratorio
+					
+				
+			
 		
 		
-            
-            	Contact form            
+		
+			
+							
+			
+				Bienvenido Dr. jkjk bjkb kjbjkb! 
+
+Se informa que puede ver y acceder a los resultados de sus exámenes en línea, accediendo a:  www.dcilaboratorio.com . 
+
+ Para poder ingresar se ha generado una cuenta especial para usted. 
+
+
+
+	* Usuario: jkj14dci
+	* Contraseña: lab$14
+
+			
 		
 		
-            
-				Message from John Doe: Message to send
-
-You may change the content of this page by modifying the following two files:
-
-	View file: /opt/lampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/mail/contact.php
-	Layout file: /opt/lampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/mail.php
+			 ¡DCI Laboratorio agradece tu peferencia! 
+				Para cualquier aclaración comunicarse al: (443) 3-22-11-22.
 
 
---b1_03417440f131edb8fb6dece4e53d37ce
+--b1_857b5038988fd9b0cedceaae1f916754
 Content-Type: multipart/related;
-	boundary="b2_03417440f131edb8fb6dece4e53d37ce"
+	boundary="b2_857b5038988fd9b0cedceaae1f916754"
 
---b2_03417440f131edb8fb6dece4e53d37ce
-Content-Type: text/html; charset=us-ascii
+--b2_857b5038988fd9b0cedceaae1f916754
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+<!DOCTYPE html>
 <html>
-<head>
-	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
-</head>
-<body>
-<table cellspacing="0" cellpadding="10" style="color:#666;font:13px Arial;line-height:1.4em;width:100%;">
-	<tbody>
-		<tr>
-            <td style="color:#4D90FE;font-size:22px;border-bottom: 2px solid #4D90FE;">
-				<a href="http://www.dcilaboratorio.com/"><img alt="dcilaboratorio.com" src="cid:166387ec54524647c96ce03c04d374d6@phpmailer.0" /></a>
-				DCI Laboratorio            </td>
-		</tr>
-		<tr>
-            <td style="color:#777;font-size:16px;padding-top:5px;">
-            	Contact form            </td>
-		</tr>
-		<tr>
-            <td>
-				<p>Message from John Doe: Message to send</p>
+	<head>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				background-color:white;
+				font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+			}
+			h1 {
+				color:#3B3F51;
+			}
+			p {
+				font-size: 12pt;
+			}
+			.encabezado {
+				background-color:#3B3F51;
+				height: 80;
+				color: white;
+			}
 
-<p>You may change the content of this page by modifying the following two files:</p>
-<ul>
-	<li>View file: <tt>/opt/lampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/mail/contact.php</tt></li>
-	<li>Layout file: <tt>/opt/lampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/mail.php</tt></li>
-</ul>            </td>
-		</tr>
-	</tbody>
-</table>
-</body>
+			.img{
+				padding-top: 10px;
+				padding-left: 10px;	
+			}
+			.importante{
+				font-size: 16pt;
+				color:#1E90FF;
+			}
+			.margen{
+				padding-left: 100px;	
+			}
+
+			.header, .footer {
+				background-color:#3B3F51;
+				color: white;
+			}
+
+			.header h1 {
+				color: white;
+				display: inline-block;
+			}
+
+			.align-center {
+				text-align: center;
+			}
+
+			table {
+				width: 100%;
+			}
+			td {
+				white-space: nowrap;
+			}
+
+		</style>
+	</head>
+	
+	<body>
+		<div class="header">
+			<table>
+				<tr>
+					<td>
+						<a href="http://www.dcilaboratorio.com/" style="float:left;">
+							<img class="img" src="cid:166387ec54524647c96ce03c04d374d6@phpmailer.0" alt="logo"  height="50" width="60" class="logo-default" alt="dcilaboratorio.com" />
+						</a>
+					</td>
+					<td class="align-center" width="100%">
+						<h1>DCI Laboratorio</h1>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<br />
+		<section class="contenido">
+			<h2 style="color:#777;font-size:16px;padding-top:5px;">
+							</h2>
+			<p>
+				<h1>Bienvenido Dr. jkjk bjkb kjbjkb! </h1>
+<br />
+<p>Se informa que puede ver y acceder a los resultados de sus exámenes en línea, accediendo a: <a href="www.dcilaboratorio.com"> www.dcilaboratorio.com </a>.</p> 
+
+<p> Para poder ingresar se ha generado una cuenta especial para usted.</p> 
+<br />
+
+<div class="margen">
+	<p>* Usuario: <span class="importante">jkj14dci</span></p>
+	<p>* Contraseña: <span class="importante">lab$14</span></p>
+</div>
+			</p>
+		</section>
+		<div class="footer">
+			<p class="align-center"> ¡DCI Laboratorio agradece tu peferencia! <br/>
+				Para cualquier aclaración comunicarse al: (443) 3-22-11-22.
+			</p>
+		</div>
+	</body>
 </html>
 
 
---b2_03417440f131edb8fb6dece4e53d37ce
+--b2_857b5038988fd9b0cedceaae1f916754
 Content-Type: image/png; name="dci.png"
 Content-Transfer-Encoding: base64
 Content-ID: <166387ec54524647c96ce03c04d374d6@phpmailer.0>
@@ -308,7 +392,7 @@ tAVLEqsvL0ITbvgL+FxJ6E7UhN5kTejP1IXhbOt4vNy5L4+fr3WBfgGUznb/Y7qc4SH/L5ehXkIm
 +LhH8f497TKl/38H3zP26wIodKbhYe77/wMmcttEOXwI2QAAAABJRU5ErkJggg==
 
 
---b2_03417440f131edb8fb6dece4e53d37ce--
+--b2_857b5038988fd9b0cedceaae1f916754--
 
 
---b1_03417440f131edb8fb6dece4e53d37ce--
+--b1_857b5038988fd9b0cedceaae1f916754--

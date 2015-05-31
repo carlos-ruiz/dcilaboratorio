@@ -166,6 +166,13 @@ class DoctoresController extends Controller
 
 					$transaction->commit();
 
+					if ($correo->contacto == '') {
+						$this->redirect(array('view','id'=>$model->id));
+					}
+					$titulo = TitulosForm::model()->findByPk($model->id_titulos);
+					$nombreDoctor = $titulo->nombre.' '.$model->nombre.' '.$model->a_paterno.' '.$model->a_materno;
+					$this->enviarAccesoPorCorreo($nombreDoctor, $usuario->usuario, base64_decode($usuario->contrasena), $correo->contacto);
+
 					$this->redirect(array('view','id'=>$model->id));
 				}
 				else{
@@ -452,5 +459,19 @@ class DoctoresController extends Controller
 			$resultado.=$ur['nombre'];
 		}
 		return $resultado;
-	} 
+	}
+
+	public function enviarAccesoPorCorreo($nombreDoctor, $usuario, $contrasena, $correo){
+		$mail = new YiiMailer();
+		$mail->setView('enviarContrasena');
+		$mail->setData(array('nombreCompleto' => $nombreDoctor, 'usuario' => $usuario, 'contrasena' => $contrasena,));
+		$mail->setFrom('clientes@dcilaboratorio.com', 'DCI Laboratorio');
+		$mail->setTo($correo);
+		$mail->setSubject('Bienvenido a DCI Laboratorio');
+		if ($mail->send()) {
+			Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
+		} else {
+			Yii::app()->user->setFlash('error','Error while sending email: '.$mail->getError());
+		}
+	}
 }
