@@ -1,30 +1,27 @@
 <?php
 
 /**
- * This is the model class for table "orden_tiene_examenes".
+ * This is the model class for table "ordenes_facturacion".
  *
- * The followings are the available columns in table 'orden_tiene_examenes':
+ * The followings are the available columns in table 'ordenes_facturacion':
  * @property integer $id
+ * @property integer $id_datos_facturacion
  * @property integer $id_ordenes
- * @property string $resultado
- * @property integer $id_detalles_examen
- * @property string $ultima_edicion
- * @property integer $usuario_ultima_edicion
- * @property string $creacion
- * @property integer $usuario_creacion
+ * @property integer $id_pacientes
  *
  * The followings are the available model relations:
- * @property DetallesExamen $idDetallesExamen
+ * @property DatosFacturacion $idDatosFacturacion
  * @property Ordenes $idOrdenes
+ * @property Pacientes $idPacientes
  */
-class OrdenTieneExamenes extends CActiveRecord
+class OrdenesFacturacion extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'orden_tiene_examenes';
+		return 'ordenes_facturacion';
 	}
 
 	/**
@@ -35,12 +32,11 @@ class OrdenTieneExamenes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_ordenes, id_detalles_examen, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('id_ordenes, id_detalles_examen, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('resultado', 'length', 'max'=>45),
+			array('id_ordenes, id_pacientes', 'required'),
+			array('id_datos_facturacion, id_ordenes, id_pacientes', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_ordenes, resultado, id_detalles_examen, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, id_datos_facturacion, id_ordenes, id_pacientes', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,8 +48,9 @@ class OrdenTieneExamenes extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'detalleExamen' => array(self::BELONGS_TO, 'DetallesExamen', 'id_detalles_examen','order'=>'detalleExamen.id_examenes ASC'),
-			'orden' => array(self::BELONGS_TO, 'Ordenes', 'id_ordenes'),
+			'idDatosFacturacion' => array(self::BELONGS_TO, 'DatosFacturacion', 'id_datos_facturacion'),
+			'idOrdenes' => array(self::BELONGS_TO, 'Ordenes', 'id_ordenes'),
+			'idPacientes' => array(self::BELONGS_TO, 'Pacientes', 'id_pacientes'),
 		);
 	}
 
@@ -64,13 +61,9 @@ class OrdenTieneExamenes extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'id_datos_facturacion' => 'Id Datos Facturacion',
 			'id_ordenes' => 'Id Ordenes',
-			'resultado' => 'Resultado',
-			'id_detalles_examen' => 'Id Detalles Examen',
-			'ultima_edicion' => 'Ultima Edicion',
-			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
-			'creacion' => 'Creacion',
-			'usuario_creacion' => 'Usuario Creacion',
+			'id_pacientes' => 'Id Pacientes',
 		);
 	}
 
@@ -93,13 +86,9 @@ class OrdenTieneExamenes extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('id_datos_facturacion',$this->id_datos_facturacion);
 		$criteria->compare('id_ordenes',$this->id_ordenes);
-		$criteria->compare('resultado',$this->resultado,true);
-		$criteria->compare('id_detalles_examen',$this->id_detalles_examen);
-		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
-		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
-		$criteria->compare('creacion',$this->creacion,true);
-		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		$criteria->compare('id_pacientes',$this->id_pacientes);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -110,7 +99,7 @@ class OrdenTieneExamenes extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return OrdenTieneExamenes the static model class
+	 * @return OrdenesFacturacion the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

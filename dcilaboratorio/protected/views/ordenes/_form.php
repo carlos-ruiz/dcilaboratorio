@@ -19,6 +19,17 @@
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 )); ?>
+<?php 
+echo $form->errorSummary($model);
+echo "<br /><br />";
+echo $form->errorSummary($paciente);
+echo "<br /><br />";
+echo $form->errorSummary($direccion);
+echo "<br /><br />";
+echo $form->errorSummary($pagos);
+echo "<br /><br />";
+echo $form->errorSummary($datosFacturacion);
+?>
 
 	<div class="form-body">
 
@@ -88,7 +99,7 @@
 						<div class="form-group col-md-6 <?php if($form->error($model,'id_doctores')!=''){ echo 'has-error'; }?>">
 									<?php echo $form->labelEx($model,'id_doctores', array('class'=>'control-label')); ?>
 									<div class="input-group">
-										<?php echo $form->dropDownList($model,'id_doctores',$model->obtenerDoctores(), array("empty"=>"Seleccione una opción", 'class'=>'form-control medium-field select2me','onchange' => 'javascript:$("#compartirDr").toggle()')); ?>
+										<?php echo $form->dropDownList($model,'id_doctores',$model->obtenerDoctores(), array("empty"=>"Seleccione una opción", 'class'=>'form-control input-medium select2me','onchange' => 'javascript:$("#compartirDr").toggle()')); ?>
 										<?php echo $form->error($model,'id_doctores', array('class'=>'help-block')); ?>
 									</div>
 						</div>
@@ -128,7 +139,7 @@
 						<div class="form-group col-md-6 <?php if($form->error($model,'id_multitarifarios')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($model,'id_multitarifarios', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->dropDownList($model,'id_multitarifarios',$model->obtenerMultitarifarios(), array("empty"=>"Seleccione una opción", 'class'=>'form-control select2me')); ?>
+								<?php echo $form->dropDownList($model,'id_multitarifarios',$model->obtenerMultitarifarios(), array("empty"=>"Seleccione una opción", 'class'=>'form-control input-medium select2me')); ?>
 								<?php echo $form->error($model,'id_multitarifarios', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -177,7 +188,7 @@
 											"type"=>"POST",
 											"update"=>"#Direcciones_id_municipios"
 										),
-										"class" => "form-control select2me",
+										"class" => "form-control input-medium select2me",
 										"empty"=>"Seleccione una opci&oacute;n",
 										"data-placeholder"=>"--Seleccione--",
 									);
@@ -190,7 +201,7 @@
 						<div class="form-group col-md-6 <?php if($form->error($direccion,'id_municipios')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($direccion,'id_municipios', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->dropDownList($direccion,'id_municipios',$direccion->obtenerMunicipios(), array('class' => 'form-control select2me',"empty"=>"Seleccione una opci&oacute;n")); ?>
+								<?php echo $form->dropDownList($direccion,'id_municipios',$direccion->obtenerMunicipios(), array('class' => 'form-control input-medium select2me',"empty"=>"Seleccione una opci&oacute;n")); ?>
 								<?php echo $form->error($direccion,'id_municipios', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -248,25 +259,25 @@
 						<hr/>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-8">
-							<div class="form-group col-md-8">
+						<div class="form-group col-md-9">
+							<div class="form-group col-md-6">
 								<?php echo "<label class='control-label'>Examen</label>"?>
 								<div class="input-group">
-									<?php echo $form->dropDownList($examenes,'clave', Examenes::model()->selectListWithClave(), array('class'=>'form-control select2me')); ?>
+									<?php echo $form->dropDownList($examenes,'clave', Examenes::model()->selectListWithClave(), array('class'=>'form-control input-medium select2me')); ?>
 								</div>
 							</div>
 
-							<div class="form-group col-md-4">
+							<div class="form-group col-md-6">
 								<?php echo "<label class='control-label'>Grupo de exámenes</label>"?>
 								<div class="input-group">
-									<?php echo $form->dropDownList($examenes,'nombre', Grupos::model()->selectList(), array('class'=>'form-control select2me')); ?>
+									<?php echo $form->dropDownList($examenes,'nombre', Grupos::model()->selectList(), array('class'=>'form-control input-medium select2me')); ?>
 								</div>
 							</div>
 						</div>
 					
-						<div class="form-group  col-md-4" >
+						<div class="form-group col-md-3" >
 							<div class="input-group">
-							<input type="hidden" id="examenesIds" name="Examenes[ids]" value />
+								<input type="hidden" id="examenesIds" name="Examenes[ids]" value />
 								<a href="js:void(0);" class="btn default blue-stripe" id="agregarExamen">Agregar</a>
 							</div>
 						</div>
@@ -394,11 +405,11 @@
 	}
 
 	$("#Examenes_nombre").change(function(){
-		$("#Examenes_clave").val(0);
+		$("#Examenes_clave").select2('val',null);
 	});
 
 	$("#Examenes_clave").change(function(){
-		$("#Examenes_nombre").val(0);
+		$("#Examenes_nombre").select2('val',null);
 	});
 
 	$("#agregarExamen").click(function(){
@@ -442,7 +453,9 @@
 								$("#examenesAgregados").html("");
 							}
 							$("#examenesAgregados").html(data);
-							examenesIds.push(idExamen);
+							$(".eliminarExamen").each(function(){
+								examenesIds.push($(this).data('id'));
+							});
 							activarEliminacion();
 						}
 					);
@@ -453,11 +466,30 @@
 			}
 		}
 		else{
-			alerta("Debe seleccionar un multitarifario");
+			alerta("Debe seleccionar un multitarifario","Aviso");
 		}
 	});
 
-
+	$("#Ordenes_id_multitarifarios").change(function(){
+		var ids="";
+		var idMultitarifario = $(this).val();
+		if(examenesIds.length>0){
+			for (var i = 0; i < examenesIds.length; i++) {
+				ids+=examenesIds[i]+",";
+			};
+			$.post(
+					"<?php echo $this->createUrl('ordenes/actualizarPrecios/');?>",
+					{
+						examenes:ids,
+						tarifa:idMultitarifario
+					},
+					function(data){
+						$("#examenesAgregados").html(data);
+						activarEliminacion();
+					}
+				);
+		}
+	});
 
 </script>
 

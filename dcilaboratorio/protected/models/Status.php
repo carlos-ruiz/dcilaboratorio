@@ -112,4 +112,9 @@ class Status extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function findByName($name){
+		$status = $this->model()->find("nombre=?",array($name));
+		return $status->id;
+	}
 }

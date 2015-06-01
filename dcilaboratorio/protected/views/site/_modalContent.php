@@ -9,7 +9,7 @@
 	
 </script>
 <?php
-$orden =Ordenes::model()->findByPk(3);
+$orden = Ordenes::model()->findByPk(18);
 $aux=$orden->ordenTieneExamenes;
 $anterior=0;
  foreach ($aux as $ordenExamen): 

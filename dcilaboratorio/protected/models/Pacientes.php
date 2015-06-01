@@ -41,7 +41,7 @@ class Pacientes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, a_paterno, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios, email, fecha_nacimiento, sexo', 'required'),
+			array('nombre, a_paterno, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, email, fecha_nacimiento, sexo', 'required'),
 			array('sexo, usuario_ultima_edicion, usuario_creacion, id_usuarios, activo', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, email', 'length', 'max'=>45),
 			array('fecha_nacimiento', 'safe'),
