@@ -34,7 +34,7 @@ class EspecialidadesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'sendMail'),
+				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -175,20 +175,6 @@ class EspecialidadesController extends Controller
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
-		}
-	}
-
-	public function actionSendMail(){
-		$mail = new YiiMailer();
-		$mail->setView('contact');
-		$mail->setData(array('message' => 'Message to send', 'name' => 'John Doe', 'description' => 'Contact form', 'pass' => 'HolaPass',));
-		$mail->setFrom('carlos@techinc.com', 'Carlos Ruiz');
-		$mail->setTo(Yii::app()->params['adminEmail']);
-		$mail->setSubject('Mail subject');
-		if ($mail->send()) {
-			Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
-		} else {
-			Yii::app()->user->setFlash('error','Error while sending email: '.$mail->getError());
 		}
 	}
 }

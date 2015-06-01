@@ -5,4 +5,9 @@
 
 <h1>Actualizar unidad responsable: <?php echo $model->nombre; ?></h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', array(
+	'model'=>$model,
+	'direccion'=>$direccion,
+	'contacto'=>$contacto,
+	)
+); ?>

@@ -6,4 +6,9 @@
 
 <h1>Nueva unidad responsable</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'direccion' => $direccion)); ?>
+<?php $this->renderPartial('_form', array(
+	'model'=>$model, 
+	'direccion'=>$direccion, 
+	'contacto'=>$contacto,
+	)
+); ?>

@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"text",
+				"text-align"
+			],
+			[
+				"find",
+				"findByPk"
+			],
+			[
+				"id",
+				"id_estado"
+			],
+			[
 				"id_d",
 				"id_direccion"
 			],
@@ -34,10 +46,6 @@
 			[
 				"ui",
 				"unidades"
-			],
-			[
-				"id",
-				"id_unidades_responsables"
 			],
 			[
 				"doc",
@@ -98,10 +106,6 @@
 			[
 				"tp",
 				"tipo_contacto"
-			],
-			[
-				"find",
-				"findByName"
 			],
 			[
 				"a_",
@@ -200,35 +204,43 @@
 	"buffers":
 	[
 		{
-			"file": "dcilaboratorio/protected/models/Pagos.php",
+			"file": "dcilaboratorio/protected/views/doctores/view.php",
 			"settings":
 			{
-				"buffer_size": 3867,
+				"buffer_size": 1944,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/models/Doctores.php",
+			"file": "dcilaboratorio/protected/views/mail/enviarContrasena.php",
 			"settings":
 			{
-				"buffer_size": 7453,
+				"buffer_size": 492,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
+			"file": "dcilaboratorio/protected/views/layouts/mail.php",
 			"settings":
 			{
-				"buffer_size": 13384,
+				"buffer_size": 1407,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/runtime/application.log",
+			"file": "dcilaboratorio/protected/controllers/EspecialidadesController.php",
 			"settings":
 			{
-				"buffer_size": 138058,
-				"line_ending": "Unix"
+				"buffer_size": 5133,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/mail/contact.php",
+			"settings":
+			{
+				"buffer_size": 321,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -336,23 +348,29 @@
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/config",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/mail"
 	],
 	"file_history":
 	[
+		"/C/Users/Carlos/Downloads/envio.html",
+		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Doctores.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/_form.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/create.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/update.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/DoctoresController.php",
+		"/C/Users/Carlos/Downloads/dcilab_28may.sql",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Municipio.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Direccion.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Pagos.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/menu.php",
 		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/Base de Datos/scripts/dcilab_26may.sql",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/DoctoresController.php",
 		"/C/Users/Carlos/AppData/Local/Temp/25c44905-d916-4e99-ac03-dacc59b3b21d/dcilaboratorio/protected/controllers/DoctoresController.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
 		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/Base de Datos/scripts/dcilab_22may.sql",
 		"/C/Users/Carlos/Documents/Development/glassfish4.0.1/glassfish/domains/domainZeitek/config/domain.xml",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/_form.php",
 		"/C/Users/Carlos/Downloads/cgi_error_log (4)",
 		"/C/Users/Carlos/Downloads/cgi_error_log (5)",
 		"/C/Users/Carlos/Downloads/DoctoresController.php",
@@ -368,14 +386,11 @@
 		"/C/Users/Carlos/Downloads/dcilab (1).sql",
 		"/C/Users/Carlos/AppData/Local/Temp/25c44905-d916-4e99-ac03-dacc59b3b21d/dcilaboratorio/protected/config/database.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/admin.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Doctores.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/view.php",
 		"/C/Users/Carlos/Downloads/Doctores.php",
 		"/C/Users/Carlos/Downloads/webalizer.hist",
 		"/C/Users/Carlos/Downloads/application.log",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/UnidadTieneDoctores.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/update.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/create.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/.gitkeep",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Contactos.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/GruposController.php",
@@ -415,7 +430,6 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/TarifasActivas.php",
 		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data/es_mx.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Multitarifarios.php",
-		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
 		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/index.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/multitarifarios/admin.php",
@@ -466,7 +480,7 @@
 	],
 	"find":
 	{
-		"height": 38.0
+		"height": 36.0
 	},
 	"find_in_files":
 	{
@@ -487,6 +501,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"actionUpdate",
+			"idUsuarios",
 			"especial",
 			"porcentaje",
 			"id_direccion",
@@ -567,86 +583,84 @@
 			[
 				{
 					"buffer": 0,
-					"file": "dcilaboratorio/protected/models/Pagos.php",
+					"file": "dcilaboratorio/protected/views/doctores/view.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3867,
+						"buffer_size": 1944,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3053,
-								3053
+								574,
+								574
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2530.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "dcilaboratorio/protected/models/Doctores.php",
+					"file": "dcilaboratorio/protected/views/mail/enviarContrasena.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7453,
+						"buffer_size": 492,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7157,
-								7157
+								308,
+								308
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4027.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
-					"semi_transient": true,
+					"file": "dcilaboratorio/protected/views/layouts/mail.php",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13384,
+						"buffer_size": 1407,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4418,
-								4418
+								758,
+								758
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2970.0,
+						"translation.y": 749.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -654,11 +668,40 @@
 				},
 				{
 					"buffer": 3,
-					"file": "dcilaboratorio/protected/runtime/application.log",
+					"file": "dcilaboratorio/protected/controllers/EspecialidadesController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 138058,
+						"buffer_size": 5133,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4669,
+								4669
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3470.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "dcilaboratorio/protected/views/mail/contact.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 321,
 						"regions":
 						{
 						},
@@ -671,13 +714,13 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 52382.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -685,7 +728,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 30.0
+		"height": 36.0
 	},
 	"input":
 	{
@@ -726,7 +769,7 @@
 	"project": "dciproject.sublime-project",
 	"replace":
 	{
-		"height": 56.0
+		"height": 52.0
 	},
 	"save_all_on_build": true,
 	"select_file":

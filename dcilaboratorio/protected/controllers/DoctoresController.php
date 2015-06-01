@@ -166,6 +166,13 @@ class DoctoresController extends Controller
 
 					$transaction->commit();
 
+					if ($correo->contacto == '') {
+						$this->redirect(array('view','id'=>$model->id));
+					}
+					$titulo = TitulosForm::model()->findByPk($model->id_titulos);
+					$nombreDoctor = $titulo->nombre.' '.$model->nombre.' '.$model->a_paterno.' '.$model->a_materno;
+					$this->enviarAccesoPorCorreo($nombreDoctor, $usuario->usuario, base64_decode($usuario->contrasena), $correo->contacto);
+
 					$this->redirect(array('view','id'=>$model->id));
 				}
 				else{
@@ -187,7 +194,8 @@ class DoctoresController extends Controller
 			'unidad'=>$unidadDoctores,
 			'unidadesSeleccionadas'=>$unidadesSeleccionadas,
 			'direccion' => $direccion,
-			));
+			)
+		);
 	}
 
 	/**
@@ -197,21 +205,23 @@ class DoctoresController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$perfil = Perfiles::model()->findByName("Doctor");
+		$model = $this->loadModel($id);
+		$direccion = Direcciones::model()->findByPk($model->id_direccion);
 		$tipo = TiposContacto::model()->findByName('Casa');
-		$contact = Contactos::model()->findByUser($model->id_usuarios, $tipo['id']);
+		$contact = Contactos::model()->findByUser($model->id, $tipo['id'], $perfil->id);
 		$contacto_casa_id = $contact['id'];
 
 		$tipo = TiposContacto::model()->findByName('Consultorio');
-		$contact = Contactos::model()->findByUser($model->id_usuarios, $tipo['id']);
+		$contact = Contactos::model()->findByUser($model->id, $tipo['id'], $perfil->id);
 		$contacto_consultorio_id = $contact['id'];
 
 		$tipo = TiposContacto::model()->findByName('Celular');
-		$contact = Contactos::model()->findByUser($model->id_usuarios, $tipo['id']);
+		$contact = Contactos::model()->findByUser($model->id, $tipo['id'], $perfil->id);
 		$contacto_celular_id = $contact['id'];
 
 		$tipo = TiposContacto::model()->findByName('Correo electrónico');
-		$contact = Contactos::model()->findByUser($model->id_usuarios, $tipo['id']);
+		$contact = Contactos::model()->findByUser($model->id, $tipo['id'], $perfil->id);
 		$contacto_correo_id = $contact['id'];
 
 		$contactos = array();
@@ -252,6 +262,8 @@ class DoctoresController extends Controller
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
 				$model->attributes=$_POST['Doctores'];
+				$correo->contacto = $_POST['Doctores']['correo_electronico'];
+				$correo->save();
 				if (isset($_POST['Contactos'])) {
 					foreach ($contactos as $i => $contacto) {
 						$contactoBorrar = Contactos::model()->findByPk($contacto->id);
@@ -267,7 +279,7 @@ class DoctoresController extends Controller
 							$tipo = TiposContacto::model()->findByName($i==0?'Casa':($i==1?'Consultorio':'Celular'));
 							$contacto->id_tipos_contacto = $tipo['id'];
 							$contacto->id_perfiles = $perfil->id;
-							$contacto->id_persona = $model->id_usuarios;
+							$contacto->id_persona = $model->id;
 							$contacto->ultima_edicion=date('Y-m-d H:i:s');
 							$contacto->usuario_ultima_edicion=Yii::app()->user->id;
 							$contacto->creacion=date('Y-m-d H:i:s');
@@ -279,8 +291,10 @@ class DoctoresController extends Controller
 					}
 				}
 
-				$correo->contacto = $model->correo_electronico;
-				//$correo->save();
+				if (isset($_POST['Direcciones'])) {
+					$direccion->attributes = $_POST['Direcciones'];
+					$direccion->save();
+				}
 
 				if($model->save()) {
 					if (isset($_POST['UnidadTieneDoctores'])) {
@@ -318,6 +332,7 @@ class DoctoresController extends Controller
 			'urs'=>$urs,
 			'unidad'=>$unidadDoctores,
 			'unidadesSeleccionadas'=>$unidadesSeleccionadas,
+			'direccion'=>$direccion,
 			));
 	}
 
@@ -444,5 +459,19 @@ class DoctoresController extends Controller
 			$resultado.=$ur['nombre'];
 		}
 		return $resultado;
-	} 
+	}
+
+	public function enviarAccesoPorCorreo($nombreDoctor, $usuario, $contrasena, $correo){
+		$mail = new YiiMailer();
+		$mail->setView('enviarContrasena');
+		$mail->setData(array('nombreCompleto' => $nombreDoctor, 'usuario' => $usuario, 'contrasena' => $contrasena,));
+		$mail->setFrom('clientes@dcilaboratorio.com', 'DCI Laboratorio');
+		$mail->setTo($correo);
+		$mail->setSubject('Bienvenido a DCI Laboratorio');
+		if ($mail->send()) {
+			Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
+		} else {
+			Yii::app()->user->setFlash('error','Error while sending email: '.$mail->getError());
+		}
+	}
 }

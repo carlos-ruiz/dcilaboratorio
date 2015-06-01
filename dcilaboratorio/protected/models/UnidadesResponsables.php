@@ -63,7 +63,7 @@ class UnidadesResponsables extends CActiveRecord
 		return array(
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_unidades_responsables'),
 			'unidadTieneDoctores' => array(self::HAS_MANY, 'UnidadTieneDoctores', 'id_unidades_responsables'),
-			'idDireccion' => array(self::BELONGS_TO, 'Direcciones', 'id_direccion'),
+			'direccion' => array(self::BELONGS_TO, 'Direcciones', 'id_direccion'),
 		);
 	}
 
@@ -87,6 +87,8 @@ class UnidadesResponsables extends CActiveRecord
 			'usuario_creacion' => 'Usuario Creacion',
 			'activo' => 'Activo',
 			'id_direccion' => 'Direccion',
+			'direccion.estado.nombre' => 'Estado',
+			'direccion.municipio.nombre' => 'Municipio',
 		);
 	}
 
