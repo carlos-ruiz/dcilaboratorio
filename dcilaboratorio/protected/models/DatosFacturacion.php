@@ -30,7 +30,7 @@ class DatosFacturacion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, RFC, razon_social, id_direccion,', 'required'),
+			array('RFC, razon_social', 'required'),
 			array('id', 'numerical', 'integerOnly'=>true),
 			array('razon_social', 'length', 'max'=>500),
 			array('RFC', 'length', 'max'=>13),

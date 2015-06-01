@@ -100,9 +100,10 @@ class OrdenesController extends Controller
 				$datosFacturacion->validate();
 				$direccion->validate();
 			}
+
 			if($model->validate() & $paciente->validate() & $pagos->validate()){
-				//$transaction = Yii::app()->db->beginTransaction();
-				//try{
+				$transaction = Yii::app()->db->beginTransaction();
+				try{
 					
 					$model->save();
 
@@ -125,7 +126,7 @@ class OrdenesController extends Controller
 					$paciente->id_usuarios=$user->id;
 					$paciente->save();
 
-					$odenFacturacion = new OrdenesFacturacion;
+					$ordenFacturacion = new OrdenesFacturacion;
 					if($model->requiere_factura==1){
 						$direccion->save();
 						$datosFacturacion->id_direccion=$direccion->id;
@@ -133,19 +134,19 @@ class OrdenesController extends Controller
 						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 					}
 
-					$odenFacturacion->id_pacientes=$paciente->id;
-					$odenFacturacion->id_ordenes=$model->id;
+					$ordenFacturacion->id_pacientes=$paciente->id;
+					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
 
 					$pagos->id_ordenes=$model->id;
-
+					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
 
 					
-				//}catch(Exception $e){
-					//print_r($e);
-				//	$transaction->rollback();
-				//}
+				}catch(Exception $e){
+					print_r($e);
+					$transaction->rollback();
+				}
 			}
 			
 		}
