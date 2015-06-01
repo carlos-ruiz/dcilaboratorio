@@ -88,7 +88,7 @@
 						<div class="form-group col-md-6 <?php if($form->error($model,'id_doctores')!=''){ echo 'has-error'; }?>">
 									<?php echo $form->labelEx($model,'id_doctores', array('class'=>'control-label')); ?>
 									<div class="input-group">
-										<?php echo $form->dropDownList($model,'id_doctores',$model->obtenerDoctores(), array("empty"=>"Seleccione una opción", 'class'=>'form-control select2me','onchange' => 'javascript:$("#compartirDr").toggle()')); ?>
+										<?php echo $form->dropDownList($model,'id_doctores',$model->obtenerDoctores(), array("empty"=>"Seleccione una opción", 'class'=>'form-control medium-field select2me','onchange' => 'javascript:$("#compartirDr").toggle()')); ?>
 										<?php echo $form->error($model,'id_doctores', array('class'=>'help-block')); ?>
 									</div>
 						</div>
@@ -249,35 +249,29 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-md-8">
-							<div class="form-group col-md-4">
-								<?php echo "<label class='control-label'>Clave de examen</label>"?>
+							<div class="form-group col-md-8">
+								<?php echo "<label class='control-label'>Examen</label>"?>
 								<div class="input-group">
-									<?php echo $form->dropDownList($examenes,'clave', $model->obtenerExamenesClave(), array("empty"=>"Seleccione una opción", 'class'=>'form-control select2me')); ?>
-								</div>
-							</div>
-							<div class="form-group col-md-4">
-								<?php echo "<label class='control-label'>Exámenes</label>"?>
-								<div class="input-group">
-									<?php echo $form->dropDownList($examenes,'id', $model->obtenerExamenes(), array("empty"=>"Seleccione una opción", 'class'=>'form-control select2me')); ?>
+									<?php echo $form->dropDownList($examenes,'clave', Examenes::model()->selectListWithClave(), array('class'=>'form-control select2me')); ?>
 								</div>
 							</div>
 
 							<div class="form-group col-md-4">
 								<?php echo "<label class='control-label'>Grupo de exámenes</label>"?>
 								<div class="input-group">
-									<?php echo $form->dropDownList($examenes,'clave', $model->obtenerGrupoExamenes(), array("empty"=>"Seleccione una opción", 'class'=>'form-control select2me')); ?>
+									<?php echo $form->dropDownList($examenes,'nombre', Grupos::model()->selectList(), array('class'=>'form-control select2me')); ?>
 								</div>
 							</div>
 						</div>
 					
 						<div class="form-group  col-md-4" >
 							<div class="input-group">
-							<?php echo CHtml::submitButton( 'Agregar' , array('class'=>'btn blue-stripe')); ?>
+							<input type="hidden" id="examenesIds" name="Examenes[ids]" value />
+								<a href="js:void(0);" class="btn default blue-stripe" id="agregarExamen">Agregar</a>
 							</div>
 						</div>
 					</div>
 				</section>
-				<br />
 				<section id="examenes" >
 					<table class="table table-striped table-bordered dataTable">
 						<thead >
@@ -287,12 +281,7 @@
 								<th>Precio</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
+						<tbody id="examenesAgregados">
 						</tbody>
 					</table>
 				</section>
@@ -309,7 +298,6 @@
 											<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
 										</div>
 								</div>
-								
 								<div class="form-group col-md-6  <?php if($form->error($model,'costo_emergencia')!=''){ echo 'has-error'; }?>">
 										<?php echo $form->labelEx($model,'costo_emergencia', array('class'=>'control-label')); ?>
 										<div class="input-group">
@@ -388,4 +376,88 @@
 </div>
 
 </div><!-- form -->
+
+<script type="text/javascript">
+	examenesIds=[];
+
+	function activarEliminacion(){
+		$(".eliminarExamen").click(function(){
+			$(".row_"+$(this).data('id')).hide(400);
+			$(".row_"+$(this).data('id')).html("");
+			aux=[];
+			for (var i = examenesIds.length - 1; i >= 0; i--) {
+				if(examenesIds[i]!=$(this).data('id'))
+				aux.push(examenesIds[i]);
+			};
+			examenesIds=aux;
+		});
+	}
+
+	$("#Examenes_nombre").change(function(){
+		$("#Examenes_clave").val(0);
+	});
+
+	$("#Examenes_clave").change(function(){
+		$("#Examenes_nombre").val(0);
+	});
+
+	$("#agregarExamen").click(function(){
+		var idMultitarifario = $("#Ordenes_id_multitarifarios").val();
+		var idExamen = $("#Examenes_clave").val();
+		var idGrupo = $("#Examenes_nombre").val();
+		if(idMultitarifario>0){
+			if(idExamen>0){
+				for(var i=0;i<examenesIds.length;i++){
+					if(idExamen==examenesIds[i]){
+						alerta("El examen seleccionado ya se encuentra en la lista de examenes a realizar");
+						return;
+					}
+				}
+				$.post(
+					"<?php echo $this->createUrl('ordenes/agregarExamen/');?>",
+					{
+						id:idExamen,
+						tarifa:idMultitarifario
+					},
+					function(data){
+						$("#examenesAgregados").append(data);
+						examenesIds.push(idExamen);
+						activarEliminacion();
+					}
+				);
+			}
+			else{ 
+				if(idGrupo>0){
+					$.post(
+						"<?php echo $this->createUrl('ordenes/agregarGrupoExamen/');?>",
+						{
+							id:idGrupo,
+							tarifa:idMultitarifario
+						},
+						function(data){
+							for(var i=0;i<examenesIds.length;i++){
+								$(".row_"+examenesIds[i]).hide(400);
+								$(".row_"+examenesIds[i]).html("");
+								examenesIds=[];
+								$("#examenesAgregados").html("");
+							}
+							$("#examenesAgregados").html(data);
+							examenesIds.push(idExamen);
+							activarEliminacion();
+						}
+					);
+				}
+				else{
+					alerta("Debe seleccionar un examen o grupo de examenes");
+				}
+			}
+		}
+		else{
+			alerta("Debe seleccionar un multitarifario");
+		}
+	});
+
+
+
+</script>
 

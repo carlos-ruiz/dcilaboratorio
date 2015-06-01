@@ -60,6 +60,32 @@
 	<link rel="shortcut icon" href="fav	icon.ico"/>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		function alerta(mensaje){
+			$("#modalTitle").html("Alerta");
+			$("#modalAceptar").show();
+			$("#modal").find(".modal-body").html(mensaje);
+			$("#modal").modal("show");
+			$("#modal").modal()
+				.one('hide', function () {
+					$("#modalAceptar").hide();
+				});
+		}
+
+		function alerta(mensaje, titulo){
+			$("#modalTitle").html(titulo);
+			$("#modalAceptar").show();
+			$("#modal").find(".modal-body").html(mensaje);
+			$("#modal").modal("show");
+			$("#modal").modal()
+				.one('hide', function () {
+					$("#modalAceptar").hide();
+				});
+		}
+
+	</script>
+
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
@@ -249,12 +275,15 @@
 -->
 
 <script>
-jQuery(document).ready(function() {    
+jQuery(document).ready(function() {  
+
    	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 	QuickSidebar.init(); // init quick sidebar
 	Demo.init(); // init demo features
 	ComponentsPickers.init();
+
+
 });
 
 </script>

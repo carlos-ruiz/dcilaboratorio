@@ -109,4 +109,13 @@ array('nombre', 'unique'),
 	{
 		return parent::model($className);
 	}
+
+	public function selectList(){
+		$grupos = $this->model()->findAll();
+		$data = array(null=>"--Seleccione--");
+		foreach ($grupos as $grupo) {
+			$data[$grupo->id]=$grupo->nombre;
+		}
+		return $data;
+	}
 }

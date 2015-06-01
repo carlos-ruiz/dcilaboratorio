@@ -141,10 +141,29 @@ array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
 			for ($i=0; $i < sizeof($ids); $i++) { 
 				$in.=$i!=(sizeof($ids)-1)?'?,':'?)';
 			}
-			return $this->model()->findAll('id in '.$in,$ids);
+			return $this->model()->findAll('id in '.$in.' AND activo = 1',$ids);
 		}
 		else{
 			return array();
 		}
 	}
+
+	public function selectList(){
+		$examenes = $this->model()->findAll('activo=1');
+		$data = array(null=>"--Seleccione--");
+		foreach ($examenes as $examen) {
+			$data[$examen->id]=$examen->nombre;
+		}
+		return $data;
+	}
+
+	public function selectListWithClave(){
+		$examenes = $this->model()->findAll('activo=1');
+		$data = array(null=>"--Seleccione--");
+		foreach ($examenes as $examen) {
+			$data[$examen->id]=$examen->clave." - ".$examen->nombre;
+		}
+		return $data;
+	}
+
 }

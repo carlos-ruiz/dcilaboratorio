@@ -15,9 +15,8 @@ $this->renderPartial(
 			array(	
 				'name'=>'paciente',			
 				'value'=>array($this, 'obtenerPaciente'),
-			),
-			
-			)
+			),	
+		)
 	)
 ); 
 

@@ -1,6 +1,5 @@
 <?php
-/* @var $this EspecialidadesController */
-/* @var $model Especialidades */
+
 
 ?>
 <div class="portlet box blue">

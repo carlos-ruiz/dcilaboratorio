@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','loadModalContent'),
+				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -218,22 +218,48 @@ class OrdenesController extends Controller
 	public function actionLoadModalContent(){
 		$pagos=new Pagos;
 		$form=$this->beginWidget('CActiveForm', array(
-		'id'=>'pagos-form',
-		// Please note: When you enable ajax validation, make sure the corresponding
-		// controller action is handling ajax validation correctly.
-		// There is a call to performAjaxValidation() commented in generated controller code.
-		// See class documentation of CActiveForm for details on this.
-		'enableAjaxValidation'=>false,
-	)); 
+			'id'=>'pagos-form',
+			// Please note: When you enable ajax validation, make sure the corresponding
+			// controller action is handling ajax validation correctly.
+			// There is a call to performAjaxValidation() commented in generated controller code.
+			// See class documentation of CActiveForm for details on this.
+			'enableAjaxValidation'=>false,
+		)); 
 		$this->renderPartial("_modalPagos",
 			array('pagos'=>$pagos,'form'=>$form)
 			);
 		$this->endWidget();
 	}
 
+	public function actionAgregarExamen(){
+		//print_r($_POST);
+		$examen=Examenes::model()->findByPk($_POST['id']);
+		$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($_POST['id'],$_POST['tarifa']));
+		$precio=isset($tarifa->precio)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
+		echo "<tr class='row_$examen->id' data-id='$examen->id'>
+				<td>$examen->clave</td>
+				<td>$examen->nombre</td>
+				<td>$precio</td>
+				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+			</tr>";
+	}
 
-
-
+	public function actionAgregarGrupoExamen(){
+		//print_r($_POST);
+		$grupo=Grupos::model()->findByPk($_POST['id']);
+		foreach ($grupo->grupoTiene as $tiene) {
+			$examen=$tiene->examen;
+			$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examen->id,$_POST['tarifa']));
+			$precio=isset($tarifa->precio)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
+			echo "<tr class='row_$examen->id' data-id='$examen->id'>
+					<td>$examen->clave</td>
+					<td>$examen->nombre</td>
+					<td>$precio</td>
+					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+				</tr>";
+		}
+		
+	}
 
 	public function obtenerPaciente($data, $row){
 		$paciente =Pacientes::model()->findByAttributes(array('id'=>$data['id_pacientes']));
