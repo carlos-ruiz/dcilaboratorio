@@ -72,15 +72,24 @@
 $orden = Ordenes::model()->findByPk($model->id);
 $aux=$orden->ordenTieneExamenes;
 $anterior=0;
+echo '<table class="table table-striped table-bordered dataTable">
+   		';
+   		
  foreach ($aux as $ordenExamen): 
 	$detalleExamen=$ordenExamen->detalleExamen;
 	$examen=$detalleExamen->examenes;
 	if($examen->id!=$anterior){
-		echo '<div style="color:#1e90ff">'.$examen->nombre.'</div>';
+		echo '<tr><td style="color:#1e90ff ">'.$examen->nombre.'</td>
+	
+   		<tr><td>Descripción</td>
+   		<td>Resultado</td>
+   		<td>Rango normal</td></tr>';
 	}
-	echo '<br /> *'.$detalleExamen->descripcion.' <span style="color:#1e90ff">'.$ordenExamen->resultado.'</span>  '.$detalleExamen->unidadesMedida->nombre.', normal entre '.$detalleExamen->rango_inferior.' - '.$detalleExamen->rango_superior;
+
+	echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>'.$ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->nombre.'</td><td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td></tr>';
 	$anterior=$examen->id;
- endforeach
+ endforeach;
+ echo'</table>';
 
  ?>
 
