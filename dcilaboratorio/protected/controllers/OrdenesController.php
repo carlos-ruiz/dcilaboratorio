@@ -168,6 +168,7 @@ class OrdenesController extends Controller
 					$ordenFacturacion->save();
 
 					$pagos->id_ordenes=$model->id;
+					$pagos->save();
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
 
