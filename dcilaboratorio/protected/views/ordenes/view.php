@@ -69,12 +69,10 @@
 
 	<div class="heading text-center">
 		<h3 style="color:#1e90ff ">Examenes</h3>
-		<hr/>
 	</div>
 <?php
 
-$orden = Ordenes::model()->findByPk($model->id);
-$aux=$orden->ordenTieneExamenes;
+$aux=$model->ordenTieneExamenes;
 $anterior=0;
 echo '<table class="table table-striped table-bordered dataTable">
    		';
@@ -110,12 +108,10 @@ echo '<table class="table table-striped table-bordered dataTable">
 <div class="form-group col-md-4">
 	<div class="heading text-center">
 		<h3 style="color:#1e90ff ">Pagos</h3>
-		<hr/>
 	</div>
 
 <?php
-$orden =Ordenes::model()->findByPk($model->id);
-$aux=$orden->pagos;
+$aux=$model->pagos;
 $total=0;
 echo '<table class="table table-striped table-bordered dataTable">
    		<tr>

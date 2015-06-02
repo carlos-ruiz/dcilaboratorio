@@ -34,9 +34,6 @@
 
 <div class="portlet-body form" style="display: block;">
 
-
-	
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'resultados-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -92,10 +89,7 @@ foreach ($ordenExamenesModel as $i => $ordenExamen){
 
  ?>
 
-
-
 	<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
-
 	
 	<div class="form-actions" >
 			<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
@@ -106,4 +100,3 @@ foreach ($ordenExamenesModel as $i => $ordenExamen){
 </div>
 
 </div><!-- form -->
-</div>
