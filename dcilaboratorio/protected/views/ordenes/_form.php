@@ -20,6 +20,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 <?php 
+/*
 echo $form->errorSummary($model);
 echo "<br /><br />";
 echo $form->errorSummary($paciente);
@@ -29,6 +30,7 @@ echo "<br /><br />";
 echo $form->errorSummary($pagos);
 echo "<br /><br />";
 echo $form->errorSummary($datosFacturacion);
+*/
 ?>
 
 	<div class="form-body">
@@ -391,16 +393,25 @@ echo $form->errorSummary($datosFacturacion);
 <script type="text/javascript">
 	examenesIds=[];
 
+	function setExamenesIds(){
+		var ids=examenesIds.join();
+		$("#examenesIds").val(ids);
+	}
+
 	function activarEliminacion(){
 		$(".eliminarExamen").click(function(){
 			$(".row_"+$(this).data('id')).hide(400);
 			$(".row_"+$(this).data('id')).html("");
 			aux=[];
-			for (var i = examenesIds.length - 1; i >= 0; i--) {
-				if(examenesIds[i]!=$(this).data('id'))
-				aux.push(examenesIds[i]);
+			var ids="";
+			for (var i = 0; i < examenesIds.length; i++) {
+				if(examenesIds[i]!=$(this).data('id')){
+					aux.push(examenesIds[i]);
+					ids+=examenesIds[i]+",";
+				}
 			};
 			examenesIds=aux;
+			$("#examenesIds").val(ids);
 		});
 	}
 
@@ -434,6 +445,7 @@ echo $form->errorSummary($datosFacturacion);
 						$("#examenesAgregados").append(data);
 						examenesIds.push(idExamen);
 						activarEliminacion();
+						setExamenesIds();
 					}
 				);
 			}
@@ -457,6 +469,7 @@ echo $form->errorSummary($datosFacturacion);
 								examenesIds.push($(this).data('id'));
 							});
 							activarEliminacion();
+							setExamenesIds();
 						}
 					);
 				}

@@ -48,7 +48,7 @@
 		array(
             'label'=>'Doctor',
             'type'=>'raw',
-            'value'=>$this->obtenerNombreCompletoDoctor($model, $this),
+            'value'=>($model->id_doctores!=null)?$this->obtenerNombreCompletoDoctor($model, $this):"No asignado",
         ),
 		array(
             'label'=>'Comparte inf. con Dr.',

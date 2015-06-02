@@ -12,8 +12,8 @@ $this->renderPartial(
 			'id',
 			'status.descripcion',
 			'fecha_captura',
-			
-		)
+		),
+		'buttonsTemplate'=>'{view}'
 	)
 ); 
 

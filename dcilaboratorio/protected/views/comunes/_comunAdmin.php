@@ -74,7 +74,7 @@
        													),
 								        			),
 											    ),
-											    'template'=>'{activar} {view} {update} {borrar} {desactivar}',
+											    'template'=>(!isset($buttonsTemplate))?'{activar} {view} {update} {borrar} {desactivar}':$buttonsTemplate,
 											));
 
 					$this->widget('zii.widgets.grid.CGridView',array(

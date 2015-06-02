@@ -91,33 +91,56 @@ class OrdenesController extends Controller
 			$paciente->attributes=$_POST['Pacientes'];
 			$pagos->attributes=$_POST['Pagos'];
 
-			$model->fecha_captura=date('Y-m-d H:i:s');
-			$model->id_status=Status::model()->findByName("Proceso");
+			$fecha_creacion=date('Y-m-d H:i:s');
+			$fecha_edicion='2000-01-01 00:00:00';
+
+			$model->fecha_captura=$fecha_creacion;
+			$status = Status::model()->findByName("Proceso");
+			$model->id_status=$status->id;
 			$pagos->fecha=$model->fecha_captura;
+			$validaRequiere=true;
 			if($model->requiere_factura==1){
 				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
 				$direccion->attributes=$_POST['Direcciones'];
-				$datosFacturacion->validate();
-				$direccion->validate();
+				$valida=($datosFacturacion->validate()&$direccion->validate());
+
 			}
 
-			if($model->validate() & $paciente->validate() & $pagos->validate()){
+			if($model->validate() & $paciente->validate() & $pagos->validate() & $validaRequiere){
 				$transaction = Yii::app()->db->beginTransaction();
 				try{
-					
+
+
 					$model->save();
+					$examenesIds = split(',',$_POST['Examenes']['ids']);
+					
+					foreach ($examenesIds as $idExamen) {
+						$detallesExamen = DetallesExamen::model()->findByExamenId($idExamen);
+						foreach ($detallesExamen as $detalle) {
+							$ordenTieneExamenes = new OrdenTieneExamenes;
+							$ordenTieneExamenes->id_ordenes=$model->id;
+							$ordenTieneExamenes->id_detalles_examen=$detalle->id;
+							$ordenTieneExamenes->ultima_edicion=$fecha_edicion;
+							$ordenTieneExamenes->usuario_ultima_edicion=Yii::app()->user->id;;
+							$ordenTieneExamenes->creacion=$fecha_creacion;
+							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;;
+							$ordenTieneExamenes->save();
+						}
+					}
 
 					//GENERAR USUARIO PARA EL PACIENTE
 					$simbolos = array('!', '$', '#', '?');
 					$perfil = Perfiles::model()->findByName("Paciente");
 					$user=new Usuarios;
+
 					$user->usuario=substr($paciente->nombre, 0,3);
 					$user->contrasena="beforeSave";
-					$user->ultima_edicion="0000-00-00 00:00:00";
+					$user->ultima_edicion=$fecha_edicion;
 					$user->usuario_ultima_edicion=1;
-					$user->creacion=$model->fecha_captura;
+					$user->creacion=$fecha_creacion;
 					$user->usuario_creacion=1;
 					$user->id_perfiles=$perfil->id;
+
 					$user->save();
 					$user->usuario=strtolower($user->usuario).$user->id."dci";
 					$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
@@ -144,7 +167,7 @@ class OrdenesController extends Controller
 
 					
 				}catch(Exception $e){
-					print_r($e);
+					//print_r($e);
 					$transaction->rollback();
 				}
 			}

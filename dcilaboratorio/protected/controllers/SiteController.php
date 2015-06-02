@@ -153,13 +153,24 @@ class SiteController extends Controller
 			$perfil = new Perfiles;
 			$perfil->nombre="Administrador";
 			$perfil->save();
-			//$perfil->edicion=date('Y-m-d H:i:s');
-			//$perfil->usuario_edicion=0;
-			//$perfil->creacion=date('Y-m-d H:i:s');
-			//$perfil->usuario_creacion=0;
+			$perfil2 = new Perfiles;
+			$perfil2->nombre="Paciente";
+			$perfil2->save();
+
 		}
 		else{
 			$perfil=Perfiles::model()->findByName("Administrador");
+		}
+
+		if(Status::model()->count()==0){
+			$status = new Status;
+			$status->nombre="Proceso";
+			$status->descripcion="Primer paso";
+			$status->ultima_edicion=date('2000-01-01 00:00:00');
+			$status->usuario_ultima_edicion=0;
+			$status->creacion=date('Y-m-d H:i:s');
+			$status->usuario_creacion=0;
+			$status->save();
 		}
 
 		if(Usuarios::model()->count()==0){
