@@ -80,7 +80,7 @@ class OrdenesController extends Controller
 		$examenes=new Examenes;
 		$pagos=new Pagos;
 		$direccion = new Direcciones;
-		
+		$listaTarifasExamenes=array();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -99,6 +99,12 @@ class OrdenesController extends Controller
 			$model->id_status=$status->id;
 			$pagos->fecha=$model->fecha_captura;
 			$validaRequiere=true;
+
+			$examenesIds = split(',',$_POST['Examenes']['ids']);
+			foreach ($examenesIds as $idExamen) {
+				array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
+			}
+
 			if($model->requiere_factura==1){
 				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
 				$direccion->attributes=$_POST['Direcciones'];
@@ -112,9 +118,9 @@ class OrdenesController extends Controller
 
 
 					$model->save();
-					$examenesIds = split(',',$_POST['Examenes']['ids']);
 					
 					foreach ($examenesIds as $idExamen) {
+						array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
 						$detallesExamen = DetallesExamen::model()->findByExamenId($idExamen);
 						foreach ($detallesExamen as $detalle) {
 							$ordenTieneExamenes = new OrdenTieneExamenes;
@@ -181,6 +187,7 @@ class OrdenesController extends Controller
 			'examenes'=>$examenes,
 			'pagos'=>$pagos,
 			'direccion' => $direccion,
+			'listaTarifasExamenes'=>$listaTarifasExamenes,
 		));
 	}
 
@@ -321,7 +328,7 @@ class OrdenesController extends Controller
 		echo "<tr class='row_$examen->id' data-id='$examen->id'>
 				<td>$examen->clave</td>
 				<td>$examen->nombre</td>
-				<td>$precio</td>
+				<td class='precioExamen' data-val='$precio'>$ $precio</td>
 				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 			</tr>";
 	}
@@ -336,7 +343,7 @@ class OrdenesController extends Controller
 			echo "<tr class='row_$examen->id' data-id='$examen->id'>
 					<td>$examen->clave</td>
 					<td>$examen->nombre</td>
-					<td>$precio</td>
+					<td class='precioExamen' data-val='$precio'>$ $precio</td>
 					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 				</tr>";
 		}
@@ -346,14 +353,14 @@ class OrdenesController extends Controller
 	public function actionActualizarPrecios(){
 		$examenes=split(',',$_POST['examenes']);
 		$tarifario = $_POST['tarifa'];
-		for ($i=0; $i<sizeof($examenes)-1; $i++) {
+		for ($i=0; $i<sizeof($examenes); $i++) {
 			$examen=Examenes::model()->findByPk($examenes[$i]);
 			$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examenes[$i],$tarifario));
-			$precio=isset($tarifa->precio)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
+			$precio=isset($tarifa)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
 			echo "<tr class='row_$examen->id' data-id='$examen->id'>
 					<td>$examen->clave</td>
 					<td>$examen->nombre</td>
-					<td>$precio</td>
+					<td class='precioExamen' data-val='$precio'>$ $precio</td>
 					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 				</tr>";
 		}

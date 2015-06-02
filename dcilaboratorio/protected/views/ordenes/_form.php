@@ -156,7 +156,7 @@ echo $form->errorSummary($datosFacturacion);
 					</div>
 				</section>
 				<br />
-				<section id="facturacion" style="display:none;">
+				<section id="facturacion" style="display:<?php echo $model->requiere_factura==0?'none':'normal';?>;">
 
 					<div class="heading text-center">
 						<h3 style="color:#1e90ff ">Datos de Facturación</h3>
@@ -295,6 +295,14 @@ echo $form->errorSummary($datosFacturacion);
 							</tr>
 						</thead>
 						<tbody id="examenesAgregados">
+							<?php foreach ($listaTarifasExamenes as $tarifaExamen): ?>
+								<tr class='row_<?php echo $tarifaExamen->id_examenes;?>' data-id='<?php echo $tarifaExamen->id_examenes;?>'>
+									<td><?php echo $tarifaExamen->examen->clave; ?></td>
+									<td><?php echo $tarifaExamen->examen->nombre; ?></td>
+									<td class="precioExamen" data-val="<?php echo $tarifaExamen->precio; ?>">$ <?php echo $tarifaExamen->precio; ?></td>
+									<td><a href='js:void(0)' data-id='<?php echo $tarifaExamen->id_examenes;?>' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+								</tr>
+							<?php endforeach; ?>
 						</tbody>
 					</table>
 				</section>
@@ -321,7 +329,7 @@ echo $form->errorSummary($datosFacturacion);
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6 "> <center> Total $</center></div>
-								<div class="form-group col-md-6 align-right">999.00 <?php $total ?></div>						
+								<div class="form-group col-md-6 align-right total">999.00 <?php $total ?></div>						
 							</div>
 							<div class="row">
 								<div id="descuentoAplicado" style="display:none;">	
@@ -367,7 +375,7 @@ echo $form->errorSummary($datosFacturacion);
 					<div class="row">
 						<div class="form-group col-md-8"></div>
 						<div class="form-group col-md-4">
-							<div class="form-group "> <h3 style="color:#1e90ff ">Total $ 1111.00 <? //$total?></h3></div>
+							<div class="form-group" > <h3 style="color:#1e90ff">Total <span class="total">$ 1111.00</span> <? //$total?></h3></div>
 							<div class="form-group align-right"><h3 style="color:#1e90ff ">Pago $999.00 <?php $sumatoria ?></h3></div>
 							<!-- Sólo si no paga completo-->
 							<div class="form-group align-right"><h3 style="color:#FE2E64 ">Debe<?php $sumatoria ?></h3></div>
@@ -412,8 +420,27 @@ echo $form->errorSummary($datosFacturacion);
 			};
 			examenesIds=aux;
 			$("#examenesIds").val(ids);
+			calcularTotal();
 		});
 	}
+
+	function calcularTotal(){
+		var suma=0;
+		$(".precioExamen").each(function(){
+			suma +=$(this).data('val');
+		});
+		$(".total").text("$ "+suma);
+	}
+
+	//Inicializamos los ids por si viene una lista de examenes
+	$(".eliminarExamen").each(function(){
+		examenesIds.push($(this).data('id'));
+	});
+	activarEliminacion();
+	setExamenesIds();
+	calcularTotal();
+	
+
 
 	$("#Examenes_nombre").change(function(){
 		$("#Examenes_clave").select2('val',null);
@@ -446,6 +473,7 @@ echo $form->errorSummary($datosFacturacion);
 						examenesIds.push(idExamen);
 						activarEliminacion();
 						setExamenesIds();
+						calcularTotal();
 					}
 				);
 			}
@@ -470,6 +498,7 @@ echo $form->errorSummary($datosFacturacion);
 							});
 							activarEliminacion();
 							setExamenesIds();
+							calcularTotal();
 						}
 					);
 				}
@@ -487,9 +516,7 @@ echo $form->errorSummary($datosFacturacion);
 		var ids="";
 		var idMultitarifario = $(this).val();
 		if(examenesIds.length>0){
-			for (var i = 0; i < examenesIds.length; i++) {
-				ids+=examenesIds[i]+",";
-			};
+			ids=examenesIds.join();
 			$.post(
 					"<?php echo $this->createUrl('ordenes/actualizarPrecios/');?>",
 					{
@@ -499,6 +526,7 @@ echo $form->errorSummary($datosFacturacion);
 					function(data){
 						$("#examenesAgregados").html(data);
 						activarEliminacion();
+						calcularTotal();
 					}
 				);
 		}
