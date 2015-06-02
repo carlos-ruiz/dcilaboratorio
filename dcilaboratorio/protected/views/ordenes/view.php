@@ -90,7 +90,14 @@ echo '<table class="table table-striped table-bordered dataTable">
    		<td>Rango normal</td></tr>';
 	}
 
-	echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>'.$ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->nombre.'</td><td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td></tr>';
+	echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
+	if ($ordenExamen->resultado=='') {
+		echo "Sin resultado";
+	}
+	else{
+		echo $ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->nombre;
+	}
+	echo '</td><td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td></tr>';
 	$anterior=$examen->id;
  endforeach;
  echo'</table>';

@@ -3,7 +3,6 @@
 /* @var $model Ordenes */
 ?>
 
-
 <h1>Orden con folio: <?php echo $model->id; ?></h1>
 <div class="form-group col-md-4">
 
@@ -60,31 +59,35 @@
 	
 <?php
 
-$orden = Ordenes::model()->findByPk($model->id);
-$aux=$orden->ordenTieneExamenes;
 $anterior=0;
-echo '<table class="table table-striped table-bordered dataTable">
-   		';
-   		
- foreach ($aux as $ordenExamen): 
+echo '<table class="table table-striped table-bordered dataTable">';
+
+foreach ($ordenExamenesModel as $i => $ordenExamen){
 	$detalleExamen=$ordenExamen->detalleExamen;
 	$examen=$detalleExamen->examenes;
 	if($examen->id!=$anterior){
-		echo '<tr><td style="color:#1e90ff ">'.$examen->nombre.'</td>
-	
-   		<tr><td>Descripción</td>
-   		<td>Resultado</td>
-   		<td>Unidad Medida</td>
-   		<td>Rango normal</td></tr>';
+		echo '
+		<tr>
+			<td style="color:#1e90ff ">'.$examen->nombre.'</td>
+		</tr>
+
+		<tr>
+			<td>Descripción</td>
+			<td>Resultado</td>
+			<td>Unidad Medida</td>
+			<td>Rango normal</td>
+		</tr>';
 	}
 
-	echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
-	echo $form->textField($model,'id',array('size'=>25,'maxlength'=>25,'class'=>'form-control'));
-	echo '</td><td>'
-	.$detalleExamen->unidadesMedida->nombre.'</td><td>'
-	.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td></tr>';
+	echo '
+		<tr>
+			<td>'.$detalleExamen->descripcion.'</td>'.
+			'<td>'.$form->textField($ordenExamen,"[$i]resultado",array('size'=>25,'maxlength'=>25,'class'=>'form-control')).'</td>
+			<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
+			<td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
+		</tr>';
 	$anterior=$examen->id;
- endforeach;
+};
  echo'</table>';
 
  ?>
