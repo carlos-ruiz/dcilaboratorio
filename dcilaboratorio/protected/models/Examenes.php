@@ -59,7 +59,7 @@ array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'detallesExamens' => array(self::HAS_MANY, 'DetallesExamen', 'id_examenes'),
+			'detallesExamenes' => array(self::HAS_MANY, 'DetallesExamen', 'id_examenes'),
 			'grupoTieneExamenes' => array(self::HAS_MANY, 'GrupoTieneExamenes', 'id_examenes'),
 			'tarifasActivases' => array(self::HAS_MANY, 'TarifasActivas', 'id_examenes'),
 		);

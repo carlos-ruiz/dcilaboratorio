@@ -48,7 +48,7 @@ class Ordenes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_status, id_unidades_responsables, fecha_captura, id_multitarifarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('id_status, fecha_captura, id_multitarifarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
 			array('id_doctores, id_status, id_unidades_responsables, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('informacion_clinica_y_terapeutica, comentarios', 'length', 'max'=>256),
 			array('costo_emergencia', 'length', 'max'=>8),

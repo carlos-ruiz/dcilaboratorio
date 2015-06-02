@@ -138,4 +138,8 @@ class DetallesExamen extends CActiveRecord
 		return CHtml::listData(Examenes::model()->findAll('activo=1'), 'id', 'nombre');
 	}
 
+	public function findByExamenId($idExamen){
+		return $this->model()->findAll('id_examenes=? AND activo=1',array($idExamen));
+	}
+
 }

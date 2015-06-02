@@ -36,7 +36,7 @@ class Pagos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_ordenes, fecha, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('fecha, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
 			array('id_ordenes, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('efectivo, tarjeta, cheque', 'length', 'max'=>8),
 			// The following rule is used by search().

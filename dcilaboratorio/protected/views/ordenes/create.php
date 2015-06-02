@@ -11,4 +11,5 @@
 	'examenes'=>$examenes,
 	'pagos'=>$pagos,
 	'direccion' => $direccion,
+	'listaTarifasExamenes'=>$listaTarifasExamenes,
  	)); ?>

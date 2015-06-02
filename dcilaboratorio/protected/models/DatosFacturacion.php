@@ -7,15 +7,7 @@
  * @property integer $id
  * @property string $razon_social
  * @property string $RFC
- * @property string $calle
- * @property string $num_ext
- * @property string $num_int
- * @property string $colonia
- * @property string $ciudad
- * @property string $municipio
- * @property string $estado
- * @property string $codigo_postal
- * @property integer $id_pacientes
+ * @property string $id_direccion
  *
  * The followings are the available model relations:
  * @property Pacientes $idPacientes
@@ -38,15 +30,13 @@ class DatosFacturacion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, id_pacientes, RFC, razon_social, calle, num_ext, colonia, ciudad, municipio, estado', 'required'),
-			array('id, id_pacientes', 'numerical', 'integerOnly'=>true),
+			array('RFC, razon_social', 'required'),
+			array('id', 'numerical', 'integerOnly'=>true),
 			array('razon_social', 'length', 'max'=>500),
 			array('RFC', 'length', 'max'=>13),
-			array('calle, num_ext, num_int, colonia, ciudad, municipio, estado', 'length', 'max'=>45),
-			array('codigo_postal', 'length', 'max'=>5),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, razon_social, RFC, calle, num_ext, num_int, colonia, ciudad, municipio, estado, codigo_postal, id_pacientes', 'safe', 'on'=>'search'),
+			array('id, razon_social, RFC, id_direccion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,7 +48,7 @@ class DatosFacturacion extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idPacientes' => array(self::BELONGS_TO, 'Pacientes', 'id_pacientes'),
+			'direccion' => array(self::BELONGS_TO, 'Direcciones', 'id_direccion'),
 		);
 	}
 
@@ -71,15 +61,7 @@ class DatosFacturacion extends CActiveRecord
 			'id' => 'ID',
 			'razon_social' => 'Nombre completo de persona física o moral',
 			'RFC' => 'RFC',
-			'calle' => 'Calle',
-			'num_ext' => 'Num Ext',
-			'num_int' => 'Num Int',
-			'colonia' => 'Colonia',
-			'ciudad' => 'Ciudad',
-			'municipio' => 'Municipio',
-			'estado' => 'Estado',
-			'codigo_postal' => 'Codigo Postal',
-			'id_pacientes' => 'Id Pacientes',
+			'id_direccion' => 'Direccion',
 		);
 	}
 
@@ -104,16 +86,7 @@ class DatosFacturacion extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('razon_social',$this->razon_social,true);
 		$criteria->compare('RFC',$this->RFC,true);
-		$criteria->compare('calle',$this->calle,true);
-		$criteria->compare('num_ext',$this->num_ext,true);
-		$criteria->compare('num_int',$this->num_int,true);
-		$criteria->compare('colonia',$this->colonia,true);
-		$criteria->compare('ciudad',$this->ciudad,true);
-		$criteria->compare('municipio',$this->municipio,true);
-		$criteria->compare('estado',$this->estado,true);
-		$criteria->compare('codigo_postal',$this->codigo_postal,true);
-		$criteria->compare('id_pacientes',$this->id_pacientes);
-
+		$criteria->compare('id_direccion',$this->id_direccion,true);
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen'),
+				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -80,7 +80,7 @@ class OrdenesController extends Controller
 		$examenes=new Examenes;
 		$pagos=new Pagos;
 		$direccion = new Direcciones;
-		
+		$listaTarifasExamenes=array();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -88,8 +88,96 @@ class OrdenesController extends Controller
 		if(isset($_POST['Ordenes']))
 		{
 			$model->attributes=$_POST['Ordenes'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$paciente->attributes=$_POST['Pacientes'];
+			$pagos->attributes=$_POST['Pagos'];
+
+			$fecha_creacion=date('Y-m-d H:i:s');
+			$fecha_edicion='2000-01-01 00:00:00';
+
+			$model->fecha_captura=$fecha_creacion;
+			$status = Status::model()->findByName("Proceso");
+			$model->id_status=$status->id;
+			$pagos->fecha=$model->fecha_captura;
+			$validaRequiere=true;
+
+			$examenesIds = split(',',$_POST['Examenes']['ids']);
+			foreach ($examenesIds as $idExamen) {
+				array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
+			}
+
+			if($model->requiere_factura==1){
+				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
+				$direccion->attributes=$_POST['Direcciones'];
+				$valida=($datosFacturacion->validate()&$direccion->validate());
+
+			}
+
+			if($model->validate() & $paciente->validate() & $pagos->validate() & $validaRequiere){
+				$transaction = Yii::app()->db->beginTransaction();
+				try{
+
+
+					$model->save();
+					
+					foreach ($examenesIds as $idExamen) {
+						array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
+						$detallesExamen = DetallesExamen::model()->findByExamenId($idExamen);
+						foreach ($detallesExamen as $detalle) {
+							$ordenTieneExamenes = new OrdenTieneExamenes;
+							$ordenTieneExamenes->id_ordenes=$model->id;
+							$ordenTieneExamenes->id_detalles_examen=$detalle->id;
+							$ordenTieneExamenes->ultima_edicion=$fecha_edicion;
+							$ordenTieneExamenes->usuario_ultima_edicion=Yii::app()->user->id;;
+							$ordenTieneExamenes->creacion=$fecha_creacion;
+							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;;
+							$ordenTieneExamenes->save();
+						}
+					}
+
+					//GENERAR USUARIO PARA EL PACIENTE
+					$simbolos = array('!', '$', '#', '?');
+					$perfil = Perfiles::model()->findByName("Paciente");
+					$user=new Usuarios;
+
+					$user->usuario=substr($paciente->nombre, 0,3);
+					$user->contrasena="beforeSave";
+					$user->ultima_edicion=$fecha_edicion;
+					$user->usuario_ultima_edicion=1;
+					$user->creacion=$fecha_creacion;
+					$user->usuario_creacion=1;
+					$user->id_perfiles=$perfil->id;
+
+					$user->save();
+					$user->usuario=strtolower($user->usuario).$user->id."dci";
+					$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
+					$user->save();
+
+					$paciente->id_usuarios=$user->id;
+					$paciente->save();
+
+					$ordenFacturacion = new OrdenesFacturacion;
+					if($model->requiere_factura==1){
+						$direccion->save();
+						$datosFacturacion->id_direccion=$direccion->id;
+						$datosFacturacion->save();
+						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
+					}
+
+					$ordenFacturacion->id_pacientes=$paciente->id;
+					$ordenFacturacion->id_ordenes=$model->id;
+					$ordenFacturacion->save();
+
+					$pagos->id_ordenes=$model->id;
+					$transaction->commit();
+					$this->redirect(array('view','id'=>$model->id));
+
+					
+				}catch(Exception $e){
+					//print_r($e);
+					$transaction->rollback();
+				}
+			}
+			
 		}
 
 		$this->render('create',array(
@@ -99,6 +187,7 @@ class OrdenesController extends Controller
 			'examenes'=>$examenes,
 			'pagos'=>$pagos,
 			'direccion' => $direccion,
+			'listaTarifasExamenes'=>$listaTarifasExamenes,
 		));
 	}
 
@@ -239,7 +328,7 @@ class OrdenesController extends Controller
 		echo "<tr class='row_$examen->id' data-id='$examen->id'>
 				<td>$examen->clave</td>
 				<td>$examen->nombre</td>
-				<td>$precio</td>
+				<td class='precioExamen' data-val='$precio'>$ $precio</td>
 				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 			</tr>";
 	}
@@ -254,11 +343,27 @@ class OrdenesController extends Controller
 			echo "<tr class='row_$examen->id' data-id='$examen->id'>
 					<td>$examen->clave</td>
 					<td>$examen->nombre</td>
-					<td>$precio</td>
+					<td class='precioExamen' data-val='$precio'>$ $precio</td>
 					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 				</tr>";
 		}
 		
+	}
+
+	public function actionActualizarPrecios(){
+		$examenes=split(',',$_POST['examenes']);
+		$tarifario = $_POST['tarifa'];
+		for ($i=0; $i<sizeof($examenes); $i++) {
+			$examen=Examenes::model()->findByPk($examenes[$i]);
+			$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examenes[$i],$tarifario));
+			$precio=isset($tarifa)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
+			echo "<tr class='row_$examen->id' data-id='$examen->id'>
+					<td>$examen->clave</td>
+					<td>$examen->nombre</td>
+					<td class='precioExamen' data-val='$precio'>$ $precio</td>
+					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+				</tr>";
+		}
 	}
 
 	public function obtenerPaciente($data, $row){
