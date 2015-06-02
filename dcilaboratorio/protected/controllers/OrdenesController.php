@@ -168,6 +168,7 @@ class OrdenesController extends Controller
 					$ordenFacturacion->save();
 
 					$pagos->id_ordenes=$model->id;
+					$pagos->save();
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
 
@@ -319,9 +320,24 @@ class OrdenesController extends Controller
 
 	public function actionCalificar($id){
 		$model = $this->loadModel($id);
+		$ordenExamenes = array();
 
+		$ordenTieneExamenes = $model->ordenTieneExamenes;
+		foreach ($ordenTieneExamenes as $ordenExamen) {
+			array_push($ordenExamenes, $ordenExamen);
+		}
+
+		if (isset($_POST['OrdenTieneExamenes'])) {
+			foreach ($_POST['OrdenTieneExamenes'] as $i => $value) {
+				$ordenExamenToSave = $ordenExamenes[$i];
+				$ordenExamenToSave->resultado = $value['resultado'];
+				$ordenExamenToSave->save();
+			}
+			$this->redirect(array('view','id'=>$model->id));
+		}
 		$this->render('_calificar',array(
 			'model'=>$model,
+			'ordenExamenesModel'=>$ordenExamenes,
 		));
 	}
 
