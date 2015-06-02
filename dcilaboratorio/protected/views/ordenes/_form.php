@@ -312,25 +312,32 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-8"></div>
 						<div class="form-group col-md-4">
 							<div class="row">
+								<div class="form-group col-md-6 "> <center> Total $</center></div>
+								<div class="form-group col-md-6 align-right total">999.00 <?php $total ?></div>						
+							</div>
+							<div class="row">
 								<div class="form-group col-md-6  <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
 										<?php echo $form->labelEx($model,'descuento', array('class'=>'control-label')); ?>
+								</div>
+								<div class="form-group col-md-6  <?php if($form->error($model,'costo_emergencia')!=''){ echo 'has-error'; }?>">
 										<div class="input-group">
 											<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45,'class'=>'form-control', 'onchange' => 'javascript:$("#descuentoAplicado").toggle()')); ?>							
 											<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
 										</div>
 								</div>
-								<div class="form-group col-md-6  <?php if($form->error($model,'costo_emergencia')!=''){ echo 'has-error'; }?>">
+							</div>
+							<div class="row">
+								<div class="form-group col-md-6  <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
 										<?php echo $form->labelEx($model,'costo_emergencia', array('class'=>'control-label')); ?>
+								</div>
+								<div class="form-group col-md-6  <?php if($form->error($model,'costo_emergencia')!=''){ echo 'has-error'; }?>">
 										<div class="input-group">
 											<?php echo $form->textField($model,'costo_emergencia',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
 											<?php echo $form->error($model,'costo_emergencia', array('class'=>'help-block')); ?>
 										</div>
 								</div>
 							</div>
-							<div class="row">
-								<div class="form-group col-md-6 "> <center> Total $</center></div>
-								<div class="form-group col-md-6 align-right total">999.00 <?php $total ?></div>						
-							</div>
+							
 							<div class="row">
 								<div id="descuentoAplicado" style="display:none;">	
 									<div class="form-group col-md-6"> <center> Con descuento $</center></div>
@@ -349,22 +356,39 @@ echo $form->errorSummary($datosFacturacion);
 						<hr/>
 					</div>
 					<div class="row">
-						<div class="form-group  col-md-4 <?php if($form->error($pagos,'efectivo')!=''){ echo 'has-error'; }?>">
-							<?php echo $form->labelEx($pagos,'efectivo', array('class'=>'control-label')); ?>
+						<div class="form-group col-md-8 text-right" > <h3 style="color:#1e90ff">Total </h3></div>
+						<div class="form-group col-md-4"><h3 style="color:#1e90ff" class="total"> $ 1111.00</h3></div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-8 text-right <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($pagos,'efectivo', array('class'=>'control-label ')); ?>
+							
+						</div>
+						<div class="form-group col-md-4 <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
 							<div class="input-group">
 								<?php echo $form->textField($pagos,'efectivo',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
 								<?php echo $form->error($pagos,'efectivo', array('class'=>'help-block')); ?>
 							</div>
 						</div>
-						<div class="form-group   col-md-4 <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
+					</div>
+					<div class="row">
+						<div class="form-group col-md-8 text-right <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($pagos,'tarjeta', array('class'=>'control-label')); ?>
+							
+						</div>
+						<div class="form-group col-md-4 <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
 							<div class="input-group">
 								<?php echo $form->textField($pagos,'tarjeta',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
 								<?php echo $form->error($pagos,'tarjeta', array('class'=>'help-block')); ?>
 							</div>
 						</div>
-						<div class="form-group  col-md-4 <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
+					</div>
+					<div class="row">
+						<div class="form-group col-md-8 text-right <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($pagos,'cheque', array('class'=>'control-label')); ?>
+							
+						</div>
+						<div class="form-group col-md-4 <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
 							<div class="input-group">
 								<?php echo $form->textField($pagos,'cheque',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
 								<?php echo $form->error($pagos,'cheque', array('class'=>'help-block')); ?>
@@ -372,15 +396,17 @@ echo $form->errorSummary($datosFacturacion);
 							<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$pagos)); ?>
 						</div>
 					</div>
+		
 					<div class="row">
-						<div class="form-group col-md-8"></div>
-						<div class="form-group col-md-4">
-							<div class="form-group" > <h3 style="color:#1e90ff">Total <span class="total">$ 1111.00</span> <? //$total?></h3></div>
-							<div class="form-group align-right"><h3 style="color:#1e90ff ">Pago $999.00 <?php $sumatoria ?></h3></div>
-							<!-- Sólo si no paga completo-->
-							<div class="form-group align-right"><h3 style="color:#FE2E64 ">Debe<?php $sumatoria ?></h3></div>
-						</div>
+						<div class="form-group col-md-8 text-right" > <h3 style="color:#1e90ff">Pago </h3></div>
+						<div class="form-group col-md-4"><h3 style="color:#1e90ff"> $999.00</h3></div>
 					</div>
+					<div class="row">
+						<div class="form-group col-md-8 text-right" > <h3 style="color:#FE2E64">Debe </h3></div>
+						<div class="form-group col-md-4"><h3 style="color:#FE2E64"> $50.00</h3></div>
+					</div>
+
+					
 				</section>
 
 	
