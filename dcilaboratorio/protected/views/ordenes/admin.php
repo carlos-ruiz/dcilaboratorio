@@ -12,10 +12,7 @@ $this->renderPartial(
 			'id',
 			'status.descripcion',
 			'fecha_captura',
-			array(	
-				'name'=>'paciente',			
-				'value'=>array($this, 'obtenerPaciente'),
-			),	
+			
 		)
 	)
 ); 

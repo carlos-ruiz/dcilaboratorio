@@ -9,9 +9,6 @@
 
 	<div class="heading text-center">
 		<h3 style="color:#1e90ff ">Datos de la orden</h3>
-		<hr/>
-		<?php echo Yii::app()->dateFormatter->formatDateTime(CDateTimeParser::parse($classified->create_date, 'yyyy-MM-dd'),'medium',null);?>
-
 	</div>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
@@ -19,35 +16,30 @@
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
 		'status.descripcion',
-		'fecha_captura',
-
+		array('name' => 'Fecha',
+            'value' => date("j/m/Y H:i", strtotime($model->fecha_captura))
+        ),
 		'multitarifarios.nombre',
 		'descuento',
 	),
 )); ?>
+<div class="heading text-center">
+	<h5 style="color:#1e90ff ">Datos del Paciente</h5>
+</div>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
-	'attributes'=>array(		
-		array(
-            'label'=>'Nombre del paciente',
-            'type'=>'raw',
-            'value'=>$this->obtenerPaciente($model, $this),
-        ),
-        'pacientes.fecha_nacimiento',
-        array(
-            'label'=>'Sexo',
-            'type'=>'raw',
-            'value'=>$this->obtenerGenero($model, $this),
-        ),
-        
-
+	'attributes'=>array(
+		'ordenesFacturacion.id_paciente'        
 	),
-)); 
+)); ?>
 
 
-?>
+
+<div class="heading text-center">
+	<h5 style="color:#1e90ff ">Datos del Doctor</h5>
+</div>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -75,49 +67,53 @@
 		<h3 style="color:#1e90ff ">Examenes</h3>
 		<hr/>
 	</div>
+<?php
 
-	<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
-	'attributes'=>array(
-		'examenes.nombre',
-		      
-	),
-)); ?>
+$orden = Ordenes::model()->findByPk($model->id);
+$aux=$orden->ordenTieneExamenes;
+$anterior=0;
+ foreach ($aux as $ordenExamen): 
+	$detalleExamen=$ordenExamen->detalleExamen;
+	$examen=$detalleExamen->examenes;
+	if($examen->id!=$anterior){
+		echo '<div style="color:#1e90ff">'.$examen->nombre.'</div>';
+	}
+	echo '<br /> *'.$detalleExamen->descripcion.' <span style="color:#1e90ff">'.$ordenExamen->resultado.'</span>  '.$detalleExamen->unidadesMedida->nombre.', normal entre '.$detalleExamen->rango_inferior.' - '.$detalleExamen->rango_superior;
+	$anterior=$examen->id;
+ endforeach
+
+ ?>
 
 
 </div>
 
 <div class="form-group col-md-4">
-	
-<?php 
+	<div class="heading text-center">
+		<h3 style="color:#1e90ff ">Pagos</h3>
+		<hr/>
+	</div>
 
-/*$this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'pagos-grid',
-	'dataProvider'=>$pagos->search(),
-	'columns'=>array(
-		'efectivo',
-		'tarjeta',
-		'cheque',
-		'fecha',
-	),
-)); */
-
-$this->renderPartial(
-	'/comunes/_comunAdmin', 
-	array(
-		'model'=>$pagos,
-		'titulo'=>'Pagos',
-		'columnas'=>array(
-			'efectivo',
-			'tarjeta',
-			'cheque',
-			'fecha',
-		)
-	)
-); ?>
-
-
+<?php
+$orden =Ordenes::model()->findByPk($model->id);
+$aux=$orden->pagos;
+$total=0;
+echo '<table class="table table-striped table-bordered dataTable">
+   		<tr>
+   		<td>Fecha</td>
+   		<td>Efectivo</td>
+   		<td>Tarjeta</td>
+   		<td>Cheque</td>';
+		 foreach ($aux as $pago):  
+		 	echo '<tr><td>'.date("d/m/Y H:i", strtotime($pago->fecha)).'</td>';
+			echo '<td> $'.$pago->efectivo.'</td>';
+			echo '<td> $'.$pago->tarjeta.'</td>';
+			echo '<td> $'.$pago->cheque.'</td></tr>';
+			$total = $total + $pago->efectivo+$pago->tarjeta+$pago->cheque;
+		 endforeach;
+		echo'</table>';
+		echo '<table class="table table-striped table-bordered dataTable"><tr>
+			   <td>Total pagado </td><td>$ '.$total.'</td></<tr> </table>';
+?>
 </div>
 
 
