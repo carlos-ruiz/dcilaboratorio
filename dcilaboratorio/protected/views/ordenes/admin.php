@@ -6,14 +6,17 @@ $this->renderPartial(
 	'/comunes/_comunAdmin', 
 	array(
 		'model'=>$model,
-		'paciente'=>$paciente,
 		'titulo'=>'Ordenes',
 		'columnas'=>array(
 			'id',
-			'status.descripcion',
+			'status.nombre',
+			array(
+				'name'=>'Paciente',
+				'value'=>array($this, 'obtenerPaciente'),
+				),
 			'fecha_captura',
 		),
-		'buttonsTemplate'=>'{view}'
+		'buttonsTemplate'=>'{view} {rate}'
 	)
 ); 
 

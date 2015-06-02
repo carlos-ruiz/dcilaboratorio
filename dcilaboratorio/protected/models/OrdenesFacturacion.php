@@ -48,9 +48,9 @@ class OrdenesFacturacion extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idDatosFacturacion' => array(self::BELONGS_TO, 'DatosFacturacion', 'id_datos_facturacion'),
-			'idOrdenes' => array(self::BELONGS_TO, 'Ordenes', 'id_ordenes'),
-			'idPacientes' => array(self::BELONGS_TO, 'Pacientes', 'id_pacientes'),
+			'datosFacturacion' => array(self::BELONGS_TO, 'DatosFacturacion', 'id_datos_facturacion'),
+			'orden' => array(self::BELONGS_TO, 'Ordenes', 'id_ordenes'),
+			'paciente' => array(self::BELONGS_TO, 'Pacientes', 'id_pacientes'),
 		);
 	}
 
@@ -61,9 +61,9 @@ class OrdenesFacturacion extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'id_datos_facturacion' => 'Id Datos Facturacion',
-			'id_ordenes' => 'Id Ordenes',
-			'id_pacientes' => 'Id Pacientes',
+			'id_datos_facturacion' => 'Datos facturación',
+			'id_ordenes' => 'Orden',
+			'id_pacientes' => 'Paciente',
 		);
 	}
 

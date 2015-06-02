@@ -43,6 +43,15 @@
 								        					'title'=>'Detalles',
 								        				),
 											        ),
+											        'rate'=>array(
+											        	'label'=>'<span class="fa fa-plus"></span>',
+								        				'visible'=>'(isset($data->activo) && $data->activo == 1) || !isset($data->activo)',
+								        				'imageUrl'=>false,
+								        				'url'=>'Yii::app()->controller->createUrl("calificar",array("id"=>$data->id))',
+								        				'options'=>array(
+								        					'title'=>'Calificar',
+								        				),
+											        ),
 											        'update'=>array(
 											        	'label'=>'<span class="fa fa-pencil"></span>',
 								        				'visible'=>'(isset($data->activo) && $data->activo == 1) || !isset($data->activo)',

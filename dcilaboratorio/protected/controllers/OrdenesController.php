@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios'),
+				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -257,7 +257,6 @@ class OrdenesController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$paciente =new Pacientes('search');;
 		$this->subSection = "Admin";
 		$model=new Ordenes('search');
 		
@@ -267,8 +266,6 @@ class OrdenesController extends Controller
 
 		$this->render('admin',array(
 			'model'=>$model,
-			'paciente'=>$paciente,
-
 		));
 	}
 
@@ -320,6 +317,14 @@ class OrdenesController extends Controller
 		$this->endWidget();
 	}
 
+	public function actionCalificar($id){
+		$model = $this->loadModel($id);
+
+		$this->render('_calificar',array(
+			'model'=>$model,
+		));
+	}
+
 	public function actionAgregarExamen(){
 		//print_r($_POST);
 		$examen=Examenes::model()->findByPk($_POST['id']);
@@ -367,8 +372,8 @@ class OrdenesController extends Controller
 	}
 
 	public function obtenerPaciente($data, $row){
-		$paciente =Pacientes::model()->findByAttributes(array('id'=>$data['id_pacientes']));
-		$completo =$paciente->nombre.' '.$paciente->a_paterno.' '.$paciente->a_materno;
+		$paciente = $data->ordenFacturacion->paciente;
+		$completo = $paciente->nombre.' '.$paciente->a_paterno.' '.$paciente->a_materno;
 		return $completo;
 	}
 
@@ -380,7 +385,7 @@ class OrdenesController extends Controller
 	}
 
 	public function obtenerSioNoComparteDr($data, $row){		
-		if ($data['requiere_factura'] = 0)
+		if ($data['compartir_con_doctor'] == 1)
 			$var = "Sí";
 		else
 			$var = "No";
@@ -389,7 +394,7 @@ class OrdenesController extends Controller
 
 	public function obtenerGenero($data, $row){		
 		$paciente =Pacientes::model()->findByAttributes(array('id'=>$data['id_pacientes']));
-		if ($paciente['sexo'] = 1)
+		if ($paciente['sexo'] == 1)
 			$var = "Mujer";
 		else
 			$var = "Hombre";

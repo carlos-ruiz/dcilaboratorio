@@ -61,7 +61,7 @@ class Pacientes extends CActiveRecord
 		return array(
 			'datosFacturacions' => array(self::HAS_MANY, 'DatosFacturacion', 'id_pacientes'),
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_pacientes'),
-			'idUsuarios' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
+			'usuario' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
 		);
 	}
 

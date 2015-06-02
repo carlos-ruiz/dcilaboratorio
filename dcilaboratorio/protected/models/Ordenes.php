@@ -71,7 +71,7 @@ class Ordenes extends CActiveRecord
 			'multitarifarios' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
 			'status' => array(self::BELONGS_TO, 'Status', 'id_status'),
 			'idUnidadesResponsables' => array(self::BELONGS_TO, 'UnidadesResponsables', 'id_unidades_responsables'),
-			'ordenesFacturacions' => array(self::HAS_MANY, 'OrdenesFacturacion', 'id_ordenes'),
+			'ordenFacturacion' => array(self::HAS_ONE, 'OrdenesFacturacion', 'id_ordenes'),
 			'pagos' => array(self::HAS_MANY, 'Pagos', 'id_ordenes'),
 		);
 	}
@@ -99,6 +99,7 @@ class Ordenes extends CActiveRecord
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
 			'multitarifarios.nombre'=>'Multitarifario',
+			'status.nombre'=>'Estatus',
 		);
 	}
 
