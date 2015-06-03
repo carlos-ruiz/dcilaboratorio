@@ -95,24 +95,33 @@ class OrdenesController extends Controller
 			$fecha_edicion='2000-01-01 00:00:00';
 
 			$model->fecha_captura=$fecha_creacion;
-			$status = Status::model()->findByName("Proceso");
-			$model->id_status=$status->id;
-			$pagos->fecha=$model->fecha_captura;
-			$validaRequiere=true;
 
+			$pagos->fecha=$model->fecha_captura;
+			$validaRequiereFactura=true;
+
+			$totalAPagar=0;
 			$examenesIds = split(',',$_POST['Examenes']['ids']);
 			foreach ($examenesIds as $idExamen) {
-				array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
+				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
+				array_push($listaTarifasExamenes, $tarifaActiva);
+				$totalAPagar+=$tarifaActiva->precio;
 			}
+			$totalPagado=isset($pagos->efectivo)?$pagos->efectivo:0+isset($pagos->tarjeta)?$pagos->tarjeta:0+isset($pagos->cheque)?$pagos->cheque:0;
+			
+			$status = new Status;
+			if($totalAPagar==$totalPagado)
+				$status=Status::model()->findByName("Pagada");
+			else
+				$status=Status::model()->findByName("Creada");
 
+			$model->id_status=$status->id;
 			if($model->requiere_factura==1){
 				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
 				$direccion->attributes=$_POST['Direcciones'];
-				$valida=($datosFacturacion->validate()&$direccion->validate());
-
+				$validaRequiereFactura=($datosFacturacion->validate()&$direccion->validate());
 			}
 
-			if($model->validate() & $paciente->validate() & $pagos->validate() & $validaRequiere){
+			if($model->validate() & $paciente->validate() & $pagos->validate() & $validaRequiereFactura){
 				$transaction = Yii::app()->db->beginTransaction();
 				try{
 
@@ -169,6 +178,7 @@ class OrdenesController extends Controller
 
 					$pagos->id_ordenes=$model->id;
 					$pagos->save();
+
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
 

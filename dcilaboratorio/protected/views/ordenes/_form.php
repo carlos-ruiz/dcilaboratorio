@@ -3,6 +3,14 @@
 /* @var $model Ordenes */
 /* @var $form CActiveForm */
 ?>
+<style type="text/css">
+	.debe{
+		color:#FE2E64;
+	}
+	.no-debe{
+		color:#07E023;
+	}
+</style>
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
@@ -395,8 +403,8 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-4"><h3 style="color:#1e90ff" id="pagoTotal"> $999.00</h3></div>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-8 text-right" > <h3 style="color:#FE2E64">Debe </h3></div>
-						<div class="form-group col-md-4"><h3 style="color:#FE2E64" id="debe"> $50.00</h3></div>
+						<div class="form-group col-md-8 text-right" > <h3 class="debe">Debe </h3></div>
+						<div class="form-group col-md-4"><h3 class="debe" id="debe"> $50.00</h3></div>
 					</div>
 
 					
@@ -423,6 +431,15 @@ echo $form->errorSummary($datosFacturacion);
 	function setExamenesIds(){
 		var ids=examenesIds.join();
 		$("#examenesIds").val(ids);
+	}
+
+	function setColorDebe(){
+		granTotal=calcularGranTotal();
+		pago=calcularPago();
+		if(pago>=granTotal)
+			$(".debe").addClass("no-debe").removeClass('debe');
+		else
+			$(".no-debe").addClass("debe").removeClass('no-debe');
 	}
 
 	function activarEliminacion(){
@@ -509,6 +526,7 @@ echo $form->errorSummary($datosFacturacion);
 
 	function setDebe(debe){
 		$("#debe").text("$ "+debe);
+		setColorDebe();
 	}
 
 	//Inicializamos los ids por si viene una lista de examenes

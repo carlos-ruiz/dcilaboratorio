@@ -164,13 +164,37 @@ class SiteController extends Controller
 
 		if(Status::model()->count()==0){
 			$status = new Status;
-			$status->nombre="Proceso";
-			$status->descripcion="Primer paso";
+			$status->nombre="Creada";
+			$status->descripcion="Creada";
 			$status->ultima_edicion=date('2000-01-01 00:00:00');
 			$status->usuario_ultima_edicion=0;
 			$status->creacion=date('Y-m-d H:i:s');
 			$status->usuario_creacion=0;
 			$status->save();
+			$status2 = new Status;
+			$status2->nombre="Pagada";
+			$status2->descripcion="Pagada";
+			$status2->ultima_edicion=date('2000-01-01 00:00:00');
+			$status2->usuario_ultima_edicion=0;
+			$status2->creacion=date('Y-m-d H:i:s');
+			$status2->usuario_creacion=0;
+			$status2->save();
+			$status3 = new Status;
+			$status3->nombre="Calificada";
+			$status3->descripcion="Calificada";
+			$status3->ultima_edicion=date('2000-01-01 00:00:00');
+			$status3->usuario_ultima_edicion=0;
+			$status3->creacion=date('Y-m-d H:i:s');
+			$status3->usuario_creacion=0;
+			$status3->save();
+			$status3 = new Status;
+			$status3->nombre="Finalizada";
+			$status3->descripcion="Finalizada";
+			$status3->ultima_edicion=date('2000-01-01 00:00:00');
+			$status3->usuario_ultima_edicion=0;
+			$status3->creacion=date('Y-m-d H:i:s');
+			$status3->usuario_creacion=0;
+			$status3->save();
 		}
 
 		if(Usuarios::model()->count()==0){
