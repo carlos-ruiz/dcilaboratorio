@@ -90,7 +90,7 @@ class Ordenes extends CActiveRecord
 			'informacion_clinica_y_terapeutica' => 'Informacion Clinica y Terapeutica',
 			'comentarios' => 'Comentarios',
 			'requiere_factura' => '¿Requiere factura?',
-			'descuento' => 'Descuento',
+			'descuento' => '% de Descuento',
 			'id_multitarifarios' => 'Multitarifario',
 			'compartir_con_doctor' => '¿Comparte con doctor?',
 			'costo_emergencia' => 'Costo Emergencia',

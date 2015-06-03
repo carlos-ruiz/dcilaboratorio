@@ -312,8 +312,8 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-8"></div>
 						<div class="form-group col-md-4">
 							<div class="row">
-								<div class="form-group col-md-6 "> <center> Total $</center></div>
-								<div class="form-group col-md-6 align-right total">999.00 <?php $total ?></div>						
+								<div class="form-group col-md-6 "> <center> Subtotal $</center></div>
+								<div class="form-group col-md-6 align-right total">0.00 <?php $total ?></div>						
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6  <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
@@ -338,13 +338,6 @@ echo $form->errorSummary($datosFacturacion);
 								</div>
 							</div>
 							
-							<div class="row">
-								<div id="descuentoAplicado" style="display:none;">	
-									<div class="form-group col-md-6"> <center> Con descuento $</center></div>
-									<div class="col-md-6 align-right"> 888.00<?php $totalDesc ?></div>
-								</div>
-							</div>
-
 						</div>
 					</div>
 				</section>
@@ -357,7 +350,7 @@ echo $form->errorSummary($datosFacturacion);
 					</div>
 					<div class="row">
 						<div class="form-group col-md-8 text-right" > <h3 style="color:#1e90ff">Total </h3></div>
-						<div class="form-group col-md-4"><h3 style="color:#1e90ff" class="total"> $ 1111.00</h3></div>
+						<div class="form-group col-md-4"><h3 style="color:#1e90ff" id="granTotal" class="total"> $ 1111.00</h3></div>
 					</div>
 					<div class="row">
 						<div class="form-group col-md-8 text-right <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
@@ -399,11 +392,11 @@ echo $form->errorSummary($datosFacturacion);
 		
 					<div class="row">
 						<div class="form-group col-md-8 text-right" > <h3 style="color:#1e90ff">Pago </h3></div>
-						<div class="form-group col-md-4"><h3 style="color:#1e90ff"> $999.00</h3></div>
+						<div class="form-group col-md-4"><h3 style="color:#1e90ff" id="pagoTotal"> $999.00</h3></div>
 					</div>
 					<div class="row">
 						<div class="form-group col-md-8 text-right" > <h3 style="color:#FE2E64">Debe </h3></div>
-						<div class="form-group col-md-4"><h3 style="color:#FE2E64"> $50.00</h3></div>
+						<div class="form-group col-md-4"><h3 style="color:#FE2E64" id="debe"> $50.00</h3></div>
 					</div>
 
 					
@@ -446,7 +439,8 @@ echo $form->errorSummary($datosFacturacion);
 			};
 			examenesIds=aux;
 			$("#examenesIds").val(ids);
-			calcularTotal();
+			total=calcularTotal();
+			setTotal(total);
 		});
 	}
 
@@ -455,7 +449,66 @@ echo $form->errorSummary($datosFacturacion);
 		$(".precioExamen").each(function(){
 			suma +=$(this).data('val');
 		});
-		$(".total").text("$ "+suma);
+		return suma;
+	}
+
+	function setTotal(total){
+		$(".total").text("$ "+total);
+	}
+
+	function calcularGranTotal(){
+
+		var descuento = $("#Ordenes_descuento").val();
+		if(descuento=="")
+			descuento=0;
+		var costo_emergencia=$("#Ordenes_costo_emergencia").val();
+		if(costo_emergencia=="")
+			costo_emergencia=0;
+		var granTotal=0;
+		if($.isNumeric( descuento) && descuento<=100){
+			var desc = descuento/100;
+			var subtotal = calcularTotal();
+			var granTotal = subtotal*(1-desc);
+		}
+		else{
+			alerta("El descuento debe ser un número entre 0 y 100","Error");
+		}
+		if($.isNumeric(costo_emergencia)){
+			granTotal=parseFloat(granTotal) + parseFloat(costo_emergencia);
+		}
+		return granTotal;
+	}
+
+	function setGranTotal(granTotal){
+		$("#granTotal").text("$ "+granTotal);
+	}
+
+	function calcularPago(){
+		efectivo = parseFloat($("#Pagos_efectivo").val());
+		if(isNaN(efectivo))
+			efectivo=0;
+		tarjeta = parseFloat($("#Pagos_tarjeta").val());
+		if(isNaN(tarjeta))
+			tarjeta=0;
+		cheque = parseFloat($("#Pagos_cheque").val());
+		if(isNaN(cheque))
+			cheque=0;
+		return efectivo+tarjeta+cheque;
+	}
+
+	function setPago(pago){
+		$("#pagoTotal").text("$ "+pago);
+	}
+
+	function calcularDebe(){
+		granTotal=calcularGranTotal();
+		pago=calcularPago();
+		debe=granTotal-pago;
+		return debe;
+	}
+
+	function setDebe(debe){
+		$("#debe").text("$ "+debe);
 	}
 
 	//Inicializamos los ids por si viene una lista de examenes
@@ -464,7 +517,14 @@ echo $form->errorSummary($datosFacturacion);
 	});
 	activarEliminacion();
 	setExamenesIds();
-	calcularTotal();
+	total=calcularTotal();
+	setTotal(total);
+	granTotal=calcularGranTotal();
+	setGranTotal(granTotal);
+	pago=calcularPago();
+	setPago(pago);
+	debe=calcularDebe();
+	setDebe(debe);
 	
 
 
@@ -499,7 +559,8 @@ echo $form->errorSummary($datosFacturacion);
 						examenesIds.push(idExamen);
 						activarEliminacion();
 						setExamenesIds();
-						calcularTotal();
+						total=calcularTotal();
+						setTotal(total);
 					}
 				);
 			}
@@ -524,7 +585,8 @@ echo $form->errorSummary($datosFacturacion);
 							});
 							activarEliminacion();
 							setExamenesIds();
-							calcularTotal();
+							total=calcularTotal();
+							setTotal(total);
 						}
 					);
 				}
@@ -552,10 +614,42 @@ echo $form->errorSummary($datosFacturacion);
 					function(data){
 						$("#examenesAgregados").html(data);
 						activarEliminacion();
-						calcularTotal();
+						total=calcularTotal();
+						setTotal(total);
 					}
 				);
 		}
+	});
+
+	$("#Ordenes_descuento").change(function(){
+		granTotal=calcularGranTotal();
+		$("#granTotal").text("$ "+granTotal);
+	});
+
+	$("#Ordenes_costo_emergencia").change(function(){
+		granTotal=calcularGranTotal();
+		$("#granTotal").text("$ "+granTotal);
+	});
+
+	$("#Pagos_efectivo").change(function(){
+		pago=calcularPago();
+		setPago(pago);
+		debe=calcularDebe();
+		setDebe(debe);
+	});
+
+	$("#Pagos_tarjeta").change(function(){
+		pago=calcularPago();
+		setPago(pago);
+		debe=calcularDebe();
+		setDebe(debe);
+	});
+
+	$("#Pagos_cheque").change(function(){
+		pago=calcularPago();
+		setPago(pago);
+		debe=calcularDebe();
+		setDebe(debe);
 	});
 
 </script>
