@@ -111,7 +111,7 @@ array('nombre', 'unique'),
 	}
 
 	public function selectList(){
-		$grupos = $this->model()->findAll();
+		$grupos = $this->model()->findAll('activo=1');
 		$data = array(null=>"--Seleccione--");
 		foreach ($grupos as $grupo) {
 			$data[$grupo->id]=$grupo->nombre;

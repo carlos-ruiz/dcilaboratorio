@@ -47,6 +47,8 @@ class UnidadesResponsables extends CActiveRecord
 			array('clave, nombre, hora_inicial, hora_final', 'length', 'max'=>45),
 			array('responsable_sanitario, responsable_administrativo', 'length', 'max'=>250),
 			array('sugerencias', 'length', 'max'=>300),
+			array('nombre, clave', 'unique'),
+
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, clave, nombre, hora_inicial, hora_final, responsable_sanitario, responsable_administrativo, sugerencias, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo, id_direccion', 'safe', 'on'=>'search'),

@@ -70,7 +70,7 @@ class DoctoresController extends Controller
 		$contactos = array(new Contactos, new Contactos, new Contactos);
 		$unidadDoctores = new UnidadTieneDoctores;
 		$direccion = new Direcciones;
-		$urs = UnidadesResponsables::model()->findAll();
+		$urs = UnidadesResponsables::model()->findAll('activo=1');
 		$unidadesSeleccionadas=array();
 		$simbolos = array('!', '$', '#', '?');
 		// Uncomment the following line if AJAX validation is needed
