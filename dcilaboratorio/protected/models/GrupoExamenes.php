@@ -51,7 +51,7 @@ class GrupoExamenes extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'examen' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
-			'grupo' => array(self::BELONGS_TO, 'GruposExamenes', 'id_grupos_examenes'),
+			'grupo' => array(self::BELONGS_TO, 'Grupo', 'id_grupos_examenes', 'condition'=>'grupo.activo=1' ),
 		);
 	}
 

@@ -49,8 +49,13 @@ class LoginForm extends CFormModel
 		if(!$this->hasErrors())
 		{
 			$this->_identity=new UserIdentity($this->usuario,$this->contrasena);
-			if(!$this->_identity->authenticate())
-				$this->addError('contrasena','Usuario o contraseña incorrectos.');
+			if($this->isActivo()){
+				if(!$this->_identity->authenticate())
+					$this->addError('contrasena','Usuario o contraseña incorrectos.');
+			}
+			else{
+				$this->addError('usuario','El usuario esta inactivo');
+			}
 		}
 	}
 
@@ -61,9 +66,15 @@ class LoginForm extends CFormModel
 	public function login()
 	{
 		if($this->_identity===null)
-		{
+		{	
+			
 			$this->_identity=new UserIdentity($this->usuario,$this->contrasena);
-			$this->_identity->authenticate();
+			if($this->isActivo()){
+				$this->_identity->authenticate();
+			}
+			else{
+				return false;
+			}
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
 		{
@@ -73,5 +84,25 @@ class LoginForm extends CFormModel
 		}
 		else
 			return false;
+	}
+
+	public function isActivo(){
+		$user = Usuarios::model()->find('usuario=?',array($this->usuario));
+		$doctor=Doctores::model()->find('id_usuarios=?',array($user->id));
+		if(isset($doctor)&&$doctor->activo==1)
+			return true;
+
+		$paciente=Pacientes::model()->find('id_usuarios=?',array($user->id));
+		if(isset($paciente)&&$paciente->activo==1)
+			return true;
+
+		if($user->perfil->nombre=="Administrador")
+			return true;
+
+		//$unidadResponsable=UnidadesResponsables::model()->find('id_usuarios=?',array($user->id));
+		//if(isset($unidadResponsable)&&$unidadResponsable->activo==1)
+		//	return true;
+
+		return false;
 	}
 }

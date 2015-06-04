@@ -248,7 +248,7 @@ class DoctoresController extends Controller
 		
 		$correo = Contactos::model()->findByPk($contacto_correo_id);
 		$unidadDoctores = new UnidadTieneDoctores;
-		$urs = UnidadesResponsables::model()->findAll();
+		$urs = UnidadesResponsables::model()->findAll('activo=1');
 		$perfil = Perfiles::model()->findByName("Doctor");
 
 		$unidadDoctoresAux = $model->unidadTieneDoctores;

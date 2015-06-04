@@ -369,14 +369,16 @@ class OrdenesController extends Controller
 		$grupo=Grupos::model()->findByPk($_POST['id']);
 		foreach ($grupo->grupoTiene as $tiene) {
 			$examen=$tiene->examen;
-			$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examen->id,$_POST['tarifa']));
-			$precio=isset($tarifa->precio)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
-			echo "<tr class='row_$examen->id' data-id='$examen->id'>
-					<td>$examen->clave</td>
-					<td>$examen->nombre</td>
-					<td class='precioExamen' data-val='$precio'>$ $precio</td>
-					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-				</tr>";
+			if($examen->activo==1){
+				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examen->id,$_POST['tarifa']));
+				$precio=isset($tarifa->precio)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
+				echo "<tr class='row_$examen->id' data-id='$examen->id'>
+						<td>$examen->clave</td>
+						<td>$examen->nombre</td>
+						<td class='precioExamen' data-val='$precio'>$ $precio</td>
+						<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+					</tr>";
+			}
 		}
 		
 	}

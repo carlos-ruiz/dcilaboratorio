@@ -515,6 +515,7 @@ echo $form->errorSummary($datosFacturacion);
 
 	function setPago(pago){
 		$("#pagoTotal").text("$ "+pago);
+		setColorDebe();
 	}
 
 	function calcularDebe(){
@@ -579,6 +580,8 @@ echo $form->errorSummary($datosFacturacion);
 						setExamenesIds();
 						total=calcularTotal();
 						setTotal(total);
+						debe=calcularDebe();
+						setDebe(debe);
 					}
 				);
 			}
@@ -605,6 +608,8 @@ echo $form->errorSummary($datosFacturacion);
 							setExamenesIds();
 							total=calcularTotal();
 							setTotal(total);
+							debe=calcularDebe();
+							setDebe(debe);
 						}
 					);
 				}
@@ -642,11 +647,15 @@ echo $form->errorSummary($datosFacturacion);
 	$("#Ordenes_descuento").change(function(){
 		granTotal=calcularGranTotal();
 		$("#granTotal").text("$ "+granTotal);
+		debe=calcularDebe();
+		setDebe(debe);
 	});
 
 	$("#Ordenes_costo_emergencia").change(function(){
 		granTotal=calcularGranTotal();
 		$("#granTotal").text("$ "+granTotal);
+		debe=calcularDebe();
+		setDebe(debe);
 	});
 
 	$("#Pagos_efectivo").change(function(){

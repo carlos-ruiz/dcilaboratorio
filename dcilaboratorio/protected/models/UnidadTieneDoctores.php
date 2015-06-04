@@ -50,8 +50,8 @@ class UnidadTieneDoctores extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idDoctores' => array(self::BELONGS_TO, 'Doctores', 'id_doctores'),
-			'idUnidadesResponsables' => array(self::BELONGS_TO, 'UnidadesResponsables', 'id_unidades_responsables'),
+			'idDoctores' => array(self::BELONGS_TO, 'Doctores', 'id_doctores','condition'=>'idDoctores.activo=1'),
+			'idUnidadesResponsables' => array(self::BELONGS_TO, 'UnidadesResponsables', 'id_unidades_responsables','condition'=>'idUnidadesResponsables.activo=1'),
 		);
 	}
 
