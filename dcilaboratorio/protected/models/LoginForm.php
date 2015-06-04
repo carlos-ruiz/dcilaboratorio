@@ -88,7 +88,8 @@ class LoginForm extends CFormModel
 
 	public function isActivo(){
 		$user = Usuarios::model()->find('usuario=?',array($this->usuario));
-		$doctor=Doctores::model()->find('id_usuarios=?',array($user->id));
+		if (isset($user)) {
+			$doctor=Doctores::model()->find('id_usuarios=?',array($user->id));
 		if(isset($doctor)&&$doctor->activo==1)
 			return true;
 
@@ -103,6 +104,11 @@ class LoginForm extends CFormModel
 		//if(isset($unidadResponsable)&&$unidadResponsable->activo==1)
 		//	return true;
 
-		return false;
+		return false;	
+		}
+		else{
+			return true;
+		}
+		
 	}
 }
