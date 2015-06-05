@@ -125,7 +125,7 @@ class DoctoresController extends Controller
 							$unidadDoctor->usuario_ultima_edicion=Yii::app()->user->id;
 							$unidadDoctor->creacion=date('Y-m-d H:i:s');
 							$unidadDoctor->usuario_creacion=Yii::app()->user->id;
-							$unidadesSeleccionadas[] = $unidadDoctor;
+							$unidadesSeleccionadas[$unidadDoctor->id_unidades_responsables]=array('selected' => 'selected');
 						}
 					}
 				}
