@@ -72,6 +72,7 @@ class DoctoresController extends Controller
 		$direccion = new Direcciones;
 		$urs = UnidadesResponsables::model()->findAll('activo=1');
 		$unidadesSeleccionadas=array();
+		$unidadesGuardar = array();
 		$simbolos = array('!', '$', '#', '?');
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -107,16 +108,14 @@ class DoctoresController extends Controller
 
 				if(isset($_POST['Direcciones'])){
 					$direccion->attributes = $_POST['Direcciones'];
-					$direccion->ultima_edicion=date('Y-m-d H:i:s');
-					$direccion->usuario_ultima_edicion=Yii::app()->user->id;
-					$direccion->creacion=date('Y-m-d H:i:s');
-					$direccion->usuario_creacion=Yii::app()->user->id;
 					$direccion->save();
 				}
 
 				$model->id_direccion=$direccion->id;
 
 				if (isset($_POST['UnidadTieneDoctores'])) {
+					$unidadesSeleccionadas = array();
+					$unidadesGuardar = array();
 					foreach ($_POST['UnidadTieneDoctores'] as $i => $unidad) {
 						foreach ($unidad as $id => $item) {
 							$unidadDoctor = new UnidadTieneDoctores;
@@ -125,6 +124,7 @@ class DoctoresController extends Controller
 							$unidadDoctor->usuario_ultima_edicion=Yii::app()->user->id;
 							$unidadDoctor->creacion=date('Y-m-d H:i:s');
 							$unidadDoctor->usuario_creacion=Yii::app()->user->id;
+							$unidadesGuardar[] = $unidadDoctor;
 							$unidadesSeleccionadas[$unidadDoctor->id_unidades_responsables]=array('selected' => 'selected');
 						}
 					}
@@ -149,14 +149,13 @@ class DoctoresController extends Controller
 				$tip = TiposContacto::model()->findByName('Correo electrónico');
 				$correo->id_tipos_contacto = $tip['id'];
 				$correo->id_perfiles = $perfil->id;
-				// $correo->id_persona = $model->id;
 				$correo->ultima_edicion=date('Y-m-d H:i:s');
 				$correo->usuario_ultima_edicion=Yii::app()->user->id;
 				$correo->creacion=date('Y-m-d H:i:s');
 				$correo->usuario_creacion=Yii::app()->user->id;
 
 				if($model->save()){
-					foreach ($unidadesSeleccionadas as $unidadDoctor) {
+					foreach ($unidadesGuardar as $unidadDoctor) {
 						$unidadDoctor->id_doctores = $model->id;
 						$unidadDoctor->save();
 					}
@@ -185,7 +184,6 @@ class DoctoresController extends Controller
 				}
 				else{
 					$transaction->rollback();
-					echo "<script>alerta('No se pudo guardar');</script>";
 				}
 			}
 		}catch(Exception $e)
