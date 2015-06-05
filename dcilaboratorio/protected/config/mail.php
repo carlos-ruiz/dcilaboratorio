@@ -30,13 +30,13 @@ return array(
 		'variable_set' => Yii::t('YiiMailer', 'Cannot set or reset variable: ')
 	),
 	'savePath' => 'webroot.assets.mail',
-	'testMode' => true,
+	'testMode' => false,
 // if you want to use SMTP, uncomment and configure lines below to your needs
 	'Mailer' => 'smtp',
-	'Host' => 'smtp.gmail.com',
+	'Host' => 'smtp.ipage.com',
 	'Port' => 465,
 	'SMTPSecure' => 'ssl',
 	'SMTPAuth' => true,
-	'Username' => 'car.ruiz90@gmail.com',
-	'Password' => 'krlospotter',
+	'Username' => 'clientes@dcilaboratorio.com',
+	'Password' => 'Clientes@dci1',
 );

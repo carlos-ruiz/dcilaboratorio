@@ -140,7 +140,7 @@ class Direcciones extends CActiveRecord
 		return CHtml::listData($estados, 'id', 'nombre');
 	}
 
-	public function obtenerMunicipios($defaultEstado=1){
+	public function obtenerMunicipios($defaultEstado){
 		$municipios=Municipios::model()->findAll("id_estados=?", array($defaultEstado));
 		return CHtml::listData($municipios, 'id', 'nombre');
 	}
