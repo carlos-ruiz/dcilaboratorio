@@ -90,21 +90,21 @@ class LoginForm extends CFormModel
 		$user = Usuarios::model()->find('usuario=?',array($this->usuario));
 		if (isset($user)) {
 			$doctor=Doctores::model()->find('id_usuarios=?',array($user->id));
-		if(isset($doctor)&&$doctor->activo==1)
-			return true;
+			if(isset($doctor)&&$doctor->activo==1)
+				return true;
 
-		$paciente=Pacientes::model()->find('id_usuarios=?',array($user->id));
-		if(isset($paciente)&&$paciente->activo==1)
-			return true;
+			$paciente=Pacientes::model()->find('id_usuarios=?',array($user->id));
+			if(isset($paciente)&&$paciente->activo==1)
+				return true;
 
-		if($user->perfil->nombre=="Administrador")
-			return true;
+			if($user->perfil->nombre=="Administrador")
+				return true;
 
-		//$unidadResponsable=UnidadesResponsables::model()->find('id_usuarios=?',array($user->id));
-		//if(isset($unidadResponsable)&&$unidadResponsable->activo==1)
-		//	return true;
+			//$unidadResponsable=UnidadesResponsables::model()->find('id_usuarios=?',array($user->id));
+			//if(isset($unidadResponsable)&&$unidadResponsable->activo==1)
+			//	return true;
 
-		return false;	
+			return false;	
 		}
 		else{
 			return true;

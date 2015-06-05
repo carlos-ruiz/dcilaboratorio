@@ -49,6 +49,20 @@ echo $form->errorSummary($datosFacturacion);
 						<h3 style="color:#1e90ff ">Datos del paciente</h3>
 						<hr/>
 					</div>
+					<div class="heading">
+						<h5 style="color:#1e90ff ">Seleccione un paciente existente</h5>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="input-group">
+								<?php echo $form->dropDownList($paciente,'id',Pacientes::model()->selectListWithMail(), array("empty"=>"Seleccione un paciente", 'class'=>'form-control input-medium select2me')); ?>
+							</div>
+						</div>
+					</div>
+					<hr/>
+					<div class="heading">
+						<h5 style="color:#1e90ff ">O agregue uno nuevo</h5>
+					</div>
 					<div class="row">
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'nombre')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'nombre', array('class'=>'control-label')); ?>
@@ -78,7 +92,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'fecha_nacimiento')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'fecha_nacimiento', array('class'=>'control-label')); ?>
 							<div class="input-group">	
-								<?php echo $form->textField($paciente,'fecha_nacimiento',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker')); ?>													
+								<?php echo $form->textField($paciente,'fecha_nacimiento',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es')); ?>													
 								<?php echo $form->error($paciente,'fecha_nacimiento', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -678,6 +692,40 @@ echo $form->errorSummary($datosFacturacion);
 		debe=calcularDebe();
 		setDebe(debe);
 	});
+
+	$("#Pacientes_id").change(function(){
+		var idPaciente=$(this).val();
+		if(idPaciente>0){
+			$.post(
+					"<?php echo $this->createUrl('ordenes/datosPacienteExistente/');?>",
+					{
+						id:idPaciente,
+					},
+					function(data){
+						paciente=JSON.parse(data);
+						
+						$("#Pacientes_nombre").val(paciente.nombre);
+						$("#Pacientes_a_paterno").val(paciente.a_paterno);
+						$("#Pacientes_a_materno").val(paciente.a_materno);
+						$("#Pacientes_email").val(paciente.email);
+						$("#Pacientes_fecha_nacimiento").val(paciente.fecha_nacimiento);
+						if(paciente.sexo==0)
+							$("#Pacientes_sexo_0").parent().addClass("checked");
+						else
+							$("#Pacientes_sexo_1").parent().addClass("checked");
+						
+					}
+				);
+		}
+	});
+
+	$("#Pacientes_nombre").change(function(){$("#Pacientes_id").select2('val',null);});
+	$("#Pacientes_a_paterno").change(function(){$("#Pacientes_id").select2('val',null);});
+	$("#Pacientes_a_materno").change(function(){$("#Pacientes_id").select2('val',null);});
+	$("#Pacientes_email").change(function(){$("#Pacientes_id").select2('val',null);});
+	$("#Pacientes_fecha_nacimiento").change(function(){$("#Pacientes_id").select2('val',null);});
+	$("#Pacientes_sexo_0").click(function(){$("#Pacientes_id").select2('val',null);});
+	$("#Pacientes_sexo_1").click(function(){$("#Pacientes_id").select2('val',null);});
 
 </script>
 

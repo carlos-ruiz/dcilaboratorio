@@ -282,7 +282,9 @@ jQuery(document).ready(function() {
 	QuickSidebar.init(); // init quick sidebar
 	Demo.init(); // init demo features
 	ComponentsPickers.init();
-
+	$(".date-picker").datepicker({
+	    language: 'es',
+	});
 
 });
 

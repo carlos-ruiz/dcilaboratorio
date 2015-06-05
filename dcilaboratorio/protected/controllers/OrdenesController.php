@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar'),
+				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -143,27 +143,28 @@ class OrdenesController extends Controller
 						}
 					}
 
-					//GENERAR USUARIO PARA EL PACIENTE
-					$simbolos = array('!', '$', '#', '?');
-					$perfil = Perfiles::model()->findByName("Paciente");
-					$user=new Usuarios;
+					if(!isset($paciente->id)){
+						//GENERAR USUARIO PARA EL PACIENTE
+						$simbolos = array('!', '$', '#', '?');
+						$perfil = Perfiles::model()->findByName("Paciente");
+						$user=new Usuarios;
 
-					$user->usuario=substr($paciente->nombre, 0,3);
-					$user->contrasena="beforeSave";
-					$user->ultima_edicion=$fecha_edicion;
-					$user->usuario_ultima_edicion=1;
-					$user->creacion=$fecha_creacion;
-					$user->usuario_creacion=1;
-					$user->id_perfiles=$perfil->id;
+						$user->usuario=substr($paciente->nombre, 0,3);
+						$user->contrasena="beforeSave";
+						$user->ultima_edicion=$fecha_edicion;
+						$user->usuario_ultima_edicion=1;
+						$user->creacion=$fecha_creacion;
+						$user->usuario_creacion=1;
+						$user->id_perfiles=$perfil->id;
 
-					$user->save();
-					$user->usuario=strtolower($user->usuario).$user->id."dci";
-					$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
-					$user->save();
+						$user->save();
+						$user->usuario=strtolower($user->usuario).$user->id."dci";
+						$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
+						$user->save();
 
-					$paciente->id_usuarios=$user->id;
-					$paciente->save();
-
+						$paciente->id_usuarios=$user->id;
+						$paciente->save();
+					}
 					$ordenFacturacion = new OrdenesFacturacion;
 					if($model->requiere_factura==1){
 						$direccion->save();
@@ -397,6 +398,12 @@ class OrdenesController extends Controller
 					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 				</tr>";
 		}
+	}
+
+	public function actionDatosPacienteExistente(){
+		$paciente = Pacientes::model()->findByPk($_POST['id']);
+		$json = json_encode( (array)$paciente->getAttributes() );
+		echo $json;
 	}
 
 	public function obtenerPaciente($data, $row){
