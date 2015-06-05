@@ -45,6 +45,7 @@ class Direcciones extends CActiveRecord
 			array('calle, colonia, numero_ext, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipios, codigo_postal', 'required'),
 			array('codigo_postal, usuario_ultima_edicion, usuario_creacion, id_estados, id_municipios', 'numerical', 'integerOnly'=>true),
 			array('calle, colonia, numero_ext, num_int', 'length', 'max'=>45),
+			array('codigo_postal', 'length', 'min'=>5 ,'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, calle, colonia, numero_ext, num_int, codigo_postal, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_estados, id_municipios', 'safe', 'on'=>'search'),

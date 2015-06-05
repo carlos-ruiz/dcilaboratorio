@@ -88,11 +88,8 @@ class UnidadesResponsablesController extends Controller
 				}
 
 				$model->id_direccion=$direccion->id;
-
-				if($model->save()){
 					if(isset($_POST['Contactos'])){
-						$contacto->attributes = $_POST['Contactos'];
-						$contacto->id_persona = $model->id;
+						$contacto->attributes = $_POST['Contactos'];						
 						$tipo = TiposContacto::model()->findByName('Celular');
 						$contacto->id_tipos_contacto = $tipo['id'];
 						if($perfil = Perfiles::model()->findByName("Unidad responsable")){			
@@ -104,8 +101,16 @@ class UnidadesResponsablesController extends Controller
 							$perfil->save();
 							$contacto->id_perfiles=$perfil->id;	
 						}
-						$contacto->save();
+						
 					}
+
+				if($model->save()){
+				
+
+				if(isset($_POST['Contactos'])){
+					$contacto->id_persona = $model->id;
+					$contacto->save();
+				}
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
 				}
