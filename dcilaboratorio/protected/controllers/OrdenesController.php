@@ -106,10 +106,10 @@ class OrdenesController extends Controller
 				array_push($listaTarifasExamenes, $tarifaActiva);
 				$totalAPagar+=$tarifaActiva->precio;
 			}
-			$totalPagado=isset($pagos->efectivo)?$pagos->efectivo:0+isset($pagos->tarjeta)?$pagos->tarjeta:0+isset($pagos->cheque)?$pagos->cheque:0;
-			
+			$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
+
 			$status = new Status;
-			if($totalAPagar==$totalPagado)
+			if($totalAPagar<=$totalPagado)
 				$status=Status::model()->findByName("Pagada");
 			else
 				$status=Status::model()->findByName("Creada");
@@ -119,6 +119,10 @@ class OrdenesController extends Controller
 				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
 				$direccion->attributes=$_POST['Direcciones'];
 				$validaRequiereFactura=($datosFacturacion->validate()&$direccion->validate());
+			}
+
+			if($_POST['Pacientes']['id']>0){
+				$paciente->sexo=0;
 			}
 
 			if($model->validate() & $paciente->validate() & $pagos->validate() & $validaRequiereFactura){
@@ -143,7 +147,7 @@ class OrdenesController extends Controller
 						}
 					}
 
-					if(!isset($paciente->id)){
+					if(!$_POST['Pacientes']['id']>0){
 						//GENERAR USUARIO PARA EL PACIENTE
 						$simbolos = array('!', '$', '#', '?');
 						$perfil = Perfiles::model()->findByName("Paciente");
@@ -152,9 +156,9 @@ class OrdenesController extends Controller
 						$user->usuario=substr($paciente->nombre, 0,3);
 						$user->contrasena="beforeSave";
 						$user->ultima_edicion=$fecha_edicion;
-						$user->usuario_ultima_edicion=1;
+						$user->usuario_ultima_edicion=Yii::app()->user->id;
 						$user->creacion=$fecha_creacion;
-						$user->usuario_creacion=1;
+						$user->usuario_creacion=Yii::app()->user->id;
 						$user->id_perfiles=$perfil->id;
 
 						$user->save();
@@ -165,6 +169,9 @@ class OrdenesController extends Controller
 						$paciente->id_usuarios=$user->id;
 						$paciente->save();
 					}
+					else{
+						$paciente->id=$_POST['Pacientes']['id'];
+					}
 					$ordenFacturacion = new OrdenesFacturacion;
 					if($model->requiere_factura==1){
 						$direccion->save();
@@ -172,13 +179,16 @@ class OrdenesController extends Controller
 						$datosFacturacion->save();
 						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 					}
-
-					$ordenFacturacion->id_pacientes=$paciente->id;
+					if($_POST['Pacientes']['id']>0)
+						$ordenFacturacion->id_pacientes=$_POST['Pacientes']['id'];
+					else
+						$ordenFacturacion->id_pacientes=$paciente->id;
 					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
 
 					$pagos->id_ordenes=$model->id;
-					$pagos->save();
+					if($totalPagado>0)
+						$pagos->save();
 
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));

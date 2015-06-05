@@ -116,48 +116,57 @@ class DoctoresController extends Controller
 
 				$model->id_direccion=$direccion->id;
 
+				if (isset($_POST['UnidadTieneDoctores'])) {
+					foreach ($_POST['UnidadTieneDoctores'] as $i => $unidad) {
+						foreach ($unidad as $id => $item) {
+							$unidadDoctor = new UnidadTieneDoctores;
+							$unidadDoctor->id_unidades_responsables = $item;
+							$unidadDoctor->ultima_edicion=date('Y-m-d H:i:s');
+							$unidadDoctor->usuario_ultima_edicion=Yii::app()->user->id;
+							$unidadDoctor->creacion=date('Y-m-d H:i:s');
+							$unidadDoctor->usuario_creacion=Yii::app()->user->id;
+							$unidadesSeleccionadas[] = $unidadDoctor;
+						}
+					}
+				}
+
+				if (isset($_POST['Contactos'])) {
+					foreach ($contactos as $i => $contacto) {
+						if (isset($_POST['Contactos'][$i])) {
+							$contacto->attributes=$_POST['Contactos'][$i];
+							$tip = TiposContacto::model()->findByName($i==0?'Casa':($i==1?'Consultorio':'Celular'));
+							$contacto->id_tipos_contacto = $tip['id'];
+							$contacto->id_perfiles = $perfil->id;
+							$contacto->ultima_edicion=date('Y-m-d H:i:s');
+							$contacto->usuario_ultima_edicion=Yii::app()->user->id;
+							$contacto->creacion=date('Y-m-d H:i:s');
+							$contacto->usuario_creacion=Yii::app()->user->id;
+						}
+					}
+				}
+
+				$correo->contacto = $_POST['Doctores']['correo_electronico'];
+				$tip = TiposContacto::model()->findByName('Correo electrónico');
+				$correo->id_tipos_contacto = $tip['id'];
+				$correo->id_perfiles = $perfil->id;
+				// $correo->id_persona = $model->id;
+				$correo->ultima_edicion=date('Y-m-d H:i:s');
+				$correo->usuario_ultima_edicion=Yii::app()->user->id;
+				$correo->creacion=date('Y-m-d H:i:s');
+				$correo->usuario_creacion=Yii::app()->user->id;
+
 				if($model->save()){
-					if (isset($_POST['UnidadTieneDoctores'])) {
-						foreach ($_POST['UnidadTieneDoctores'] as $i => $unidad) {
-							foreach ($unidad as $id => $item) {
-								$unidadDoctor = new UnidadTieneDoctores;
-								$unidadDoctor->id_unidades_responsables = $item;
-								$unidadDoctor->id_doctores = $model->id;
-								$unidadDoctor->ultima_edicion=date('Y-m-d H:i:s');
-								$unidadDoctor->usuario_ultima_edicion=Yii::app()->user->id;
-								$unidadDoctor->creacion=date('Y-m-d H:i:s');
-								$unidadDoctor->usuario_creacion=Yii::app()->user->id;
-								$unidadDoctor->save();
-							}
-						}
+					foreach ($unidadesSeleccionadas as $unidadDoctor) {
+						$unidadDoctor->id_doctores = $model->id;
+						$unidadDoctor->save();
 					}
 
-					if (isset($_POST['Contactos'])) {
-						foreach ($contactos as $i => $contacto) {
-							if (isset($_POST['Contactos'][$i])) {
-								$contacto->attributes=$_POST['Contactos'][$i];
-								$tip = TiposContacto::model()->findByName($i==0?'Casa':($i==1?'Consultorio':'Celular'));
-								$contacto->id_tipos_contacto = $tip['id'];
-								$contacto->id_perfiles = $perfil->id;
-								$contacto->id_persona = $model->id;
-								$contacto->ultima_edicion=date('Y-m-d H:i:s');
-								$contacto->usuario_ultima_edicion=Yii::app()->user->id;
-								$contacto->creacion=date('Y-m-d H:i:s');
-								$contacto->usuario_creacion=Yii::app()->user->id;
-								$contacto->save();
-							}
-						}
+					foreach ($contactos as $contacto) {
+						$contacto->id_persona = $model->id;
+						$contacto->save();
 					}
-
-					$correo->contacto = $_POST['Doctores']['correo_electronico'];
-					$tip = TiposContacto::model()->findByName('Correo electrónico');
-					$correo->id_tipos_contacto = $tip['id'];
-					$correo->id_perfiles = $perfil->id;
+					
 					$correo->id_persona = $model->id;
-					$correo->ultima_edicion=date('Y-m-d H:i:s');
-					$correo->usuario_ultima_edicion=Yii::app()->user->id;
-					$correo->creacion=date('Y-m-d H:i:s');
-					$correo->usuario_creacion=Yii::app()->user->id;
 					$correo->save();
 
 					$usuario->usuario=substr($model->nombre, 0, 3).$usuario->id.'dci';
@@ -172,12 +181,11 @@ class DoctoresController extends Controller
 					$titulo = TitulosForm::model()->findByPk($model->id_titulos);
 					$nombreDoctor = $titulo->nombre.' '.$model->nombre.' '.$model->a_paterno.' '.$model->a_materno;
 					$this->enviarAccesoPorCorreo($nombreDoctor, $usuario->usuario, base64_decode($usuario->contrasena), $correo->contacto);
-
 					$this->redirect(array('view','id'=>$model->id));
 				}
 				else{
 					$transaction->rollback();
-					echo "<script>alert('No se pudo guardar');</script>";
+					echo "<script>alerta('No se pudo guardar');</script>";
 				}
 			}
 		}catch(Exception $e)

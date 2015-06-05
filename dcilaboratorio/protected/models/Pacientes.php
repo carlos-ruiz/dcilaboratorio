@@ -137,6 +137,7 @@ class Pacientes extends CActiveRecord
 
 	public function selectListWithMail(){
 		$pacientes = $this->model()->findAll('activo=1');
+		$data=array();
 		foreach ($pacientes as $paciente) {
 			$data[$paciente->id]=$paciente->nombre." ".$paciente->a_paterno." ".$paciente->a_materno." - ".$paciente->email;
 		}

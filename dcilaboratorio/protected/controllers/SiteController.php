@@ -156,6 +156,12 @@ class SiteController extends Controller
 			$perfil2 = new Perfiles;
 			$perfil2->nombre="Paciente";
 			$perfil2->save();
+			$perfil3 = new Perfiles;
+			$perfil3->nombre="Doctor";
+			$perfil3->save();
+			$perfil4 = new Perfiles;
+			$perfil4->nombre="Unidad responsable";
+			$perfil4->save();
 
 		}
 		else{
