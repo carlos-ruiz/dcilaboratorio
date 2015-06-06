@@ -135,10 +135,15 @@
 				$total = $total + $pago->efectivo+$pago->tarjeta+$pago->cheque;
 			 endforeach;
 			echo'</table>';
-			echo '<table class="table table-striped table-bordered dataTable"><tr>
-				   <td>Total pagado </td><td>$ '.$total.'</td></<tr> </table>';
+			
 		    echo '<table class="table table-striped table-bordered dataTable"><tr>
 		    <td>Total de la Orden </td><th colspan="3" style="color:#1e90ff ">$ '.$totalOrden.'</th></<tr> </table>';
+		    echo '<table class="table table-striped table-bordered dataTable"><tr>
+				   <td>Total pagado </td><td>$ '.$total.'</td></<tr> </table>';
+		    if ($total>$totalOrden){
+		   	$cambio=$total-$totalOrden;
+		   	 echo '<table class="table table-striped table-bordered dataTable"><tr>		   
+		    <td>Cambio </td><td>$ '.$cambio.'</td><tr> </table>';}
 		    echo '<table class="table table-striped table-bordered dataTable"><tr>
 		    <th colspan="3" style="color:#1e90ff "> <center>Tarda '.$entrega.' día(s) para entregarse</center></th></<tr> </table>';
 		   
