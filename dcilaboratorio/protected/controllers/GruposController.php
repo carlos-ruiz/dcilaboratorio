@@ -223,4 +223,6 @@ class GruposController extends Controller
 			Yii::app()->end();
 		}
 	}
+	
 }
+
