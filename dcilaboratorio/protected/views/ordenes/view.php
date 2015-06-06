@@ -75,15 +75,21 @@
 
 	$aux=$model->ordenTieneExamenes;
 	$anterior=0;
-	echo '<table class="table table-striped table-bordered dataTable">
-	   		';
+	$totalOrden=0;
+	$entrega=1;
+	echo '<table class="table table-striped table-bordered dataTable">';
 	   		
 	 foreach ($aux as $ordenExamen): 
 		$detalleExamen=$ordenExamen->detalleExamen;
 		$examen=$detalleExamen->examenes;
 		if($examen->id!=$anterior){
-			echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
-		
+			$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($examen->id,$model->id_multitarifarios));
+			$totalOrden+=$tarifaActiva->precio;
+
+			if($examen->duracion_dias>$entrega)
+				$entrega=$examen->duracion_dias;
+
+			echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>		
 	   		<tr><td>Descripción</td>
 	   		<td>Resultado</td>
 	   		<td>Rango normal</td></tr>';
@@ -100,6 +106,7 @@
 		$anterior=$examen->id;
 	 endforeach;
 	 echo'</table>';
+	
 
 	 ?>
 
@@ -130,7 +137,16 @@
 			echo'</table>';
 			echo '<table class="table table-striped table-bordered dataTable"><tr>
 				   <td>Total pagado </td><td>$ '.$total.'</td></<tr> </table>';
+		    echo '<table class="table table-striped table-bordered dataTable"><tr>
+		    <td>Total de la Orden </td><th colspan="3" style="color:#1e90ff ">$ '.$totalOrden.'</th></<tr> </table>';
+		    echo '<table class="table table-striped table-bordered dataTable"><tr>
+		    <th colspan="3" style="color:#1e90ff "> <center>Tarda '.$entrega.' día(s) para entregarse</center></th></<tr> </table>';
+		   
+
 	?>
 	</div>
+
+
+
 </div>
 </div>
