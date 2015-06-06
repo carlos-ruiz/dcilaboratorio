@@ -225,7 +225,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6 <?php if($form->error($direccion,'id_municipios')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($direccion,'id_municipios', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->dropDownList($direccion,'id_municipios',$direccion->obtenerMunicipios(), array('class' => 'form-control input-medium select2me',"empty"=>"Seleccione una opci&oacute;n")); ?>
+								<?php echo $form->dropDownList($direccion,'id_municipios',$direccion->obtenerMunicipios(isset($direccion->id_estados)?$direccion->id_estados:0), array('class' => 'form-control input-medium select2me',"empty"=>"Seleccione una opci&oacute;n")); ?>
 								<?php echo $form->error($direccion,'id_municipios', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -321,7 +321,7 @@ echo $form->errorSummary($datosFacturacion);
 								<tr class='row_<?php echo $tarifaExamen->id_examenes;?>' data-id='<?php echo $tarifaExamen->id_examenes;?>'>
 									<td><?php echo $tarifaExamen->examen->clave; ?></td>
 									<td><?php echo $tarifaExamen->examen->nombre; ?></td>
-									<td class="precioExamen" data-val="<?php echo $tarifaExamen->precio; ?>">$ <?php echo $tarifaExamen->precio; ?></td>
+									<td class="precioExamen" data-val="<?php echo isset($tarifaExamen->precio)?$tarifaExamen->precio:0; ?>"><?php echo isset($tarifaExamen->precio)?"$ ".$tarifaExamen->precio:"No hay precio para el tarifario seleccionado <a href='js:void(0)' data-id='$tarifaExamen->id_examenes' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$tarifaExamen->id_examenes' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />"; ?></td>
 									<td><a href='js:void(0)' data-id='<?php echo $tarifaExamen->id_examenes;?>' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 								</tr>
 							<?php endforeach; ?>
@@ -456,6 +456,36 @@ echo $form->errorSummary($datosFacturacion);
 			$(".no-debe").addClass("debe").removeClass('no-debe');
 	}
 
+	function activarAgregarPrecio(){
+		$(".agregarPrecio").click(function(){
+			id_examen=$(this).data('id');
+			id_multitarifario=$("#Ordenes_id_multitarifarios").val();
+			precio=$("#addPrecio_"+id_examen).val();
+			if($.isNumeric(precio)){
+				$.post(
+					"<?php echo $this->createUrl('ordenes/agregarPrecio/');?>",
+					{
+						id:id_examen,
+						tarifa:id_multitarifario,
+						precio:precio
+					},
+					function(data){
+						$(".row_"+id_examen).html(data);
+						activarEliminacion();
+						setExamenesIds();
+						total=calcularTotal();
+						setTotal(total);
+						debe=calcularDebe();
+						setDebe(debe);
+					}
+				);
+			}
+			else{
+				alerta("El precio debe ser numérico");
+			}
+		});
+	}
+
 	function activarEliminacion(){
 		$(".eliminarExamen").click(function(){
 			$(".row_"+$(this).data('id')).hide(400);
@@ -473,6 +503,7 @@ echo $form->errorSummary($datosFacturacion);
 			total=calcularTotal();
 			setTotal(total);
 		});
+		activarAgregarPrecio();
 	}
 
 	function calcularTotal(){

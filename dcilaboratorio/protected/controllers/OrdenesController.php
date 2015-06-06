@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente'),
+				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -99,22 +99,7 @@ class OrdenesController extends Controller
 			$pagos->fecha=$model->fecha_captura;
 			$validaRequiereFactura=true;
 
-			$totalAPagar=0;
-			$examenesIds = split(',',$_POST['Examenes']['ids']);
-			foreach ($examenesIds as $idExamen) {
-				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
-				array_push($listaTarifasExamenes, $tarifaActiva);
-				$totalAPagar+=$tarifaActiva->precio;
-			}
-			$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
-
-			$status = new Status;
-			if($totalAPagar<=$totalPagado)
-				$status=Status::model()->findByName("Pagada");
-			else
-				$status=Status::model()->findByName("Creada");
-
-			$model->id_status=$status->id;
+			
 			if($model->requiere_factura==1){
 				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
 				$direccion->attributes=$_POST['Direcciones'];
@@ -125,9 +110,35 @@ class OrdenesController extends Controller
 				$paciente->sexo=0;
 			}
 
-			if($model->validate() & $paciente->validate() & $pagos->validate() & $validaRequiereFactura){
+			$totalAPagar=0;
+			$examenesIds = split(',',$_POST['Examenes']['ids']);
+			$validateExamenes=true;
+			foreach ($examenesIds as $idExamen) {
+				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
+				if(isset($tarifaActiva)){
+					array_push($listaTarifasExamenes, $tarifaActiva);
+					$totalAPagar+=$tarifaActiva->precio;
+				}
+				else{
+					$tarifaAux= new TarifasActivas;
+					$tarifaAux->id_examenes=$idExamen;
+					array_push($listaTarifasExamenes, $tarifaAux);
+					$validateExamenes=false;
+				}
+			}
+			$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
+
+			$status = new Status;
+			if($totalAPagar<=$totalPagado)
+				$status=Status::model()->findByName("Pagada");
+			else
+				$status=Status::model()->findByName("Creada");
+			$model->id_status=$status->id;
+
+			if($model->validate() & $paciente->validate() & $pagos->validate() & $validaRequiereFactura & $validateExamenes){
 				$transaction = Yii::app()->db->beginTransaction();
 				try{
+
 
 
 					$model->save();
@@ -366,11 +377,13 @@ class OrdenesController extends Controller
 		//print_r($_POST);
 		$examen=Examenes::model()->findByPk($_POST['id']);
 		$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($_POST['id'],$_POST['tarifa']));
-		$precio=isset($tarifa->precio)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
+		$precio=isset($tarifa->precio)?$tarifa->precio:0;
+		$precioText=isset($tarifa->precio)?'$ '.$tarifa->precio:'No hay precio para el tarifario seleccionado';
+		$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 		echo "<tr class='row_$examen->id' data-id='$examen->id'>
 				<td>$examen->clave</td>
 				<td>$examen->nombre</td>
-				<td class='precioExamen' data-val='$precio'>$ $precio</td>
+				<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
 				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 			</tr>";
 	}
@@ -382,11 +395,13 @@ class OrdenesController extends Controller
 			$examen=$tiene->examen;
 			if($examen->activo==1){
 				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examen->id,$_POST['tarifa']));
-				$precio=isset($tarifa->precio)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
+				$precio=isset($tarifa->precio)?$tarifa->precio:0;
+				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
+				$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 				echo "<tr class='row_$examen->id' data-id='$examen->id'>
 						<td>$examen->clave</td>
 						<td>$examen->nombre</td>
-						<td class='precioExamen' data-val='$precio'>$ $precio</td>
+						<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
 						<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 					</tr>";
 			}
@@ -400,15 +415,40 @@ class OrdenesController extends Controller
 		for ($i=0; $i<sizeof($examenes); $i++) {
 			$examen=Examenes::model()->findByPk($examenes[$i]);
 			$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examenes[$i],$tarifario));
-			$precio=isset($tarifa)?$tarifa->precio:'No hay precio para el tarifario seleccionado';
+			$precio=isset($tarifa->precio)?$tarifa->precio:0;
+			$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
+			$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 			echo "<tr class='row_$examen->id' data-id='$examen->id'>
 					<td>$examen->clave</td>
 					<td>$examen->nombre</td>
-					<td class='precioExamen' data-val='$precio'>$ $precio</td>
+					<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
 					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 				</tr>";
 		}
 	}
+
+	public function actionAgregarPrecio(){
+		$examenId=$_POST['id'];
+		$tarifario = $_POST['tarifa'];
+		$precio=$_POST['precio'];
+
+		$tarifa = new TarifasActivas;
+		$tarifa->id_examenes=$examenId;
+		$tarifa->id_multitarifarios=$tarifario;
+		$tarifa->precio=$precio;
+		$tarifa->ultima_edicion='2000-01-01 00:00:00';
+		$tarifa->usuario_ultima_edicion=Yii::app()->user->id;
+		$tarifa->creacion=date('Y-m-d H:i:s');
+		$tarifa->usuario_creacion=Yii::app()->user->id;
+		$tarifa->save();
+
+		$examen=Examenes::model()->findByPk($examenId);
+		echo "<td>$examen->clave</td>
+					<td>$examen->nombre</td>
+					<td class='precioExamen' data-val='$precio'>$ $precio</td>
+					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+				";
+	} 
 
 	public function actionDatosPacienteExistente(){
 		$paciente = Pacientes::model()->findByPk($_POST['id']);
