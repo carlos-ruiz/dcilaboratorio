@@ -320,7 +320,18 @@ echo $form->errorSummary($datosFacturacion);
 								<tr class='row_<?php echo $tarifaExamen->id_examenes;?>' data-id='<?php echo $tarifaExamen->id_examenes;?>'>
 									<td><?php echo $tarifaExamen->examen->clave; ?></td>
 									<td><?php echo $tarifaExamen->examen->nombre; ?></td>
-									<td class="precioExamen" data-val="<?php echo isset($tarifaExamen->precio)?$tarifaExamen->precio:0; ?>"><?php echo isset($tarifaExamen->precio)?"$ ".$tarifaExamen->precio:"No hay precio para el tarifario seleccionado <a href='js:void(0)' data-id='$tarifaExamen->id_examenes' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$tarifaExamen->id_examenes' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />"; ?></td>
+									<td class="precioExamen" data-val="<?php echo isset($tarifaExamen->precio)?$tarifaExamen->precio:0; ?>">
+									
+									<?php echo isset($tarifaExamen->precio)?
+										"$ ".$tarifaExamen->precio:
+										"<div style='margin:0px;' class='form-group ".($form->error($tarifaExamen,'precio')!=''?"has-error":"")."'>".
+											"<div class='row' style='margin-left:5px'>No hay precio para el tarifario seleccionado ".
+											"<a href='js:void(0)' data-id='$tarifaExamen->id_examenes' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a> ".
+											"<input type='text' class='form-control input-small' id='addPrecio_$tarifaExamen->id_examenes' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />".
+											"</div><div class='help-block row' style='float:right; margin:0px;'>Debe agregar un precio para el examen en el multitarifario seleccionado.</div>".
+										"</div>"; ?>
+									</td>
+									
 									<td><a href='js:void(0)' data-id='<?php echo $tarifaExamen->id_examenes;?>' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 								</tr>
 							<?php endforeach; ?>
@@ -441,6 +452,18 @@ echo $form->errorSummary($datosFacturacion);
 <script type="text/javascript">
 	examenesIds=[];
 
+	function block(target) {
+        Metronic.blockUI({
+            target: '#'+target,
+            animate: true
+        });
+    }
+
+    function unblock(target){
+
+        Metronic.unblockUI('#'+target);
+    }
+
 	function setExamenesIds(){
 		var ids=examenesIds.join();
 		$("#examenesIds").val(ids);
@@ -461,6 +484,7 @@ echo $form->errorSummary($datosFacturacion);
 			id_multitarifario=$("#Ordenes_id_multitarifarios").val();
 			precio=$("#addPrecio_"+id_examen).val();
 			if($.isNumeric(precio)){
+				block("examenes");
 				$.post(
 					"<?php echo $this->createUrl('ordenes/agregarPrecio/');?>",
 					{
@@ -476,6 +500,7 @@ echo $form->errorSummary($datosFacturacion);
 						setTotal(total);
 						debe=calcularDebe();
 						setDebe(debe);
+						unblock("examenes");
 					}
 				);
 			}
@@ -611,6 +636,7 @@ echo $form->errorSummary($datosFacturacion);
 						return;
 					}
 				}
+				block("examenes");
 				$.post(
 					"<?php echo $this->createUrl('ordenes/agregarExamen/');?>",
 					{
@@ -626,11 +652,13 @@ echo $form->errorSummary($datosFacturacion);
 						setTotal(total);
 						debe=calcularDebe();
 						setDebe(debe);
+						unblock("examenes");
 					}
 				);
 			}
 			else{ 
 				if(idGrupo>0){
+					block("examenes");
 					$.post(
 						"<?php echo $this->createUrl('ordenes/agregarGrupoExamen/');?>",
 						{
@@ -654,6 +682,7 @@ echo $form->errorSummary($datosFacturacion);
 							setTotal(total);
 							debe=calcularDebe();
 							setDebe(debe);
+							unblock("examenes");
 						}
 					);
 				}
@@ -672,6 +701,7 @@ echo $form->errorSummary($datosFacturacion);
 		var idMultitarifario = $(this).val();
 		if(examenesIds.length>0){
 			ids=examenesIds.join();
+			block("examenes");
 			$.post(
 					"<?php echo $this->createUrl('ordenes/actualizarPrecios/');?>",
 					{
@@ -683,6 +713,7 @@ echo $form->errorSummary($datosFacturacion);
 						activarEliminacion();
 						total=calcularTotal();
 						setTotal(total);
+						unblock("examenes");
 					}
 				);
 		}

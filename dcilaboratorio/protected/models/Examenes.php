@@ -40,7 +40,7 @@ class Examenes extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('clave, nombre, duracion_dias, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
+			array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
 			array('clave,nombre', 'unique'),
 			array('duracion_dias, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('clave, nombre', 'length', 'max'=>45),
@@ -132,7 +132,7 @@ array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
 	}
 
 	public function getAll(){
-		return $this->model()->findAll();
+		return $this->model()->findAll('activo=1');
 	}
 
 	public function findExamenesInIds($ids){
@@ -161,9 +161,19 @@ array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
 		$examenes = $this->model()->findAll('activo=1');
 		$data = array(null=>"--Seleccione--");
 		foreach ($examenes as $examen) {
-			$data[$examen->id]=$examen->clave." - ".$examen->nombre;
+			if(sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos())
+				$data[$examen->id]=$examen->clave." - ".$examen->nombre;
 		}
 		return $data;
+	}
+
+	public function tieneResultadosActivos(){
+		foreach ($this->detallesExamenes as $detalle) {
+			if($detalle->activo==1){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
