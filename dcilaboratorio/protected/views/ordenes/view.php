@@ -142,7 +142,7 @@
 		    <td>Cambio </td><td>$ '.$cambio.'</td><tr> </table>';}
 		    echo '<table class="table table-striped table-bordered dataTable"><tr>
 		    <th colspan="3" style="color:#1e90ff "> <center>Tarda '.$entrega.' día(s) para entregarse</center></th></<tr>'; ?>
-		    <tr style="<?php if($total==$totalOrden){ echo 'display:none'; } ?>">
+		    <tr style="<?php if($total>=$totalOrden){ echo 'display:none'; } ?>">
 		    	<td>
 		    	<a class="btn red" style="width:100%;" href="<?php echo CController::createUrl('ordenes/loadModalContent',array('id_ordenes'=>"$model->id"));?>" data-target="#modal" data-toggle="modal">Agregar pago</a>
 		    	</td>

@@ -162,9 +162,8 @@
 				$("#pagos-form").submit();
 			}
 			else{
-				alert("El monto de pago es mayor al adeudo");
-				$("#modal .form-group").addClass("has-error");
-				return false;	
+				alert("Su cambio es: $"+calcularDebe()*-1);
+				$("#pagos-form").submit();	
 			}
 		}
 		else{
