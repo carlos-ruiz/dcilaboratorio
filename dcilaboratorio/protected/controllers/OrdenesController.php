@@ -334,8 +334,30 @@ class OrdenesController extends Controller
 	*Modal 
 	*/
 
-	public function actionLoadModalContent(){
-		$pagos=new Pagos;
+	public function actionLoadModalContent($id_ordenes){
+		if (isset($id_ordenes)) {
+			$orden = $this->loadModel($id_ordenes);
+		}
+
+		$transaction = Yii::app()->db->beginTransaction();
+		try{
+			$pagos=new Pagos;
+			if (isset($_POST['Pagos'])) {
+				$pagos->attributes = $_POST['Pagos'];
+				$pagos->id_ordenes = $orden->id;
+				$pagos->ultima_edicion = '2000-01-01 00:00:00';
+				$pagos->usuario_ultima_edicion = Yii::app()->user->id;
+				$pagos->creacion = date('Y-m-d H:i:s');
+				$pagos->usuario_creacion = Yii::app()->user->id;
+				$pagos->fecha = date('Y-m-d H:i:s');
+				$pagos->save();
+				$transaction->commit();
+				$this->redirect(array('view','id'=>$orden->id));
+			}
+		}
+		catch(Exception $ex){
+			$transaction->rollback();
+		}
 		$form=$this->beginWidget('CActiveForm', array(
 			'id'=>'pagos-form',
 			// Please note: When you enable ajax validation, make sure the corresponding
@@ -345,7 +367,7 @@ class OrdenesController extends Controller
 			'enableAjaxValidation'=>false,
 		)); 
 		$this->renderPartial("_modalPagos",
-			array('pagos'=>$pagos,'form'=>$form)
+			array('pagos'=>$pagos,'form'=>$form, 'orden'=>$orden)
 			);
 		$this->endWidget();
 	}
