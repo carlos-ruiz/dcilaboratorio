@@ -122,12 +122,18 @@ class OrdenesController extends Controller
 				else{
 					$tarifaAux= new TarifasActivas;
 					$tarifaAux->id_examenes=$idExamen;
+					$tarifaAux->addError('precio','No hay precio en el tarifario');
 					array_push($listaTarifasExamenes, $tarifaAux);
 					$validateExamenes=false;
 				}
 			}
-			$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
+			if(isset($model->descuento)){
+				$totalAPagar=$totalAPagar * (1-($model->descuento/100));
+			}
+			if(isset($model->costo_emergencia))
+				$totalAPagar=$totalAPagar+$model->costo_emergencia;
 
+			$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
 			$status = new Status;
 			if($totalAPagar<=$totalPagado)
 				$status=Status::model()->findByName("Pagada");
@@ -415,7 +421,7 @@ class OrdenesController extends Controller
 		$grupo=Grupos::model()->findByPk($_POST['id']);
 		foreach ($grupo->grupoTiene as $tiene) {
 			$examen=$tiene->examen;
-			if($examen->activo==1){
+			if($examen->activo==1 && sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos()){
 				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examen->id,$_POST['tarifa']));
 				$precio=isset($tarifa->precio)?$tarifa->precio:0;
 				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
@@ -436,16 +442,18 @@ class OrdenesController extends Controller
 		$tarifario = $_POST['tarifa'];
 		for ($i=0; $i<sizeof($examenes); $i++) {
 			$examen=Examenes::model()->findByPk($examenes[$i]);
-			$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examenes[$i],$tarifario));
-			$precio=isset($tarifa->precio)?$tarifa->precio:0;
-			$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
-			$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
-			echo "<tr class='row_$examen->id' data-id='$examen->id'>
-					<td>$examen->clave</td>
-					<td>$examen->nombre</td>
-					<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-				</tr>";
+			if(sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos()){
+				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examenes[$i],$tarifario));
+				$precio=isset($tarifa->precio)?$tarifa->precio:0;
+				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
+				$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
+				echo "<tr class='row_$examen->id' data-id='$examen->id'>
+						<td>$examen->clave</td>
+						<td>$examen->nombre</td>
+						<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
+						<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+					</tr>";
+			}
 		}
 	}
 

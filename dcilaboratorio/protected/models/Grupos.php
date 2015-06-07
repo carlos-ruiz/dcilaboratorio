@@ -114,7 +114,7 @@ array('nombre', 'unique'),
 		$grupos = $this->model()->findAll('activo=1');
 		$data = array(null=>"--Seleccione--");
 		foreach ($grupos as $grupo) {
-			$data[$grupo->id]=$grupo->nombre;
+				$data[$grupo->id]=$grupo->nombre;
 		}
 		return $data;
 	}
