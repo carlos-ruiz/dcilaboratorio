@@ -45,6 +45,9 @@ class Pacientes extends CActiveRecord
 			array('sexo, usuario_ultima_edicion, usuario_creacion, id_usuarios, activo', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, email', 'length', 'max'=>45),
 			array('fecha_nacimiento', 'safe'),
+			array('email', 'unique',
+				'attributeName' => 'email',
+				'message'=>'Ya existe un usuario registrado con este correo electrónico.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, nombre, a_paterno, a_materno, fecha_nacimiento, sexo, email, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios, activo', 'safe', 'on'=>'search'),

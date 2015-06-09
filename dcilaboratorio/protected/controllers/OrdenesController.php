@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio'),
+				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo"),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -113,11 +113,16 @@ class OrdenesController extends Controller
 			$totalAPagar=0;
 			$examenesIds = split(',',$_POST['Examenes']['ids']);
 			$validateExamenes=true;
+			$examenes_precio = array();
 			foreach ($examenesIds as $idExamen) {
 				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
 				if(isset($tarifaActiva)){
 					array_push($listaTarifasExamenes, $tarifaActiva);
 					$totalAPagar+=$tarifaActiva->precio;
+					$examen_precio = new OrdenPrecioExamen;
+					$examen_precio->precio = $tarifaActiva->precio;
+					$examen_precio->id_examenes = $idExamen;
+					array_push($examenes_precio, $examen_precio);
 				}
 				else{
 					$tarifaAux= new TarifasActivas;
@@ -135,8 +140,18 @@ class OrdenesController extends Controller
 
 			$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
 			$status = new Status;
-			if($totalAPagar<=$totalPagado)
+			if($totalAPagar<=$totalPagado){
+				$cambio = $totalPagado-$totalAPagar;
+				if ($pagos->efectivo >= $cambio) {
+					$pagos->efectivo -= $cambio; 
+				}
+				else{
+					$cambio -= $pagos->efectivo;
+					$pagos->efectivo = 0;
+					$pagos->tarjeta -= $cambio;
+				}
 				$status=Status::model()->findByName("Pagada");
+			}
 			else
 				$status=Status::model()->findByName("Creada");
 			$model->id_status=$status->id;
@@ -144,10 +159,13 @@ class OrdenesController extends Controller
 			if($model->validate() & $paciente->validate() & $pagos->validate() & $validaRequiereFactura & $validateExamenes){
 				$transaction = Yii::app()->db->beginTransaction();
 				try{
-
-
-
 					$model->save();
+					// print_r($examenes_precio);
+					// return;
+					foreach ($examenes_precio as $examen_precio) {
+						$examen_precio->id_ordenes = $model->id;
+						$examen_precio->save();
+					}
 					
 					foreach ($examenesIds as $idExamen) {
 						array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
@@ -208,6 +226,8 @@ class OrdenesController extends Controller
 						$pagos->save();
 
 					$transaction->commit();
+					$nombrePaciente = $paciente->nombre." ".$paciente->a_paterno." ".$paciente->a_materno;
+					$this->enviarAccesoPorCorreo($nombrePaciente, $user->usuario, base64_decode($user->contrasena), $paciente->email);
 					$this->redirect(array('view','id'=>$model->id));
 
 					
@@ -478,6 +498,20 @@ class OrdenesController extends Controller
 					<td class='precioExamen' data-val='$precio'>$ $precio</td>
 					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 				";
+	}
+
+	public function enviarAccesoPorCorreo($nombrePaciente, $usuario, $contrasena, $correo){
+		$mail = new YiiMailer();
+		$mail->setView('enviarContrasena');
+		$mail->setData(array('nombreCompleto' => $nombrePaciente, 'usuario' => $usuario, 'contrasena' => $contrasena,));
+		$mail->setFrom('clientes@dcilaboratorio.com', 'DCI Laboratorio');
+		$mail->setTo($correo);
+		$mail->setSubject('Bienvenido a DCI Laboratorio');
+		if ($mail->send()) {
+			Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
+		} else {
+			Yii::app()->user->setFlash('error','Error while sending email: '.$mail->getError());
+		}
 	} 
 
 	public function actionDatosPacienteExistente(){

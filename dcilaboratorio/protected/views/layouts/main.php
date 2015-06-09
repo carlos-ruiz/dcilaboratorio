@@ -63,25 +63,25 @@
 
 	<script type="text/javascript">
 		function alerta(mensaje){
-			$("#modalTitle").html("Alerta");
-			$("#modalAceptar").show();
-			$("#modal").find(".modal-body").html(mensaje);
-			$("#modal").modal("show");
-			$("#modal").modal()
+			$("#modalTitleAviso").html("Alerta");
+			$("#modalAceptarAviso").show();
+			$("#modalAviso").find(".modal-body").html(mensaje);
+			$("#modalAviso").modal("show");
+			$("#modalAviso").modal()
 				.one('hide', function () {
-					$("#modalAceptar").hide();
+					$("#modalAceptarAviso").hide();
 				});
 		}
 
 		function alerta(mensaje, titulo){
-			$("#modalTitle").html(titulo);
-			$("#modalAceptar").show();
-			$("#modal").find(".modal-body").html(mensaje);
-			$("#modal").modal("show");
-			$("#modal").modal()
-				.one('hide', function () {
-					$("#modalAceptar").hide();
-				});
+			$("#modalTitleAviso").html(titulo);
+			$("#modalAceptarAviso").show();
+			$("#modalAviso").find(".modal-body").html(mensaje);
+			$("#modalAviso").modal("show");
+			$("#modalAviso").modal()
+			.one('hide', function () {
+				$("#modalAceptarAviso").hide();
+			});
 		}
 
 	</script>
@@ -189,6 +189,26 @@
 	<!-- BEGIN CONTENT -->
 	<div class="page-content-wrapper">
 		<div class="page-content">
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<div class="modal fade draggable-modal" id="modalAviso" tabindex="-1" role="basic" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 id="modalTitleAviso" class="modal-title">Titulo</h4>
+						</div>
+						<div class="modal-body">
+							 Cargando...
+						</div>
+						<div class="modal-footer">
+							<button type="button" id="modalAceptarAviso" class="btn red" style="display:none" data-dismiss="modal">Aceptar</button>
+						</div> 
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<div class="modal fade draggable-modal" id="modal" tabindex="-1" role="basic" aria-hidden="true">
 				<div class="modal-dialog">

@@ -62,6 +62,7 @@ class Examenes extends CActiveRecord
 			'detallesExamenes' => array(self::HAS_MANY, 'DetallesExamen', 'id_examenes'),
 			'grupoTieneExamenes' => array(self::HAS_MANY, 'GrupoTieneExamenes', 'id_examenes'),
 			'tarifasActivases' => array(self::HAS_MANY, 'TarifasActivas', 'id_examenes'),
+			'precio' => array(self::HAS_MANY, 'OrdenPrecioExamen', 'id_examenes'),
 		);
 	}
 

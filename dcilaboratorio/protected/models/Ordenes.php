@@ -73,6 +73,7 @@ class Ordenes extends CActiveRecord
 			'idUnidadesResponsables' => array(self::BELONGS_TO, 'UnidadesResponsables', 'id_unidades_responsables'),
 			'ordenFacturacion' => array(self::HAS_ONE, 'OrdenesFacturacion', 'id_ordenes'),
 			'pagos' => array(self::HAS_MANY, 'Pagos', 'id_ordenes'),
+			'precios' => array(self::HAS_MANY, 'OrdenPrecioExamen', 'id_ordenes'),
 		);
 	}
 

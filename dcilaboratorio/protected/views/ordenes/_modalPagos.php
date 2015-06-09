@@ -123,6 +123,14 @@
 		cheque = parseFloat($("#Pagos_cheque").val());
 		if(isNaN(cheque))
 			cheque=0;
+		granTotal = parseFloat($("#granTotal").text());
+		if(isNaN(granTotal))
+			granTotal=0;
+		if (cheque > granTotal) {
+			alerta("El monto del cheque no debe ser mayor al costo de la orden","Aviso");
+			$("#Pagos_cheque").val("");
+			cheque = 0;
+		}
 		return efectivo+tarjeta+cheque;
 	}
 
@@ -139,10 +147,12 @@
 	}
 
 	function setPago(pago){
+		pago=Number((pago).toFixed(2));
 		$("#pagoActual").text("$ "+pago);
 	}
 
 	function setDebe(debe){
+		debe=Number((debe).toFixed(2));
 		$("#adeudo").text("$ "+debe);
 	}
 
@@ -162,12 +172,12 @@
 				$("#pagos-form").submit();
 			}
 			else{
-				alert("Su cambio es: $"+calcularDebe()*-1);
+				alerta("Su cambio es: $"+calcularDebe()*-1,"Cambio");
 				$("#pagos-form").submit();	
 			}
 		}
 		else{
-			alert("Escriba el monto de pago en al menos una forma de pago");
+			alerta("Escriba el monto de pago en al menos una forma de pago","Aviso");
 			$("#modal .form-group").addClass("has-error");
 			return false;
 		}

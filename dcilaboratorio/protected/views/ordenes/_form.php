@@ -539,6 +539,7 @@ echo $form->errorSummary($datosFacturacion);
 	}
 
 	function setTotal(total){
+		total=Number((total).toFixed(2));
 		$(".total").text("$ "+total);
 	}
 
@@ -566,6 +567,7 @@ echo $form->errorSummary($datosFacturacion);
 	}
 
 	function setGranTotal(granTotal){
+		granTotal=Number((granTotal).toFixed(2));
 		$("#granTotal").text("$ "+granTotal);
 	}
 
@@ -579,10 +581,16 @@ echo $form->errorSummary($datosFacturacion);
 		cheque = parseFloat($("#Pagos_cheque").val());
 		if(isNaN(cheque))
 			cheque=0;
+		if (cheque > calcularGranTotal()) {
+			alerta("El monto del cheque no debe ser mayor al costo de la orden","Aviso");
+			$("#Pagos_cheque").val("");
+			cheque=0;
+		}
 		return efectivo+tarjeta+cheque;
 	}
 
 	function setPago(pago){
+		pago=Number((pago).toFixed(2));
 		$("#pagoTotal").text("$ "+pago);
 		setColorDebe();
 	}
@@ -595,6 +603,7 @@ echo $form->errorSummary($datosFacturacion);
 	}
 
 	function setDebe(debe){
+		debe=Number((debe).toFixed(2));
 		$("#debe").text("$ "+debe);
 		setColorDebe();
 	}
@@ -770,11 +779,14 @@ echo $form->errorSummary($datosFacturacion);
 						$("#Pacientes_a_materno").val(paciente.a_materno);
 						$("#Pacientes_email").val(paciente.email);
 						$("#Pacientes_fecha_nacimiento").val(paciente.fecha_nacimiento);
-						if(paciente.sexo==0)
+						if(paciente.sexo==0){
+							$("#Pacientes_sexo_1").parent().removeClass("checked");
 							$("#Pacientes_sexo_0").parent().addClass("checked");
-						else
+						}
+						else{
+							$("#Pacientes_sexo_0").parent().removeClass("checked");
 							$("#Pacientes_sexo_1").parent().addClass("checked");
-						
+						}
 					}
 				);
 		}

@@ -57,8 +57,8 @@ class DetallesExamen extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'examenes' => array(self::BELONGS_TO, 'Examenes', 'id_examenes','condition'=>'examenes.activo=1'),
-			'unidadesMedida' => array(self::BELONGS_TO, 'UnidadesMedida', 'id_unidades_medida','condition'=>'unidadesMedida.activo=1'),
+			'examenes' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
+			'unidadesMedida' => array(self::BELONGS_TO, 'UnidadesMedida', 'id_unidades_medida'),
 			'ordenTieneExamenes' => array(self::HAS_MANY, 'OrdenTieneExamenes', 'id_detalles_examen'),
 		);
 	}
