@@ -364,6 +364,16 @@ class OrdenesController extends Controller
 		if (isset($id_ordenes)) {
 			$orden = $this->loadModel($id_ordenes);
 		}
+		$precios = $orden->precios;
+		$totalOrden = 0;
+		$totalPagado = 0;
+		foreach ($precios as $precio) {
+			$totalOrden += $precio->precio;
+		}
+		$pagosAnteriores = $orden->pagos;
+		foreach ($pagosAnteriores as $pagoRealizado) {
+			$totalPagado += $pagoRealizado->efectivo + $pagoRealizado->tarjeta + $pagoRealizado->cheque;
+		}
 
 		$transaction = Yii::app()->db->beginTransaction();
 		try{
@@ -371,6 +381,23 @@ class OrdenesController extends Controller
 			if (isset($_POST['Pagos'])) {
 				$pagos->attributes = $_POST['Pagos'];
 				$pagos->id_ordenes = $orden->id;
+				$totalPagado += $pagos->efectivo + $pagos->tarjeta + $pagos->cheque;
+				if($totalOrden <= $totalPagado){
+					$cambio = $totalPagado-$totalOrden;
+					if ($pagos->efectivo >= $cambio) {
+						$pagos->efectivo -= $cambio; 
+					}
+					else {
+						$cambio -= $pagos->efectivo;
+						$pagos->efectivo = 0;
+						$pagos->tarjeta -= $cambio;
+					}
+					$status=Status::model()->findByName("Pagada");
+					$orden->id_status = $status->id;
+					$orden->ultima_edicion = date('Y-m-d H:i:s');
+					$orden->usuario_ultima_edicion = Yii::app()->user->id;
+					$orden->save();
+				}
 				$pagos->ultima_edicion = '2000-01-01 00:00:00';
 				$pagos->usuario_ultima_edicion = Yii::app()->user->id;
 				$pagos->creacion = date('Y-m-d H:i:s');

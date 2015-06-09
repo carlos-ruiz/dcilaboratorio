@@ -41,13 +41,10 @@ class Pacientes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, a_paterno, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, email, fecha_nacimiento, sexo', 'required'),
+			array('nombre, a_paterno, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, fecha_nacimiento, sexo', 'required'),
 			array('sexo, usuario_ultima_edicion, usuario_creacion, id_usuarios, activo', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, email', 'length', 'max'=>45),
 			array('fecha_nacimiento', 'safe'),
-			array('email', 'unique',
-				'attributeName' => 'email',
-				'message'=>'Ya existe un usuario registrado con este correo electrónico.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, nombre, a_paterno, a_materno, fecha_nacimiento, sexo, email, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios, activo', 'safe', 'on'=>'search'),
@@ -142,7 +139,7 @@ class Pacientes extends CActiveRecord
 		$pacientes = $this->model()->findAll('activo=1');
 		$data=array();
 		foreach ($pacientes as $paciente) {
-			$data[$paciente->id]=$paciente->nombre." ".$paciente->a_paterno." ".$paciente->a_materno." - ".$paciente->email;
+			$data[$paciente->id]=$paciente->nombre." ".$paciente->a_paterno." ".$paciente->a_materno." - ".date("j/m/Y", strtotime($paciente->fecha_nacimiento));
 		}
 		return $data;
 	}

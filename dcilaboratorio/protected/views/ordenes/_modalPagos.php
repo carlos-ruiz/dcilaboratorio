@@ -126,8 +126,11 @@
 		granTotal = parseFloat($("#granTotal").text());
 		if(isNaN(granTotal))
 			granTotal=0;
-		if (cheque > granTotal) {
-			alerta("El monto del cheque no debe ser mayor al costo de la orden","Aviso");
+		adeudo = parseFloat($("#adeudo").text());
+		if(isNaN(adeudo))
+			adeudo=0;
+		if (cheque > adeudo) {
+			alerta("El monto del cheque no debe ser mayor al adeudo de la orden","Aviso");
 			$("#Pagos_cheque").val("");
 			cheque = 0;
 		}
@@ -172,7 +175,7 @@
 				$("#pagos-form").submit();
 			}
 			else{
-				alerta("Su cambio es: $"+calcularDebe()*-1,"Cambio");
+				alert("Su cambio es: $"+calcularDebe()*-1);
 				$("#pagos-form").submit();	
 			}
 		}
