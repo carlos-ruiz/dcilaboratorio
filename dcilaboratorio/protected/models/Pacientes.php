@@ -42,7 +42,7 @@ class Pacientes extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nombre, a_paterno, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, fecha_nacimiento, sexo', 'required'),
-			array('sexo, usuario_ultima_edicion, usuario_creacion, id_usuarios, activo', 'numerical', 'integerOnly'=>true),
+			array('id, sexo, usuario_ultima_edicion, usuario_creacion, id_usuarios, activo', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, email', 'length', 'max'=>45),
 			array('fecha_nacimiento', 'safe'),
 			// The following rule is used by search().
@@ -121,6 +121,7 @@ class Pacientes extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'pagination'=>false,
 		));
 	}
 
@@ -142,5 +143,10 @@ class Pacientes extends CActiveRecord
 			$data[$paciente->id]=$paciente->nombre." ".$paciente->a_paterno." ".$paciente->a_materno." - ".date("j/m/Y", strtotime($paciente->fecha_nacimiento));
 		}
 		return $data;
+	}
+
+	public function findPacientePorNombreYFecha($nombre, $a_paterno, $a_materno, $fecha_nacimiento){
+		$paciente = $this->model()->find("nombre=? AND a_paterno=? AND a_materno=? AND fecha_nacimiento=?",array($nombre,$a_paterno,$a_materno,$fecha_nacimiento));
+		return $paciente;
 	}
 }

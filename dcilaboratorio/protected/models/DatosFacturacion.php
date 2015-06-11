@@ -89,6 +89,7 @@ class DatosFacturacion extends CActiveRecord
 		$criteria->compare('id_direccion',$this->id_direccion,true);
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'pagination'=>false,
 		));
 	}
 

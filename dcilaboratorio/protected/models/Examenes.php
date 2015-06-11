@@ -118,6 +118,7 @@ class Examenes extends CActiveRecord
 		$this->dbCriteria->order='activo DESC, nombre ASC';
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'pagination'=>false,
 		));
 	}
 

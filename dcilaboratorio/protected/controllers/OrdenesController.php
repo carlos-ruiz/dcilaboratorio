@@ -106,7 +106,7 @@ class OrdenesController extends Controller
 				$validaRequiereFactura=($datosFacturacion->validate()&$direccion->validate());
 			}
 
-			if($_POST['Pacientes']['id']>0){
+			if($paciente->id>0){
 				$paciente->sexo=0;
 			}
 
@@ -191,7 +191,17 @@ class OrdenesController extends Controller
 						}
 					}
 
-					if(!$_POST['Pacientes']['id']>0){
+					if(isset($paciente->id)&&$paciente->id>0){
+						
+						$paciente = Pacientes::model()->findByPk($paciente->id);
+					}
+					else{
+						$pacienteAux = Pacientes::model()->findPacientePorNombreYFecha($paciente->nombre, $paciente->a_paterno, $paciente->a_materno, $paciente->fecha_nacimiento);
+						if(isset($pacienteAux->id))
+							$paciente=$pacienteAux;
+					}
+
+					if(!isset($paciente->id)||!$paciente->id>0){
 						//GENERAR USUARIO PARA EL PACIENTE
 						$simbolos = array('!', '$', '#', '?');
 						$perfil = Perfiles::model()->findByName("Paciente");
@@ -213,9 +223,7 @@ class OrdenesController extends Controller
 						$paciente->id_usuarios=$user->id;
 						$paciente->save();
 					}
-					else{
-						$paciente->id=$_POST['Pacientes']['id'];
-					}
+
 					$ordenFacturacion = new OrdenesFacturacion;
 					if($model->requiere_factura==1){
 						$direccion->save();
@@ -223,10 +231,9 @@ class OrdenesController extends Controller
 						$datosFacturacion->save();
 						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 					}
-					if($_POST['Pacientes']['id']>0)
-						$ordenFacturacion->id_pacientes=$_POST['Pacientes']['id'];
-					else
+					if($paciente->id>0)
 						$ordenFacturacion->id_pacientes=$paciente->id;
+					
 					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
 
@@ -235,6 +242,9 @@ class OrdenesController extends Controller
 						$pagos->save();
 
 					$transaction->commit();
+					if(!isset($user))
+						$user=Usuarios::model()->findByPk($paciente->id_usuarios);
+					
 					$nombrePaciente = $paciente->nombre." ".$paciente->a_paterno." ".$paciente->a_materno;
 					$this->enviarAccesoPorCorreo($nombrePaciente, $user->usuario, base64_decode($user->contrasena), $paciente->email);
 					$this->redirect(array('view','id'=>$model->id));
@@ -242,7 +252,10 @@ class OrdenesController extends Controller
 					
 				}catch(Exception $e){
 					//print_r($e);
+					//return;
 					$transaction->rollback();
+					$mensaje="Ocurrió un error inesperado, verifica los datos e intenta de nuevo";
+					$titulo="Aviso";
 				}
 			}
 			

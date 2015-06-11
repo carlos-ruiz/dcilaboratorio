@@ -106,7 +106,8 @@ class Contactos extends CActiveRecord
 		$criteria->compare('id_perfiles',$this->id_perfiles);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria'=>$criteria,,
+			'pagination'=>false,
 		));
 	}
 
