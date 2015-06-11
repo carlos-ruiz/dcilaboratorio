@@ -472,7 +472,9 @@ class OrdenesController extends Controller
 				$ordenExamenToSave = $ordenExamenes[$i];
 				$ordenExamenToSave->resultado = $value['resultado'];
 				$ordenExamenToSave->save();
-				$calificada = $ordenExamenToSave->resultado!=""; 
+				if ($calificada) {
+					$calificada = $ordenExamenToSave->resultado!=""; 
+				}
 			}
 			$statusPagada=Status::model()->findByName("Pagada");
 			$statusCalificada=Status::model()->findByName("Calificada");
