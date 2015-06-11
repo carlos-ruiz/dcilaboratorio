@@ -111,8 +111,17 @@ class OrdenesController extends Controller
 			}
 
 			$totalAPagar=0;
-			$examenesIds = split(',',$_POST['Examenes']['ids']);
 			$validateExamenes=true;
+			$examenesIds=array();
+			if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids']))
+				$examenesIds = split(',',$_POST['Examenes']['ids']);
+			else{
+				$mensaje="Debe agregar al menos un examen a la orden";
+				$titulo="Aviso";
+				$validateExamenes=false;
+			}
+
+			
 			$examenes_precio = array();
 			foreach ($examenesIds as $idExamen) {
 				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
@@ -248,6 +257,7 @@ class OrdenesController extends Controller
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
 		));
+		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
 	/**
@@ -392,8 +402,15 @@ class OrdenesController extends Controller
 						$pagos->efectivo = 0;
 						$pagos->tarjeta -= $cambio;
 					}
-					$status=Status::model()->findByName("Pagada");
-					$orden->id_status = $status->id;
+					$statusPagada=Status::model()->findByName("Pagada");
+					$statusCalificada=Status::model()->findByName("Calificada");
+					$statusFinalizada=Status::model()->findByName("Finalizada");
+					if ($orden->id_status == $statusCalificada->id) {
+						$orden->id_status = $statusFinalizada->id;
+					}
+					else{
+						$orden->id_status = $statusPagada->id;
+					}
 					$orden->ultima_edicion = date('Y-m-d H:i:s');
 					$orden->usuario_ultima_edicion = Yii::app()->user->id;
 					$orden->save();
@@ -435,10 +452,29 @@ class OrdenesController extends Controller
 		}
 
 		if (isset($_POST['OrdenTieneExamenes'])) {
+			$calificada = true;
 			foreach ($_POST['OrdenTieneExamenes'] as $i => $value) {
 				$ordenExamenToSave = $ordenExamenes[$i];
 				$ordenExamenToSave->resultado = $value['resultado'];
 				$ordenExamenToSave->save();
+				$calificada = $ordenExamenToSave->resultado!=""; 
+			}
+			$statusPagada=Status::model()->findByName("Pagada");
+			$statusCalificada=Status::model()->findByName("Calificada");
+			$statusFinalizada=Status::model()->findByName("Finalizada");
+			$statusCreada=Status::model()->findByName("Creada");
+
+			if($model->id_status == $statusPagada->id && $calificada){
+				$model->id_status = $statusFinalizada->id;
+				$model->save();
+			}
+			elseif (!$calificada && $model->id_status == $statusFinalizada->id) {
+				$model->id_status = $statusPagada->id;
+				$model->save();
+			}
+			elseif ($calificada && $model->id_status == $statusCreada->id) {
+				$model->id_status = $statusCalificada->id;
+				$model->save();
 			}
 			$this->redirect(array('view','id'=>$model->id));
 		}

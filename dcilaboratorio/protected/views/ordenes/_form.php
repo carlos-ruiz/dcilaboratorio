@@ -515,15 +515,13 @@ echo $form->errorSummary($datosFacturacion);
 			$(".row_"+$(this).data('id')).hide(400);
 			$(".row_"+$(this).data('id')).html("");
 			aux=[];
-			var ids="";
 			for (var i = 0; i < examenesIds.length; i++) {
 				if(examenesIds[i]!=$(this).data('id')){
 					aux.push(examenesIds[i]);
-					ids+=examenesIds[i]+",";
 				}
 			};
 			examenesIds=aux;
-			$("#examenesIds").val(ids);
+			setExamenesIds();
 			total=calcularTotal();
 			setTotal(total);
 		});
@@ -780,10 +778,12 @@ echo $form->errorSummary($datosFacturacion);
 						$("#Pacientes_email").val(paciente.email);
 						$("#Pacientes_fecha_nacimiento").val(paciente.fecha_nacimiento);
 						if(paciente.sexo==0){
+							$("#ytPacientes_sexo").val(0);
 							$("#Pacientes_sexo_1").parent().removeClass("checked");
 							$("#Pacientes_sexo_0").parent().addClass("checked");
 						}
 						else{
+							$("#ytPacientes_sexo").val(1);
 							$("#Pacientes_sexo_0").parent().removeClass("checked");
 							$("#Pacientes_sexo_1").parent().addClass("checked");
 						}
