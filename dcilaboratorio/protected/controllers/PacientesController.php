@@ -7,7 +7,9 @@ class PacientesController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-
+	public $section = "Ordenes";
+	public $subSection;
+	public $pageTitle="Pacientes";
 	/**
 	 * @return array action filters
 	 */
@@ -169,6 +171,14 @@ class PacientesController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public function obtenerGenero($data, $row){		
+		if ($data['sexo'] == 1)
+			$var = "Mujer";
+		else
+			$var = "Hombre";
+		return $var;
 	}
 
 }
