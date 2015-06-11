@@ -139,15 +139,14 @@
 		   }
 
 			 if($model->costo_emergencia !=0) {
-			 	$totalOrden=$totalOrden+$model->costo_emergencia;
-			 	 
+			 				 	 
 				echo   '<table class="table table-striped table-bordered dataTable"><tr>
 				   <td>Costo emergencia</td><td>$'.$model->costo_emergencia.'</td></<tr> </table>';
 				}
 
 
 		    if($model->descuento !=0) {
-		    	$totalOrden=$totalOrden-($totalOrden*$model->descuento)/100;
+		    	$totalOrden=($totalOrden-($totalOrden*$model->descuento)/100)+$model->costo_emergencia;
 				echo   '<table class="table table-striped table-bordered dataTable"><tr>
 				   <td>Descuento </td><td> '.$model->descuento.'%</td></<tr> </table>';
 		    }
@@ -158,6 +157,11 @@
 
 		    echo '<table class="table table-striped table-bordered dataTable"><tr>
 				   <td>Total pagado </td><td>$ '.$total.'</td></<tr> </table>';
+
+			$pagado=$totalOrden-$total;
+
+			  echo '<table class="table table-striped table-bordered dataTable"><tr>
+				   <td>Total pagado </td><td>$ '.$pagado.'</td></<tr> </table>';
 
 				
 		    echo '<table class="table table-striped table-bordered dataTable"><tr>
