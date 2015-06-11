@@ -101,7 +101,7 @@
 			echo "Sin resultado";
 		}
 		else{
-			echo $ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->nombre;
+			echo $ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura;
 		}
 		echo '</td><td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td></tr>';
 		$anterior=$examen->id;
