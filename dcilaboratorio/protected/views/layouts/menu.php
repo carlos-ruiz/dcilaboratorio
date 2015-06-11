@@ -54,6 +54,11 @@
 							<i class="icon-list"></i>
 							Administrar</a>
 						</li>
+						<li <?php if($this->section=="Ordenes" && $this->subSection=="Paciente"){ echo 'class="active"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/pacientes/admin">
+							<i class="icon-list"></i>
+							Pacientes</a>
+						</li>
 					</ul>
 				</li>
 

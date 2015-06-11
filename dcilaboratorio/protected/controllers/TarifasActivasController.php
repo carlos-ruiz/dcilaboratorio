@@ -74,7 +74,10 @@ class TarifasActivasController extends Controller
 			$model->attributes=$_POST['TarifasActivas'];
 
 			if($model->FindByAttributes(array('id_examenes'=>$model->id_examenes, 'id_multitarifarios'=>$model->id_multitarifarios)))
-				echo "<script>alert('Tarifa activa registrada para ese examen y multitarifario ');</script>";	
+			{
+				$titulo='Aviso';
+				$mensaje='Tarifa activa registrada para ese examen y multitarifario';
+			}
 
 			else{
 			if($model->save())
@@ -85,6 +88,7 @@ class TarifasActivasController extends Controller
 		$this->render('create',array(
 			'model'=>$model,
 		));
+		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
 	/**
