@@ -427,7 +427,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-4"><h3 style="color:#1e90ff" id="pagoTotal"> $999.00</h3></div>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-8 text-right" > <h3 class="debe">Debe </h3></div>
+						<div class="form-group col-md-8 text-right" > <h3 class="debe" id="debeText">Adeudo </h3></div>
 						<div class="form-group col-md-4"><h3 class="debe" id="debe"> $50.00</h3></div>
 					</div>
 
@@ -472,10 +472,17 @@ echo $form->errorSummary($datosFacturacion);
 	function setColorDebe(){
 		granTotal=calcularGranTotal();
 		pago=calcularPago();
-		if(pago>=granTotal)
+		if(pago>=granTotal){
+			if(pago>granTotal)
+				$("#debeText").text("Cambio");
+			else
+				$("#debeText").text("Adeudo");
 			$(".debe").addClass("no-debe").removeClass('debe');
-		else
+		}
+		else{
+			$("#debeText").text("Adeudo");
 			$(".no-debe").addClass("debe").removeClass('no-debe');
+		}
 	}
 
 	function activarAgregarPrecio(){
@@ -602,6 +609,8 @@ echo $form->errorSummary($datosFacturacion);
 
 	function setDebe(debe){
 		debe=Number((debe).toFixed(2));
+		if(debe<0)
+			debe=debe*(-1);
 		$("#debe").text("$ "+debe);
 		setColorDebe();
 	}
