@@ -48,7 +48,7 @@
 		$pagado += $pago->efectivo; 
 	}
 
-	$adeudo = $totalOrden-$pagado;
+	$adeudo = ($totalOrden*$orden->descuento/100+$orden->costo_emergencia)-$pagado;
 	?>
 	<table class="table table-striped table-bordered dataTable paymentDetailsTable">
 		<tr>
@@ -57,10 +57,34 @@
 		</tr>
 		<tr>
 			<td>
+				<div>Subtotal:</div>
+			</td>
+			<td>
+				$ <div id="subtotal" class="inline-block"><?php echo $totalOrden; ?></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Descuento:</div>
+			</td>
+			<td>
+				<div id="descuento" class="inline-block"><?php echo $orden->descuento; ?></div> %
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>Costo emergencia:</div>
+			</td>
+			<td>
+				$ <div id="costoEmergencia" class="inline-block"><?php echo $orden->costo_emergencia; ?></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
 				<div> Total de la órden:</div>
 			</td>
 			<td>
-				$ <div id="granTotal" class="inline-block"><?php echo $totalOrden; ?></div>
+				$ <div id="granTotal" class="inline-block"><?php echo ($totalOrden*$orden->descuento/100+$orden->costo_emergencia); ?></div>
 			</td>
 		</tr>
 		<tr>
@@ -81,10 +105,10 @@
 		</tr>
 		<tr>
 			<td>
-				<div>Adeudo:</div>
+				<div id="adeudoTitulo">Adeudo:</div>
 			</td>
 			<td>
-				<div class="inline-block color-red" id="adeudo">$<?php echo $adeudo; ?></div>
+				$ <div class="inline-block color-red" id="adeudo"><?php echo $adeudo; ?></div>
 			</td>
 		</tr>
 	</table>
@@ -126,10 +150,10 @@
 		granTotal = parseFloat($("#granTotal").text());
 		if(isNaN(granTotal))
 			granTotal=0;
-		adeudo = parseFloat($("#adeudo").text());
-		if(isNaN(adeudo))
-			adeudo=0;
-		if (cheque > adeudo) {
+		pagado = parseFloat($("#pagado").text());
+		if(isNaN(pagado))
+			pagado=0;
+		if (cheque > granTotal-pagado) {
 			alerta("El monto del cheque no debe ser mayor al adeudo de la orden","Aviso");
 			$("#Pagos_cheque").val("");
 			cheque = 0;
@@ -156,7 +180,19 @@
 
 	function setDebe(debe){
 		debe=Number((debe).toFixed(2));
-		$("#adeudo").text("$ "+debe);
+		if (debe<0) {
+			debe=debe*-1;
+			$("#adeudo").text(debe);
+			$("#adeudo").removeClass("color-red");
+			$("#adeudo").addClass("color-green");
+			$("#adeudoTitulo").text("Cambio:");
+		}
+		else{
+			$("#adeudo").text(debe);
+			$("#adeudo").removeClass("color-green");
+			$("#adeudo").addClass("color-red");
+			$("#adeudoTitulo").text("Adeudo:");	
+		}
 	}
 
 	$("#modalGuardar").click(function(evt) {
@@ -175,7 +211,6 @@
 				$("#pagos-form").submit();
 			}
 			else{
-				alert("Su cambio es: $"+calcularDebe()*-1);
 				$("#pagos-form").submit();	
 			}
 		}
