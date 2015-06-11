@@ -90,7 +90,7 @@ class OrdenesController extends Controller
 			$model->attributes=$_POST['Ordenes'];
 			$paciente->attributes=$_POST['Pacientes'];
 			$pagos->attributes=$_POST['Pagos'];
-
+			
 			$fecha_creacion=date('Y-m-d H:i:s');
 			$fecha_edicion='2000-01-01 00:00:00';
 
@@ -149,6 +149,7 @@ class OrdenesController extends Controller
 
 			$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
 			$status = new Status;
+
 			if($totalAPagar<=$totalPagado){
 				$cambio = $totalPagado-$totalAPagar;
 				if ($pagos->efectivo >= $cambio) {
@@ -192,7 +193,6 @@ class OrdenesController extends Controller
 					}
 
 					if(isset($paciente->id)&&$paciente->id>0){
-						
 						$paciente = Pacientes::model()->findByPk($paciente->id);
 					}
 					else{
@@ -221,7 +221,9 @@ class OrdenesController extends Controller
 						$user->save();
 
 						$paciente->id_usuarios=$user->id;
+						$paciente->id=null;
 						$paciente->save();
+
 					}
 
 					$ordenFacturacion = new OrdenesFacturacion;
@@ -231,8 +233,8 @@ class OrdenesController extends Controller
 						$datosFacturacion->save();
 						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 					}
-					if($paciente->id>0)
-						$ordenFacturacion->id_pacientes=$paciente->id;
+					
+					$ordenFacturacion->id_pacientes=$paciente->id;
 					
 					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
