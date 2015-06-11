@@ -48,7 +48,12 @@
 		$pagado += $pago->efectivo; 
 	}
 
-	$adeudo = ($totalOrden*$orden->descuento/100+$orden->costo_emergencia)-$pagado;
+	if (isset($orden->descuento) && $orden->descuento > 0) {
+		$adeudo = ($totalOrden*$orden->descuento/100+$orden->costo_emergencia)-$pagado;
+	}
+	else{
+		$adeudo = ($totalOrden+$orden->costo_emergencia)-$pagado;
+	}
 	?>
 	<table class="table table-striped table-bordered dataTable paymentDetailsTable">
 		<tr>
@@ -84,7 +89,14 @@
 				<div> Total de la órden:</div>
 			</td>
 			<td>
-				$ <div id="granTotal" class="inline-block"><?php echo ($totalOrden*$orden->descuento/100+$orden->costo_emergencia); ?></div>
+				$ <div id="granTotal" class="inline-block"><?php 
+					if(isset($orden->descuento) && $orden->descuento > 0){
+						echo ($totalOrden*$orden->descuento/100+$orden->costo_emergencia);
+					}
+					else{
+						echo ($totalOrden+$orden->costo_emergencia);
+					}
+				?></div>
 			</td>
 		</tr>
 		<tr>
