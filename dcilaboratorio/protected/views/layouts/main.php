@@ -190,7 +190,6 @@
 				include_once("menu_ur.php");
 			if(Yii::app()->user->getState('perfil')=='Paciente')
 				include_once("menu_paciente.php");
-
 			?>
 
 			<!-- END SIDEBAR MENU -->
