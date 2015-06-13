@@ -220,7 +220,6 @@ class OrdenesController extends Controller
 						$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
 						$user->save();
 
-						$paciente->id_usuarios=$user->id;
 						$paciente->id=null;
 						$paciente->save();
 
@@ -235,6 +234,7 @@ class OrdenesController extends Controller
 					}
 					
 					$ordenFacturacion->id_pacientes=$paciente->id;
+					$ordenFacturacion->id_usuarios=$user->id;
 					
 					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();

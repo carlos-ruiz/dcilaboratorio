@@ -184,16 +184,12 @@ class UsuariosController extends Controller
 		$nombre='';
 
 		if ($data->perfil->id == $perfilPaciente->id) {
-			$pacientes = $data->pacientes;
-			foreach ($pacientes as $paciente) {
-				$nombre = $paciente->obtenerNombreCompleto();
-			}
+			$paciente = $data->ordenFacturacion->paciente;
+			$nombre = $paciente->obtenerNombreCompleto();
 		}
 		elseif ($data->perfil->id == $perfilDoctor->id) {
-			$doctores = $data->doctores;
-			foreach ($doctores as $doctor) {
-				$nombre = $doctor->obtenerNombreCompleto();
-			}
+			$doctor = $data->doctor;
+			$nombre = $doctor->obtenerNombreCompleto();
 		}
 		return $nombre;
 	}

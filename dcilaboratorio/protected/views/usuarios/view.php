@@ -15,10 +15,9 @@
 	$perfilDoctor = Perfiles::model()->findByName("Doctor");
 	$perfilPaciente = Perfiles::model()->findByName("Paciente");
 	if ($model->perfil->id == $perfilPaciente->id) {
-		$pacientes = $model->pacientes;
-		foreach ($pacientes as $paciente) {
-			$nombre = $paciente->obtenerNombreCompleto();
-		}
+		$paciente = $model->ordenFacturacion->paciente;
+		$nombre = $paciente->obtenerNombreCompleto();
+
 		array_push($array, array(
 			'label'=>'Nombre',
 			'type'=>'raw',
@@ -27,10 +26,9 @@
 	}
 
 	elseif ($model->perfil->id == $perfilDoctor->id) {
-		$doctores = $model->doctores;
-		foreach ($doctores as $doctor) {
-			$nombre = $doctor->obtenerNombreCompleto();
-		}
+		$doctor = $model->doctor;
+		$nombre = $doctor->obtenerNombreCompleto();
+
 		array_push($array, array(
 			'label'=>'Nombre',
 			'type'=>'raw',

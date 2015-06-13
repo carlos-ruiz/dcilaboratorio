@@ -93,7 +93,10 @@ class LoginForm extends CFormModel
 			if(isset($doctor)&&$doctor->activo==1)
 				return true;
 
-			$paciente=Pacientes::model()->find('id_usuarios=?',array($user->id));
+			$ordenFacturacion=OrdenesFacturacion::model()->find('id_usuarios=?',array($user->id));
+			if (isset($ordenFacturacion)) {
+				$paciente = $ordenFacturacion->paciente;
+			}
 			if(isset($paciente)&&$paciente->activo==1)
 				return true;
 
