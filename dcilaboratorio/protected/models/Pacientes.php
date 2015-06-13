@@ -15,13 +15,11 @@
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
- * @property integer $id_usuarios
  * @property integer $activo
  *
  * The followings are the available model relations:
  * @property DatosFacturacion[] $datosFacturacions
  * @property Ordenes[] $ordenes
- * @property Usuarios $idUsuarios
  */
 class Pacientes extends CActiveRecord
 {
@@ -42,12 +40,12 @@ class Pacientes extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nombre, a_paterno, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, fecha_nacimiento, sexo', 'required'),
-			array('id, sexo, usuario_ultima_edicion, usuario_creacion, id_usuarios, activo', 'numerical', 'integerOnly'=>true),
+			array('id, sexo, usuario_ultima_edicion, usuario_creacion, activo', 'numerical', 'integerOnly'=>true),
 			array('nombre, a_paterno, a_materno, email', 'length', 'max'=>45),
 			array('fecha_nacimiento', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, a_paterno, a_materno, fecha_nacimiento, sexo, email, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, id_usuarios, activo', 'safe', 'on'=>'search'),
+			array('id, nombre, a_paterno, a_materno, fecha_nacimiento, sexo, email, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,7 +59,6 @@ class Pacientes extends CActiveRecord
 		return array(
 			'datosFacturacions' => array(self::HAS_MANY, 'DatosFacturacion', 'id_pacientes'),
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_pacientes'),
-			'usuario' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
 			);
 	}
 
@@ -82,7 +79,6 @@ class Pacientes extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
-			'id_usuarios' => 'Id Usuarios',
 			'activo' => 'Activo',
 		);
 	}
@@ -116,7 +112,6 @@ class Pacientes extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-		$criteria->compare('id_usuarios',$this->id_usuarios);
 		$criteria->compare('activo',$this->activo);
 
 		return new CActiveDataProvider($this, array(
@@ -148,5 +143,9 @@ class Pacientes extends CActiveRecord
 	public function findPacientePorNombreYFecha($nombre, $a_paterno, $a_materno, $fecha_nacimiento){
 		$paciente = $this->model()->find("nombre=? AND a_paterno=? AND a_materno=? AND fecha_nacimiento=?",array($nombre,$a_paterno,$a_materno,$fecha_nacimiento));
 		return $paciente;
+	}
+
+	public function obtenerNombreCompleto(){
+		return $this->nombre.' '.$this->a_paterno.' '.$this->a_materno;
 	}
 }

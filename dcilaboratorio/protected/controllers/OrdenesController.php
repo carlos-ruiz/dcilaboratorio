@@ -35,11 +35,11 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo"),
+				'actions'=>array('create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo"),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -90,7 +90,7 @@ class OrdenesController extends Controller
 			$model->attributes=$_POST['Ordenes'];
 			$paciente->attributes=$_POST['Pacientes'];
 			$pagos->attributes=$_POST['Pagos'];
-
+			
 			$fecha_creacion=date('Y-m-d H:i:s');
 			$fecha_edicion='2000-01-01 00:00:00';
 
@@ -149,6 +149,7 @@ class OrdenesController extends Controller
 
 			$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
 			$status = new Status;
+
 			if($totalAPagar<=$totalPagado){
 				$cambio = $totalPagado-$totalAPagar;
 				if ($pagos->efectivo >= $cambio) {
@@ -192,7 +193,6 @@ class OrdenesController extends Controller
 					}
 
 					if(isset($paciente->id)&&$paciente->id>0){
-						
 						$paciente = Pacientes::model()->findByPk($paciente->id);
 					}
 					else{
@@ -201,28 +201,23 @@ class OrdenesController extends Controller
 							$paciente=$pacienteAux;
 					}
 
-					if(!isset($paciente->id)||!$paciente->id>0){
-						//GENERAR USUARIO PARA EL PACIENTE
-						$simbolos = array('!', '$', '#', '?');
-						$perfil = Perfiles::model()->findByName("Paciente");
-						$user=new Usuarios;
+					//GENERAR USUARIO PARA EL PACIENTE (SE GENERA UN USUARIO EN CADA ORDEN)
+					$simbolos = array('!', '$', '#', '?');
+					$perfil = Perfiles::model()->findByName("Paciente");
+					$user=new Usuarios;
 
-						$user->usuario=substr($paciente->nombre, 0,3);
-						$user->contrasena="beforeSave";
-						$user->ultima_edicion=$fecha_edicion;
-						$user->usuario_ultima_edicion=Yii::app()->user->id;
-						$user->creacion=$fecha_creacion;
-						$user->usuario_creacion=Yii::app()->user->id;
-						$user->id_perfiles=$perfil->id;
+					$user->usuario=substr($paciente->nombre, 0,3);
+					$user->contrasena="beforeSave";
+					$user->ultima_edicion=$fecha_edicion;
+					$user->usuario_ultima_edicion=Yii::app()->user->id;
+					$user->creacion=$fecha_creacion;
+					$user->usuario_creacion=Yii::app()->user->id;
+					$user->id_perfiles=$perfil->id;
 
-						$user->save();
-						$user->usuario=strtolower($user->usuario).$user->id."dci";
-						$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
-						$user->save();
-
-						$paciente->id_usuarios=$user->id;
-						$paciente->save();
-					}
+					$user->save();
+					$user->usuario=strtolower($user->usuario).$user->id."dci";
+					$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
+					$user->save();
 
 					$ordenFacturacion = new OrdenesFacturacion;
 					if($model->requiere_factura==1){
@@ -231,8 +226,9 @@ class OrdenesController extends Controller
 						$datosFacturacion->save();
 						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 					}
-					if($paciente->id>0)
-						$ordenFacturacion->id_pacientes=$paciente->id;
+					
+					$ordenFacturacion->id_pacientes=$paciente->id;
+					$ordenFacturacion->id_usuarios=$user->id;
 					
 					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
@@ -470,7 +466,9 @@ class OrdenesController extends Controller
 				$ordenExamenToSave = $ordenExamenes[$i];
 				$ordenExamenToSave->resultado = $value['resultado'];
 				$ordenExamenToSave->save();
-				$calificada = $ordenExamenToSave->resultado!=""; 
+				if ($calificada) {
+					$calificada = $ordenExamenToSave->resultado!=""; 
+				}
 			}
 			$statusPagada=Status::model()->findByName("Pagada");
 			$statusCalificada=Status::model()->findByName("Calificada");

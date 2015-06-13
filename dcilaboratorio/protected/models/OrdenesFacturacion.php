@@ -8,11 +8,13 @@
  * @property integer $id_datos_facturacion
  * @property integer $id_ordenes
  * @property integer $id_pacientes
+ * @property integer $id_usuarios
  *
  * The followings are the available model relations:
  * @property DatosFacturacion $idDatosFacturacion
  * @property Ordenes $idOrdenes
  * @property Pacientes $idPacientes
+ * @property Pacientes $idUsuarios
  */
 class OrdenesFacturacion extends CActiveRecord
 {
@@ -32,11 +34,11 @@ class OrdenesFacturacion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_ordenes, id_pacientes', 'required'),
-			array('id_datos_facturacion, id_ordenes, id_pacientes', 'numerical', 'integerOnly'=>true),
+			array('id_ordenes, id_pacientes, id_usuarios', 'required'),
+			array('id_datos_facturacion, id_ordenes, id_pacientes, id_usuarios', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_datos_facturacion, id_ordenes, id_pacientes', 'safe', 'on'=>'search'),
+			array('id, id_datos_facturacion, id_ordenes, id_pacientes, id_usuarios', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,6 +53,7 @@ class OrdenesFacturacion extends CActiveRecord
 			'datosFacturacion' => array(self::BELONGS_TO, 'DatosFacturacion', 'id_datos_facturacion'),
 			'orden' => array(self::BELONGS_TO, 'Ordenes', 'id_ordenes'),
 			'paciente' => array(self::BELONGS_TO, 'Pacientes', 'id_pacientes'),
+			'usuario' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
 		);
 	}
 
@@ -64,6 +67,7 @@ class OrdenesFacturacion extends CActiveRecord
 			'id_datos_facturacion' => 'Datos facturación',
 			'id_ordenes' => 'Orden',
 			'id_pacientes' => 'Paciente',
+			'id_usuarios' => 'Usuario',
 		);
 	}
 
@@ -89,6 +93,7 @@ class OrdenesFacturacion extends CActiveRecord
 		$criteria->compare('id_datos_facturacion',$this->id_datos_facturacion);
 		$criteria->compare('id_ordenes',$this->id_ordenes);
 		$criteria->compare('id_pacientes',$this->id_pacientes);
+		$criteria->compare('id_usuarios',$this->id_usuarios);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

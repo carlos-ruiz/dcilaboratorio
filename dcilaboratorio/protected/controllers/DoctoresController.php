@@ -416,14 +416,11 @@ class DoctoresController extends Controller
 	}
 
 	public function obtenerNombreCompletoConTitulo($data, $row){
-		$titulo = TitulosForm::model()->findByPk($data->id_titulos);
-		$completo = $titulo->nombre.' '.$data->nombre.' '.$data->a_paterno.' '.$data->a_materno;
-		return $completo;
+		return $data->obtenerNombreCompleto();
 	}
 
 	public function obtenerNombreEspecialidad($data, $row){
-		$especialidad = Especialidades::model()->find($data->id_especialidades);
-		return $especialidad->nombre;
+		return $data->especialidad->nombre;
 	}
 
 	public function obtenerTelefonoConsultorio($data, $row){

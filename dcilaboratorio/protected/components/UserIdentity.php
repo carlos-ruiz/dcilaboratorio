@@ -8,6 +8,7 @@
 class UserIdentity extends CUserIdentity
 {
 	private $_id;
+	private $_perfil;
 	/**
 	 * Authenticates a user.
 	 * The example implementation makes sure if the username and password
@@ -26,6 +27,7 @@ class UserIdentity extends CUserIdentity
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
 		else{
 			$this->_id=$user->id;
+			Yii::app()->session['perfil'] = $user->perfil->nombre;
 			$this->errorCode=self::ERROR_NONE;
 		}
 		return !$this->errorCode;
