@@ -60,7 +60,6 @@ else{
 	<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo_6.png" alt=""/></center>
 	<br /><br />
 	<center>En construcción...</center>
-	<a class="btn red" href="<?php echo CController::createUrl('site/loadModalContent',array('id'=>''));?>" data-target="#modal" data-toggle="modal">modal</a>
 <?php
 }
 ?>

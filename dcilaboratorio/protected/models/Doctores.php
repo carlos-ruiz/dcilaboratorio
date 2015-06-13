@@ -72,7 +72,7 @@ class Doctores extends CActiveRecord
 			'usuario' => array(self::BELONGS_TO, 'Usuarios', 'id_usuarios'),
 			'direccion' => array(self::BELONGS_TO, 'Direcciones', 'id_direccion'),
 			'especialidad' => array(self::BELONGS_TO, 'Especialidades', 'id_especialidades'),
-			'titulo' => array(self::BELONGS_TO, 'Titulos', 'id_titulos'),
+			'titulo' => array(self::BELONGS_TO, 'TitulosForm', 'id_titulos'),
 			'ordenes' => array(self::HAS_MANY, 'Ordenes', 'id_doctores'),
 			'unidadTieneDoctores' => array(self::HAS_MANY, 'UnidadTieneDoctores', 'id_doctores'),
 		);

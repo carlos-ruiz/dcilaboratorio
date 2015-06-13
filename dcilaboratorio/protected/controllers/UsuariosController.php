@@ -177,4 +177,24 @@ class UsuariosController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	public function obtenerNombre($data, $row){
+		$perfilDoctor = Perfiles::model()->findByName("Doctor");
+		$perfilPaciente = Perfiles::model()->findByName("Paciente");
+		$nombre='';
+
+		if ($data->perfil->id == $perfilPaciente->id) {
+			$pacientes = $data->pacientes;
+			foreach ($pacientes as $paciente) {
+				$nombre = $paciente->obtenerNombreCompleto();
+			}
+		}
+		elseif ($data->perfil->id == $perfilDoctor->id) {
+			$doctores = $data->doctores;
+			foreach ($doctores as $doctor) {
+				$nombre = $doctor->obtenerNombreCompleto();
+			}
+		}
+		return $nombre;
+	}
 }

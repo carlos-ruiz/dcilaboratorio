@@ -14,8 +14,8 @@
  * @property integer $id_perfiles
  *
  * The followings are the available model relations:
- * @property Doctores[] $doctores
- * @property Pacientes[] $pacientes
+ * @property Doctores $doctor
+ * @property OrdenesFacturacion $ordenFacturacion
  * @property UnidadesResponsables[] $unidadesResponsables
  * @property Perfiles $idPerfiles
  */
@@ -55,8 +55,8 @@ class Usuarios extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'doctores' => array(self::HAS_MANY, 'Doctores', 'id_usuarios'),
-			'pacientes' => array(self::HAS_MANY, 'Pacientes', 'id_usuarios'),
+			'doctores' => array(self::HAS_ONE, 'Doctores', 'id_usuarios'),
+			'ordenFacturacion' => array(self::HAS_ONE, 'OrdenesFacturacion', 'id_usuarios'),
 			'unidadesResponsables' => array(self::HAS_MANY, 'UnidadesResponsables', 'id_usuarios'),
 			'perfil' => array(self::BELONGS_TO, 'Perfiles', 'id_perfiles'),
 		);
@@ -76,6 +76,7 @@ class Usuarios extends CActiveRecord
 			'creacion' => 'Creación',
 			'usuario_creacion' => 'Usuario Creación',
 			'id_perfiles' => 'Perfil',
+			'perfil.nombre' => 'Perfil',
 		);
 	}
 
