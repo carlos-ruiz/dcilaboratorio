@@ -181,7 +181,18 @@
 			<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
 			<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-			<?php include_once("menu.php");?>
+			<?php 
+			if(Yii::app()->user->getState('perfil')=='Administrador')
+				include_once("menu_admin.php");
+			if(Yii::app()->user->getState('perfil')=='Doctor')
+				include_once("menu_doctor.php");
+			if(Yii::app()->user->getState('perfil')=='Unidad Responsable')
+				include_once("menu_ur.php");
+			if(Yii::app()->user->getState('perfil')=='Paciente')
+				include_once("menu_paciente.php");
+
+			?>
+
 			<!-- END SIDEBAR MENU -->
 		</div>
 	</div>
