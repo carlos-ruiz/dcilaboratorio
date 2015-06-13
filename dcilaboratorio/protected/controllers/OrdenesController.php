@@ -201,29 +201,23 @@ class OrdenesController extends Controller
 							$paciente=$pacienteAux;
 					}
 
-					if(!isset($paciente->id)||!$paciente->id>0){
-						//GENERAR USUARIO PARA EL PACIENTE
-						$simbolos = array('!', '$', '#', '?');
-						$perfil = Perfiles::model()->findByName("Paciente");
-						$user=new Usuarios;
+					//GENERAR USUARIO PARA EL PACIENTE (SE GENERA UN USUARIO EN CADA ORDEN)
+					$simbolos = array('!', '$', '#', '?');
+					$perfil = Perfiles::model()->findByName("Paciente");
+					$user=new Usuarios;
 
-						$user->usuario=substr($paciente->nombre, 0,3);
-						$user->contrasena="beforeSave";
-						$user->ultima_edicion=$fecha_edicion;
-						$user->usuario_ultima_edicion=Yii::app()->user->id;
-						$user->creacion=$fecha_creacion;
-						$user->usuario_creacion=Yii::app()->user->id;
-						$user->id_perfiles=$perfil->id;
+					$user->usuario=substr($paciente->nombre, 0,3);
+					$user->contrasena="beforeSave";
+					$user->ultima_edicion=$fecha_edicion;
+					$user->usuario_ultima_edicion=Yii::app()->user->id;
+					$user->creacion=$fecha_creacion;
+					$user->usuario_creacion=Yii::app()->user->id;
+					$user->id_perfiles=$perfil->id;
 
-						$user->save();
-						$user->usuario=strtolower($user->usuario).$user->id."dci";
-						$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
-						$user->save();
-
-						$paciente->id=null;
-						$paciente->save();
-
-					}
+					$user->save();
+					$user->usuario=strtolower($user->usuario).$user->id."dci";
+					$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
+					$user->save();
 
 					$ordenFacturacion = new OrdenesFacturacion;
 					if($model->requiere_factura==1){
