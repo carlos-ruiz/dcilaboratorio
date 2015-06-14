@@ -55,6 +55,13 @@
 			</div>
 	</div>
 
+	<div class="form-group <?php if($form->error($model,'rango_promedio')!=''){ echo 'has-error'; }?>">
+			<?php echo $form->labelEx($model,'rango_promedio', array('class'=>'control-label')); ?>
+			<div class="input-group">
+				<?php echo $form->textField($model,'rango_promedio',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model,'rango_promedio', array('class'=>'help-block')); ?>
+			</div>
+	</div>
 
 	<div class="form-group <?php if($form->error($model,'rango_superior')!=''){ echo 'has-error'; }?>">
 			<?php echo $form->labelEx($model,'rango_superior', array('class'=>'control-label')); ?>

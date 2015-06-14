@@ -93,7 +93,9 @@
 			echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>		
 	   		<tr><td>Descripción</td>
 	   		<td>Resultado</td>
-	   		<td>Rango normal</td></tr>';
+	   		<td>Rango Inferior</td>
+	   		<td>Rango Promedio</td>
+	   		<td>Rango Superior</td></tr>';
 		}
 
 		echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
@@ -103,7 +105,10 @@
 		else{
 			echo $ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura;
 		}
-		echo '</td><td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td></tr>';
+		echo '</td><td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
+		<td>'.$detalleExamen->rango_promedio'</td>
+		<td>'$detalleExamen->rango_superior.'</td>
+		</tr>';
 		$anterior=$examen->id;
 	 endforeach;
 	 echo'</table>';
