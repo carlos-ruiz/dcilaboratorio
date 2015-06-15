@@ -93,9 +93,9 @@
 			echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>		
 	   		<tr><td>Descripción</td>
 	   		<td>Resultado</td>
-	   		<td>Rango Inferior</td>
-	   		<td>Rango Promedio</td>
-	   		<td>Rango Superior</td></tr>';
+	   		<td>R. I.</td>
+	   		<td>R. P.</td>
+	   		<td>R. S.</td></tr>';
 		}
 
 		echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
