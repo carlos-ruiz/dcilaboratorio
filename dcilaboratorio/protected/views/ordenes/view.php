@@ -105,7 +105,12 @@
 		else{
 			echo $ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura;
 		}
-		echo '</td><td>'.$detalleExamen->rango_inferior.'</td><td>'.$detalleExamen->rango_promedio.'</td><td>'.$detalleExamen->rango_superior.'</td></tr>';
+
+		echo '</td><td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
+		<td>'.$detalleExamen->rango_promedio.'</td>
+		<td>'.$detalleExamen->rango_superior.'</td>
+		</tr>';
+
 		$anterior=$examen->id;
 	 endforeach;
 	 echo'</table>';
