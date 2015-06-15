@@ -170,8 +170,9 @@ class OrdenesController extends Controller
 				$transaction = Yii::app()->db->beginTransaction();
 				try{
 					$model->save();
-					// print_r($examenes_precio);
-					// return;
+					$paciente->id=null;
+					$paciente->save();
+
 					foreach ($examenes_precio as $examen_precio) {
 						$examen_precio->id_ordenes = $model->id;
 						$examen_precio->save();
@@ -219,18 +220,18 @@ class OrdenesController extends Controller
 					$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
 					$user->save();
 
+
 					$ordenFacturacion = new OrdenesFacturacion;
+					$ordenFacturacion->id_pacientes=$paciente->id;
+					$ordenFacturacion->id_usuarios=$user->id;
+					$ordenFacturacion->id_ordenes=$model->id;
+
 					if($model->requiere_factura==1){
 						$direccion->save();
 						$datosFacturacion->id_direccion=$direccion->id;
 						$datosFacturacion->save();
 						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 					}
-					
-					$ordenFacturacion->id_pacientes=$paciente->id;
-					$ordenFacturacion->id_usuarios=$user->id;
-					
-					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
 
 					$pagos->id_ordenes=$model->id;
