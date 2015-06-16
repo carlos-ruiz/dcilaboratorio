@@ -199,6 +199,10 @@ class OrdenesController extends Controller
 						$pacienteAux = Pacientes::model()->findPacientePorNombreYFecha($paciente->nombre, $paciente->a_paterno, $paciente->a_materno, $paciente->fecha_nacimiento);
 						if(isset($pacienteAux->id))
 							$paciente=$pacienteAux;
+						else{
+							$paciente->id=null;
+							$paciente->save();
+						}
 					}
 
 					//GENERAR USUARIO PARA EL PACIENTE (SE GENERA UN USUARIO EN CADA ORDEN)
@@ -232,7 +236,7 @@ class OrdenesController extends Controller
 					
 					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
-
+					
 					$pagos->id_ordenes=$model->id;
 					if($totalPagado>0)
 						$pagos->save();
