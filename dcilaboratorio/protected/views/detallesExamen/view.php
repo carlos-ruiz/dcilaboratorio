@@ -19,6 +19,7 @@ $this->breadcrumbs=array(
 		'descripcion',
 		'unidadesMedida.nombre',
 		'rango_inferior',
+		'rango_promedio',
 		'rango_superior',		
 	),
 )); ?>
