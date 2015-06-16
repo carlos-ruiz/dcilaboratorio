@@ -54,6 +54,7 @@ class OrdenesController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$section = "Ordenes";
 		$pagos=new Pagos('search');
 		$datosFacturacion=new DatosFacturacion('search');
 		$paciente =new Pacientes;

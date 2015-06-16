@@ -62,6 +62,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="content">
 
 	<?php 
+		//echo base64_decode("bGFiIzU=");
 		echo $content; 
 	?>
 
