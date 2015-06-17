@@ -52,14 +52,21 @@ License: You must have a valid license purchased only from themeforest(the above
 </div>
 <!-- END SIDEBAR TOGGLER BUTTON -->
 <!-- BEGIN LOGO -->
-<div class="logo">
+<br /><br /><br /><br /><br /><br />
+<div class=" col-md-6 " style="background-color:#FFffff; height: 150;">
+
+</div>
+
+<!--
+<div class=" col-md-6 logo">
 	<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php">
-	<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo.png" alt=""/>
+	<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo22.png"  WIDTH=400 HEIGHT=400 alt=""/>
 	</a>
 </div>
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
-<div class="content">
+
+<div class=" col-md-6  col-md-offset-5 content">
 
 	<?php 
 		//echo base64_decode("bGFiIzU=");
@@ -67,8 +74,8 @@ License: You must have a valid license purchased only from themeforest(the above
 	?>
 
 </div>
-<div class="copyright">
-	 2015 © Techinc.
+<div class=" col-md-12  copyright">
+	2015 © Techinc.
 </div>
 <div class="page-footer">
 	<div class="page-footer-inner">
