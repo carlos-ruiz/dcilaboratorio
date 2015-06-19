@@ -16,10 +16,23 @@
 					</a>
 				</li>
 
-				<li <?php if($this->section=='Ordenes'){ echo 'class="startactive open"';}?>>
+				<li <?php if($this->section=="Pacientes"){ echo 'class="startactive open"';}?>>
+					<a href="<?php echo Yii::app()->controller->createUrl('/pacientes/view',array('id'=>$user->ordenFacturacion->id_pacientes)); ?>">
+					<i class="icon-home"></i>
+					<span class="title">Datos personales</span>
+					<?php if($this->section==""){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+				</li>
+
+				<li <?php if($this->section=='Ordenes'&&$this->subSection!="Pacientes"){ echo 'class="startactive open"';}?>>
 					<a href="<?php echo Yii::app()->controller->createUrl('/ordenes/view',array('id'=>$user->ordenFacturacion->id_ordenes)); ?>">
 					<i class="icon-chemistry"></i>
-					<span class="title">Ordenes</span>
+					<span class="title">Orden</span>
 					<?php if($this->section==""){?>
 					<span class="selected"></span>
 					<span class="arrow open"></span>

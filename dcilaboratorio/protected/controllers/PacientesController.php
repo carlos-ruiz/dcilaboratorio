@@ -52,7 +52,10 @@ class PacientesController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id)
-	{
+	{	
+		if(Yii::app()->user->getState('perfil')=="Paciente")
+			$this->section="Pacientes";
+		$this->subSection="Pacientes";
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -88,6 +91,9 @@ class PacientesController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+		if(Yii::app()->user->getState('perfil')=="Paciente")
+			$this->section="Pacientes";
+		$this->subSection="Editar";
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
