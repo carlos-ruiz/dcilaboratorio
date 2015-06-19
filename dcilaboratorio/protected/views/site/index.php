@@ -56,6 +56,17 @@ $form=$this->beginWidget('CActiveForm', array(
 }
 else{
 ?>
+
+<div id="slider" >
+<figure>
+<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab1.jpg" WIDTH=450 HEIGHT=350 alt="">
+<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab2.jpg" WIDTH=450 HEIGHT=350 alt="">
+<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab3.jpg" WIDTH=450 HEIGHT=350 alt="">
+<img src="<?echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab.jpg" WIDTH=450 HEIGHT=350 alt="">IDTH=450 HEIGHT=350 alt="">
+<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo6.png" WIDTH=450 HEIGHT=350 alt="">
+</figure>
+</div>
+
 	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 	<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo_6.png" alt=""/></center>
 	<br /><br />
@@ -63,3 +74,30 @@ else{
 <?php
 }
 ?>
+<style type="text/css">
+	
+	@keyframes slidy {
+0% { left: 0%; }
+20% { left: 0%; }
+25% { left: -100%; }
+45% { left: -100%; }
+50% { left: -200%; }
+70% { left: -200%; }
+75% { left: -300%; }
+95% { left: -300%; }
+100% { left: -400%; }
+}
+
+body { margin: 0; } 
+div#slider { overflow: hidden; }
+div#slider figure img { width: 20%; float: left; }
+div#slider figure { 
+  position: relative;
+  width: 500%;
+  margin: 0;
+  left: 0;
+  text-align: left;
+  font-size: 0;
+  animation: 30s slidy infinite; 
+}
+</style>
