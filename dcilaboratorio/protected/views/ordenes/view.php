@@ -93,9 +93,9 @@
 			echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>		
 	   		<tr><td>Descripción</td>
 	   		<td>Resultado</td>
-	   		<td>Rango Inferior</td>
-	   		<td>Rango Promedio</td>
-	   		<td>Rango Superior</td></tr>';
+	   		<td>R. I.</td>
+	   		<td>R. P.</td>
+	   		<td>R. S.</td></tr>';
 		}
 
 		echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
@@ -105,10 +105,12 @@
 		else{
 			echo $ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura;
 		}
-		echo '</td><td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
+
+		echo '</td><td>'.$detalleExamen->rango_inferior.'</td>
 		<td>'.$detalleExamen->rango_promedio.'</td>
 		<td>'.$detalleExamen->rango_superior.'</td>
 		</tr>';
+
 		$anterior=$examen->id;
 	 endforeach;
 	 echo'</table>';
@@ -171,11 +173,14 @@
 				
 		    echo '<table class="table table-striped table-bordered dataTable"><tr>
 		    <th colspan="3" style="color:#1e90ff "> <center>Tarda '.$entrega.' día(s) para entregarse</center></th></<tr>'; ?>
-		    <tr style="<?php if($total>=$totalOrden){ echo 'display:none'; } ?>">
-		    	<td>
-		    	<a class="btn red" style="width:100%;" href="<?php echo CController::createUrl('ordenes/loadModalContent',array('id_ordenes'=>"$model->id"));?>" data-target="#modal" data-toggle="modal">Agregar pago</a>
-		    	</td>
-		    </tr>
+		    <?php
+		    if(Yii::app()->user->getState('perfil')=='Administrador' && $total<$totalOrden) { ?>
+			    <tr>
+			    	<td>
+			    	<a class="btn red" style="width:100%;" href="<?php echo CController::createUrl('ordenes/loadModalContent',array('id_ordenes'=>"$model->id"));?>" data-target="#modal" data-toggle="modal">Agregar pago</a>
+			    	</td>
+			    </tr>
+		    <?php } ?>
 		    </table>
 	
 	</div>

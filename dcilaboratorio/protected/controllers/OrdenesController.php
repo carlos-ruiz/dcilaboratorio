@@ -54,6 +54,7 @@ class OrdenesController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$section = "Ordenes";
 		$pagos=new Pagos('search');
 		$datosFacturacion=new DatosFacturacion('search');
 		$paciente =new Pacientes;
@@ -170,9 +171,8 @@ class OrdenesController extends Controller
 				$transaction = Yii::app()->db->beginTransaction();
 				try{
 					$model->save();
-					$paciente->id=null;
-					$paciente->save();
-
+					// print_r($examenes_precio);
+					// return;
 					foreach ($examenes_precio as $examen_precio) {
 						$examen_precio->id_ordenes = $model->id;
 						$examen_precio->save();
@@ -200,6 +200,10 @@ class OrdenesController extends Controller
 						$pacienteAux = Pacientes::model()->findPacientePorNombreYFecha($paciente->nombre, $paciente->a_paterno, $paciente->a_materno, $paciente->fecha_nacimiento);
 						if(isset($pacienteAux->id))
 							$paciente=$pacienteAux;
+						else{
+							$paciente->id=null;
+							$paciente->save();
+						}
 					}
 
 					//GENERAR USUARIO PARA EL PACIENTE (SE GENERA UN USUARIO EN CADA ORDEN)
@@ -220,20 +224,20 @@ class OrdenesController extends Controller
 					$user->contrasena=base64_encode("lab".$simbolos[rand(0, count($simbolos)-1)].$user->id);
 					$user->save();
 
-
 					$ordenFacturacion = new OrdenesFacturacion;
-					$ordenFacturacion->id_pacientes=$paciente->id;
-					$ordenFacturacion->id_usuarios=$user->id;
-					$ordenFacturacion->id_ordenes=$model->id;
-
 					if($model->requiere_factura==1){
 						$direccion->save();
 						$datosFacturacion->id_direccion=$direccion->id;
 						$datosFacturacion->save();
 						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 					}
+					
+					$ordenFacturacion->id_pacientes=$paciente->id;
+					$ordenFacturacion->id_usuarios=$user->id;
+					
+					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
-
+					
 					$pagos->id_ordenes=$model->id;
 					if($totalPagado>0)
 						$pagos->save();
