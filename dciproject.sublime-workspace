@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"orde",
+				"ordenFacturacion"
+			],
+			[
 				"id",
 				"id_usuarios"
 			],
@@ -280,50 +284,34 @@
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/models/OrdenesFacturacion.php",
+			"file": "dcilaboratorio/protected/views/ordenes/view.php",
 			"settings":
 			{
-				"buffer_size": 3551,
+				"buffer_size": 5717,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/runtime/application.log",
+			"settings":
+			{
+				"buffer_size": 11536,
+				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "dcilaboratorio/protected/controllers/OrdenesController.php",
 			"settings":
 			{
-				"buffer_size": 22220,
+				"buffer_size": 22209,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/models/Pacientes.php",
+			"file": "dcilaboratorio/protected/models/Ordenes.php",
 			"settings":
 			{
-				"buffer_size": 5129,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/views/usuarios/admin.php",
-			"settings":
-			{
-				"buffer_size": 321,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/controllers/UsuariosController.php",
-			"settings":
-			{
-				"buffer_size": 4827,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/views/usuarios/view.php",
-			"settings":
-			{
-				"buffer_size": 967,
+				"buffer_size": 7327,
 				"line_ending": "Windows"
 			}
 		}
@@ -432,26 +420,32 @@
 	[
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/global",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/global/css",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/comunes",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/ordenes",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios"
 	],
 	"file_history":
 	[
-		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/Base de Datos/municipios.sql",
-		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/Base de Datos/estados.sql",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/OrdenesFacturacion.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/OrdenesController.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/LoginForm.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Pacientes.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/admin.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/UsuariosController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/view.php",
+		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/Base de Datos/scripts/dcilab_13junio_campo extra.sql",
+		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/Base de Datos/estados.sql",
+		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/Base de Datos/municipios.sql",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/LoginForm.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/comunes/_comunAdmin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/DoctoresController.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/UsuariosController.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Pacientes.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Doctores.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Perfiles.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/ordenes/view.php",
@@ -565,9 +559,7 @@
 		"/C/xampp/htdocs/techinc/techinc/protected/.htaccess",
 		"/C/xampp/htdocs/maquetacion/index.php",
 		"/C/Users/Carlos-Yackie/Desktop/main.java",
-		"/C/Users/Carlos-Yackie/Desktop/newMainActivity.java",
-		"/C/Users/Carlos-Yackie/Documents/canciones viky.php",
-		"/C/xampp/htdocs/cruiz90/index.php"
+		"/C/Users/Carlos-Yackie/Desktop/newMainActivity.java"
 	],
 	"find":
 	{
@@ -677,7 +669,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -706,27 +698,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 853.0,
+						"translation.y": 733.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "dcilaboratorio/protected/models/OrdenesFacturacion.php",
+					"file": "dcilaboratorio/protected/views/ordenes/view.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3551,
+						"buffer_size": 5717,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1397,
-								1397
+								3083,
+								3083
 							]
 						],
 						"settings":
@@ -738,7 +730,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 900.0,
+						"translation.y": 1965.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -746,19 +738,19 @@
 				},
 				{
 					"buffer": 2,
-					"file": "dcilaboratorio/protected/controllers/OrdenesController.php",
+					"file": "dcilaboratorio/protected/runtime/application.log",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 22220,
+						"buffer_size": 11536,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6606,
-								6606
+								0,
+								0
 							]
 						],
 						"settings":
@@ -766,126 +758,30 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4067.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "dcilaboratorio/protected/models/Pacientes.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5129,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5129,
-								5129
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2893.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "dcilaboratorio/protected/views/usuarios/admin.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 321,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								165,
-								165
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage"
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "dcilaboratorio/protected/controllers/UsuariosController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4827,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4751,
-								4751
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3400.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "dcilaboratorio/protected/views/usuarios/view.php",
+					"buffer": 3,
+					"file": "dcilaboratorio/protected/controllers/OrdenesController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 967,
+						"buffer_size": 22209,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								680,
-								680
+								5227,
+								5227
 							]
 						],
 						"settings":
@@ -897,7 +793,39 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 253.0,
+						"translation.y": 3349.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "dcilaboratorio/protected/models/Ordenes.php",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 7327,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1107.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
