@@ -6,7 +6,7 @@
 	<div class="row">
 	<h1>Orden con folio: <?php echo $model->id; ?></h1>
 	<div class="form-group col-md-4">
-
+<?php if(Yii::app()->user->getState('perfil')!="Doctor") {?>
 		<div class="heading text-center">
 			<h3 style="color:#1e90ff ">Datos de la orden</h3>
 		</div>
@@ -24,8 +24,13 @@
 			'descuento',
 		),
 	)); ?>
+	<?php } ?>
 	<div class="heading text-center">
+		<?php if(Yii::app()->user->getState('perfil')!="Doctor"){?>
 		<h5 style="color:#1e90ff ">Datos del Paciente</h5>
+		<?php } else {?>
+			<h3 style="color:#1e90ff ">Datos del Paciente</h3>
+		<?php } ?>
 	</div>
 
 	<?php $this->widget('zii.widgets.CDetailView', array(
@@ -39,8 +44,6 @@
 	        ),     
 		),
 	)); ?>
-
-
 
 	<div class="heading text-center">
 		<h5 style="color:#1e90ff ">Datos del Doctor</h5>
@@ -66,7 +69,12 @@
 	)); ?>
 	</div>
 
+	<?php if(Yii::app()->user->getState('perfil')!="Doctor"){?>
 	<div class="form-group col-md-4">
+	<?php } else {?>
+		<div class="form-group col-md-8">
+	<?php } ?>
+	
 
 		<div class="heading text-center">
 			<h3 style="color:#1e90ff ">Examenes</h3>
@@ -116,13 +124,14 @@
 	 echo'</table>';
 	 ?>
 	</div>
-
+	<?php if(Yii::app()->user->getState('perfil')!="Doctor"){ ?>
 	<div class="form-group col-md-4">
 		<div class="heading text-center">
 			<h3 style="color:#1e90ff ">Pagos</h3>
 		</div>
 
 	<?php
+	
 	$aux=$model->pagos;
 	$total=0;
 	echo '<table class="table table-striped table-bordered dataTable">
@@ -182,9 +191,9 @@
 			    </tr>
 		    <?php } ?>
 		    </table>
-	
+		
 	</div>
-
+	<?php } ?>
 
 
 </div>
