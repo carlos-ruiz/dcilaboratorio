@@ -18,8 +18,9 @@ Page Header
 /* Header search bar, toggler button & top menu */
 .page-header.navbar {
   /*background: #3B3F51;*/
-  background: #162090;
-  border-bottom: 1px solid #e9ecf3;
+  background: #ffffff;
+  border-bottom: 3px solid #4B8DF8;
+
   /* Top notification menu/bar */
   /* Header seaech box */
   /* Menu Toggler */
@@ -34,7 +35,7 @@ Page Header
   /* Dark version */
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown .dropdown-toggle:hover {
-  background-color: #3f4457;
+  background-color:#4B8DF8;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown .dropdown-toggle > i {
   color: #737a99;
@@ -44,7 +45,7 @@ Page Header
   color: #5b617d;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown.open .dropdown-toggle {
-  background-color: #3f4457;
+  background-color: #4B8DF8;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown .dropdown-menu:before {
   border-bottom-color: #dce1ec;
@@ -139,7 +140,7 @@ Page Header
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu.dropdown-menu-default > li a:hover,
 .page-header.navbar .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu .dropdown-menu-list > li a:hover {
-  background: #606683;
+  background: #4B8DF8;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown-dark .dropdown-menu.dropdown-menu-default > li a {
   border-bottom: 0 !important;

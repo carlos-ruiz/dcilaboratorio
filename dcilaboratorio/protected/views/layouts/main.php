@@ -100,7 +100,7 @@
 		<!-- BEGIN LOGO -->
 		<div class="page-logo" >
 			<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php" >
-			<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo_small.png" alt="logo" height="30" width="50" class="logo-default"/></center>
+			<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo22.png" alt="logo" height="65" width="65" class="logo-default"/></center>
 			</a>
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
