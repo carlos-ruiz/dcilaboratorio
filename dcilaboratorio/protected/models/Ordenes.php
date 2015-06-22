@@ -142,6 +142,9 @@ class Ordenes extends CActiveRecord
 			$criteria->with=array('ordenFacturacion');
 			$criteria->compare('ordenFacturacion.id_usuarios',Yii::app()->user->id);
 		}
+		if(Yii::app()->user->getState('perfil')=='Doctor'){	
+			$criteria->compare('id_doctores',Yii::app()->user->getState('id_persona'));
+		}
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>false,

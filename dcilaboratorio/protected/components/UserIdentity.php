@@ -28,6 +28,15 @@ class UserIdentity extends CUserIdentity
 		else{
 			$this->_id=$user->id;
 			Yii::app()->session['perfil'] = $user->perfil->nombre;
+			Yii::app()->user->setState('perfil',$user->perfil->nombre);
+			if($user->perfil->nombre=="Doctor"){
+    			$persona=Doctores::model()->obtenerPorUserId($user->id);
+    			Yii::app()->user->setState('id_persona',$persona->id);
+    		}
+    		if($user->perfil->nombre=="Paciente"){
+    			//$persona=Pacientes::model()->obtenerPorUserId($Yii::app()->user->id);
+    			Yii::app()->user->setState('id_persona',0);
+    		}
 			$this->errorCode=self::ERROR_NONE;
 		}
 		return !$this->errorCode;

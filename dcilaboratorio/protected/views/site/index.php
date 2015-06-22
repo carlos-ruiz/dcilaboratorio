@@ -57,20 +57,47 @@ $form=$this->beginWidget('CActiveForm', array(
 else{
 ?>
 
-<div id="slider" >
+
+<div  class=" col-md-6 ">	
+		<h3  class="heading text-center" style="color:#1e90ff ">Nuestras sucursales</h3>
+		
+	
+	<div class="row">			
+		<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
+		Gral. Nocolás Bravo No. 170 Col. Chapultepec Norte .P 58260
+		<br />Tel. Fax. (443) 232 0166
+		<br />Lunes a Sábado de 07:00 a 20:00 hrs. 
+		<br /> Domingo 08:00 a 14:00 hrs.
+	</div>
+	<div class="row">			
+		<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
+		Francisco M. Díaz No. 145 Col. Ex Gobernador Gildardo Magaña .P 58149
+		<br />Tel. Fax. (443) 232 01 65
+		<br />Lunes a Sábado de 07:00 a 15:00 hrs. 
+	</div>
+	<div class="row">			
+		<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
+		Amado Nervo No. 392-4 Col. Centro .P 58000
+		<br />Tel. Fax. (443) 326 98 91
+		<br />Lunes a Sábado de 07:00 a 15:00 hrs. 
+	</div>
+
+		
+	</div>
+	
+
+<div  id="slider" class=" col-md-6 text-right">
 <figure>
-<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab1.jpg" WIDTH=450 HEIGHT=350 alt="">
-<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab2.jpg" WIDTH=450 HEIGHT=350 alt="">
-<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab3.jpg" WIDTH=450 HEIGHT=350 alt="">
-<img src="<?echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab.jpg" WIDTH=450 HEIGHT=350 alt="">IDTH=450 HEIGHT=350 alt="">
-<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo6.png" WIDTH=450 HEIGHT=350 alt="">
+
+<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab5.png"  alt="">
+<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab1.jpg" WIDTH=450 HEIGHT=365  alt="">
+<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab2.jpg" WIDTH=450 HEIGHT=365 alt="">
+<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab.jpg" WIDTH=450 HEIGHT=365 alt="">
 </figure>
 </div>
 
-	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-	<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/gvia_logo_6.png" alt=""/></center>
-	<br /><br />
-	<center>En construcción...</center>
+
+	
 <?php
 }
 ?>

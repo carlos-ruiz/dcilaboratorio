@@ -69,3 +69,12 @@
 		'direccion.codigo_postal',			
 	),
 )); ?>
+
+<?php $user = Usuarios::model()->findByPk(Yii::app()->user->id); 
+
+	if(Yii::app()->user->getState('perfil')=="Doctor") { ?>
+	<br />
+	<a class="btn blue red-stripe" href="<?php echo Yii::app()->controller->createUrl('/doctores/update',array('id'=>Yii::app()->user->getState('id_persona'))); ?>">
+		Cambiar
+	</a> <br /> <br />
+<?php } ?>
