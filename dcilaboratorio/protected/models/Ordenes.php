@@ -179,4 +179,13 @@ class Ordenes extends CActiveRecord
 		return CHtml::listData(Grupos::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
 	}
 
+	public function editable(){
+		$now = date('Y-m-d H:i:s');
+		$hourdiff = round((strtotime($now) - strtotime($this->fecha_captura))/3600, 1);
+		if($hourdiff<24){
+			return 1;
+		}
+		return 0;
+	}
+
 }

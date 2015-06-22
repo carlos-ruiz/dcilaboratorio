@@ -16,7 +16,7 @@ $this->renderPartial(
 				),
 			'fecha_captura',
 		),
-		'buttonsTemplate'=>'{view} {rate}'
+		'buttonsTemplate'=>'{view} {rate} {updateOrden}'
 	)
 ); 
 

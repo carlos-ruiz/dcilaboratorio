@@ -55,7 +55,7 @@ echo $form->errorSummary($datosFacturacion);
 					<div class="row">
 						<div class="col-md-12">
 							<div class="input-group">
-								<?php echo $form->dropDownList($paciente,'id',Pacientes::model()->selectListWithMail(), array("empty"=>"Seleccione un paciente", 'class'=>'form-control input-medium select2me')); ?>
+								<?php echo $form->dropDownList($paciente,'id',Pacientes::model()->selectListWithMail(), array("empty"=>"Seleccione un paciente", 'class'=>'form-control input-medium select2me', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>
 							</div>
 						</div>
 					</div>
@@ -67,7 +67,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'nombre')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'nombre', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($paciente,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>							
 								<?php echo $form->error($paciente,'nombre', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -75,7 +75,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'a_paterno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'a_paterno', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'a_paterno',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($paciente,'a_paterno',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>							
 								<?php echo $form->error($paciente,'a_paterno', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -84,7 +84,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'a_materno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'a_materno', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'a_materno',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($paciente,'a_materno',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>							
 								<?php echo $form->error($paciente,'a_materno', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -92,7 +92,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'fecha_nacimiento')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'fecha_nacimiento', array('class'=>'control-label')); ?>
 							<div class="input-group">	
-								<?php echo $form->textField($paciente,'fecha_nacimiento',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es')); ?>													
+								<?php echo $form->textField($paciente,'fecha_nacimiento',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>													
 								<?php echo $form->error($paciente,'fecha_nacimiento', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -102,7 +102,7 @@ echo $form->errorSummary($datosFacturacion);
 							<?php echo $form->labelEx($paciente,'sexo', array('class'=>'control-label')); ?>
 							<div class="input-group">
 								<?php $accountStatus = array('0'=>'Hombre', '1'=>'Mujer');
-	              				  echo $form->radioButtonList($paciente,'sexo',$accountStatus,array('separator'=>'   ','class'=>'form-control' ));?>						
+	              				  echo $form->radioButtonList($paciente,'sexo',$accountStatus,array('separator'=>'   ','class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled"));?>						
 								<?php echo $form->error($paciente,'sexo', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -110,7 +110,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6 <?php if($form->error($paciente,'email')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'email', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'email',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+								<?php echo $form->textField($paciente,'email',array('size'=>45,'maxlength'=>45, 'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>
 								<?php echo $form->error($paciente,'email', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -380,6 +380,18 @@ echo $form->errorSummary($datosFacturacion);
 						<h3 style="color:#1e90ff ">Métodos de pago</h3>
 						<hr/>
 					</div>
+					
+					<?php 
+						$totalPagosAnteriores = 0;
+						//Obtener pagos de la orden en caso de que se esté editando
+						if (!$model->isNewRecord) {
+							$aux=$model->pagos;
+							foreach ($aux as $pago) {
+								$totalPagosAnteriores += $pago->efectivo + $pago->tarjeta + $pago->cheque; 
+							}
+						}
+					?>
+					<input type="hidden" id="pagosAnteriores" value="<?php echo $totalPagosAnteriores; ?>" />
 					<div class="row">
 						<div class="form-group col-md-8 text-right" > <h3 style="color:#1e90ff">Total </h3></div>
 						<div class="form-group col-md-4"><h3 style="color:#1e90ff" id="granTotal" class="total"> $ 1111.00</h3></div>
@@ -531,6 +543,10 @@ echo $form->errorSummary($datosFacturacion);
 			setExamenesIds();
 			total=calcularTotal();
 			setTotal(total);
+			granTotal=calcularGranTotal();
+			setGranTotal(granTotal);
+			debe=calcularDebe();
+			setDebe(debe);
 		});
 		activarAgregarPrecio();
 	}
@@ -549,7 +565,6 @@ echo $form->errorSummary($datosFacturacion);
 	}
 
 	function calcularGranTotal(){
-
 		var descuento = $("#Ordenes_descuento").val();
 		if(descuento=="")
 			descuento=0;
@@ -577,6 +592,7 @@ echo $form->errorSummary($datosFacturacion);
 	}
 
 	function calcularPago(){
+		var pagosAnteriores = parseFloat($("#pagosAnteriores").val());
 		efectivo = parseFloat($("#Pagos_efectivo").val());
 		if(isNaN(efectivo))
 			efectivo=0;
@@ -586,12 +602,12 @@ echo $form->errorSummary($datosFacturacion);
 		cheque = parseFloat($("#Pagos_cheque").val());
 		if(isNaN(cheque))
 			cheque=0;
-		if (cheque > calcularGranTotal()) {
+		if (cheque > calcularGranTotal()-pagosAnteriores) {
 			alerta("El monto del cheque no debe ser mayor al costo de la orden","Aviso");
 			$("#Pagos_cheque").val("");
 			cheque=0;
 		}
-		return efectivo+tarjeta+cheque;
+		return efectivo+tarjeta+cheque+pagosAnteriores;
 	}
 
 	function setPago(pago){
@@ -666,6 +682,8 @@ echo $form->errorSummary($datosFacturacion);
 						setExamenesIds();
 						total=calcularTotal();
 						setTotal(total);
+						granTotal=calcularGranTotal();
+						setGranTotal(granTotal);
 						debe=calcularDebe();
 						setDebe(debe);
 						unblock("examenes");
@@ -696,6 +714,8 @@ echo $form->errorSummary($datosFacturacion);
 							setExamenesIds();
 							total=calcularTotal();
 							setTotal(total);
+							granTotal=calcularGranTotal();
+							setGranTotal(granTotal);
 							debe=calcularDebe();
 							setDebe(debe);
 							unblock("examenes");

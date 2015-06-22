@@ -52,6 +52,15 @@
 								        					'title'=>'Calificar',
 								        				),
 											        ),
+											        'updateOrden'=>array(
+											        	'label'=>'<span class="fa fa-pencil"></span>',
+								        				'visible'=>'$data->editable() == 1',
+								        				'imageUrl'=>false,
+								        				'url'=>'Yii::app()->controller->createUrl("update",array("id"=>$data->id))',
+								        				'options'=>array(
+								        					'title'=>'Actualizar',
+								        				),
+											        ),
 											        'update'=>array(
 											        	'label'=>'<span class="fa fa-pencil"></span>',
 								        				'visible'=>'(isset($data->activo) && $data->activo == 1) || !isset($data->activo)',

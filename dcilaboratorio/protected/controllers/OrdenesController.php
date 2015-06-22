@@ -171,8 +171,7 @@ class OrdenesController extends Controller
 				$transaction = Yii::app()->db->beginTransaction();
 				try{
 					$model->save();
-					// print_r($examenes_precio);
-					// return;
+
 					foreach ($examenes_precio as $examen_precio) {
 						$examen_precio->id_ordenes = $model->id;
 						$examen_precio->save();
@@ -281,20 +280,51 @@ class OrdenesController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
-		$paciente =new Pacientes;
-		$datosFacturacion=new DatosFacturacion;
-		$examenes=new Examenes;
-		$pagos=new Pagos;
+		$model = $this->loadModel($id);
+		$ordenFacturacion = $model->ordenFacturacion;
+		$paciente = $ordenFacturacion->paciente;
+		$datosFacturacion = new DatosFacturacion;
+		$direccion = new Direcciones;
+		if ($ordenFacturacion->id_datos_facturacion!=null) {
+			$datosFacturacion = $ordenFacturacion->datosFacturacion;
+			$direccion = $datosFacturacion->direccion;
+		}
+		$examenes = new Examenes;
+		$pagos = new Pagos;
+		$listaTarifasExamenes = array();
+		$ordenExamenes = $model->ordenTieneExamenes;
+		$examenesEncontradosIds = array();
+		foreach ($ordenExamenes as $ordenExamen) {
+			$examen_id = $ordenExamen->detalleExamen->examenes->id;
+			if (!in_array($examen_id, $examenesEncontradosIds)) {
+				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($examen_id,$model->id_multitarifarios));
+				array_push($listaTarifasExamenes, $tarifaActiva);
+				array_push($examenesEncontradosIds, $examen_id);
+			}
+		}
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Ordenes']))
 		{
+			$transaction = Yii::app()->db->beginTransaction();
 			$model->attributes=$_POST['Ordenes'];
-			if($model->save())
+			if($model->requiere_factura==1){
+				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
+				$direccion->attributes=$_POST['Direcciones'];
+				$direccion->save();
+				$datosFacturacion->id_direccion=$direccion->id;
+				$datosFacturacion->save();
+				$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
+				$ordenFacturacion->save();
+			}
+
+			if($model->save()){
+				$transaction->commit();
 				$this->redirect(array('view','id'=>$model->id));
+			}
+			$transaction->rollback();
 		}
 
 		$this->render('update',array(
@@ -303,6 +333,8 @@ class OrdenesController extends Controller
 			'datosFacturacion'=>$datosFacturacion,
 			'examenes'=>$examenes,
 			'pagos'=>$pagos,
+			'direccion' => $direccion,
+			'listaTarifasExamenes'=>$listaTarifasExamenes,
 		));
 	}
 
