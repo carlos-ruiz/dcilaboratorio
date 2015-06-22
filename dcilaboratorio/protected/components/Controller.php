@@ -24,7 +24,7 @@ class Controller extends CController
 	public function beforeAction(){
         // Check only when the user is logged in
         if ( !Yii::app()->user->isGuest)  {
-        	if(!empty(Yii::app()->user->getState('perfil'))){
+        	if(Yii::app()->user->getState('perfil')){
         		return true;
         	}
         	else{
