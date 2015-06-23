@@ -294,6 +294,7 @@ class OrdenesController extends Controller
 		$listaTarifasExamenes = array();
 		$ordenExamenes = $model->ordenTieneExamenes;
 		$examenesEncontradosIds = array();
+		$examenesIds = array();
 		foreach ($ordenExamenes as $ordenExamen) {
 			$examen_id = $ordenExamen->detalleExamen->examenes->id;
 			if (!in_array($examen_id, $examenesEncontradosIds)) {
@@ -308,6 +309,7 @@ class OrdenesController extends Controller
 
 		if(isset($_POST['Ordenes']))
 		{
+			$validateExamenes = true;
 			$transaction = Yii::app()->db->beginTransaction();
 			$model->attributes=$_POST['Ordenes'];
 			if($model->requiere_factura==1){
@@ -319,8 +321,47 @@ class OrdenesController extends Controller
 				$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 				$ordenFacturacion->save();
 			}
+			else{
+				if ($ordenFacturacion->id_datos_facturacion != null) {
+					$direccion->delete();
+					$datosFacturacion->delete();
+				}
+			}
+			foreach ($ordenExamenes as $ordenExamen) {
+				$ordenExamen->delete();
+			}
+			if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids'])){
+				$examenesIds = split(',',$_POST['Examenes']['ids']);
+			}
+			else{
+				$mensaje="Debe agregar al menos un examen a la orden";
+				$titulo="Aviso";
+				$validateExamenes=false;
+			}
 
-			if($model->save()){
+			
+			$examenes_precio = array();
+			$totalAPagar = 0;
+			foreach ($examenesIds as $idExamen) {
+				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
+				if(isset($tarifaActiva)){
+					array_push($listaTarifasExamenes, $tarifaActiva);
+					$totalAPagar+=$tarifaActiva->precio;
+					$examen_precio = new OrdenPrecioExamen;
+					$examen_precio->precio = $tarifaActiva->precio;
+					$examen_precio->id_examenes = $idExamen;
+					array_push($examenes_precio, $examen_precio);
+				}
+				else{
+					$tarifaAux= new TarifasActivas;
+					$tarifaAux->id_examenes=$idExamen;
+					$tarifaAux->addError('precio','No hay precio en el tarifario');
+					array_push($listaTarifasExamenes, $tarifaAux);
+					$validateExamenes=false;
+				}
+			}
+
+			if($validateExamenes && $model->save()){
 				$transaction->commit();
 				$this->redirect(array('view','id'=>$model->id));
 			}
@@ -336,6 +377,7 @@ class OrdenesController extends Controller
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
 		));
+		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
 	/**
