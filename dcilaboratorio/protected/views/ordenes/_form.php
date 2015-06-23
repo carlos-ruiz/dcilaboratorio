@@ -602,7 +602,7 @@ echo $form->errorSummary($datosFacturacion);
 		cheque = parseFloat($("#Pagos_cheque").val());
 		if(isNaN(cheque))
 			cheque=0;
-		if (cheque > calcularGranTotal()-pagosAnteriores) {
+		if (cheque > 0 && cheque > calcularGranTotal()-pagosAnteriores) {
 			alerta("El monto del cheque no debe ser mayor al costo de la orden","Aviso");
 			$("#Pagos_cheque").val("");
 			cheque=0;

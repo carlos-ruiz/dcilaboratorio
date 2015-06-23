@@ -177,7 +177,7 @@
 			$pagado=$totalOrden-$total;
 
 			  echo '<table class="table table-striped table-bordered dataTable"><tr>
-				   <td>Total por pagar </td><td>$ '.$pagado.'</td></<tr> </table>';
+				   <td>'.($pagado>=0?"Total por pagar":"Cambio").'</td><td>$ '.($pagado>=0?$pagado:$pagado*-1).'</td></<tr> </table>';
 
 				
 		    echo '<table class="table table-striped table-bordered dataTable"><tr>

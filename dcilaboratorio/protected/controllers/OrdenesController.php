@@ -19,7 +19,7 @@ class OrdenesController extends Controller
 		return array(
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
+			);
 	}
 
 	/**
@@ -33,19 +33,19 @@ class OrdenesController extends Controller
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
-			),
+				),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo"),
 				'users'=>array('@'),
-			),
+				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('delete'),
 				'users'=>array('admin'),
-			),
+				),
 			array('deny',  // deny all users
 				'users'=>array('*'),
-			),
-		);
+				),
+			);
 	}
 
 	/**
@@ -65,7 +65,7 @@ class OrdenesController extends Controller
 			'pagos'=>$pagos,
 			'datosFacturacion'=>$datosFacturacion,
 			'examenes'=>$examenes,
-		));
+			));
 	}
 
 	/**
@@ -269,7 +269,7 @@ class OrdenesController extends Controller
 			'pagos'=>$pagos,
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
-		));
+			));
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
@@ -303,6 +303,8 @@ class OrdenesController extends Controller
 				array_push($examenesEncontradosIds, $examen_id);
 			}
 		}
+		$fecha_creacion=date('Y-m-d H:i:s');
+		$fecha_edicion='2000-01-01 00:00:00';
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -311,61 +313,131 @@ class OrdenesController extends Controller
 		{
 			$validateExamenes = true;
 			$transaction = Yii::app()->db->beginTransaction();
-			$model->attributes=$_POST['Ordenes'];
-			if($model->requiere_factura==1){
-				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
-				$direccion->attributes=$_POST['Direcciones'];
-				$direccion->save();
-				$datosFacturacion->id_direccion=$direccion->id;
-				$datosFacturacion->save();
-				$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
-				$ordenFacturacion->save();
-			}
-			else{
-				if ($ordenFacturacion->id_datos_facturacion != null) {
-					$direccion->delete();
-					$datosFacturacion->delete();
-				}
-			}
-			foreach ($ordenExamenes as $ordenExamen) {
-				$ordenExamen->delete();
-			}
-			if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids'])){
-				$examenesIds = split(',',$_POST['Examenes']['ids']);
-			}
-			else{
-				$mensaje="Debe agregar al menos un examen a la orden";
-				$titulo="Aviso";
-				$validateExamenes=false;
-			}
-
-			
-			$examenes_precio = array();
-			$totalAPagar = 0;
-			foreach ($examenesIds as $idExamen) {
-				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
-				if(isset($tarifaActiva)){
-					array_push($listaTarifasExamenes, $tarifaActiva);
-					$totalAPagar+=$tarifaActiva->precio;
-					$examen_precio = new OrdenPrecioExamen;
-					$examen_precio->precio = $tarifaActiva->precio;
-					$examen_precio->id_examenes = $idExamen;
-					array_push($examenes_precio, $examen_precio);
+			try{
+				$model->attributes=$_POST['Ordenes'];
+				if($model->requiere_factura==1){
+					$datosFacturacion->attributes=$_POST['DatosFacturacion'];
+					$direccion->attributes=$_POST['Direcciones'];
+					$direccion->save();
+					$datosFacturacion->id_direccion=$direccion->id;
+					$datosFacturacion->save();
+					$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
+					$ordenFacturacion->save();
 				}
 				else{
-					$tarifaAux= new TarifasActivas;
-					$tarifaAux->id_examenes=$idExamen;
-					$tarifaAux->addError('precio','No hay precio en el tarifario');
-					array_push($listaTarifasExamenes, $tarifaAux);
+					if ($ordenFacturacion->id_datos_facturacion != null) {
+						$ordenFacturacion->id_datos_facturacion = null;
+						$ordenFacturacion->save();
+						$datosFacturacion->delete();
+						$direccion->delete();
+					}
+				}
+				foreach ($ordenExamenes as $ordenExamen) {
+					$ordenExamen->delete();
+				}
+				if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids'])){
+					$examenesIds = split(',',$_POST['Examenes']['ids']);
+				}
+				else{
+					$mensaje="Debe agregar al menos un examen a la orden";
+					$titulo="Aviso";
 					$validateExamenes=false;
 				}
-			}
 
-			if($validateExamenes && $model->save()){
-				$transaction->commit();
-				$this->redirect(array('view','id'=>$model->id));
+
+				$examenes_precio = array();
+				$totalAPagar = 0;
+				$ordenPrecioExamenes = $model->precios;
+				foreach ($ordenPrecioExamenes as $ordenPrecio) {
+					$ordenPrecio->delete();
+				}
+				foreach ($examenesIds as $idExamen) {
+					$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
+					if(isset($tarifaActiva)){
+						array_push($listaTarifasExamenes, $tarifaActiva);
+						$totalAPagar+=$tarifaActiva->precio;
+						$examen_precio = new OrdenPrecioExamen;
+						$examen_precio->precio = $tarifaActiva->precio;
+						$examen_precio->id_examenes = $idExamen;
+						array_push($examenes_precio, $examen_precio);
+					}
+					else{
+						$tarifaAux= new TarifasActivas;
+						$tarifaAux->id_examenes=$idExamen;
+						$tarifaAux->addError('precio','No hay precio en el tarifario');
+						array_push($listaTarifasExamenes, $tarifaAux);
+						$validateExamenes=false;
+					}
+				}
+
+				if($validateExamenes && $model->save()){
+					foreach ($examenes_precio as $examen_precio) {
+						$examen_precio->id_ordenes = $model->id;
+						$examen_precio->save();
+					}
+
+					foreach ($examenesIds as $idExamen) {
+					// array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
+						$detallesExamen = DetallesExamen::model()->findByExamenId($idExamen);
+						foreach ($detallesExamen as $detalle) {
+							$ordenTieneExamenes = new OrdenTieneExamenes;
+							$ordenTieneExamenes->id_ordenes=$model->id;
+							$ordenTieneExamenes->id_detalles_examen=$detalle->id;
+							$ordenTieneExamenes->ultima_edicion=$fecha_edicion;
+							$ordenTieneExamenes->usuario_ultima_edicion=Yii::app()->user->id;;
+							$ordenTieneExamenes->creacion=$fecha_creacion;
+							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;;
+							$ordenTieneExamenes->save();
+						}
+					}
+					if(isset($model->descuento)){
+						$totalAPagar=$totalAPagar * (1-($model->descuento/100));
+					}
+					if(isset($model->costo_emergencia)){
+						$totalAPagar=$totalAPagar+$model->costo_emergencia;
+					}
+					$pagosAnteriores = $model->pagos;
+					foreach ($pagosAnteriores as $pagoAnterior) {
+						$totalAPagar-=((isset($pagoAnterior->efectivo)?$pagoAnterior->efectivo:0)+(isset($pagoAnterior->tarjeta)?$pagoAnterior->tarjeta:0)+(isset($pagoAnterior->cheque)?$pagoAnterior->cheque:0));
+					}
+
+					if (isset($_POST['Pagos'])) {
+						$pagos->attributes=$_POST['Pagos'];
+						$pagos->fecha=$fecha_creacion;
+						$totalPagado=(isset($pagos->efectivo)?$pagos->efectivo:0)+(isset($pagos->tarjeta)?$pagos->tarjeta:0)+(isset($pagos->cheque)?$pagos->cheque:0);
+
+						$status = new Status;
+
+						if($totalAPagar<=$totalPagado){
+							$cambio = $totalPagado-$totalAPagar;
+							if ($pagos->efectivo >= $cambio) {
+								$pagos->efectivo -= $cambio; 
+							}
+							else{
+								$cambio -= $pagos->efectivo;
+								$pagos->efectivo = 0;
+								$pagos->tarjeta -= $cambio;
+							}
+							$status=Status::model()->findByName("Pagada");
+						}
+						else{
+							$status=Status::model()->findByName("Creada");
+						}
+						$pagos->id_ordenes = $model->id;
+						if($totalPagado > 0){
+							$pagos->save();
+						}
+						$model->id_status=$status->id;
+						$model->save();
+					}
+					$transaction->commit();
+					$this->redirect(array('view','id'=>$model->id));
+				}
+			}catch(Exception $ex){
+				$transaction->rollback();
+				print_r($ex);
+				return;
 			}
-			$transaction->rollback();
 		}
 
 		$this->render('update',array(
@@ -376,7 +448,7 @@ class OrdenesController extends Controller
 			'pagos'=>$pagos,
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
-		));
+			));
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
@@ -406,7 +478,7 @@ class OrdenesController extends Controller
 		$dataProvider=new CActiveDataProvider('Ordenes');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
-		));
+			));
 	}
 
 	/**
@@ -423,7 +495,7 @@ class OrdenesController extends Controller
 
 		$this->render('admin',array(
 			'model'=>$model,
-		));
+			));
 	}
 
 	/**
@@ -523,7 +595,7 @@ class OrdenesController extends Controller
 			// There is a call to performAjaxValidation() commented in generated controller code.
 			// See class documentation of CActiveForm for details on this.
 			'enableAjaxValidation'=>false,
-		)); 
+			)); 
 		$this->renderPartial("_modalPagos",
 			array('pagos'=>$pagos,'form'=>$form, 'orden'=>$orden)
 			);
@@ -571,7 +643,7 @@ class OrdenesController extends Controller
 		$this->render('_calificar',array(
 			'model'=>$model,
 			'ordenExamenesModel'=>$ordenExamenes,
-		));
+			));
 	}
 
 	public function actionAgregarExamen(){
@@ -582,11 +654,11 @@ class OrdenesController extends Controller
 		$precioText=isset($tarifa->precio)?'$ '.$tarifa->precio:'No hay precio para el tarifario seleccionado';
 		$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 		echo "<tr class='row_$examen->id' data-id='$examen->id'>
-				<td>$examen->clave</td>
-				<td>$examen->nombre</td>
-				<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-			</tr>";
+		<td>$examen->clave</td>
+		<td>$examen->nombre</td>
+		<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
+		<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+		</tr>";
 	}
 
 	public function actionAgregarGrupoExamen(){
@@ -600,11 +672,11 @@ class OrdenesController extends Controller
 				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
 				$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 				echo "<tr class='row_$examen->id' data-id='$examen->id'>
-						<td>$examen->clave</td>
-						<td>$examen->nombre</td>
-						<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-						<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-					</tr>";
+				<td>$examen->clave</td>
+				<td>$examen->nombre</td>
+				<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
+				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+				</tr>";
 			}
 		}
 		
@@ -621,11 +693,11 @@ class OrdenesController extends Controller
 				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
 				$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 				echo "<tr class='row_$examen->id' data-id='$examen->id'>
-						<td>$examen->clave</td>
-						<td>$examen->nombre</td>
-						<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-						<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-					</tr>";
+				<td>$examen->clave</td>
+				<td>$examen->nombre</td>
+				<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
+				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+				</tr>";
 			}
 		}
 	}
@@ -647,10 +719,10 @@ class OrdenesController extends Controller
 
 		$examen=Examenes::model()->findByPk($examenId);
 		echo "<td>$examen->clave</td>
-					<td>$examen->nombre</td>
-					<td class='precioExamen' data-val='$precio'>$ $precio</td>
-					<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-				";
+		<td>$examen->nombre</td>
+		<td class='precioExamen' data-val='$precio'>$ $precio</td>
+		<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+		";
 	}
 
 	public function enviarAccesoPorCorreo($nombrePaciente, $usuario, $contrasena, $correo){
