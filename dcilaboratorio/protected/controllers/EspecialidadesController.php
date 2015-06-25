@@ -34,7 +34,7 @@ class EspecialidadesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','generarPdf'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -45,6 +45,14 @@ class EspecialidadesController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionGenerarPdf(){
+		$pdf = new FPDF('P','mm','letter');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',16);
+		$pdf->Cell(40,10,'¡Hola mundo? pío');
+		$pdf->Output();
 	}
 
 	/**
