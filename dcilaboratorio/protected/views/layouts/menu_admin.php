@@ -289,6 +289,25 @@
 						</li>
 					</ul>
 				</li>
+				<li <?php if($this->section=="Reportes"){ echo 'class="active open"';}?>>
+					<a href="javascript:;">
+					<i class="icon-docs"></i>
+					<span class="title">Reportes</span>
+					<?php if($this->section=="Reportes"){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+					<ul class="sub-menu">
+						<li <?php if($this->section=="Reportes"){ echo 'class="active open"';}?>>
+							<a href="<?php echo Yii::app()->request->baseUrl; ?>/reportes/generar">
+							<i class="icon-list"></i>
+							Administrar</a>
+						</li>
+					</ul>
+				</li>
 <li >
 <div style="height:44px">
 </div>

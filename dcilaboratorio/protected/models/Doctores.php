@@ -175,4 +175,16 @@ class Doctores extends CActiveRecord
 	public function obtenerPorUserId($id){
 		return $this->model()->find("id_usuarios=?",array($id));
 	}
+
+
+	
+
+	public function selectList(){
+		$models = $this->model()->findAll('activo=1');
+		$data = array(null=>"--Seleccione--");
+		foreach ($models as $model) {
+				$data[$model->id]=$model->obtenerNombreCompleto();
+		}
+		return $data;
+	}
 }

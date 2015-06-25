@@ -116,4 +116,13 @@ array('nombre', 'unique'),
 	{
 		return parent::model($className);
 	}
+
+	public function selectList(){
+		$models = $this->model()->findAll('activo=1');
+		$data = array(null=>"--Seleccione--");
+		foreach ($models as $model) {
+				$data[$model->id]=$model->nombre;
+		}
+		return $data;
+	}
 }
