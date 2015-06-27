@@ -71,9 +71,9 @@ class ReportesController extends Controller
 			}
 
 			$query = Yii::app()->db->createCommand();
-			$query->select('ordenes.id');
+			//$query->select('ordenes.id');
+			$query->selectDistinct('ordenes.id');
 			$query->from('ordenes');
-
 			if ((isset($model->id_pacientes) && $model->id_pacientes > 0)|| $model->nombre_paciente == 1 || $model->id_paciente == 1)
 			{			 
 				$query->join('ordenes_facturacion', 'ordenes.id=ordenes_facturacion.id_ordenes');
@@ -102,40 +102,42 @@ class ReportesController extends Controller
 			$resultados=$query->queryAll();
 			
 
-			$resultadosMostrar= array();
+			$resultadosMostrar = array();
 			if($model->dia==1)
-				array_push($resultadosMostrar, 'dia');
+				array_push($resultadosMostrar, array('nombre'=>utf8_encode('  Día'), 'size'=>'0.7', 'id'=>'day'));
 			if($model->mes==1)
-				array_push($resultadosMostrar, 'mes');
+				array_push($resultadosMostrar, array('nombre'=>'Mes', 'size'=>'0.7', 'id'=>'month'));
 			if($model->año==1)
-				array_push($resultadosMostrar, 'año');
+				array_push($resultadosMostrar, array('nombre'=>utf8_encode('  Año'), 'size'=>'0.9', 'id'=>'year'));
 			if($model->semana==1)
-				array_push($resultadosMostrar, 'semana');
+				array_push($resultadosMostrar, array('nombre'=>'Sem', 'size'=>'0.7', 'id'=>'week'));
 			if($model->hora==1)
-				array_push($resultadosMostrar, 'hora');
+				array_push($resultadosMostrar, array('nombre'=>'Hora', 'size'=>'1', 'id'=>'hr'));
 			if($model->folio==1)
-				array_push($resultadosMostrar, 'folio');
+				array_push($resultadosMostrar, array('nombre'=>'Folio', 'size'=>'1', 'id'=>'folio'));
 			if($model->id_paciente==1)
-				array_push($resultadosMostrar, 'id_paciente');
+				array_push($resultadosMostrar, array('nombre'=>'Id P', 'size'=>'0.7', 'id'=>'idp'));
 			if($model->nombre_paciente==1)
-				array_push($resultadosMostrar, 'nombre_paciente');
+				array_push($resultadosMostrar, array('nombre'=>'Paciente', 'size'=>'5', 'id'=>'namep'));
 			if($model->unidad==1)
-				array_push($resultadosMostrar, 'unidad');
+				array_push($resultadosMostrar, array('nombre'=>'UR', 'size'=>'3', 'id'=>'ur'));
 			if($model->doctor==1)
-				array_push($resultadosMostrar, 'doctor');
+				array_push($resultadosMostrar, array('nombre'=>'Doctor', 'size'=>'5', 'id'=>'dr'));
 			if($model->id_examen==1)
-				array_push($resultadosMostrar, 'id_examen');
+				array_push($resultadosMostrar, array('nombre'=>'Examen', 'size'=>'3', 'id'=>'exam'));
 			if($model->costo==1)
-				array_push($resultadosMostrar, 'costo');
+				array_push($resultadosMostrar, array('nombre'=>'Costo', 'size'=>'1.5', 'id'=>'cost'));
 			if($model->porcentaje_descuento==1)
-				array_push($resultadosMostrar, 'porcentaje_descuento');
+				array_push($resultadosMostrar, array('nombre'=>'% Desc', 'size'=>'1', 'id'=>'discp'));
 			if($model->monto_descuento==1)
-				array_push($resultadosMostrar, 'monto_descuento');
+				array_push($resultadosMostrar, array('nombre'=>'$ Desc', 'size'=>'1', 'id'=>'disa'));
 			if($model->tarifa==1)
-				array_push($resultadosMostrar, 'tarifa');
+				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'size'=>'1', 'id'=>'tarifa'));
 
-			$pdf = new ImprimirPdf('P','cm','letter');
-			$pdf->model = Ordenes::model()->findByPk(1);
+			$pdf = new ImprimirPdf('L','cm','letter');
+			$pdf->AddPage();
+			$pdf->cabeceraHorizontal($resultadosMostrar);
+			$pdf->contenido($resultados, $resultadosMostrar);
 			$pdf->Output();
 		//$this->imprimirPdf($resultados, $resultadosMostrar);
 		}
