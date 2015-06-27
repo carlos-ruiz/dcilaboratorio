@@ -56,11 +56,11 @@ echo $form->errorSummary($datosFacturacion);
 						
 					</div>
 					<div class="row">
-						<div class="form-group col-md-4 <?php if($form->error($model,'id_multitarifario')!=''){ echo 'has-error'; }?>">
-							<?php echo $form->labelEx($model,'id_multitarifario', array('class'=>'control-label')); ?>
+						<div class="form-group col-md-4 <?php if($form->error($model,'id_multitarifarios')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($model,'id_multitarifarios', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->dropDownList($model,'id_multitarifario',Multitarifarios::model()->selectList(), array('class'=>'form-control input-medium select2me')); ?>
-								<?php echo $form->error($model,'id_multitarifario', array('class'=>'help-block')); ?>
+								<?php echo $form->dropDownList($model,'id_multitarifarios',Multitarifarios::model()->selectList(), array('class'=>'form-control input-medium select2me')); ?>
+								<?php echo $form->error($model,'id_multitarifarios', array('class'=>'help-block')); ?>
 							</div>
 						</div>
 						<div class="col-md-4">

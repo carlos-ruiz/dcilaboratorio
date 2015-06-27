@@ -139,6 +139,33 @@ class ReportesController extends Controller
 		if(isset($_POST['BusquedaForm']))
 		{
 			$model->attributes=$_POST['BusquedaForm'];
+			$query = Yii::app()->db->createCommand();
+			$query->select('*');
+			$query->from('ordenes');
+			$query->where('ordenes.fecha_captura>:start and ordenes.fecha_captura<:end', array('start'=>$model->fecha_inicial, 'end'=>$model->fecha_final));
+			if (isset($model->id_multitarifarios) && $model->id_multitarifarios > 0) {
+				$query->join('multitarifarios', 'ordenes.id_multitarifarios=multitarifarios.id');
+				$query->andWhere('multitarifarios.id=:idMultitarifario', array('idMultitarifario'=>$model->id_multitarifarios));
+			}
+			if (isset($model->id_doctores) && $model->id_doctores > 0) {
+				$query->join('doctores', 'ordenes.id_doctores=doctores.id');
+				$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
+			}
+			// if (isset($model->id_doctores) && $model->id_doctores > 0) {
+			// 	$query->join('doctores', 'ordenes.id_doctores=doctores.id');
+			// 	$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
+			// }
+			// if (isset($model->id_doctores) && $model->id_doctores > 0) {
+			// 	$query->join('doctores', 'ordenes.id_doctores=doctores.id');
+			// 	$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
+			// }
+			// if (isset($model->id_doctores) && $model->id_doctores > 0) {
+			// 	$query->join('doctores', 'ordenes.id_doctores=doctores.id');
+			// 	$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
+			// }
+			$result=$query->queryAll();
+			print_r($result);
+			return;
 			
 
 			//$models=Ordenes::model()->findAll();

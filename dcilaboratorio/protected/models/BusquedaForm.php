@@ -11,7 +11,7 @@ class BusquedaForm extends CFormModel
 	public $fecha_inicial;
 	public $id_pacientes;
 	public $id_doctores;
-	public $id_multitarifario;
+	public $id_multitarifarios;
 	public $grupo_examen;
 	public $id_grupo;
 	public $dia;
@@ -60,7 +60,7 @@ class BusquedaForm extends CFormModel
 			'fecha_final'=>'Fecha Final',
 			'id_pacientes'=>'Paciente',
 			'id_doctores'=>'Doctor',
-			'id_multitarifario'=>'Multitarifario',
+			'id_multitarifarios'=>'Multitarifario',
 			'id_examenes'=>'Examen',
 			'id_grupo'=>'Grupo de exámen',
 			'dia'=>'Día',
