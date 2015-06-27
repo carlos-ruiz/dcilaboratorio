@@ -47,13 +47,7 @@ class EspecialidadesController extends Controller
 		);
 	}
 
-	public function actionGenerarPdf(){
-		$pdf = new FPDF('P','mm','letter');
-		$pdf->AddPage();
-		$pdf->SetFont('Arial','B',16);
-		$pdf->Cell(40,10,'¡Hola mundo? pío');
-		$pdf->Output();
-	}
+	
 
 	/**
 	 * Displays a particular model.

@@ -51,83 +51,8 @@ class ReportesController extends Controller
 		);
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionCreate()
-	{
-		$this->subSection = "Nuevo";
-		$model=new TitulosForm;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['TitulosForm']))
-		{
-			$model->attributes=$_POST['TitulosForm'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['TitulosForm']))
-		{
-			$model->attributes=$_POST['TitulosForm'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
-	public function actionDelete($id)
-	{
-		$model=$this->loadModel($id);
-		if(isset($model->activo))
-			$model->activo=$model->activo==0?1:0;
-		else
-			$model->delete();
-		$model->save();	
-
-		$status = (!isset($model->activo)?"Eliminado":($model->activo==0?"Desactivado":"Activado"));
-		echo '{id:'.$model->id.', estatus:'.$status.'}';	
-	}
-
+	
+	
 	/**
 	 * Lists all models.
 	 */
@@ -136,31 +61,36 @@ class ReportesController extends Controller
 
 		$model=new BusquedaForm;
 
-		$criteria=new CDbCriteria;
 
 		if(isset($_POST['BusquedaForm']))
 		{
+			
 			$model->attributes=$_POST['BusquedaForm'];
 			if(!$model->validate()){
 				$this->render('generar', array('model'=>$model));
 			}
 
 			$query = Yii::app()->db->createCommand();
-			$query->select('*');
+			$query->select('ordenes.id');
 			$query->from('ordenes');
-			$query->join('multitarifarios', 'ordenes.id_multitarifarios=multitarifarios.id');
-			$query->leftJoin('doctores', 'ordenes.id_doctores=doctores.id');
-			$query->join('ordenes_facturacion', 'ordenes.id=ordenes_facturacion.id_ordenes');
-			$query->join('orden_tiene_examenes', 'ordenes.id=orden_tiene_examenes.id_ordenes');
-		 	$query->join('detalles_examen', 'orden_tiene_examenes.id_detalles_examen=detalles_examen.id');
+
+			 if ((isset($model->id_pacientes) && $model->id_pacientes > 0)|| $model->nombre_paciente == 1 || $model->id_paciente == 1)
+			 {			 
+				$query->join('ordenes_facturacion', 'ordenes.id=ordenes_facturacion.id_ordenes');
+			 }	
+			 if ((isset($model->clave_examen) && $model->clave_examen > 0)|| $model->id_examen==1) 
+			 {		
+				$query->join('orden_tiene_examenes', 'ordenes.id=orden_tiene_examenes.id_ordenes');
+			 	$query->join('detalles_examen', 'orden_tiene_examenes.id_detalles_examen=detalles_examen.id');
+		 	 }
+
 			$query->where('ordenes.fecha_captura>:start and ordenes.fecha_captura<:end', array('start'=>$model->fecha_inicial, 'end'=>$model->fecha_final));
 			
-
 			if (isset($model->id_multitarifarios) && $model->id_multitarifarios > 0) {
-				$query->andWhere('multitarifarios.id=:idMultitarifario', array('idMultitarifario'=>$model->id_multitarifarios));
+				$query->andWhere('ordenes.id_multitarifarios=:idMultitarifario', array('idMultitarifario'=>$model->id_multitarifarios));
 			}
 			if (isset($model->id_doctores) && $model->id_doctores > 0) {				
-				$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
+				$query->andWhere('ordenes.id_doctores=:idDoctor', array('idDoctor'=>$model->id_doctores));
 			}
 			 if (isset($model->id_pacientes) && $model->id_pacientes > 0) {			 	
 			 	$query->andWhere('ordenes_facturacion.id_pacientes=:idPaciente', array('idPaciente'=>$model->id_pacientes));
@@ -168,39 +98,56 @@ class ReportesController extends Controller
 			 if (isset($model->clave_examen) && $model->clave_examen > 0) {			 
 			 	$query->andWhere('detalles_examen.id_examenes=:idExamen', array('idExamen'=>$model->clave_examen));
 			 }
-		
-			$result=$query->queryAll();
-			print_r($result);
-			return;
+			
+			$resultados=$query->queryAll();
 			
 
-			//$models=Ordenes::model()->findAll();
-			
-			
-			//$criteria->join = 'orden_precio_examen';
-			$criteria->condition = 'id_doctores = :idDoctores';
-        	$criteria->params = array(":idDoctores" => $model['id_doctores'], 
-        							  ":id_multitarifarios"=> $model['id_multitarifarios'],
-        							  );
-			$criteria->addBetweenCondition('creacion', $model['fecha_inicial'], $model['fecha_final']);
-			
+			$resultadosMostrar= array();
+			if($model->dia==1)
+				array_push($resultadosMostrar, 'dia');
+			if($model->mes==1)
+				array_push($resultadosMostrar, 'mes');
+			if($model->año==1)
+				array_push($resultadosMostrar, 'año');
+			if($model->semana==1)
+				array_push($resultadosMostrar, 'semana');
+			if($model->hora==1)
+				array_push($resultadosMostrar, 'hora');
+			if($model->folio==1)
+				array_push($resultadosMostrar, 'folio');
+			if($model->id_paciente==1)
+				array_push($resultadosMostrar, 'id_paciente');
+			if($model->nombre_paciente==1)
+				array_push($resultadosMostrar, 'nombre_paciente');
+			if($model->unidad==1)
+				array_push($resultadosMostrar, 'unidad');
+			if($model->doctor==1)
+				array_push($resultadosMostrar, 'doctor');
+			if($model->id_examen==1)
+				array_push($resultadosMostrar, 'id_examen');
+			if($model->costo==1)
+				array_push($resultadosMostrar, 'costo');
+			if($model->porcentaje_descuento==1)
+				array_push($resultadosMostrar, 'porcentaje_descuento');
+			if($model->monto_descuento==1)
+				array_push($resultadosMostrar, 'monto_descuento');
+			if($model->tarifa==1)
+				array_push($resultadosMostrar, 'tarifa');
 
 
-			/*$models=Ordenes::model()->findAllByAttributes(array(
-			'id_doctores'=>$model['id_doctores'],
-			'id_multitarifarios'=>$model['id_multitarifario'],			
-			),$criteria);
-			print_r($models);*/
-
-
-
-
-			
-			//$resultado = $model->search();
-			
+		$this->imprimirPdf($resultados, $resultadosMostrar);
 		}
 		$this->render('generar', array('model'=>$model));
 	}
+
+	public function imprimirPdf($resultados, $resultadosMostrar){
+		$pdf = new FPDF('P','mm','letter');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',16);
+		$pdf->Cell(40,10,'¡Hola mundo? pío');
+		$pdf->Output();
+	}
+	
 
 	/**
 	 * Manages all models.

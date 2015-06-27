@@ -70,7 +70,7 @@ class BusquedaForm extends CFormModel
 			'nombre_paciente'=>'Nombre del paciente',
 			'unidad'=>'Unidad Responsable',
 			'doctor'=>'Doctor',
-			'examen'=>'Examen',
+			'id_examen'=>'Examen',
 			'costo'=>'Costo',
 			'porcentaje_descuento'=>'% Desc',
 			'monto_descuento'=>'Monto descuento',
