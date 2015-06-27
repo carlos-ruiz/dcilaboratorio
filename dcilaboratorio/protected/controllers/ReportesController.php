@@ -7,9 +7,9 @@ class ReportesController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-    public $section = "Reportes";
-    public $subSection="Generar";
-    public $pageTitle="Reportes";
+	public $section = "Reportes";
+	public $subSection="Generar";
+	public $pageTitle="Reportes";
 	/**
 	 * @return array action filters
 	 */
@@ -18,7 +18,7 @@ class ReportesController extends Controller
 		return array(
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
+			);
 	}
 
 	/**
@@ -32,23 +32,23 @@ class ReportesController extends Controller
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
-			),
+				),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
 				'users'=>array('@'),
-			),
+				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
-			),
+				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','generar'),
 				'users'=>array('admin'),
-			),
+				),
 			array('deny',  // deny all users
 				'users'=>array('*'),
-			),
-		);
+				),
+			);
 	}
 
 	
@@ -74,15 +74,15 @@ class ReportesController extends Controller
 			$query->select('ordenes.id');
 			$query->from('ordenes');
 
-			 if ((isset($model->id_pacientes) && $model->id_pacientes > 0)|| $model->nombre_paciente == 1 || $model->id_paciente == 1)
-			 {			 
+			if ((isset($model->id_pacientes) && $model->id_pacientes > 0)|| $model->nombre_paciente == 1 || $model->id_paciente == 1)
+			{			 
 				$query->join('ordenes_facturacion', 'ordenes.id=ordenes_facturacion.id_ordenes');
-			 }	
-			 if ((isset($model->clave_examen) && $model->clave_examen > 0)|| $model->id_examen==1) 
-			 {		
+			}	
+			if ((isset($model->clave_examen) && $model->clave_examen > 0)|| $model->id_examen==1) 
+			{		
 				$query->join('orden_tiene_examenes', 'ordenes.id=orden_tiene_examenes.id_ordenes');
-			 	$query->join('detalles_examen', 'orden_tiene_examenes.id_detalles_examen=detalles_examen.id');
-		 	 }
+				$query->join('detalles_examen', 'orden_tiene_examenes.id_detalles_examen=detalles_examen.id');
+			}
 
 			$query->where('ordenes.fecha_captura>:start and ordenes.fecha_captura<:end', array('start'=>$model->fecha_inicial, 'end'=>$model->fecha_final));
 			
@@ -92,12 +92,12 @@ class ReportesController extends Controller
 			if (isset($model->id_doctores) && $model->id_doctores > 0) {				
 				$query->andWhere('ordenes.id_doctores=:idDoctor', array('idDoctor'=>$model->id_doctores));
 			}
-			 if (isset($model->id_pacientes) && $model->id_pacientes > 0) {			 	
-			 	$query->andWhere('ordenes_facturacion.id_pacientes=:idPaciente', array('idPaciente'=>$model->id_pacientes));
-			 }
-			 if (isset($model->clave_examen) && $model->clave_examen > 0) {			 
-			 	$query->andWhere('detalles_examen.id_examenes=:idExamen', array('idExamen'=>$model->clave_examen));
-			 }
+			if (isset($model->id_pacientes) && $model->id_pacientes > 0) {			 	
+				$query->andWhere('ordenes_facturacion.id_pacientes=:idPaciente', array('idPaciente'=>$model->id_pacientes));
+			}
+			if (isset($model->clave_examen) && $model->clave_examen > 0) {			 
+				$query->andWhere('detalles_examen.id_examenes=:idExamen', array('idExamen'=>$model->clave_examen));
+			}
 			
 			$resultados=$query->queryAll();
 			
@@ -134,8 +134,10 @@ class ReportesController extends Controller
 			if($model->tarifa==1)
 				array_push($resultadosMostrar, 'tarifa');
 
-
-		$this->imprimirPdf($resultados, $resultadosMostrar);
+			$pdf = new ImprimirPdf('P','cm','letter');
+			$pdf->model = Ordenes::model()->findByPk(1);
+			$pdf->Output();
+		//$this->imprimirPdf($resultados, $resultadosMostrar);
 		}
 		$this->render('generar', array('model'=>$model));
 	}
@@ -162,7 +164,7 @@ class ReportesController extends Controller
 
 		$this->render('admin',array(
 			'model'=>$model,
-		));
+			));
 	}
 
 	/**

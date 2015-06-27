@@ -17,7 +17,7 @@ return array(
 		'application.models.*',
 		'application.components.*',
 		'ext.YiiMailer.YiiMailer',
-		'ext.fpdf.FPDF',
+		'ext.fpdf.ImprimirPdf',
 	),
 
 	'modules'=>array(
