@@ -189,8 +189,10 @@
 			    	<a class="btn red" style="width:100%;" href="<?php echo CController::createUrl('ordenes/loadModalContent',array('id_ordenes'=>"$model->id"));?>" data-target="#modal" data-toggle="modal">Agregar pago</a>
 			    	</td>
 			    </tr>
+
 		    <?php } ?>
 		    </table>
+		     <?php echo CHtml::link('<i class="icon-plus"></i> Generar PDF', array('especialidades/generarPdf'), array('class'=>'btn')); ?>
 		
 	</div>
 	<?php } ?>

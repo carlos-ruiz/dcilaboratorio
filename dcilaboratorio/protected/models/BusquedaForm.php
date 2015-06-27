@@ -12,8 +12,6 @@ class BusquedaForm extends CFormModel
 	public $id_pacientes;
 	public $id_doctores;
 	public $id_multitarifarios;
-	public $grupo_examen;
-	public $id_grupo;
 	public $dia;
 	public $mes;
 	public $año;
@@ -31,6 +29,7 @@ class BusquedaForm extends CFormModel
 	public $tarifa;
 
 	public $check;
+	public $id_examen;
 
 
 	/**
@@ -44,9 +43,9 @@ class BusquedaForm extends CFormModel
 			// username and password are required
 			array('fecha_inicial, fecha_final', 'required'),
 			// boolean
-			array('dia, mes, año, semana, id_paciente, hora, folio, nombre_paciente, unidad, doctor, examen, costo, porcentaje_desc, monto_desc, tarifa', 'boolean'),
+			array('dia, mes, año, semana, id_paciente, hora, folio, nombre_paciente, unidad, doctor, id_examen, costo, porcentaje_descuento, monto_descuento, tarifa', 'boolean'),
 			// numerical
-			array('id_doctores, id_pacientes, id_doctores, id_multitarifarios, clave_examen, id_grupo', 'numerical', 'integerOnly'=>true),
+			array('id_doctores, id_pacientes, id_doctores, id_multitarifarios, clave_examen', 'numerical', 'integerOnly'=>true),
 		);
 	}
 
@@ -62,7 +61,6 @@ class BusquedaForm extends CFormModel
 			'id_doctores'=>'Doctor',
 			'id_multitarifarios'=>'Multitarifario',
 			'id_examenes'=>'Examen',
-			'id_grupo'=>'Grupo de exámen',
 			'dia'=>'Día',
 			'mes'=>'Mes',
 			'año'=>'Año',

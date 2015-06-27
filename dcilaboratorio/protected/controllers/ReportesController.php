@@ -133,36 +133,42 @@ class ReportesController extends Controller
 	 */
 	public function actionGenerar()
 	{
+
 		$model=new BusquedaForm;
+
 		$criteria=new CDbCriteria;
 
 		if(isset($_POST['BusquedaForm']))
 		{
 			$model->attributes=$_POST['BusquedaForm'];
+			if(!$model->validate()){
+				$this->render('generar', array('model'=>$model));
+			}
+
 			$query = Yii::app()->db->createCommand();
 			$query->select('*');
 			$query->from('ordenes');
+			$query->join('multitarifarios', 'ordenes.id_multitarifarios=multitarifarios.id');
+			$query->leftJoin('doctores', 'ordenes.id_doctores=doctores.id');
+			$query->join('ordenes_facturacion', 'ordenes.id=ordenes_facturacion.id_ordenes');
+			$query->join('orden_tiene_examenes', 'ordenes.id=orden_tiene_examenes.id_ordenes');
+		 	$query->join('detalles_examen', 'orden_tiene_examenes.id_detalles_examen=detalles_examen.id');
 			$query->where('ordenes.fecha_captura>:start and ordenes.fecha_captura<:end', array('start'=>$model->fecha_inicial, 'end'=>$model->fecha_final));
+			
+
 			if (isset($model->id_multitarifarios) && $model->id_multitarifarios > 0) {
-				$query->join('multitarifarios', 'ordenes.id_multitarifarios=multitarifarios.id');
 				$query->andWhere('multitarifarios.id=:idMultitarifario', array('idMultitarifario'=>$model->id_multitarifarios));
 			}
-			if (isset($model->id_doctores) && $model->id_doctores > 0) {
-				$query->join('doctores', 'ordenes.id_doctores=doctores.id');
+			if (isset($model->id_doctores) && $model->id_doctores > 0) {				
 				$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
 			}
-			// if (isset($model->id_doctores) && $model->id_doctores > 0) {
-			// 	$query->join('doctores', 'ordenes.id_doctores=doctores.id');
-			// 	$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
-			// }
-			// if (isset($model->id_doctores) && $model->id_doctores > 0) {
-			// 	$query->join('doctores', 'ordenes.id_doctores=doctores.id');
-			// 	$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
-			// }
-			// if (isset($model->id_doctores) && $model->id_doctores > 0) {
-			// 	$query->join('doctores', 'ordenes.id_doctores=doctores.id');
-			// 	$query->andWhere('doctores.id=:idDoctor', array('idDoctor'=>$model->id_doctores));
-			// }
+			 if (isset($model->id_pacientes) && $model->id_pacientes > 0) {			 	
+			 	$query->andWhere('ordenes_facturacion.id_pacientes=:idPaciente', array('idPaciente'=>$model->id_pacientes));
+			 }
+			 if (isset($model->clave_examen) && $model->clave_examen > 0) {			 
+			 	$query->andWhere('detalles_examen.id_examenes=:idExamen', array('idExamen'=>$model->clave_examen));
+			 }
+		
 			$result=$query->queryAll();
 			print_r($result);
 			return;

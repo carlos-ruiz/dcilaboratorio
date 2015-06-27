@@ -85,15 +85,7 @@ echo $form->errorSummary($datosFacturacion);
 								<div class="input-group">
 									<?php echo $form->dropDownList($model,'clave_examen', Examenes::model()->selectListWithClave(), array('class'=>'form-control input-medium select2me')); ?>
 								</div>
-							</div>
-
-							<div class="form-group col-md-4">
-								<?php echo "<label class='control-label'>Grupo de exámenes</label>"?>
-								<div class="input-group">
-									<?php echo $form->dropDownList($model,'grupo_examen', Grupos::model()->selectList(), array('class'=>'form-control input-medium select2me')); ?>
-								</div>
-							</div>
-					
+							</div>					
 					</div>
 					<hr/>
 					<div class="heading">
@@ -175,11 +167,11 @@ echo $form->errorSummary($datosFacturacion);
 							</div>
 					</div>
 					<div class="row">
-							<div class="form-group col-md-2 <?php if($form->error($model,'clave_examen')!=''){ echo 'has-error'; }?>">
-									<?php echo $form->labelEx($model,'clave_examen', array('class'=>'control-label')); ?>
+							<div class="form-group col-md-2 <?php if($form->error($model,'id_examen')!=''){ echo 'has-error'; }?>">
+									<?php echo $form->labelEx($model,'id_examen', array('class'=>'control-label')); ?>
 									<div class="input-group" >
-										<?php echo $form->checkBox($model,'clave_examen',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
-										<?php echo $form->error($model,'clave_examen', array('class'=>'help-block')); ?>
+										<?php echo $form->checkBox($model,'id_examen',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
+										<?php echo $form->error($model,'id_examen', array('class'=>'help-block')); ?>
 									</div>
 							</div>
 							<div class="form-group col-md-2 <?php if($form->error($model,'costo')!=''){ echo 'has-error'; }?>">
