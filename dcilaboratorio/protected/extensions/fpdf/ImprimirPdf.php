@@ -4,21 +4,21 @@ class ImprimirPdf extends FPDF{
 
 	function Header(){
 		$this->SetFont('Arial','B',18);
-		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css\layout\img/avatar7.jpg',1,2,3,3);
+		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css\layout\img/gvia_logo22.png',1.5,1.5,3,3);
     // Move to the right
     //$this->Cell(8);
     // Title
+		$this->SetXY(4, 1);
 		$this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
 		$this->ln(0.75);
-		$this->Cell(0,2.54,'KANTOR PERTANAHAN KOTA PEKANBARU',0,0,'C');
-		$this->ln(0.75);
-		$this->Cell(0,2.54,'PROVINSI RIAU',0,0,'C');
-		$this->ln(0.75);
-		$this->SetFont('Times','',13);
-		$this->Cell(0,2.54,'JALAN PEPAYA NO.47 TELP.(0761)23106-PEKANBARU',0,0,'C');
-		$this->ln(0.75);
-		$this->SetLineWidth(0.07);
-		$this->line(0.54,5,21,5);       
+		$this->SetFont('Times','',8);
+		$this->SetXY(4, 1.75);
+		$this->Cell(0,2.54,'UNIDAD CENTRAL                    UNIDAD FELIX IRETA                     UNIDAD AMADO NERVO                     UNIDAD DE CANCEROLOGIA',0,0,'C');
+		$this->SetXY(7, 2.30);
+		$this->Cell(0,2.54,'Gnl.Bravo #170                                      Tucurán #230                                   Amado Nervo $392-A                                 Francisco Madero #145',0,0,'L');
+		$this->Cell(0,2.54,'',0,0,'C');
+	//	$this->SetLineWidth(0.07);
+	//	$this->line(0.54,5,27,5);       
 	}
 
 	function cabeceraHorizontal($cabecera)
@@ -161,22 +161,52 @@ class ImprimirPdf extends FPDF{
     			$posX += $columna['size'];
     			$posY = $posYOriginal;
     		}
-    		// if ($columna['id']=='exam') {
-    		// 	foreach ($coleccion as $i => $value) {
-    		// 		$this->setXY($posX,$posY);
-    		// 		$posY+=$y*$posYIncremento;
-    		// 		$orden = Ordenes::model()->findByPk($value);
-    		// 		$ordenTieneExamenes = $orden->ordenTieneExamenes;
-    				
-    		// 		foreach ($ordenTieneExamenes as $ordenExamen) {
-    		// 			$examen = $ordenExamen->detalleExamen->examenes;
-    		// 		}
-    		// 			$this->Cell($columna['size'],($y*$posYIncremento),$examen->nombre, 1, 1);
+			// if ($columna['id']=='exam') {
+			// 	foreach ($coleccion as $i => $value) {
+			// 		$this->setXY($posX,$posY);
+			// 		$posY+=$y*$posYIncremento;
+			// 		$orden = Ordenes::model()->findByPk($value);
+			// 		$ordenTieneExamenes = $orden->ordenTieneExamenes;
+					
+			// 		foreach ($ordenTieneExamenes as $ordenExamen) {
+			// 			$examen = $ordenExamen->detalleExamen->examenes;
+			// 		}
+			// 			$this->Cell($columna['size'],($y*$posYIncremento),$examen->nombre, 1, 1);
 		    // 		// ->detalleExamen->examenes;
-    		// 	}
-    		// 	$posX += $columna['size'];
-    		// 	$posY = $posYOriginal;
-    		// }
+			// 	}
+			// 	$posX += $columna['size'];
+			// 	$posY = $posYOriginal;
+			// }
+
+
+    		//descuento porcentaje
+
+    		if ($columna['id']=='discp') {
+    			foreach ($coleccion as $i => $value) {
+    				$this->setXY($posX,$posY);
+    				$posY+=$y*$posYIncremento;
+    				$orden = Ordenes::model()->findByPk($value);
+    				$this->Cell($columna['size'],($y*$posYIncremento),$orden->descuento, 1, 1);
+    			}
+    			$posX += $columna['size'];
+    			$posY = $posYOriginal;
+    		}
+
+    		//Tarifa
+    			if ($columna['id']=='tarifa') {
+    			foreach ($coleccion as $i => $value) {
+    				$this->setXY($posX,$posY);
+    				$posY+=$y*$posYIncremento;
+    				$orden = Ordenes::model()->findByPk($value);
+    				$multitarifario = $orden->multitarifarios;
+    				$nombre = $multitarifario->nombre;
+    				$this->Cell($columna['size'],($y*$posYIncremento),$nombre, 1, 1);
+    			}
+    			$posX += $columna['size'];
+    			$posY = $posYOriginal;
+    		}
+
+    		
     	}
     }
 }
