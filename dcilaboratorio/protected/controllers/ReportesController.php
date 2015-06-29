@@ -51,10 +51,8 @@ class ReportesController extends Controller
 			);
 	}
 
-	
-	
 	/**
-	 * Lists all models.
+	 * Generar reporte en PDF
 	 */
 	public function actionGenerar()
 	{
@@ -100,38 +98,54 @@ class ReportesController extends Controller
 			}
 			
 			$resultados=$query->queryAll();
-			
+			$mostrarTodos = (
+				$model->dia==0 &&
+				$model->mes==0 &&
+				$model->año==0 &&
+				$model->semana==0 &&
+				$model->hora==0 &&
+				$model->folio==0 &&
+				$model->id_paciente==0 &&
+				$model->nombre_paciente==0 &&
+				$model->unidad==0 &&
+				$model->doctor==0 &&
+				$model->id_examen==0 &&
+				$model->costo==0 &&
+				$model->porcentaje_descuento==0 &&
+				$model->monto_descuento==0 &&
+				$model->tarifa==0
+			);
 
 			$resultadosMostrar = array();
-			if($model->dia==1)
+			if($model->dia==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>utf8_encode('  Día'), 'size'=>'0.7', 'id'=>'day'));
-			if($model->mes==1)
+			if($model->mes==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Mes', 'size'=>'0.7', 'id'=>'month'));
-			if($model->año==1)
+			if($model->año==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>utf8_encode('  Año'), 'size'=>'0.9', 'id'=>'year'));
-			if($model->semana==1)
+			if($model->semana==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Sem', 'size'=>'0.7', 'id'=>'week'));
-			if($model->hora==1)
+			if($model->hora==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Hora', 'size'=>'1', 'id'=>'hr'));
-			if($model->folio==1)
+			if($model->folio==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Folio', 'size'=>'1', 'id'=>'folio'));
-			if($model->id_paciente==1)
+			if($model->id_paciente==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Id P', 'size'=>'0.8', 'id'=>'idp'));
-			if($model->nombre_paciente==1)
+			if($model->nombre_paciente==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Paciente', 'size'=>'4.2', 'id'=>'namep'));
-			if($model->unidad==1)
+			if($model->unidad==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'UR', 'size'=>'3', 'id'=>'ur'));
-			if($model->doctor==1)
+			if($model->doctor==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Doctor', 'size'=>'4.2', 'id'=>'dr'));
-			if($model->id_examen==1)
+			if($model->id_examen==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Examen', 'size'=>'3.5', 'id'=>'exam'));
-			if($model->costo==1)
+			if($model->costo==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Costo', 'size'=>'1.5', 'id'=>'cost'));
-			if($model->porcentaje_descuento==1)
+			if($model->porcentaje_descuento==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'% Desc', 'size'=>'1', 'id'=>'discp'));
-			if($model->monto_descuento==1)
+			if($model->monto_descuento==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'$ Desc', 'size'=>'1', 'id'=>'disa'));
-			if($model->tarifa==1)
+			if($model->tarifa==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'size'=>'1.7', 'id'=>'tarifa'));
 
 			$pdf = new ImprimirPdf('L','cm','letter');
