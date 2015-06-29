@@ -4,7 +4,7 @@ class ImprimirOrden extends FPDF{
 
 	function Header(){
 		$this->SetFont('Arial','B',18);
-		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css\layout\img/gvia_logo22.png',1,1.7,2.3,2.3);
+		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/gvia_logo22.png',1,1.7,2.3,2.3);
     // Move to the right
     //$this->Cell(8);
     // Title
