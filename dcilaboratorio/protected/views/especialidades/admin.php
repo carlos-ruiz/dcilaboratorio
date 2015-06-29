@@ -2,7 +2,6 @@
 <h1>Administrar especialidades</h1>
 <div class="text-right">
 	<?php echo CHtml::link('<i class="icon-plus"></i> Nueva especialidad', array('especialidades/create'), array('class'=>'btn')); ?>
-	<?php echo CHtml::link('<i class="icon-plus"></i> Generar PDF', array('especialidades/generarPdf'), array('class'=>'btn')); ?>
 </div>
 <?php 
 $this->renderPartial(

@@ -477,4 +477,13 @@ class DoctoresController extends Controller
 			Yii::app()->user->setFlash('error','Error while sending email: '.$mail->getError());
 		}
 	}
+
+	// public function actionUrsPorDoctor($value='')
+	// {
+	// 	echo "<script>alert('ejecuto con action');</script>";
+	// 	$list = UnidadTieneDoctores::model()->findAll('id_doctores=?', array($_POST['Ordenes']['id_doctores']));
+	// 	foreach ($list as $data) {
+	// 		echo "<option value=\"{$data->idUnidadesResponsables->id}\">{$data->idUnidadesResponsables->nombre}</option>";
+	// 	}
+	// }
 }

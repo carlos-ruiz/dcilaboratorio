@@ -172,7 +172,7 @@ class DireccionesController extends Controller
 	}
 
 
-		public function municipiosPorEstado()
+	public function municipiosPorEstado()
 	{
 		
 		$list=Municipios::model()->findAll("id_muncipio",array($_POST["UnidadesResponsables"]["id_estado"]));

@@ -192,7 +192,7 @@
 
 		    <?php } ?>
 		    </table>
-		     <?php echo CHtml::link('<i class="icon-plus"></i> Generar PDF', array('especialidades/generarPdf'), array('class'=>'btn')); ?>
+		     <?php echo CHtml::link('<i class="icon-plus"></i> Generar PDF', array('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn')); ?>
 		
 	</div>
 	<?php } ?>

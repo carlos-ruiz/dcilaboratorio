@@ -116,15 +116,15 @@ class ReportesController extends Controller
 			if($model->folio==1)
 				array_push($resultadosMostrar, array('nombre'=>'Folio', 'size'=>'1', 'id'=>'folio'));
 			if($model->id_paciente==1)
-				array_push($resultadosMostrar, array('nombre'=>'Id P', 'size'=>'0.7', 'id'=>'idp'));
+				array_push($resultadosMostrar, array('nombre'=>'Id P', 'size'=>'0.8', 'id'=>'idp'));
 			if($model->nombre_paciente==1)
-				array_push($resultadosMostrar, array('nombre'=>'Paciente', 'size'=>'5', 'id'=>'namep'));
+				array_push($resultadosMostrar, array('nombre'=>'Paciente', 'size'=>'4.2', 'id'=>'namep'));
 			if($model->unidad==1)
 				array_push($resultadosMostrar, array('nombre'=>'UR', 'size'=>'3', 'id'=>'ur'));
 			if($model->doctor==1)
-				array_push($resultadosMostrar, array('nombre'=>'Doctor', 'size'=>'5', 'id'=>'dr'));
+				array_push($resultadosMostrar, array('nombre'=>'Doctor', 'size'=>'4.2', 'id'=>'dr'));
 			if($model->id_examen==1)
-				array_push($resultadosMostrar, array('nombre'=>'Examen', 'size'=>'3', 'id'=>'exam'));
+				array_push($resultadosMostrar, array('nombre'=>'Examen', 'size'=>'3.5', 'id'=>'exam'));
 			if($model->costo==1)
 				array_push($resultadosMostrar, array('nombre'=>'Costo', 'size'=>'1.5', 'id'=>'cost'));
 			if($model->porcentaje_descuento==1)
@@ -132,26 +132,16 @@ class ReportesController extends Controller
 			if($model->monto_descuento==1)
 				array_push($resultadosMostrar, array('nombre'=>'$ Desc', 'size'=>'1', 'id'=>'disa'));
 			if($model->tarifa==1)
-				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'size'=>'1', 'id'=>'tarifa'));
+				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'size'=>'1.7', 'id'=>'tarifa'));
 
 			$pdf = new ImprimirPdf('L','cm','letter');
 			$pdf->AddPage();
 			$pdf->cabeceraHorizontal($resultadosMostrar);
 			$pdf->contenido($resultados, $resultadosMostrar);
 			$pdf->Output();
-		//$this->imprimirPdf($resultados, $resultadosMostrar);
 		}
 		$this->render('generar', array('model'=>$model));
-	}
-
-	public function imprimirPdf($resultados, $resultadosMostrar){
-		$pdf = new FPDF('P','mm','letter');
-		$pdf->AddPage();
-		$pdf->SetFont('Arial','B',16);
-		$pdf->Cell(40,10,'¡Hola mundo? pío');
-		$pdf->Output();
-	}
-	
+	}	
 
 	/**
 	 * Manages all models.

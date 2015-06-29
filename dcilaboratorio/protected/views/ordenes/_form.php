@@ -123,7 +123,19 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6 <?php if($form->error($model,'id_doctores')!=''){ echo 'has-error'; }?>">
 									<?php echo $form->labelEx($model,'id_doctores', array('class'=>'control-label')); ?>
 									<div class="input-group">
-										<?php echo $form->dropDownList($model,'id_doctores',$model->obtenerDoctores(), array("empty"=>"Seleccione una opción", 'class'=>'form-control input-medium select2me','onchange' => 'javascript:$("#compartirDr").toggle()')); ?>
+										<?php
+											$htmlOptions = array(
+												// "ajax"=>array(
+													// "url"=>$this->createUrl("doctores/ursPorDoctor"),
+													// "type"=>"POST",
+													// "update"=>"#ursPorDoctor"
+													// ),
+												"class" => "form-control input-medium select2me",
+												"empty"=>"Seleccione una opci&oacute;n",
+												'onchange' => 'javascript:$("#compartirDr").toggle()'
+												);
+										?>
+										<?php echo $form->dropDownList($model,'id_doctores',$model->obtenerDoctores(), $htmlOptions); ?>
 										<?php echo $form->error($model,'id_doctores', array('class'=>'help-block')); ?>
 									</div>
 						</div>
@@ -141,7 +153,6 @@ echo $form->errorSummary($datosFacturacion);
 				</section>
 				<br />
 				<section id="comentarios">
-
 					<div class="row">
 						<div class="form-group col-md-6 <?php if($form->error($model,'informacion_clinica_y_terapeutica')!=''){ echo 'has-error'; }?>">
 						<?php echo $form->labelEx($model,'informacion_clinica_y_terapeutica', array('class'=>'control-label')); ?>

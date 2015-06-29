@@ -176,9 +176,6 @@ class Doctores extends CActiveRecord
 		return $this->model()->find("id_usuarios=?",array($id));
 	}
 
-
-	
-
 	public function selectList(){
 		$models = $this->model()->findAll('activo=1');
 		$data = array(null=>"--Seleccione--");
@@ -187,4 +184,11 @@ class Doctores extends CActiveRecord
 		}
 		return $data;
 	}
+
+	// public function ursPorDoctor($value=0)
+	// {
+	// 	$list=UnidadTieneDoctores::model()->findAll("id_doctores",array($value));
+	// 	foreach($list as $data)
+	// 		echo "<option value=\"{$data->idUnidadesResponsables->id}\">{$data->idUnidadesResponsables->nombre}</option>";
+	// }
 }

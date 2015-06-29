@@ -18,6 +18,7 @@ return array(
 		'application.components.*',
 		'ext.YiiMailer.YiiMailer',
 		'ext.fpdf.ImprimirPdf',
+		'ext.fpdf.ImprimirOrden',
 	),
 
 	'modules'=>array(
