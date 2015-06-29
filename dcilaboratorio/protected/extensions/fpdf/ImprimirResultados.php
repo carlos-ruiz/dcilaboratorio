@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
-class ImprimirOrden extends FPDF{
+class ImprimirResultados extends FPDF{
 
 	function Header(){
 		$this->SetFont('Arial','B',18);

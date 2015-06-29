@@ -19,6 +19,7 @@ return array(
 		'ext.YiiMailer.YiiMailer',
 		'ext.fpdf.ImprimirPdf',
 		'ext.fpdf.ImprimirOrden',
+		'ext.fpdf.ImprimirResultados',
 	),
 
 	'modules'=>array(

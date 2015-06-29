@@ -192,7 +192,8 @@
 
 		    <?php } ?>
 		    </table>
-		     <?php echo CHtml::link('<i class="icon-plus"></i> Generar PDF',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn')); ?>
+		     <?php echo CHtml::link('<i class="icon-printer"></i> Generar PDF',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn')); ?>
+		     <?php echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn')); ?>
 		
 	</div>
 	<?php } ?>

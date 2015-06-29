@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>array('*'),
 				),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf'),
+				'actions'=>array('create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf'),
 				'users'=>array('@'),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -795,6 +795,15 @@ class OrdenesController extends Controller
 	public function actionGenerarPdf($id){
 		$model = $this->loadModel($id);
 		$pdf = new ImprimirOrden('P','cm','letter');
+		$pdf->AddPage();
+		$pdf->cabeceraHorizontal($model);
+		$pdf->contenido($model);
+		$pdf->Output();
+	}
+
+	public function actionImprimirResultadosPdf($id){
+		$model = $this->loadModel($id);
+		$pdf = new ImprimirResultados('P','cm','letter');
 		$pdf->AddPage();
 		$pdf->cabeceraHorizontal($model);
 		$pdf->contenido($model);
