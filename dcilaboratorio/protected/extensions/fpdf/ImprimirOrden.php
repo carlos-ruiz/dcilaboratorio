@@ -116,7 +116,16 @@ class ImprimirOrden extends FPDF{
         }
         $this->setX(16.5);
         $this->SetFont('Arial','B',8);
-        $this->Cell(4,$y,'Total: $'.$totalOrden, 1, 1, 'R');
+        $this->Cell(4,$y,'Total orden: $'.$totalOrden, 1, 1, 'R');
+        $this->setX(16.5);
+        $this->Cell(4,$y,'Descuento: '.$model->descuento.'%', 1, 1, 'R');
+        $this->setX(16.5);
+        $this->Cell(4,$y,'Total con descuento: $'.$totalOrden*(1-($model->descuento/100)), 1, 1, 'R');
+        $this->setX(16.5);
+        $this->Cell(4,$y,'Costo emergencia: $'.$model->costo_emergencia, 1, 1, 'R');
+        $this->setX(16.5);
+        $total = $totalOrden*(1-($model->descuento/100)) + $model->costo_emergencia;
+        $this->Cell(4,$y,'Total: $'.$total, 1, 1, 'R');
         $pagos = $model->pagos;
         $totalPagado = 0;
         foreach ($pagos as $pago) {
@@ -125,7 +134,7 @@ class ImprimirOrden extends FPDF{
         $this->setX(16.5);
         $this->Cell(4,$y,'Pago: $'.$totalPagado, 1, 1, 'R');
         $this->setX(16.5);
-        $this->Cell(4,$y,'Saldo: $'.($totalOrden-$totalPagado), 1, 1, 'R');
+        $this->Cell(4,$y,'Saldo: $'.($total-$totalPagado), 1, 1, 'R');
 
         //Observaciones
         $this->ln(1);
