@@ -2,6 +2,15 @@
 <h1>Administrar ordenes</h1>
 
 <?php 
+if(Yii::app()->user->getState('perfil')=="Administrador") {
+	$btnTemplate = '{view} {rate} {updateOrden}';
+ }
+ if(Yii::app()->user->getState('perfil')=="Doctor") {
+ 	$btnTemplate = '{view} ';
+ }
+ if(Yii::app()->user->getState('perfil')=="Paciente") {
+ 	$btnTemplate = '{view} ';
+ }
 $this->renderPartial(
 	'/comunes/_comunAdmin', 
 	array(
@@ -16,7 +25,7 @@ $this->renderPartial(
 				),
 			'fecha_captura',
 		),
-		'buttonsTemplate'=>'{view} {rate} {updateOrden}'
+		'buttonsTemplate'=> $btnTemplate,
 	)
 ); 
 
