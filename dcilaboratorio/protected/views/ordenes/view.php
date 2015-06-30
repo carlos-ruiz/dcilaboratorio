@@ -81,6 +81,15 @@
 		</div>
 	<?php
 
+	// Aqui la leyenda de que pague.
+
+
+
+
+	
+
+
+
 	$aux=$model->ordenTieneExamenes;
 	$precios = $model->precios;
 	$anterior=0;
@@ -192,9 +201,21 @@
 
 		    <?php } ?>
 		    </table>
-		     <?php echo CHtml::link('<i class="icon-printer"></i> Generar PDF',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn')); ?>
-		     <?php echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn')); ?>
-		
+		    <?php
+
+		    //Aqui que solo aparezca los botones si esta pagado
+		     if(Yii::app()->user->getState('perfil')=='Administrador'){ 
+		     echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn')); 
+		     echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn')); 
+			  } 
+			 if((Yii::app()->user->getState('perfil')=='Paciente' || Yii::app()->user->getState('perfil')=='Doctor' ) && $total=$totalOrden){ 
+		     echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn')); 
+		     echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn')); 
+			  } 
+
+
+
+			  ?>
 	</div>
 	<?php } ?>
 
