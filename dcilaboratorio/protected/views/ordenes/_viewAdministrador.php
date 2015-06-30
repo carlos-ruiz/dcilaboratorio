@@ -3,13 +3,17 @@
 /* @var $model Ordenes */
 
 	$totalOrden=0;
+	$totalSinDescuento = 0;
+	$totalConDescuento = 0;
 	$precios = $model->precios;
 	foreach ($precios as $precio) {
 	 	$totalOrden += $precio->precio;
 	}
+	$totalSinDescuento = $totalOrden;
 	if($model->descuento !=0) {
     	$totalOrden=($totalOrden-($totalOrden*$model->descuento)/100);
     }
+    $totalConDescuento = $totalOrden;
 	if($model->costo_emergencia !=0) {	
 		$totalOrden=$totalOrden +$model->costo_emergencia; 
 	}
@@ -168,23 +172,26 @@
 			 endforeach;
 			echo'</table>';
 			
-		   if($model->costo_emergencia !=0 || $model->descuento !=0) {
+		    if($model->costo_emergencia !=0 || $model->descuento !=0) {
 				echo '<table class="table table-striped table-bordered dataTable"><tr>
-		    	<td>Total de exámenes </td><td>$ '.$totalOrden.'</td><tr> </table>';
-		   }
-
-			 if($model->costo_emergencia !=0) {
-				echo   '<table class="table table-striped table-bordered dataTable"><tr>
-				   <td>Costo emergencia</td><td>$'.$model->costo_emergencia.'</td></<tr> </table>';
-				}
-
-
-		    if($model->descuento !=0) {
-				echo   '<table class="table table-striped table-bordered dataTable"><tr>
-				   <td>Descuento </td><td> '.$model->descuento.'%</td></<tr> </table>';
+		    	<td>Total de exámenes </td><td>$ '.$totalSinDescuento.'</td><tr> </table>';
 		    }
 
-		     echo '<table class="table table-striped table-bordered dataTable"><tr>
+		    if($model->descuento !=0) {
+		    	echo   '<table class="table table-striped table-bordered dataTable"><tr>
+		    	<td>Descuento </td><td> '.$model->descuento.'%</td></<tr> </table>';
+		    	if($model->costo_emergencia != 0){
+		    		echo '<table class="table table-striped table-bordered dataTable"><tr>
+		    		<td>Total con descuento </td><th colspan="3" style="color:#1e90ff ">$ '.$totalConDescuento.'</th></<tr> </table>';
+		    	}
+		    }
+
+			if($model->costo_emergencia !=0) {
+				echo   '<table class="table table-striped table-bordered dataTable"><tr>
+				   <td>Costo emergencia</td><td>$'.$model->costo_emergencia.'</td></<tr> </table>';
+			}
+
+		    echo '<table class="table table-striped table-bordered dataTable"><tr>
 		    <td>Total de la Orden </td><th colspan="3" style="color:#1e90ff ">$ '.$totalOrden.'</th></<tr> </table>';
 
 
