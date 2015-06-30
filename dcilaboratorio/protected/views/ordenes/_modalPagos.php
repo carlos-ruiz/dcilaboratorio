@@ -48,12 +48,7 @@
 		$pagado += $pago->efectivo; 
 	}
 
-	if (isset($orden->descuento) && $orden->descuento > 0) {
-		$adeudo = ($totalOrden*$orden->descuento/100+$orden->costo_emergencia)-$pagado;
-	}
-	else{
-		$adeudo = ($totalOrden+$orden->costo_emergencia)-$pagado;
-	}
+		$adeudo = $totalOrden*(1-$orden->descuento/100)+$orden->costo_emergencia-$pagado;
 	?>
 	<table class="table table-striped table-bordered dataTable paymentDetailsTable">
 		<tr>
@@ -89,13 +84,8 @@
 				<div> Total de la órden:</div>
 			</td>
 			<td>
-				$ <div id="granTotal" class="inline-block"><?php 
-					if(isset($orden->descuento) && $orden->descuento > 0){
-						echo ($totalOrden*$orden->descuento/100+$orden->costo_emergencia);
-					}
-					else{
-						echo ($totalOrden+$orden->costo_emergencia);
-					}
+				$ <div id="granTotal" class="inline-block"><?php
+						echo ($totalOrden*(1-$orden->descuento/100)+$orden->costo_emergencia);
 				?></div>
 			</td>
 		</tr>
@@ -165,7 +155,7 @@
 		pagado = parseFloat($("#pagado").text());
 		if(isNaN(pagado))
 			pagado=0;
-		if (cheque > granTotal-pagado) {
+		if (cheque > 0 && cheque > granTotal-pagado) {
 			alerta("El monto del cheque no debe ser mayor al adeudo de la orden","Aviso");
 			$("#Pagos_cheque").val("");
 			cheque = 0;
