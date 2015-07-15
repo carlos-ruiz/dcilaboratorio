@@ -16,6 +16,9 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.clases.*',
+		'application.clases.conf.*',
+		'application.clases.php.*',
 		'ext.YiiMailer.YiiMailer',
 		'ext.fpdf.ImprimirPdf',
 		'ext.fpdf.ImprimirOrden',
