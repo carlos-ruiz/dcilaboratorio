@@ -16,13 +16,12 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
-		'application.clases.*',
-		'application.clases.conf.*',
-		'application.clases.php.*',
 		'ext.YiiMailer.YiiMailer',
 		'ext.fpdf.ImprimirPdf',
 		'ext.fpdf.ImprimirOrden',
 		'ext.fpdf.ImprimirResultados',
+		'ext.Facturacion.conf.nusoap.php',
+		// 'ext.Facturacion.php.*',
 	),
 
 	'modules'=>array(
@@ -88,6 +87,6 @@ return array(
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
-		'adminEmail'=>'cruiz90@live.com',
+		'adminEmail'=>'info@techincmexico.com',
 	),
 );

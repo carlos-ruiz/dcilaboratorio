@@ -8,7 +8,7 @@
 	//
 	///////////////////////////////////////////////////////////////////////////
 	//lib
-	require_once('../conf/nusoap.php');
+	require_once('C:\xampp\htdocs\dcilaboratorio\dcilaboratorio\protected\extensions\Facturacion\conf/nusoap.php');
 	//indicamos el archivo wspac.wsdl
 	$client = new soapclient('wspac.wsdl', 'wsdl');
 	//

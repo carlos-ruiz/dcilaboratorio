@@ -1,5 +1,5 @@
 <?php
-
+require_once('C:\xampp\htdocs\dcilaboratorio\dcilaboratorio\protected\extensions\Facturacion\conf/nusoap.php');
 class FacturacionController extends Controller
 {
 	/**
@@ -40,7 +40,7 @@ class FacturacionController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','delete'),
+				'actions'=>array('index','timbrar'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -54,7 +54,11 @@ class FacturacionController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$answer=null;
+		$answer = null;
+		$token = null;
+		$cfdi = null;
+		$fullAnswer = null;
+		$msgError = null;
 		if(isset($_POST['xmlfile'])){
 			$wsUser = 'VE223.test_ws';   //usuario de ws
 			$wsPassword = 'Test-WS+092013';   //password de ws
@@ -62,8 +66,8 @@ class FacturacionController extends Controller
 			///////////////////////////////////////////////////////////////////////////
 			//lib
 			//indicamos el archivo wspac.wsdl
-	
-			$client = new soapclient('C:\xampp\htdocs\techinc\dcilaboratorio\css/wspac.wsdl');
+
+			$client = new soapclient('C:\xampp\htdocs\dcilaboratorio\dcilaboratorio\protected\extensions\Facturacion/php/wspac.wsdl', 'wsdl');
 			//
 			$err = $client->getError();
 			if ($err) {
@@ -72,6 +76,7 @@ class FacturacionController extends Controller
 			}else {
 				$params = array($wsUser,$wsPassword); /*('usuario','contrasena')*/
 				$answer = $client->call('openSession', $params );
+
 				$err = $client->getError();
 				if ($err) {
 					//     Muestra error
@@ -97,7 +102,7 @@ class FacturacionController extends Controller
 					// xml a Timbrar
 					$xml = $_POST["xmlfile"];
 					//
-					$params = array(token => $token, xml => $xml); /*('token','xml')*/
+					$params = array('token' => $token, 'xml' => $xml); /*('token','xml')*/
 					$answer = $client->call('createCFDI', array($params) );
 					//
 					$err = $client->getError();
@@ -110,11 +115,12 @@ class FacturacionController extends Controller
 						return;
 					} else {
 						//     Respuesta ws
+						$fullAnswer = $answer;
 						$ok = $answer['ok'];
 						$errorCode = $answer['errorCode'];
 						$cfdi = $answer['xml'];
 						$uuid = $answer['uuid'];
-						$msgError = 'cfdi';
+						$msgError = 'ok';
 					}
 				}
 				//
@@ -168,16 +174,16 @@ class FacturacionController extends Controller
 				$msgError = $token;
 			}
 		}
-		$this->render('index',array('respuesta'=>$answer));
+		$this->render('index',array('respuestaCompleta'=>$fullAnswer, 'resultado'=>$msgError));
 	}
 
-	public function timbrar(){
+	public function actionTimbrar(){
 		///////////////////////////////////////////////////////////////////////////
 		//Configuracion de usuario y password para generar el Timbre.
 		///////////////////////////////////////////////////////////////////////////
 		//
 
-		$this->render('index');
+		$this->render('stamp');
 	}
 
 

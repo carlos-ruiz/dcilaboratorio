@@ -4,7 +4,7 @@
 				<li class="sidebar-search-wrapper">
 					<!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
 					<!-- DOC: Apply "sidebar-search-bordered" class the below search form to have bordered search box -->
-					<!-- DOC: Apply "sidebar-search-bordered sidebar-search-solid" class the below search form to have bordered & solid search box 
+					<!-- DOC: Apply "sidebar-search-bordered sidebar-search-solid" class the below search form to have bordered & solid search box
 					<form class="sidebar-search sidebar-search-bordered" action="extra_search.html" method="POST">
 						<a href="javascript:;" class="remove">
 						<i class="icon-close"></i>
@@ -16,7 +16,7 @@
 							</span>
 						</div>
 					</form>
-					<!-- END RESPONSIVE QUICK SEARCH FORM 
+					<!-- END RESPONSIVE QUICK SEARCH FORM
 				</li>
 				-->
 				<li <?php if($this->section=='Home'){ echo 'class="startactive open"';}?>>
@@ -63,7 +63,7 @@
 				</li>
 
 
-				
+
 				<li class="heading">
 					<h3 class="uppercase">Catálogos</h3>
 				</li>
@@ -90,7 +90,7 @@
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/unidadesResponsables/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
-						</li>						
+						</li>
 					</ul>
 				</li>
 
@@ -123,9 +123,9 @@
 						</li>
 
 					</ul>
-				
-				
-				
+
+
+
 				<li <?php if($this->section=="Examenes"){ echo 'class="active open"';}?>>
 					<a href="javascript:;">
 					<i class="icon-book-open"></i>
@@ -147,7 +147,7 @@
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/admin">
 							<i class="icon-list"></i>
 							Administrar</a>
-						</li>						
+						</li>
 						<li <?php if($this->section=="Examenes" && $this->subSection=="Grupos"){ echo 'class="active"';}?>>
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/admin">
 							<i class="icon-layers"></i>
@@ -240,7 +240,7 @@
 							<a href="<?php echo Yii::app()->request->baseUrl; ?>/titulosForm/admin">
 							<i class="icon-list"></i>
 							Administración</a>
-						</li>					
+						</li>
 					</ul>
 				</li>
 
@@ -308,14 +308,26 @@
 						</li>
 					</ul>
 				</li>
+				<li <?php if($this->section=='Facturacion'){ echo 'class="startactive open"';}?>>
+					<a href="<?php echo Yii::app()->request->baseUrl; ?>/facturacion">
+					<i class="icon-doc"></i>
+					<span class="title">Facturación</span>
+					<?php if($this->section==""){?>
+					<span class="selected"></span>
+					<span class="arrow open"></span>
+					<?php } else{ ?>
+					<span class="arrow "></span>
+					<?php }?>
+					</a>
+				</li>
 <li >
 <div style="height:44px">
 </div>
 </li>
 </ul>
-					
-						
 
-				
 
-			
+
+
+
+
