@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
-class ImprimirOrden extends FPDF{
+class ImprimirFactura extends FPDF{
 
 	function Header(){
         $y = 0.5;
@@ -10,9 +10,9 @@ class ImprimirOrden extends FPDF{
     //$this->Cell(8);
     // Title
 		$this->SetXY(4, .75);
-        $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
-        $this->ln(0.75);
-        $this->SetFont('Times','B',8);
+		$this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
+		$this->ln(0.75);
+		$this->SetFont('Times','B',8);
         $this->SetXY(3, 2.75);
         $this->Cell(4.3, $y, 'UNIDAD CENTRAL', 0, 0, 'C');
         $this->Cell(4.3, $y, 'UNIDAD FÉLIX IRETA', 0, 0, 'C');
@@ -42,13 +42,13 @@ class ImprimirOrden extends FPDF{
         $this->Cell(4.5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
 	}
 
-	function cabeceraHorizontal($model)
+	function cabeceraHorizontal($model, $datosFactura)
 	{
         $y = 0.5;
-        $this->SetXY(-5, 6);
-        $this->SetFont('Arial','',8);
-        $this->Cell(1,$y,'Fecha:', 0, 0);
+        $this->ln(1);
+        $this->setX(-7.5);
         $this->SetFont('Arial','B',8);
+        $this->Cell(0,$y,'Fecha:', 0, 1, 'R');
         $fecha = explode('-', $model->fecha_captura);
         $dia= substr($fecha[2], 0, 2);
         $hora = explode(' ', $fecha[2]);
@@ -56,59 +56,48 @@ class ImprimirOrden extends FPDF{
 
 
         $fecha = $dia.'/'.$fecha[1].'/'.$fecha[0].'   '. $hora[0].':'.$hora[1];
-        $this->Cell(2,$y,$fecha, 0, 1);
-        $this->setX(1);
-        $this->SetFont('Arial','B',12);
-        $this->SetTextColor(75, 141, 248);
-        $this->Cell(10,$y,'Orden de Trabajo', 0, 1);
-        $this->SetFont('Arial','',8);
-        $this->SetTextColor(0, 0, 0);
-        $this->Cell(3,$y,'Folio:', 0, 0);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(3,$y,$model->id, 0, 1);
-        $this->SetFont('Arial','',8);
-        $this->Cell(3,$y,'Paciente', 0, 0);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(10,$y,$model->ordenFacturacion->paciente->obtenerNombreCompleto(), 0, 0);
-        $this->setX(-5);
-        $this->SetFont('Arial','',8);
-        $this->Cell(1,$y,'Sexo:', 0, 0);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(2,$y,$model->ordenFacturacion->paciente->sexo==0?'Masculino':'Femenino', 0, 1);
-        $this->setX(1);
-        $this->SetFont('Arial','',8);
-        $this->Cell(3,$y,'Médico:', 0, 0);
-        $this->SetFont('Arial','B',8);
-        if($model->doctor)
-            $this->Cell(10,$y,$model->doctor->obtenerNombreCompleto(), 0, 1);
-        else
-            $this->Cell(10,$y,'Sin Dr. asignado', 0, 1);
+        $this->setX(-7.5);
+        $this->Cell(0,$y,$fecha, 0, 1, 'R');
+        $this->setX(-7.5);
+        $this->Cell(0,$y,'Factura:', 0, 1, 'R');
+        $this->setX(-7.5);
+        $this->Cell(0,$y,'XXXXXX', 0, 1, 'R');
+        $this->setX(-7.5);
+        $this->Cell(0,$y,'Folio fiscal:', 0, 1, 'R');
+        $this->setX(-7.5);
+        $this->Cell(0,$y,$datosFactura['uuid'], 0, 1, 'R');
+        $this->setX(-7.5);
+        $this->Cell(0,$y,'No de serie del certificado:', 0, 1, 'R');
+        $this->setX(-7.5);
+        $this->Cell(0,$y, $datosFactura['certNumber'], 0, 1, 'R');
+        $this->setX(-7.5);
+        $this->Cell(0,$y,'Fecha y hora de emisión:', 0, 1, 'R');
+        $this->setX(-7.5);
+        $this->Cell(0,$y, $datosFactura['date'], 0, 1, 'R');
+
+
         $this->ln(0.5);
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
         $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
         $this->SetTextColor(0, 0, 0);
 
-
-        $this->SetXY(1, 10);
+        $this->ln(1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
         $this->SetTextColor(0, 0, 0); //Letra color blanco
-        $x = 2;
+
         $this->Cell(3.5,$y, 'Clave',1, 0 , 'C', true);
         $this->Cell(12,$y, 'Descripción',1, 0 , 'C', true);
-        $this->Cell(4,$y, 'Costo',1, 0 , 'C', true);
-        //Atención!! el parámetro true rellena la celda con el color elegido
-		//$this->Cell(120,7, utf8_decode("hola mundo"),1, 0 , 'C', true);
-		//$this->Cell(20,7, utf8_decode($cabecera[2]),1, 0 , 'C', true);
+        $this->Cell(4,$y, 'Costo',1, 1 , 'C', true);
     }
 
-    function contenido($model){
+    function contenido($model, $datosFactura){
     	$this->SetTextColor(0, 0, 0); //Letra color blanco
     	$this->SetFont('Arial','',8);
     	$posYOriginal = 7;
     	$posYIncremento = 1.5;
-    	$this->setXY(1,10.5);
+    	// $this->setXY(1,8.5);
     	$y = 0.5;
         $ordenTieneExamenes = $model->ordenTieneExamenes;
         $idExamen = 0;
@@ -128,48 +117,41 @@ class ImprimirOrden extends FPDF{
             }
             $idExamen = $examen->id;
         }
-        $this->setX(16.5);
+        $this->setX(13.5);
         $this->SetFont('Arial','B',8);
-        $this->Cell(4,$y,'Total orden: $'.$totalOrden, 1, 1, 'R');
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Descuento: '.$model->descuento.'%', 1, 1, 'R');
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Total con descuento: $'.$totalOrden*(1-($model->descuento/100)), 1, 1, 'R');
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Costo emergencia: $'.$model->costo_emergencia, 1, 1, 'R');
-        $this->setX(16.5);
+        $this->Cell(3,$y,'Total orden:', 1, 0, 'R');
+        $this->Cell(4,$y,'$ '.$totalOrden, 1, 1, 'R');
+        $this->setX(13.5);
+        $this->Cell(3,$y,'Descuento:', 1, 0, 'R');
+        $this->Cell(4,$y,isset($model->descuento)?$model->descuento:'0'.'%', 1, 1, 'R');
+        $this->setX(13.5);
+        $this->Cell(3,$y,'Total con descuento:', 1, 0, 'R');
+        $this->Cell(4,$y,'$ '.$totalOrden*(1-($model->descuento/100)), 1, 1, 'R');
+        $this->setX(13.5);
+        $this->Cell(3,$y,'Costo emergencia:', 1, 0, 'R');
+        $this->Cell(4,$y,'$ '.$model->costo_emergencia, 1, 1, 'R');
+        $this->setX(13.5);
         $total = $totalOrden*(1-($model->descuento/100)) + $model->costo_emergencia;
-        $this->Cell(4,$y,'Total: $'.$total, 1, 1, 'R');
+        $this->Cell(3,$y,'Total:', 1, 0, 'R');
+        $this->Cell(4,$y,'$ '.$total, 1, 1, 'R');
         $pagos = $model->pagos;
         $totalPagado = 0;
         foreach ($pagos as $pago) {
             $totalPagado +=  $pago->efectivo + $pago->cheque + $pago->tarjeta;
         }
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Pago: $'.$totalPagado, 1, 1, 'R');
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Saldo: $'.($total-$totalPagado), 1, 1, 'R');
+        $this->setX(13.5);
+        $this->Cell(3,$y,'Pago:', 1, 0, 'R');
+        $this->Cell(4,$y,'$ '.$totalPagado, 1, 1, 'R');
+        $this->setX(13.5);
+        $this->Cell(3,$y,'Saldo:', 1, 0, 'R');
+        $this->Cell(4,$y,'$ '.($total-$totalPagado), 1, 1, 'R');
 
-        //Observaciones
-        $this->ln(1);
-        $this->SetFont('Arial','',8);
-        $this->Cell(4,$y,'Observaciones:', 0, 1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(10,$y,$model->comentarios, 0, 1);
-        $this->ln(1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(8.75,$y,'Puede consultar sus resultados por Internet en la siguente liga:', 0, 0);
-        $this->SetFillColor(75, 141, 248);
-        $this->SetFont('Arial','U',8);
-        $this->Cell(5,$y,'www.dcilaboratorio.com', 0, 1);
-        $this->SetFont('Arial','B',10);
-        $this->Cell(10,$y,'Usuario: '.$model->ordenFacturacion->usuario->usuario, 0, 1);
-        $this->Cell(10,$y,'Contraseña: '.base64_decode($model->ordenFacturacion->usuario->contrasena), 0, 1);
-
-        $this->ln(1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(10,$y,'Sus resultados estarán listos en '.$duracion.' días.', 0, 1);
-
+        $this->ln(2);
+        $this->setX(1);
+        $this->MultiCell(0, $y, 'string - '.$datosFactura['string'], 0, 'L', false);
+        $this->MultiCell(0, $y, 'cfdStamp - '.$datosFactura['cfdStamp'], 0, 'L', false);
+        $this->MultiCell(0, $y, 'certNumber - '.$datosFactura['certNumber'], 0, 'L', false);
+        $this->MultiCell(0, $y, 'satStamp - '.$datosFactura['satStamp'], 0, 'L', false);
     }
 
     function Footer()

@@ -14,13 +14,13 @@
     	$totalOrden=($totalOrden-($totalOrden*$model->descuento)/100);
     }
     $totalConDescuento = $totalOrden;
-	if($model->costo_emergencia !=0) {	
-		$totalOrden=$totalOrden +$model->costo_emergencia; 
+	if($model->costo_emergencia !=0) {
+		$totalOrden=$totalOrden +$model->costo_emergencia;
 	}
-	
+
 	$pagos=$model->pagos;
 	$total=0;
-	foreach ($pagos as $pago):  
+	foreach ($pagos as $pago):
 		$total = $total + $pago->efectivo+$pago->tarjeta+$pago->cheque;
 	endforeach;
 
@@ -51,9 +51,9 @@
 		)); ?>
 
 		<div class="heading text-center">
-			
+
 			<h5 style="color:#1e90ff ">Datos del Paciente</h5>
-			
+
 		</div>
 
 		<?php $this->widget('zii.widgets.CDetailView', array(
@@ -64,7 +64,7 @@
 		            'label'=>'Paciente',
 		            'type'=>'raw',
 		            'value'=>$this->obtenerPaciente($model, $this),
-		        ),     
+		        ),
 			),
 		)); ?>
 
@@ -87,14 +87,14 @@
 		            'value'=>$this->obtenerSioNoComparteDr($model, $this),
 		        ),
 				'informacion_clinica_y_terapeutica',
-				'comentarios',        
+				'comentarios',
 			),
 		)); ?>
 		</div>
 
-	
+
 		<div class="form-group col-md-4">
-	
+
 
 		<div class="heading text-center">
 			<h3 style="color:#1e90ff ">Examenes</h3>
@@ -106,7 +106,7 @@
 
 
 
-	
+
 
 
 
@@ -114,16 +114,16 @@
 	$anterior=0;
 	$entrega=1;
 	echo '<table class="table table-striped table-bordered dataTable">';
-	   		
 
-	 foreach ($aux as $ordenExamen): 
+
+	 foreach ($aux as $ordenExamen):
 		$detalleExamen=$ordenExamen->detalleExamen;
 		$examen=$detalleExamen->examenes;
 		if($examen->id!=$anterior){
 			if($examen->duracion_dias>$entrega)
 				$entrega=$examen->duracion_dias;
 
-			echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>		
+			echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
 	   		<tr><td>Descripción</td>
 	   		<td>Resultado</td>
 	   		<td>R. I.</td>
@@ -156,7 +156,7 @@
 		</div>
 
 	<?php
-	
+
 	$aux=$model->pagos;
 	echo '<table class="table table-striped table-bordered dataTable">
 	   		<tr>
@@ -164,14 +164,14 @@
 	   		<td>Efectivo</td>
 	   		<td>Tarjeta</td>
 	   		<td>Cheque</td>';
-			 foreach ($aux as $pago):  
+			 foreach ($aux as $pago):
 			 	echo '<tr><td>'.date("d/m/Y H:i", strtotime($pago->fecha)).'</td>';
 				echo '<td> $'.$pago->efectivo.'</td>';
 				echo '<td> $'.$pago->tarjeta.'</td>';
 				echo '<td> $'.$pago->cheque.'</td></tr>';
 			 endforeach;
 			echo'</table>';
-			
+
 		    if($model->costo_emergencia !=0 || $model->descuento !=0) {
 				echo '<table class="table table-striped table-bordered dataTable"><tr>
 		    	<td>Total de exámenes </td><td>$ '.$totalSinDescuento.'</td><tr> </table>';
@@ -203,7 +203,7 @@
 			  echo '<table class="table table-striped table-bordered dataTable"><tr>
 				   <td>'.($pagado>=0?"Total por pagar":"Cambio").'</td><td>$ '.($pagado>=0?$pagado:$pagado*-1).'</td></<tr> </table>';
 
-				
+
 		    echo '<table class="table table-striped table-bordered dataTable"><tr>
 		    <th colspan="3" style="color:#1e90ff "> <center>Tarda '.$entrega.' día(s) para entregarse</center></th></<tr>'; ?>
 		    <?php
@@ -217,16 +217,10 @@
 		    <?php } ?>
 		    </table>
 		    <?php
-
-
-		     echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn')); 
-		     echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn')); 
-			   
-
-
-
-
-			  ?>
+		     echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn'));
+		     echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn'));
+		     echo CHtml::link('<i class="icon-printer"></i> Imprimir factura',Yii::app()->createUrl('facturacion/imprimirFactura',array('id'=>$model->id)), array('class'=>'btn'));
+		    ?>
 	</div>
 
 

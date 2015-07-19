@@ -20,7 +20,8 @@ return array(
 		'ext.fpdf.ImprimirPdf',
 		'ext.fpdf.ImprimirOrden',
 		'ext.fpdf.ImprimirResultados',
-		'ext.Facturacion.conf.nusoap.php',
+		'ext.fpdf.ImprimirFactura',
+		// 'ext.Facturacion.conf.*',
 		// 'ext.Facturacion.php.*',
 	),
 
