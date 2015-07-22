@@ -54,6 +54,8 @@ class FacturacionController extends Controller
 	 */
 	public function actionIndex()
 	{
+		phpinfo();
+		return;
 		$answer = null;
 		$token = null;
 		$cfdi = null;
@@ -66,8 +68,7 @@ class FacturacionController extends Controller
 			///////////////////////////////////////////////////////////////////////////
 			//lib
 			//indicamos el archivo wspac.wsdl
-
-			$client = new soapclient('C:\xampp\htdocs\dcilaboratorio\dcilaboratorio\protected\extensions\Facturacion/php/wspac.wsdl', 'wsdl');
+			$client = new soapclient(dirname(__FILE__).DIRECTORY_SEPARATOR.'/../extensions/Facturacion/php/wspac.wsdl', 'wsdl');
 			//
 			$err = $client->getError();
 			if ($err) {
@@ -195,7 +196,7 @@ class FacturacionController extends Controller
 			//lib
 			//indicamos el archivo wspac.wsdl
 
-			$client = new soapclient('C:\xampp\htdocs\dcilaboratorio\dcilaboratorio\protected\extensions\Facturacion/php/wspac.wsdl', 'wsdl');
+			$client = new soapclient(dirname(__FILE__).DIRECTORY_SEPARATOR.'/../extensions/Facturacion/php/wspac.wsdl', 'wsdl');
 			//
 			$err = $client->getError();
 			if ($err) {
@@ -315,7 +316,7 @@ class FacturacionController extends Controller
 
 	public function generarCFD($id){
 		$orden = Ordenes::model()->findByPk($id);
-
+		$listaConceptos = $orden->ordenTieneExamenes;
 		$fecha_actual = substr( date('c'), 0, 19);
 		$regimenFiscal = 'RÉGIMEN SIMPLIFICADO';
 		$rfc_emisor = 'AAQM610917QJA';
@@ -336,6 +337,7 @@ class FacturacionController extends Controller
 		$municipioEmisor='BOCA DEL RIO';
 		$noExteriorEmisor='258';
 		$paisEmisor='MEXICO';
+		$regimenFiscal = 'Regimen Simplificado';
 
 		//DATOS DEL RECEPTOR
 		$nombreReceptor = 'CARLOS ALFREDO RUIZ CALDERON';
@@ -348,6 +350,16 @@ class FacturacionController extends Controller
 		$municipioReceptor='BOCA DEL RIO';
 		$noExteriorReceptor='258';
 		$paisReceptor='MEXICO';
+		$xmlGenerado = '<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante LugarExpedicion="'.$lugarExpedicion.'" certificado="@CERTIFICADO" fecha="@FECHA" formaDePago="'.$formaDePago.'" metodoDePago="'.$metodoDePago.'" noCertificado="@NO_CERTIFICADO" sello="@SELLO" subTotal="'.$subTotal.'" tipoDeComprobante="'.$tipoDeComprobante.'" total="'.$total.'" version="3.2" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd"><cfdi:Emisor nombre="DCI LABORATORIO" rfc="@RFC_EMISOR"><cfdi:DomicilioFiscal calle="'.$calleEmisor.'" codigoPostal="'.$codigoPostalEmisor.'" colonia="'.$coloniaEmisor.'" estado="'.$estadoEmisor.'" municipio="'.$municipioEmisor.'" noExterior="'.$noExteriorEmisor.'" pais="MÉXICO"/><cfdi:RegimenFiscal Regimen="'.$regimenFiscal.'"/></cfdi:Emisor><cfdi:Receptor nombre="'.$nombreReceptor.'" rfc="'.$rfcReceptor.'"><cfdi:Domicilio calle="'.$calleReceptor.'" codigoPostal="'.$codigoPostalReceptor.'" colonia="'.$coloniaReceptor.'" estado="'.$estadoReceptor.'" localidad="'.$localidadReceptor.'" municipio="'.$municipioReceptor.'" noExterior="'.$noExteriorReceptor.'" pais="MEXICO"/></cfdi:Receptor><cfdi:Conceptos>';
+
+	foreach ($listaConceptos as $concepto) {
+		$xmlGenerado .= '<cfdi:Concepto cantidad="1.0" descripcion="'.$concepto.'" importe="1500.00" noIdentificacion="PROD04" unidad="MENSAJE" valorUnitario="2150.50"/>';
+	}
+
+	$xmlGenerado .= '</cfdi:Conceptos><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado importe="1500.00" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="1850.00" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="154.51" impuesto="IVA" tasa="16.00"/></cfdi:Traslados></cfdi:Impuestos></cfdi:Comprobante>';
+echo $xmlGenerado;
+return;
 
 $cfdi = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
