@@ -9,7 +9,7 @@ class FacturacionController extends Controller
 	public $layout='//layouts/column2';
 	public $section = "Facturacion";
 	public $subSection;
-	public $pageTitle="Facturacion";
+	public $pageTitle="Facturación";
 	/**
 	 * @return array action filters
 	 */
@@ -40,13 +40,29 @@ class FacturacionController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','imprimirFactura'),
+				'actions'=>array('index', 'create' ,'imprimirFactura'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionCreate()
+	{
+		$this->subSection = "Nuevo";
+
+		if(isset($_POST['idInput']))
+		{
+			print_r($_POST);
+			return;
+			// $model->attributes=$_POST['Examenes'];
+			// if($model->save())
+			// 	$this->redirect(array('view','id'=>$model->id));
+		}
+
+		$this->render('_form');
 	}
 
 	/**
