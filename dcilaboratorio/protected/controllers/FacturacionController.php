@@ -40,7 +40,7 @@ class FacturacionController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index', 'create' ,'imprimirFactura'),
+				'actions'=>array('index', 'create', 'admin' ,'imprimirFactura'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -64,6 +64,21 @@ class FacturacionController extends Controller
 
 		$this->render('_form');
 	}
+
+	public function actionAdmin()
+	{
+		$this->subSection = "Admin";
+		$model=new Ordenes('search');
+
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Ordenes']))
+			$model->attributes=$_GET['Ordenes'];
+
+		$this->render('admin',array(
+			'model'=>$model,
+			));
+	}
+
 
 	/**
 	 * Lists all models.
@@ -383,5 +398,17 @@ $cfdi = <<<XML
 XML;
 
 		return $cfdi;
+	}
+
+	public function obtenerPaciente($data, $row){
+		$paciente = $data->ordenFacturacion->paciente;
+		$completo = $paciente->obtenerNombreCompleto();
+		return $completo;
+	}
+
+	public function datosFacturacionCliente($data, $row){
+		$datosFacturacion = $data->ordenFacturacion->datosFacturacion;
+		$datos = $datosFacturacion->razon_social.' - '.$datosFacturacion->RFC;
+		return $datos;
 	}
 }
