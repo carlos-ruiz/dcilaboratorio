@@ -14,7 +14,11 @@
 		<div id="sample_1_wrapper" class="dataTables_wrapper">
 			<div class="row">
 				<div class="col-md-12">
-					<?php 
+					<?php
+					$datos = $model->search(); 
+					if(isset($filtroFactura) && $filtroFactura == 1){
+						$datos = $model->searchRequiereFactura();
+					}
 			 		
 					array_push($columnas, array(
 											    'class'=>'CButtonColumn',
@@ -91,6 +95,15 @@
 								        					'title'=>'Desactivar',
        													),
 								        			),
+								        			'facturar'=>array(
+											        	'label'=>'<span class="fa fa-file-pdf-o"></span>',
+								        				'visible'=>'(isset($data->requiere_factura) && $data->requiere_factura == 1)',
+								        				'imageUrl'=>false,
+								        				'url'=>'Yii::app()->controller->createUrl("imprimirFactura",array("id"=>$data->id))',
+								        				'options'=>array(
+								        					'title'=>'Facturar',
+								        				),
+											        ),
 											    ),
 											    'template'=>(!isset($buttonsTemplate))?'{activar} {view} {update} {borrar} {desactivar}':$buttonsTemplate,
 											));
@@ -100,7 +113,7 @@
 						'rowHtmlOptionsExpression'=>'array("id"=>"row_".$data->id,"data-id"=>$data->id)',
 						'enableSorting'=>false,
 						'itemsCssClass'=>'table table-striped table-bordered table-hover',
-						'dataProvider'=>$model->search(),
+						'dataProvider'=>$datos,
 						'showTableOnEmpty'=>false,
 						'enablePagination' => false,
 						'selectableRows'=>0,
