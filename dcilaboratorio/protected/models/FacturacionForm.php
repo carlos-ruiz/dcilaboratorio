@@ -33,7 +33,7 @@ class FacturacionForm extends CFormModel
 			array('numero', 'numerical', 'integerOnly'=>true),
 			//validate RFC
 			// array('rfc', 'match', 'pattern' => '^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[A-Z|\d]{3})$', 'message' => 'El RFC es inválido.');
-			array('rfc', 'match', 'pattern' => '^([a-zA-Z&Ññ]{3}|[a-zA-Z][aAeEiIoOuU][a-zA-Z]{2})\\d{2}((01|03|05|07|08|10|12)(0[1-9]|[12]\\d|3[01])|02(0[1-9]|[12]\\d)|(04|06|09|11)(0[1-9]|[12]\\d|30))([a-zA-Z0-9]{2}[0-9A])$', 'message' => 'El RFC es inválido.');
+			array('rfc', 'match', 'pattern' => '^([a-zA-Z&Ññ]{3}|[a-zA-Z][aAeEiIoOuU][a-zA-Z]{2})\\d{2}((01|03|05|07|08|10|12)(0[1-9]|[12]\\d|3[01])|02(0[1-9]|[12]\\d)|(04|06|09|11)(0[1-9]|[12]\\d|30))([a-zA-Z0-9]{2}[0-9aA])$^', 'message' => 'El RFC es inválido.'),
 		);
 	}
 

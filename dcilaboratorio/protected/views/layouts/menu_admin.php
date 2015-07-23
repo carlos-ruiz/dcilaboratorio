@@ -308,7 +308,7 @@
 
 	<li <?php if($this->section=="Facturacion"){ echo 'class="active open"';}?>>
 		<a href="javascript:;">
-		<i class="icon-docs"></i>
+		<i class="icon-doc"></i>
 		<span class="title">Facturación</span>
 		<?php if($this->section=="Facturacion"){?>
 		<span class="selected"></span>

@@ -52,17 +52,22 @@ class FacturacionController extends Controller
 	public function actionCreate()
 	{
 		$this->subSection = "Nuevo";
+		$model = new FacturacionForm;
+		$examenes = new Examenes;
 
-		if(isset($_POST['idInput']))
+		if(isset($_POST['FacturacionForm']))
 		{
-			print_r($_POST);
-			return;
+			$model->attributes=$_POST['FacturacionForm'];
+			$model->validate();
 			// $model->attributes=$_POST['Examenes'];
 			// if($model->save())
 			// 	$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('_form');
+		$this->render('_form', array(
+			'model' => $model,
+			'examenes' => $examenes,
+			));
 	}
 
 	public function actionAdmin()
