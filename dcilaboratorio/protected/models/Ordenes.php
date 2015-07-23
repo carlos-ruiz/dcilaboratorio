@@ -54,7 +54,7 @@ class Ordenes extends CActiveRecord
 			array('costo_emergencia', 'length', 'max'=>8),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_doctores, id_status, id_unidades_responsables, fecha_captura, informacion_clinica_y_terapeutica, comentarios, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, costo_emergencia, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, id_doctores, id_status, id_unidades_responsables, fecha_captura, informacion_clinica_y_terapeutica, comentarios, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, costo_emergencia, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search, searchRequiereFactura'),
 		);
 	}
 
@@ -130,6 +130,41 @@ class Ordenes extends CActiveRecord
 		$criteria->compare('informacion_clinica_y_terapeutica',$this->informacion_clinica_y_terapeutica,true);
 		$criteria->compare('comentarios',$this->comentarios,true);
 		$criteria->compare('requiere_factura',$this->requiere_factura);
+		$criteria->compare('descuento',$this->descuento);
+		$criteria->compare('id_multitarifarios',$this->id_multitarifarios);
+		$criteria->compare('compartir_con_doctor',$this->compartir_con_doctor);
+		$criteria->compare('costo_emergencia',$this->costo_emergencia,true);
+		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
+		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
+		$criteria->compare('creacion',$this->creacion,true);
+		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		if(Yii::app()->user->getState('perfil')=='Paciente'){
+			$criteria->with=array('ordenFacturacion');
+			$criteria->compare('ordenFacturacion.id_usuarios',Yii::app()->user->id);
+		}
+		if(Yii::app()->user->getState('perfil')=='Doctor'){	
+			$criteria->compare('id_doctores',Yii::app()->user->getState('id_persona'));
+		}
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+			'pagination'=>false,
+		));
+	}
+
+	public function searchRequiereFactura()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('id',$this->id);
+		$criteria->compare('id_doctores',$this->id_doctores);
+		$criteria->compare('id_status',$this->id_status);
+		$criteria->compare('id_unidades_responsables',$this->id_unidades_responsables);
+		$criteria->compare('fecha_captura',$this->fecha_captura,true);
+		$criteria->compare('informacion_clinica_y_terapeutica',$this->informacion_clinica_y_terapeutica,true);
+		$criteria->compare('comentarios',$this->comentarios,true);
+		$criteria->compare('requiere_factura','1');
 		$criteria->compare('descuento',$this->descuento);
 		$criteria->compare('id_multitarifarios',$this->id_multitarifarios);
 		$criteria->compare('compartir_con_doctor',$this->compartir_con_doctor);

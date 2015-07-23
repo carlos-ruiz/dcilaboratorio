@@ -68,7 +68,7 @@ class FacturacionController extends Controller
 	public function actionAdmin()
 	{
 		$this->subSection = "Admin";
-		$model=new Ordenes('search');
+		$model=new Ordenes('searchRequiereFactura');
 
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Ordenes']))
@@ -76,6 +76,7 @@ class FacturacionController extends Controller
 
 		$this->render('admin',array(
 			'model'=>$model,
+			'filtroFactura'=>1,
 			));
 	}
 
@@ -382,10 +383,10 @@ class FacturacionController extends Controller
 		$noExteriorReceptor='258';
 		$paisReceptor='MEXICO';
 		$xmlGenerado = '<?xml version="1.0" encoding="UTF-8"?>
-<cfdi:Comprobante LugarExpedicion="'.$lugarExpedicion.'" certificado="@CERTIFICADO" fecha="@FECHA" formaDePago="'.$formaDePago.'" metodoDePago="'.$metodoDePago.'" noCertificado="@NO_CERTIFICADO" sello="@SELLO" subTotal="'.$subTotal.'" tipoDeComprobante="'.$tipoDeComprobante.'" total="'.$total.'" version="3.2" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd"><cfdi:Emisor nombre="DCI LABORATORIO" rfc="@RFC_EMISOR"><cfdi:DomicilioFiscal calle="'.$calleEmisor.'" codigoPostal="'.$codigoPostalEmisor.'" colonia="'.$coloniaEmisor.'" estado="'.$estadoEmisor.'" municipio="'.$municipioEmisor.'" noExterior="'.$noExteriorEmisor.'" pais="MÉXICO"/><cfdi:RegimenFiscal Regimen="'.$regimenFiscal.'"/></cfdi:Emisor><cfdi:Receptor nombre="'.$nombreReceptor.'" rfc="'.$rfcReceptor.'"><cfdi:Domicilio calle="'.$calleReceptor.'" codigoPostal="'.$codigoPostalReceptor.'" colonia="'.$coloniaReceptor.'" estado="'.$estadoReceptor.'" localidad="'.$localidadReceptor.'" municipio="'.$municipioReceptor.'" noExterior="'.$noExteriorReceptor.'" pais="MEXICO"/></cfdi:Receptor><cfdi:Conceptos>';
+<cfdi:Comprobante LugarExpedicion="'.$lugarExpedicion.'" certificado="@CERTIFICADO" fecha="@FECHA" formaDePago="'.$formaDePago.'" metodoDePago="'.$modoDePago.'" noCertificado="@NO_CERTIFICADO" sello="@SELLO" subTotal="'.$subTotal.'" tipoDeComprobante="'.$tipoDeComprobante.'" total="'.$total.'" version="3.2" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd"><cfdi:Emisor nombre="DCI LABORATORIO" rfc="@RFC_EMISOR"><cfdi:DomicilioFiscal calle="'.$calleEmisor.'" codigoPostal="'.$codigoPostalEmisor.'" colonia="'.$coloniaEmisor.'" estado="'.$estadoEmisor.'" municipio="'.$municipioEmisor.'" noExterior="'.$noExteriorEmisor.'" pais="MÉXICO"/><cfdi:RegimenFiscal Regimen="'.$regimenFiscal.'"/></cfdi:Emisor><cfdi:Receptor nombre="'.$nombreReceptor.'" rfc="'.$rfcReceptor.'"><cfdi:Domicilio calle="'.$calleReceptor.'" codigoPostal="'.$codigoPostalReceptor.'" colonia="'.$coloniaReceptor.'" estado="'.$estadoReceptor.'" localidad="'.$localidadReceptor.'" municipio="'.$municipioReceptor.'" noExterior="'.$noExteriorReceptor.'" pais="MEXICO"/></cfdi:Receptor><cfdi:Conceptos>';
 
 	foreach ($listaConceptos as $concepto) {
-		$xmlGenerado .= '<cfdi:Concepto cantidad="1.0" descripcion="'.$concepto.'" importe="1500.00" noIdentificacion="PROD04" unidad="MENSAJE" valorUnitario="2150.50"/>';
+		$xmlGenerado .= '<cfdi:Concepto cantidad="1.0" descripcion="'.$concepto->detalleExamen->examenes->nombre.'" importe="'.$concepto->detalleExamen->examenes->nombre.'" noIdentificacion="'.$concepto->detalleExamen->examenes->clave.'" unidad="'.$concepto->detalleExamen->unidadesMedida->abreviatura.'" valorUnitario="'.$concepto->detalleExamen->examenes->nombre.'"/>';
 	}
 
 	$xmlGenerado .= '</cfdi:Conceptos><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado importe="1500.00" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="1850.00" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="154.51" impuesto="IVA" tasa="16.00"/></cfdi:Traslados></cfdi:Impuestos></cfdi:Comprobante>';
