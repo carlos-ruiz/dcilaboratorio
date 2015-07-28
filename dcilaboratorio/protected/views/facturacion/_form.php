@@ -100,58 +100,24 @@
 						<hr/>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-9">
-							<div class="form-group col-md-6">
-								<?php echo "<label class='control-label'>Examen</label>"?>
-								<div class="input-group">
-									<?php echo $form->dropDownList($examenes,'clave', Examenes::model()->selectListWithClave(), array('class'=>'form-control input-medium select2me')); ?>
-								</div>
-							</div>
-
-							<div class="form-group col-md-6">
-								<?php echo "<label class='control-label'>Grupo de exámenes</label>"?>
-								<div class="input-group">
-									<?php echo $form->dropDownList($examenes,'nombre', Grupos::model()->selectList(), array('class'=>'form-control input-medium select2me')); ?>
-								</div>
-							</div>
-						</div>
-
 						<div class="form-group col-md-3" >
 							<div class="input-group">
-								<input type="hidden" id="examenesIds" name="Examenes[ids]" value />
-								<a href="js:void(0);" class="btn default blue-stripe" id="agregarExamen">Agregar</a>
+								<input type="hidden" id="listaConceptos" name="conceptos[ids]" value />
+								<a href="javascript:void(0);" class="btn default blue-stripe" id="agregarConcepto">Agregar concepto</a>
 							</div>
 						</div>
 					</div>
 
-					<table class="table table-striped table-bordered dataTable">
+					<table class="table table-striped table-bordered dataTable" id="tablaConceptos">
 						<thead >
 							<tr>
 								<th>Clave</th>
-								<th>Examen</th>
+								<th>Concepto</th>
 								<th>Precio</th>
 							</tr>
 						</thead>
 						<tbody id="examenesAgregados">
-							<?php foreach ($listaTarifasExamenes as $tarifaExamen): ?>
-								<tr class='row_<?php echo $tarifaExamen->id_examenes;?>' data-id='<?php echo $tarifaExamen->id_examenes;?>'>
-									<td><?php echo $tarifaExamen->examen->clave; ?></td>
-									<td><?php echo $tarifaExamen->examen->nombre; ?></td>
-									<td class="precioExamen" data-val="<?php echo isset($tarifaExamen->precio)?$tarifaExamen->precio:0; ?>">
-
-									<?php echo isset($tarifaExamen->precio)?
-										"$ ".$tarifaExamen->precio:
-										"<div style='margin:0px;' class='form-group ".($form->error($tarifaExamen,'precio')!=''?"has-error":"")."'>".
-											"<div class='row' style='margin-left:5px'>No hay precio para el tarifario seleccionado ".
-											"<a href='js:void(0)' data-id='$tarifaExamen->id_examenes' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a> ".
-											"<input type='text' class='form-control input-small' id='addPrecio_$tarifaExamen->id_examenes' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />".
-											"</div><div class='help-block row' style='float:right; margin:0px;'>Debe agregar un precio para el examen en el multitarifario seleccionado.</div>".
-										"</div>"; ?>
-									</td>
-
-									<td><a href='js:void(0)' data-id='<?php echo $tarifaExamen->id_examenes;?>' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-								</tr>
-							<?php endforeach; ?>
+							
 						</tbody>
 					</table>
 				</section>
@@ -162,3 +128,55 @@
 			</div>
 
 		<?php $this->endWidget(); ?>
+<script type="text/javascript">
+	var numeroConcepto = 0;
+	var conceptosIds = [];
+
+	function setConceptosIds(){
+		var ids=conceptosIds.join();
+		$("#conceptosIds").val(ids);
+	}
+
+	$("#agregarConcepto").click(function(){
+		numeroConcepto = $('#tablaConceptos tr').length;
+		$.post(
+			"<?php echo $this->createUrl('facturacion/agregarConcepto/');?>",
+			{
+				id:numeroConcepto,
+			},
+			function(data){
+				$("#examenesAgregados").append(data);
+				setConceptosIds();
+				activarEliminacion();
+				// total=calcularTotal();
+				// setTotal(total);
+				// granTotal=calcularGranTotal();
+				// setGranTotal(granTotal);
+				// debe=calcularDebe();
+				// setDebe(debe);
+			}
+		);
+	});
+
+	function activarEliminacion(){
+		$(".eliminarConcepto").click(function(){
+			alert('numeroConcepto es: '+$(this).data('id'));
+			$(".row_"+$(this).data('id')).hide(400);
+			$(".row_"+$(this).data('id')).html("");
+			aux=[];
+			for (var i = 0; i < conceptosIds.length; i++) {
+				if(conceptosIds[i]!=$(this).data('id')){
+					aux.push(conceptosIds[i]);
+				}
+			};
+			conceptosIds=aux;
+			setConceptosIds();
+			// total=calcularTotal();
+			// setTotal(total);
+			// granTotal=calcularGranTotal();
+			// setGranTotal(granTotal);
+			// debe=calcularDebe();
+			// setDebe(debe);
+		});
+	}
+</script>

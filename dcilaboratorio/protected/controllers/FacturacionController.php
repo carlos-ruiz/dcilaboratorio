@@ -40,7 +40,7 @@ class FacturacionController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index', 'create', 'admin' ,'imprimirFactura'),
+				'actions'=>array('index', 'create', 'admin' ,'imprimirFactura', 'agregarConcepto'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -53,10 +53,12 @@ class FacturacionController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
-		$examenes = new Examenes;
+		$examenes = new ConceptoForm;
 
 		if(isset($_POST['FacturacionForm']))
 		{
+		print_r($_POST);
+		return;
 			$model->attributes=$_POST['FacturacionForm'];
 			$model->validate();
 			// $model->attributes=$_POST['Examenes'];
@@ -66,7 +68,7 @@ class FacturacionController extends Controller
 
 		$this->render('_form', array(
 			'model' => $model,
-			'examenes' => $examenes,
+			'conceptos' => $examenes,
 			));
 	}
 
@@ -417,4 +419,23 @@ XML;
 		$datos = $datosFacturacion->razon_social.' - '.$datosFacturacion->RFC;
 		return $datos;
 	}
+
+	public function actionAgregarConcepto(){
+		$numeroConcepto = $_POST['id'];
+		echo "
+		<tr class='row_$numeroConcepto' data-id='$numeroConcepto'>
+			<td>
+				<input type='text' class='form-control' id='clave_$numeroConcepto' name='clave_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'/>
+			</td>
+			<td>
+				<input type='text' class='form-control' id='concepto_$numeroConcepto' name='concepto_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
+			</td>
+			<td class='precioConcepto'>
+				<input type='text' class='form-control' id='precio_$numeroConcepto' name='precio_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
+			</td>
+			<td>
+				<a href='javascript:void(0)' data-id='numeroConcepto' class='eliminarConcepto'><span class='fa fa-trash'></span></a>
+			</td>
+		</tr>";
+	} 
 }

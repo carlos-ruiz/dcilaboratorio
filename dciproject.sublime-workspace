@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"Numero",
+				"numeroConcepto"
+			],
+			[
+				"numero",
+				"numeroConcepto"
+			],
+			[
+				"filt",
+				"filtroFactura"
+			],
+			[
+				"req",
+				"requiere_factura"
+			],
+			[
+				"sera",
+				"searchRequiereFactura"
+			],
+			[
 				"durac",
 				"duracion_dias"
 			],
@@ -379,24 +399,57 @@
 			"file": "dcilaboratorio/protected/views/facturacion/_form.php",
 			"settings":
 			{
-				"buffer_size": 1365,
+				"buffer_size": 7299,
 				"line_ending": "Windows",
 				"name": "_form.com"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/views/examenes/_form.php",
-			"settings":
-			{
-				"buffer_size": 3625,
-				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "dcilaboratorio/protected/controllers/FacturacionController.php",
 			"settings":
 			{
-				"buffer_size": 15161,
+				"buffer_size": 17246,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Carlos/AppData/Local/Temp/652a2f69-1040-43ca-97d9-39f7c29944ec/test.php",
+			"settings":
+			{
+				"buffer_size": 644,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/models/ConceptoForm.php",
+			"settings":
+			{
+				"buffer_size": 835,
+				"line_ending": "Windows",
+				"name": "ConceptoForm.php"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/models/TarifasActivas.php",
+			"settings":
+			{
+				"buffer_size": 4223,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/views/ordenes/_form.php",
+			"settings":
+			{
+				"buffer_size": 32502,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "dcilaboratorio/protected/controllers/OrdenesController.php",
+			"settings":
+			{
+				"buffer_size": 28345,
 				"line_ending": "Windows"
 			}
 		}
@@ -506,20 +559,20 @@
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/examenes",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/facturacion"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Ordenes.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/facturacion/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
+		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Grupo Via/gvia/CloudWS_DB_Classes.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/comunes/_comunAdmin.php",
 		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
 		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
 		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/C/Users/Carlos/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
 		"/C/Users/Carlos/Desktop/SERIAL W81.txt",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/comunes/_comunAdmin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/ordenes/view.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/fpdf/ImprimirPdf.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/ReportesController.php",
@@ -535,7 +588,6 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/ordenes/_form.php",
 		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/resp.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/admin.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Ordenes.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/EspecialidadesController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/YiiMailer/YiiMailer.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/reportes/imprimirPdf.php",
@@ -638,9 +690,7 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos/_form.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/TarifasActivas.php",
 		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data/es_mx.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Multitarifarios.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/index.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/multitarifarios/admin.php"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Multitarifarios.php"
 	],
 	"find":
 	{
@@ -665,6 +715,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"agregarExamen",
+			"examenesIds",
+			"setExamenesIds",
+			"examenesIds",
+			");\n",
+			"agregarExamen",
+			"search",
 			"|| $mostrarTodos",
 			"==1",
 			"page",
@@ -780,7 +837,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -789,46 +846,48 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1365,
+						"buffer_size": 7299,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								850,
-								850
+								5424,
+								5424
 							]
 						],
 						"settings":
 						{
 							"auto_name": "_form.com",
 							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
 							"syntax": "Packages/HTML/HTML.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 108.0,
+						"translation.y": 1745.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "dcilaboratorio/protected/views/examenes/_form.php",
-					"semi_transient": true,
+					"file": "dcilaboratorio/protected/controllers/FacturacionController.php",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3625,
+						"buffer_size": 17246,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								744,
-								744
+								1445,
+								1445
 							]
 						],
 						"settings":
@@ -840,27 +899,88 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 810.0,
+						"translation.y": 756.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/Carlos/AppData/Local/Temp/652a2f69-1040-43ca-97d9-39f7c29944ec/test.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 644,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								490,
+								514
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "dcilaboratorio/protected/controllers/FacturacionController.php",
+					"buffer": 3,
+					"file": "dcilaboratorio/protected/models/ConceptoForm.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15161,
+						"buffer_size": 835,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1215,
-								1215
+								175,
+								175
+							]
+						],
+						"settings":
+						{
+							"auto_name": "ConceptoForm.php",
+							"incomplete_sync": null,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "dcilaboratorio/protected/models/TarifasActivas.php",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 4223,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1229,
+								1200
 							]
 						],
 						"settings":
@@ -872,10 +992,74 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 810.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "dcilaboratorio/protected/views/ordenes/_form.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 32502,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24999,
+								25009
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 11843.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "dcilaboratorio/protected/controllers/OrdenesController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 28345,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								21049,
+								21049
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 9323.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
