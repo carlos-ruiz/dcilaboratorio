@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'/../extensions/Facturacion/conf/nusoap.php');
 class FacturacionController extends Controller
 {
 	/**
@@ -87,270 +86,14 @@ class FacturacionController extends Controller
 			));
 	}
 
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		phpinfo();
-		return;
-		$answer = null;
-		$token = null;
-		$cfdi = null;
-		$fullAnswer = null;
-		$msgError = null;
-		if(isset($_POST['xmlfile'])){
-			$wsUser = 'VE223.test_ws';   //usuario de ws
-			$wsPassword = 'Test-WS+092013';   //password de ws
-			//
-			///////////////////////////////////////////////////////////////////////////
-			//lib
-			//indicamos el archivo wspac.wsdl
-			$client = new soapclient(dirname(__FILE__).DIRECTORY_SEPARATOR.'/../extensions/Facturacion/php/wspac.wsdl', 'wsdl');
-			//
-			$err = $client->getError();
-			if ($err) {
-			//   Muestra error
-				echo 'Error al construir el cliente: ' . $err ;
-			}else {
-				$params = array($wsUser,$wsPassword); /*('usuario','contrasena')*/
-				$answer = $client->call('openSession', $params );
-
-				$err = $client->getError();
-				if ($err) {
-					//     Muestra error
-					echo 'Error: ' . $err;
-					print_r($client->response);
-					print_r($client->getDebug());
-					return;
-				} else {
-					//     Respuesta ws
-					$token = $answer['token'];
-					$errorCode = $answer['errorCode'];
-					$ok = $answer['ok'];
-				}
-			}
-			if (($ok == true) && ($errorCode == 0)){
-				$err = $client->getError();
-				if ($err) {
-					//   Muestra error
-					echo 'Error al construir el cliente: ' . $err ;
-				}else {
-					//   token para inicio de sesion
-					$token = $token;
-					// xml a Timbrar
-					$xml = $_POST["xmlfile"];
-					//
-					$params = array('token' => $token, 'xml' => $xml); /*('token','xml')*/
-					$answer = $client->call('createCFDI', array($params) );
-					//
-					$err = $client->getError();
-					//
-					if ($err) {
-						//     Muestra error
-						echo 'Error: ' . $err;
-						print_r($client->response);
-						print_r($client->getDebug());
-						return;
-					} else {
-						//     Respuesta ws
-						$fullAnswer = $answer;
-						$ok = $answer['ok'];
-						$errorCode = $answer['errorCode'];
-						$cfdi = $answer['xml'];
-						$uuid = $answer['uuid'];
-						$msgError = 'ok';
-					}
-				}
-				//
-				if (($ok == true) && ($errorCode == 0)){
-					$err = $client->getError();
-					if ($err) {
-						//   Muestra error
-						echo 'Error al construir el cliente: ' . $err ;
-						return;
-					}else {
-						$params = array($token); /*token de sesion a cerrar*/
-						$answer = $client->call('closeSession', $params );
-						$err = $client->getError();
-						if ($err) {
-							//     Muestra error
-							echo 'Error: ' . $err;
-							print_r($client->response);
-							print_r($client->getDebug());
-							return;
-						} else {
-							//     Respuesta ws
-							$ok = $answer['ok'];
-							$errorCode = $answer['errorCode'];
-						}
-					}
-				} else{
-					$err = $client->getError();
-					if ($err) {
-						//   Muestra error
-						echo 'Error al construir el cliente: ' . $err ;
-						return;
-					}else {
-						$params = array($token); /*token de sesion a cerrar*/
-						$answer = $client->call('closeSession', $params );
-						$err = $client->getError();
-						if ($err) {
-							//     Muestra error
-							echo 'Error: ' . $err;
-							print_r($client->response);
-							print_r($client->getDebug());
-							return;
-						} else {
-							//     Respuesta ws
-							$msgError = '';
-						}
-					}
-					$msgError = 'Codigo de error = '.$errorCode;
-				}
-			//Error al iniciar sesion
-			} else{
-				$msgError = $token;
-			}
-		}
-		$this->render('index',array('respuestaCompleta'=>$fullAnswer, 'resultado'=>$msgError));
-	}
-
 	public function actionImprimirFactura($id){
 		$model = Ordenes::model()->findByPk($id);
-		$xml = null;
-		$answer = null;
-		$token = null;
-		$cfdi = null;
-		$fullAnswer = null;
-		$msgError = null;
-		$xml = $this->generarCFD($id);
-
-		if(isset($xml)){
-			$wsUser = 'VE223.test_ws';   //usuario de ws
-			$wsPassword = 'Test-WS+092013';   //password de ws
-			//
-			///////////////////////////////////////////////////////////////////////////
-			//lib
-			//indicamos el archivo wspac.wsdl
-
-			$client = new soapclient(dirname(__FILE__).DIRECTORY_SEPARATOR.'/../extensions/Facturacion/php/wspac.wsdl', 'wsdl');
-			//
-			$err = $client->getError();
-			if ($err) {
-			//   Muestra error
-				echo 'Error al construir el cliente: ' . $err ;
-			}else {
-				$params = array($wsUser,$wsPassword); /*('usuario','contrasena')*/
-				$answer = $client->call('openSession', $params );
-
-				$err = $client->getError();
-				if ($err) {
-					//     Muestra error
-					echo 'Error: ' . $err;
-					print_r($client->response);
-					print_r($client->getDebug());
-					return;
-				} else {
-					//     Respuesta ws
-					$token = $answer['token'];
-					$errorCode = $answer['errorCode'];
-					$ok = $answer['ok'];
-				}
-			}
-			if (($ok == true) && ($errorCode == 0)){
-				$err = $client->getError();
-				if ($err) {
-					//   Muestra error
-					echo 'Error al construir el cliente: ' . $err ;
-				}else {
-					//   token para inicio de sesion
-					$token = $token;
-					// xml a Timbrar
-					// $xml = $_POST["xmlfile"];
-					//
-					$params = array('token' => $token, 'xml' => $xml); /*('token','xml')*/
-					$answer = $client->call('createCFDI', array($params) );
-					//
-					$err = $client->getError();
-					//
-					if ($err) {
-						//     Muestra error
-						echo 'Error: ' . $err;
-						print_r($client->response);
-						print_r($client->getDebug());
-						return;
-					} else {
-						//     Respuesta ws
-						$fullAnswer = $answer;
-						$ok = $answer['ok'];
-						$errorCode = $answer['errorCode'];
-						$cfdi = $answer['xml'];
-						$uuid = $answer['uuid'];
-						$msgError = 'ok';
-					}
-				}
-				//
-				if (($ok == true) && ($errorCode == 0)){
-					$err = $client->getError();
-					if ($err) {
-						//   Muestra error
-						echo 'Error al construir el cliente: ' . $err ;
-						return;
-					}else {
-						$params = array($token); /*token de sesion a cerrar*/
-						$answer = $client->call('closeSession', $params );
-						$err = $client->getError();
-						if ($err) {
-							//     Muestra error
-							echo 'Error: ' . $err;
-							print_r($client->response);
-							print_r($client->getDebug());
-							return;
-						} else {
-							//     Respuesta ws
-							$ok = $answer['ok'];
-							$errorCode = $answer['errorCode'];
-						}
-					}
-				} else{
-					$err = $client->getError();
-					if ($err) {
-						//   Muestra error
-						echo 'Error al construir el cliente: ' . $err ;
-						return;
-					}else {
-						$params = array($token); /*token de sesion a cerrar*/
-						$answer = $client->call('closeSession', $params );
-						$err = $client->getError();
-						if ($err) {
-							//     Muestra error
-							echo 'Error: ' . $err;
-							print_r($client->response);
-							print_r($client->getDebug());
-							return;
-						} else {
-							//     Respuesta ws
-							$msgError = '';
-						}
-					}
-					$msgError = 'Codigo de error = '.$errorCode;
-				}
-			//Error al iniciar sesion
-			} else{
-				$msgError = $token;
-			}
-		}
-		if ($fullAnswer['ok']) {
-			// print_r($fullAnswer);
-			// return;
-			$pdf = new ImprimirFactura('P','cm','letter');
-			$pdf->AddPage();
-			$pdf->cabeceraHorizontal($model, $fullAnswer);
-			$pdf->contenido($model, $fullAnswer);
-			$pdf->Output();
-		}
+		$fullAnswer = $this->conectarConWS();
+		$pdf = new ImprimirFactura('P','cm','letter');
+		$pdf->AddPage();
+		$pdf->cabeceraHorizontal($model, $fullAnswer);
+		$pdf->contenido($model, $fullAnswer);
+		$pdf->Output();
 	}
 
 	public function generarCFD($id){
@@ -437,5 +180,23 @@ XML;
 				<a href='javascript:void(0)' data-id='numeroConcepto' class='eliminarConcepto'><span class='fa fa-trash'></span></a>
 			</td>
 		</tr>";
-	} 
+	}
+
+	public function conectarConWS(){
+		$url = 'http://www.bpimorelia.com/wstech/api.php';
+		$data = array('xmlfile' => '<?xml version="1.0" encoding="UTF-8"?><cfdi:Comprobante LugarExpedicion="BOCA DEL RIO, VERACRUZ" certificado="MIIELTCCAxWgAwIBAgIUMjAwMDEwMDAwMDAyMDAwMDAxNzkwDQYJKoZIhvcNAQEFBQAwggFcMRowGAYDVQQDDBFBLkMuIDIgZGUgcHJ1ZWJhczEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSkwJwYJKoZIhvcNAQkBFhphc2lzbmV0QHBydWViYXMuc2F0LmdvYi5teDEmMCQGA1UECQwdQXYuIEhpZGFsZ28gNzcsIENvbC4gR3VlcnJlcm8xDjAMBgNVBBEMBTA2MzAwMQswCQYDVQQGEwJNWDEZMBcGA1UECAwQRGlzdHJpdG8gRmVkZXJhbDESMBAGA1UEBwwJQ295b2Fjw6FuMTQwMgYJKoZIhvcNAQkCDCVSZXNwb25zYWJsZTogQXJhY2VsaSBHYW5kYXJhIEJhdXRpc3RhMB4XDTEyMTAyMjIwMDcwMloXDTE2MTAyMjIwMDcwMlowgacxHjAcBgNVBAMTFU1BUlRJTiBBUkJBSVpBIFFVSVJPWjEeMBwGA1UEKRMVTUFSVElOIEFSQkFJWkEgUVVJUk9aMR4wHAYDVQQKExVNQVJUSU4gQVJCQUlaQSBRVUlST1oxFjAUBgNVBC0TDUFBUU02MTA5MTdRSkExGzAZBgNVBAUTEkFBUU02MTA5MTdNREZSTk4wOTEQMA4GA1UECxMHTU9SRUxJQTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAuf5O30micrZtUGDgHlfQBPF9lyutJQJckUuMp+qpBZYYIpPTG2HlSWUgTnvWXpOajDTXF2pAJA2m1Y/lAIlyvVu6I6DwaVKm7n8mPCFVNnun0U5drlk5Xmu4cAG/OfF/KSgT8+u1R1auu1DPm1vUqzdRxP7mnmY9Y0eEc+qalfcCAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQEFBQADggEBAGdO8y+w0XytPTU2j/2WwJ4nQEtuw3GF09ZUFrVfHeyvTY9oaPL9uRnJ1PcCJd/d/GaXiCSUj1zzcycw/lu1OY/bMlwl9sM9/EfYasCUTOtApZL1+e4fr5tWKS3T4ZXjsXWafd8qu6kA7/sNwEgqpgKQguKQPSogTIYsPTTlqwDWYoEBoliKZU195Nl5t+YIcOfwm0RBCrqkGLlk5IO7Pq0FANHONBcFg5vQM5d/MDSYpwMXGXVuxaK6jIutsvwg6tyayVwl5LO9H1v2TIRZw9BRYTgTMLbxPjKx1Cgf5n8VgUj40oGoDBLOeyYDr/341gC+bXfqgTfbR2ESupooN04=" fecha="2015-07-29T08:58:25" formaDePago="PAGO EN UNA SOLA EXHIBICION" metodoDePago="EFECTIVO" noCertificado="20001000000200000179" sello="lEkR1Alib4tmjoG0gqXf1oyfOsOkXpUlkEnH3/Z1mS7UN+9nliozQnSQh8s1BRAWVcLBrmJuk+L+JvGecJH3iCdtxHKtj0V6rWX1fD4QwEeOUjIVogL5OtqWCg0t6HN8slUbSPy0+thjDHhV8VkbDLyzClUxbHWCVgZ2yEgAA40=" subTotal="1480.00" tipoDeComprobante="ingreso" total="1716.80" version="3.2" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd"><cfdi:Emisor nombre="EMPRESA AAQM610917QJA" rfc="AAQM610917QJA"><cfdi:DomicilioFiscal calle="JUAN PABLO II" codigoPostal="94294" colonia="FRACC. REFORMA" estado="VERACRUZ" municipio="BOCA DEL RIO" noExterior="258" pais="MEXICO"/><cfdi:RegimenFiscal Regimen="Regimen Simplificado"/></cfdi:Emisor><cfdi:Receptor nombre="EMPRESA CPA060516BG5" rfc="CPA060516BG5"><cfdi:Domicilio calle="EJERCITO MEXICANO" codigoPostal="91900" colonia="CARRANZA" estado="VERACRUZ" localidad="BOCA DEL RIO" municipio="BOCA DEL RIO" noExterior="234" pais="MEXICO"/></cfdi:Receptor><cfdi:Conceptos><cfdi:Concepto cantidad="15.0" descripcion="PERA" importe="25.25" noIdentificacion="PROD02" unidad="PIEZAS" valorUnitario="150.00"/><cfdi:Concepto cantidad="15.0" descripcion="SILLA" importe="750.00" noIdentificacion="PROD02" unidad="REMESA" valorUnitario="75.00"/><cfdi:Concepto cantidad="10.0" descripcion="MANZANA" importe="12.50" noIdentificacion="PROD02" unidad="PIEZAS" valorUnitario="3000.00"/></cfdi:Conceptos><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado importe="25.25" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="750.00" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="12.50" impuesto="IVA" tasa="16.00"/></cfdi:Traslados></cfdi:Impuestos></cfdi:Comprobante>', 'action' => 'upload');
+
+		// use key 'http' even if you send the request to https://...
+		$options = array(
+			'http' => array(
+				'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+				'method'  => 'POST',
+				'content' => http_build_query($data),
+				),
+			);
+		$context  = stream_context_create($options);
+		$user_info = file_get_contents($url, false, $context);
+		$user_info = json_decode($user_info, true);
+		return $user_info;
+	}
 }
