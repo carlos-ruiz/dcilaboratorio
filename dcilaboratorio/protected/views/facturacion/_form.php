@@ -160,7 +160,6 @@
 
 	function activarEliminacion(){
 		$(".eliminarConcepto").click(function(){
-			alert('numeroConcepto es: '+$(this).data('id'));
 			$(".row_"+$(this).data('id')).hide(400);
 			$(".row_"+$(this).data('id')).html("");
 			aux=[];
@@ -170,7 +169,7 @@
 				}
 			};
 			conceptosIds=aux;
-			setConceptosIds();
+			// setConceptosIds();
 			// total=calcularTotal();
 			// setTotal(total);
 			// granTotal=calcularGranTotal();

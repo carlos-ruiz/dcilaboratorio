@@ -39,7 +39,7 @@ class FacturacionController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index', 'create', 'admin' ,'imprimirFactura', 'agregarConcepto'),
+				'actions'=>array('index', 'create', 'admin', 'generarFactura','imprimirFactura', 'agregarConcepto'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -52,7 +52,7 @@ class FacturacionController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
-		$examenes = new ConceptoForm;
+		$conceptos = new ConceptoForm;
 
 		if(isset($_POST['FacturacionForm']))
 		{
@@ -67,7 +67,7 @@ class FacturacionController extends Controller
 
 		$this->render('_form', array(
 			'model' => $model,
-			'conceptos' => $examenes,
+			'conceptos' => $conceptos,
 			));
 	}
 
@@ -83,6 +83,51 @@ class FacturacionController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 			'filtroFactura'=>1,
+			));
+	}
+
+	public function actionGenerarFactura($id){
+		$this->subSection = "Nuevo";
+		$orden = Ordenes::model()->findByPk($id);
+		$model = new FacturacionForm;
+		if($orden == null){
+			$conceptos = new ConceptoForm;
+		}
+		else{
+			if ($orden->requiere_factura == 1) {
+				$model->razon_social = $orden->ordenFacturacion->datosFacturacion->razon_social;
+				$model->rfc = $orden->ordenFacturacion->datosFacturacion->RFC;
+				$model->calle = $orden->ordenFacturacion->datosFacturacion->direccion->calle;
+				$model->numero = $orden->ordenFacturacion->datosFacturacion->direccion->numero_ext;
+				$model->colonia = $orden->ordenFacturacion->datosFacturacion->direccion->colonia;
+				$model->codigo_postal = $orden->ordenFacturacion->datosFacturacion->direccion->codigo_postal;
+				$model->localidad = $orden->ordenFacturacion->datosFacturacion->direccion->municipio->nombre;
+				$model->municipio = $orden->ordenFacturacion->datosFacturacion->direccion->municipio->nombre;
+				$model->estado = $orden->ordenFacturacion->datosFacturacion->direccion->estado->nombre;
+			}
+			$conceptos = array();
+			foreach ($orden->ordenTieneExamenes as $ordenExamen) {
+				$concepto = new ConceptoForm;
+				$concepto->clave = $ordenExamen->detalleExamen->examenes->clave;
+				$concepto->concepto = $ordenExamen->detalleExamen->examenes->nombre;
+				// $concepto->precio = $ordenExamen->detalleExamen->examenes->precio->precio;
+			}
+		}
+
+		if(isset($_POST['FacturacionForm']))
+		{
+		print_r($_POST);
+		return;
+			$model->attributes=$_POST['FacturacionForm'];
+			$model->validate();
+			// $model->attributes=$_POST['Examenes'];
+			// if($model->save())
+			// 	$this->redirect(array('view','id'=>$model->id));
+		}
+
+		$this->render('_form', array(
+			'model' => $model,
+			'conceptos' => $conceptos,
 			));
 	}
 
@@ -177,7 +222,7 @@ XML;
 				<input type='text' class='form-control' id='precio_$numeroConcepto' name='precio_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
 			</td>
 			<td>
-				<a href='javascript:void(0)' data-id='numeroConcepto' class='eliminarConcepto'><span class='fa fa-trash'></span></a>
+				<a href='js:void(0)' data-id='$numeroConcepto' class='eliminarConcepto'><span class='fa fa-trash'></span></a>
 			</td>
 		</tr>";
 	}

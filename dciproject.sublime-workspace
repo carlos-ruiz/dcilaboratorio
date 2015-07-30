@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"Conc",
+				"ConceptoForm"
+			],
+			[
+				"Fact",
+				"FacturacionForm"
+			],
+			[
+				"user",
+				"user_info"
+			],
+			[
 				"Numero",
 				"numeroConcepto"
 			],
@@ -399,7 +411,7 @@
 			"file": "dcilaboratorio/protected/views/facturacion/_form.php",
 			"settings":
 			{
-				"buffer_size": 7299,
+				"buffer_size": 7250,
 				"line_ending": "Windows",
 				"name": "_form.com"
 			}
@@ -408,48 +420,15 @@
 			"file": "dcilaboratorio/protected/controllers/FacturacionController.php",
 			"settings":
 			{
-				"buffer_size": 17246,
+				"buffer_size": 16057,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/Carlos/AppData/Local/Temp/652a2f69-1040-43ca-97d9-39f7c29944ec/test.php",
+			"file": "dcilaboratorio/protected/models/OrdenPrecioExamen.php",
 			"settings":
 			{
-				"buffer_size": 644,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/models/ConceptoForm.php",
-			"settings":
-			{
-				"buffer_size": 835,
-				"line_ending": "Windows",
-				"name": "ConceptoForm.php"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/models/TarifasActivas.php",
-			"settings":
-			{
-				"buffer_size": 4223,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/views/ordenes/_form.php",
-			"settings":
-			{
-				"buffer_size": 32502,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "dcilaboratorio/protected/controllers/OrdenesController.php",
-			"settings":
-			{
-				"buffer_size": 28345,
+				"buffer_size": 3086,
 				"line_ending": "Windows"
 			}
 		}
@@ -559,10 +538,22 @@
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/OrdenesController.php",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/ordenes/_form.php",
+		"/C/Users/Carlos/AppData/Local/Temp/a64025a1-1b9a-4052-9566-9bcc1f7b7de3/usr/home/baden/public_html/bpiweb/wstech/php/stamp.php",
+		"/C/Users/Carlos/AppData/Local/Temp/a64025a1-1b9a-4052-9566-9bcc1f7b7de3/usr/home/baden/public_html/bpiweb/wstech/conf/nusoap.php",
+		"/C/Users/Carlos/AppData/Local/Temp/a64025a1-1b9a-4052-9566-9bcc1f7b7de3/usr/home/baden/public_html/bpiweb/wstech/api.php",
+		"/C/Users/Carlos/Downloads/KIT_INTEGRACION/generador_xml_cfdi/cfd.xml",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/ConceptoForm.php",
+		"/C/Users/Carlos/AppData/Local/Temp/652a2f69-1040-43ca-97d9-39f7c29944ec/test.php",
+		"/C/Users/Carlos/AppData/Local/Temp/Rar$DIa0.573/www.20150728",
+		"/C/Users/Carlos/AppData/Local/Temp/a64025a1-1b9a-4052-9566-9bcc1f7b7de3/usr/home/baden/www_logs/www.20150728.gz",
+		"/C/Users/Carlos/AppData/Local/Temp/a64025a1-1b9a-4052-9566-9bcc1f7b7de3/usr/home/baden/public_html/bpiweb/api.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Ordenes.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/facturacion/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
@@ -577,7 +568,6 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/fpdf/ImprimirPdf.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/ReportesController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Examenes.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/OrdenesController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/fpdf/ImprimirOrden.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/fpdf/FPDF.php",
 		"/C/Users/Carlos/Downloads/reporte.php",
@@ -585,7 +575,6 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/DireccionesController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Doctores.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/DoctoresController.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/ordenes/_form.php",
 		"/C/Users/Carlos/Google Drive/consultoria-Techinc/Clientes/Laboratorio/resp.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/admin.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/EspecialidadesController.php",
@@ -681,16 +670,7 @@
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/_form.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/TarifasActivasController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/especialidades/view.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/_form.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/contactos/create.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos/_view.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos/view.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos/index.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/layouts/column2.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/grupos/_form.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/TarifasActivas.php",
-		"/C/xampp/htdocs/dcilaboratorio/framework/i18n/data/es_mx.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Multitarifarios.php"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/usuarios/_form.php"
 	],
 	"find":
 	{
@@ -715,6 +695,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			";\n",
+			"$_POST",
 			"agregarExamen",
 			"examenesIds",
 			"setExamenesIds",
@@ -837,7 +819,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -846,15 +828,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7299,
+						"buffer_size": 7250,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5424,
-								5424
+								6779,
+								6779
 							]
 						],
 						"settings":
@@ -867,10 +849,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1745.0,
+						"translation.y": 2933.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -879,15 +861,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17246,
+						"buffer_size": 16057,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1445,
-								1445
+								3389,
+								3389
 							]
 						],
 						"settings":
@@ -899,88 +881,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 756.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/C/Users/Carlos/AppData/Local/Temp/652a2f69-1040-43ca-97d9-39f7c29944ec/test.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 644,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								490,
-								514
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "dcilaboratorio/protected/models/ConceptoForm.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 835,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								175,
-								175
-							]
-						],
-						"settings":
-						{
-							"auto_name": "ConceptoForm.php",
-							"incomplete_sync": null,
-							"syntax": "Packages/PHP/PHP.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1800.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "dcilaboratorio/protected/models/TarifasActivas.php",
+					"buffer": 2,
+					"file": "dcilaboratorio/protected/models/OrdenPrecioExamen.php",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 4223,
+						"buffer_size": 3086,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1229,
-								1200
+								0,
+								0
 							]
 						],
 						"settings":
@@ -992,74 +913,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 360.0,
+						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "dcilaboratorio/protected/views/ordenes/_form.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 32502,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								24999,
-								25009
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 11843.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "dcilaboratorio/protected/controllers/OrdenesController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 28345,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								21049,
-								21049
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 9323.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
