@@ -312,7 +312,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-3" >
 							<div class="input-group">
 								<input type="hidden" id="examenesIds" name="Examenes[ids]" value />
-								<a href="js:void(0);" class="btn default blue-stripe" id="agregarExamen">Agregar</a>
+								<a href="javascript:void(0);" class="btn default blue-stripe" id="agregarExamen">Agregar</a>
 							</div>
 						</div>
 					</div>
@@ -337,13 +337,13 @@ echo $form->errorSummary($datosFacturacion);
 										"$ ".$tarifaExamen->precio:
 										"<div style='margin:0px;' class='form-group ".($form->error($tarifaExamen,'precio')!=''?"has-error":"")."'>".
 											"<div class='row' style='margin-left:5px'>No hay precio para el tarifario seleccionado ".
-											"<a href='js:void(0)' data-id='$tarifaExamen->id_examenes' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a> ".
+											"<a href='javascript:void(0)' data-id='$tarifaExamen->id_examenes' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a> ".
 											"<input type='text' class='form-control input-small' id='addPrecio_$tarifaExamen->id_examenes' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />".
 											"</div><div class='help-block row' style='float:right; margin:0px;'>Debe agregar un precio para el examen en el multitarifario seleccionado.</div>".
 										"</div>"; ?>
 									</td>
 									
-									<td><a href='js:void(0)' data-id='<?php echo $tarifaExamen->id_examenes;?>' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+									<td><a href='javascript:void(0)' data-id='<?php echo $tarifaExamen->id_examenes;?>' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>

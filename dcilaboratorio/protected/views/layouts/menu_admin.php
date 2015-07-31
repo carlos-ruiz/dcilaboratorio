@@ -318,7 +318,12 @@
 		<?php }?>
 		</a>
 		<ul class="sub-menu">
-			<li <?php if($this->section=="Facturacion"){ echo 'class="active open"';}?>>
+			<li <?php if($this->section=="Facturacion" && $this->subSection=="Nuevo"){ echo 'class="active open"';}?>>
+				<a href="<?php echo Yii::app()->request->baseUrl; ?>/facturacion/create">
+				<i class="icon-plus"></i>
+				Nueva</a>
+			</li>
+			<li <?php if($this->section=="Facturacion" && $this->subSection=="Admin"){ echo 'class="active open"';}?>>
 				<a href="<?php echo Yii::app()->request->baseUrl; ?>/facturacion/admin">
 				<i class="icon-list"></i>
 				Administrar</a>

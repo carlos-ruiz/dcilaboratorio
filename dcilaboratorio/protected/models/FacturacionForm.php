@@ -52,7 +52,7 @@ class FacturacionForm extends CFormModel
 			'localidad'=>'Localidad/Ciudad',
 			'municipio'=>'Municipio',
 			'estado'=>'Estado',
-			'fecha'=>'Fecha',
+			'fecha'=>'Fecha de emisión',
 			'conceptos'=>'Conceptos',
 		);
 	}

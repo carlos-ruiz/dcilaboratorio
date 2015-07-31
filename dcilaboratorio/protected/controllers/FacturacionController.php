@@ -52,14 +52,37 @@ class FacturacionController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
-		$conceptos = new ConceptoForm;
+		$conceptosConError = null;
+		$conceptos = array();
 
 		if(isset($_POST['FacturacionForm']))
 		{
-		print_r($_POST);
-		return;
 			$model->attributes=$_POST['FacturacionForm'];
-			$model->validate();
+			$conceptos = array();
+			if(isset($_POST['conceptos'])){
+				foreach ($_POST['conceptos'] as $key => $value) {
+					$concepto = new ConceptoForm;
+					$concepto->id = $key;
+					$concepto->clave = $_POST["clave_$value"];
+					$concepto->concepto = $_POST["concepto_$value"];
+					$concepto->precio = $_POST["precio_$value"];
+					if (!$concepto->validate()) {
+						$conceptosConError = '';
+						foreach ($concepto->getErrors() as $value) {
+							$conceptosConError = $value[0].'<br>';
+						}
+					}
+					array_push($conceptos, $concepto);
+				}
+				$model->conceptos = $conceptos;
+			}
+			else{
+				$conceptosConError = "No es posible generar una factura sin conceptos";
+			}
+			if($model->validate() && $conceptosConError == null){
+				$mensaje="Listo para imprimir la factura correspondiente";
+				$titulo="Aviso";
+			}
 			// $model->attributes=$_POST['Examenes'];
 			// if($model->save())
 			// 	$this->redirect(array('view','id'=>$model->id));
@@ -68,7 +91,9 @@ class FacturacionController extends Controller
 		$this->render('_form', array(
 			'model' => $model,
 			'conceptos' => $conceptos,
+			'conceptosConError' => $conceptosConError,
 			));
+		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
 	public function actionAdmin()
@@ -90,6 +115,7 @@ class FacturacionController extends Controller
 		$this->subSection = "Nuevo";
 		$orden = Ordenes::model()->findByPk($id);
 		$model = new FacturacionForm;
+		$conceptosConError = null;
 		if($orden == null){
 			$conceptos = new ConceptoForm;
 		}
@@ -104,22 +130,53 @@ class FacturacionController extends Controller
 				$model->localidad = $orden->ordenFacturacion->datosFacturacion->direccion->municipio->nombre;
 				$model->municipio = $orden->ordenFacturacion->datosFacturacion->direccion->municipio->nombre;
 				$model->estado = $orden->ordenFacturacion->datosFacturacion->direccion->estado->nombre;
+				$model->fecha = $orden->fecha_captura;
 			}
 			$conceptos = array();
-			foreach ($orden->ordenTieneExamenes as $ordenExamen) {
-				$concepto = new ConceptoForm;
-				$concepto->clave = $ordenExamen->detalleExamen->examenes->clave;
-				$concepto->concepto = $ordenExamen->detalleExamen->examenes->nombre;
-				// $concepto->precio = $ordenExamen->detalleExamen->examenes->precio->precio;
+			$idExamen = 0;
+			foreach ($orden->ordenTieneExamenes as $index => $ordenExamen) {
+				$examen = $ordenExamen->detalleExamen->examenes;
+            	if($examen->id!=$idExamen){
+					$concepto = new ConceptoForm;
+					$concepto->id = $index;
+					$concepto->clave = $examen->clave;
+					$concepto->concepto = $examen->nombre;
+					$precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$orden->id, 'id_examenes'=>$examen->id));
+					$concepto->precio = $precio->precio;
+					array_push($conceptos, $concepto);
+				}
+				$idExamen = $examen->id;
 			}
+			$model->conceptos = $conceptos;
 		}
 
 		if(isset($_POST['FacturacionForm']))
 		{
-		print_r($_POST);
-		return;
 			$model->attributes=$_POST['FacturacionForm'];
-			$model->validate();
+			$conceptos = array();
+			if (isset($_POST['conceptos'])) {
+				foreach ($_POST['conceptos'] as $key => $value) {
+					$concepto = new ConceptoForm;
+					$concepto->id = $key;
+					$concepto->clave = $_POST["clave_$value"];
+					$concepto->concepto = $_POST["concepto_$value"];
+					$concepto->precio = $_POST["precio_$value"];
+					if (!$concepto->validate()) {
+						$conceptosConError = '';
+						foreach ($concepto->getErrors() as $value) {
+							$conceptosConError = $value[0].'<br>';
+						}
+					}
+					array_push($conceptos, $concepto);
+				}
+				$model->conceptos = $conceptos;
+			}else{
+				$conceptosConError = "No es posible generar una factura sin conceptos";
+			}
+			if($model->validate() && $conceptosConError == null){
+				$mensaje="Listo para imprimir la factura correspondiente";
+				$titulo="Aviso";
+			}
 			// $model->attributes=$_POST['Examenes'];
 			// if($model->save())
 			// 	$this->redirect(array('view','id'=>$model->id));
@@ -128,7 +185,9 @@ class FacturacionController extends Controller
 		$this->render('_form', array(
 			'model' => $model,
 			'conceptos' => $conceptos,
+			'conceptosConError' => $conceptosConError,
 			));
+		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
 	public function actionImprimirFactura($id){
@@ -213,6 +272,7 @@ XML;
 		echo "
 		<tr class='row_$numeroConcepto' data-id='$numeroConcepto'>
 			<td>
+				<input type='hidden' name='conceptos[$numeroConcepto]' value='$numeroConcepto' />
 				<input type='text' class='form-control' id='clave_$numeroConcepto' name='clave_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'/>
 			</td>
 			<td>
@@ -222,7 +282,7 @@ XML;
 				<input type='text' class='form-control' id='precio_$numeroConcepto' name='precio_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
 			</td>
 			<td>
-				<a href='js:void(0)' data-id='$numeroConcepto' class='eliminarConcepto'><span class='fa fa-trash'></span></a>
+				<a href='javascript:void(0)' data-id='$numeroConcepto' class='eliminarConcepto'><span class='fa fa-trash'></span></a>
 			</td>
 		</tr>";
 	}
