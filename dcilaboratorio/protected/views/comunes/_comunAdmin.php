@@ -99,7 +99,7 @@
 											        	'label'=>'<span class="fa fa-file-pdf-o"></span>',
 								        				'visible'=>'(isset($data->requiere_factura) && $data->requiere_factura == 1)',
 								        				'imageUrl'=>false,
-								        				'url'=>'Yii::app()->controller->createUrl("imprimirFactura",array("id"=>$data->id))',
+								        				'url'=>'Yii::app()->controller->createUrl("generarFactura",array("id"=>$data->id))',
 								        				'options'=>array(
 								        					'title'=>'Facturar',
 								        				),

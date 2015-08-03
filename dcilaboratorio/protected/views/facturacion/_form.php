@@ -154,21 +154,40 @@ $total = 0;
 						</tbody>
 					</table>
 				</section>
-
 				<section id="sumatorias">
 					<div class="row">
-						<div class="form-group col-md-8"></div>
-						<div class="form-group col-md-4">
-							<div class="row">
-								<div class="form-group col-md-6 "> <center> Subtotal $</center></div>
-								<div class="form-group col-md-6 align-right total"><?php echo $total; ?></div>						
+						<div class="form-group col-md-10"></div>
+						<div class="form-group col-md-2">
+								<label class="control-label" for="subtotal">Subtotal $</label>
+								<div class="input-group">
+									<input size="45" maxlength="45" class="form-control" id="subtotal" type="text">
+								</div>						
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10"></div>
+						<div class="form-group col-md-2 <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($model,'descuento', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+								<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10"></div>
+						<div class="form-group col-md-2 <?php if($form->error($model,'costo_extra')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($model,'costo_extra', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($model,'costo_extra',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+								<?php echo $form->error($model,'costo_extra', array('class'=>'help-block')); ?>
 							</div>
 						</div>
 					</div>
 				</section>
 
 				<div class="form-actions">
-					<?php echo CHtml::submitButton('Guardar', array('class'=>'btn blue-stripe')); ?>
+					<?php echo CHtml::submitButton('Generar PDF', array('class'=>'btn blue-stripe')); ?>
 				</div>
 			</div>
 

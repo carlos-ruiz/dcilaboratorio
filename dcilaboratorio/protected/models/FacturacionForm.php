@@ -18,6 +18,8 @@ class FacturacionForm extends CFormModel
 	public $estado;
 	public $fecha;
 	public $conceptos;
+	public $descuento;
+	public $costo_extra;
 
 	/**
 	 * Declares the validation rules.
@@ -30,7 +32,8 @@ class FacturacionForm extends CFormModel
 			// username and password are required
 			array('razon_social, rfc, calle, numero, colonia, codigo_postal, localidad, municipio, estado, fecha, conceptos', 'required'),
 			// numerical
-			array('numero', 'numerical', 'integerOnly'=>true),
+			array('costo_extra', 'length', 'max'=>8),
+			array('descuento', 'numerical', 'integerOnly'=>true, 'min'=>0, 'max'=>100),
 			//validate RFC
 			// array('rfc', 'match', 'pattern' => '^([A-ZÑ\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[A-Z|\d]{3})$', 'message' => 'El RFC es inválido.');
 			array('rfc', 'match', 'pattern' => '^([a-zA-Z&Ññ]{3}|[a-zA-Z][aAeEiIoOuU][a-zA-Z]{2})\\d{2}((01|03|05|07|08|10|12)(0[1-9]|[12]\\d|3[01])|02(0[1-9]|[12]\\d)|(04|06|09|11)(0[1-9]|[12]\\d|30))([a-zA-Z0-9]{2}[0-9aA])$^', 'message' => 'El RFC es inválido.'),
@@ -54,6 +57,8 @@ class FacturacionForm extends CFormModel
 			'estado'=>'Estado',
 			'fecha'=>'Fecha de emisión',
 			'conceptos'=>'Conceptos',
+			'descuento'=>'Descuento',
+			'costo_extra'=>'Costo de emergencia',
 		);
 	}
 }

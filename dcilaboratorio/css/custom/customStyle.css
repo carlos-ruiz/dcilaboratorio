@@ -47,3 +47,6 @@ input[type="radio"]{
 	margin-left: 0 !important;
 }
 
+.align-right {
+	text-align: right;
+}

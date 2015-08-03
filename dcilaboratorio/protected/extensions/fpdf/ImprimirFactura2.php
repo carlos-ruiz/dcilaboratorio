@@ -1,16 +1,23 @@
 <?php
 require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
-class ImprimirFactura extends FPDF{
+class ImprimirFactura2 extends FPDF{
 
 	function Header(){
         $y = 0.5;
 		$this->SetFont('Arial','B',14);
-        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/gvia_logo22.png',16,1.7,4.3,3.3);  
+        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/gvia_logo22.png',16,1.7,4.3,3.3);
+		
+    // Move to the right
+    //$this->Cell(8);
+    // Title
+		
+		
+        
 	}
 
 	function cabeceraHorizontal($model, $datosFactura)
 	{
-        $fecha = explode('-', $model->fecha);
+        $fecha = explode('-', $model->fecha_captura);
         $dia= substr($fecha[2], 0, 2);
         $hora = explode(' ', $fecha[2]);
         $hora = explode(':', $hora[1]);
@@ -55,11 +62,11 @@ class ImprimirFactura extends FPDF{
         $this->ln(.75);
         $this->SetFont('Times','B',9);
         $this->setX(2.5);
-        $this->Cell(0,0.1,$model->razon_social, 0, 1, 'L');
+        $this->Cell(0,0.1,$model->ordenFacturacion->datosFacturacion->razon_social, 0, 1, 'L');
         $this->Cell(0,0.1,'Comprobante Digital por Internet', 0, 1, 'R');
         $this->SetFont('Times','',8);
         $this->setX(2.5);
-        $this->Cell(5,0.6,$model->rfc, 0, 1, 'L');
+        $this->Cell(5,0.6,$model->ordenFacturacion->datosFacturacion->RFC, 0, 1, 'L');
         $this->ln(.2);
         $this->SetFont('Times','B',8);
         $this->setX(1.5);
@@ -67,13 +74,13 @@ class ImprimirFactura extends FPDF{
         $this->Cell(0,0.1,'Número de comprobante: '.$datosFactura['certNumber'], 0, 1, 'R');
         $this->SetFont('Times','',8);
         $this->setX(1.5);
-        $this->Cell(2,0.6,'Calle '.$model->calle.' N° '.$model->numero, 0, 1, 'L');
+        $this->Cell(2,0.6,'Calle '.$model->ordenFacturacion->datosFacturacion->direccion->calle.' N° '.$model->ordenFacturacion->datosFacturacion->direccion->numero_ext, 0, 1, 'L');
         $this->Cell(0,0.1,'Forma de pago: Pago en Una sola exibición', 0, 1, 'R');
         $this->setX(1.5);
-        $this->Cell(2,0.1,'Col. '.$model->colonia.' CP. '.$model->codigo_postal, 0, 1, 'L');
+        $this->Cell(2,0.1,'Col. '.$model->ordenFacturacion->datosFacturacion->direccion->colonia.' CP. '.$model->ordenFacturacion->datosFacturacion->direccion->codigo_postal, 0, 1, 'L');
         $this->Cell(0,0.4,'Fecha de comprobante '.$fecha, 0, 1, 'R');
         $this->setX(1.5);
-        $this->Cell(2,-0.1,$model->municipio.', '.$model->estado, 0, 1, 'L');
+        $this->Cell(2,-0.1,$model->ordenFacturacion->datosFacturacion->direccion->municipio->nombre.', '.$model->ordenFacturacion->datosFacturacion->direccion->estado->nombre, 0, 1, 'L');
         $this->setX(1.5);
         $this->Cell(2,0.8,'Moneda: PESOS   Tipo de cambio: 1.00', 0, 1, 'L');
         $this->Cell(0,-1,'Fecha de certificación del CFDI '.$datosFactura['date'], 0, 1, 'R');
@@ -111,15 +118,23 @@ class ImprimirFactura extends FPDF{
     	$posYIncremento = 1.5;
     	// $this->setXY(1,8.5);
     	$y = 0.5;
-        $conceptos = $model->conceptos;
+        $ordenTieneExamenes = $model->ordenTieneExamenes;
         $idExamen = 0;
         $totalOrden = 0;
         $duracion = 0;
-        foreach ($conceptos as $concepto) {
-            $this->Cell(3.5,$y, $concepto->clave,1, 0);
-            $this->Cell(12,$y, $concepto->concepto,1, 0 );
-            $this->Cell(4,$y, '$ '.$concepto->precio,1, 1, 'R');
-            $totalOrden += $concepto->precio;
+        foreach ($ordenTieneExamenes as $ordenExamen) {
+            $examen = $ordenExamen->detalleExamen->examenes;
+            if($examen->id!=$idExamen){
+                $this->Cell(3.5,$y, $examen->clave,1, 0);
+                $this->Cell(12,$y, $examen->nombre,1, 0 );
+                $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
+                $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
+                $totalOrden += $precio->precio;
+                if ($examen->duracion_dias > $duracion) {
+                    $duracion = $examen->duracion_dias;
+                }
+            }
+            $idExamen = $examen->id;
         }
         $this->setX(13.5);
         $this->SetFont('Arial','B',8);
@@ -133,11 +148,22 @@ class ImprimirFactura extends FPDF{
         $this->Cell(4,$y,'$ '.$totalOrden*(1-($model->descuento/100)), 1, 1, 'R');
         $this->setX(13.5);
         $this->Cell(3,$y,'Costo emergencia:', 1, 0, 'R');
-        $this->Cell(4,$y,'$ '.$model->costo_extra, 1, 1, 'R');
+        $this->Cell(4,$y,'$ '.$model->costo_emergencia, 1, 1, 'R');
         $this->setX(13.5);
-        $total = $totalOrden*(1-($model->descuento/100)) + $model->costo_extra;
+        $total = $totalOrden*(1-($model->descuento/100)) + $model->costo_emergencia;
         $this->Cell(3,$y,'Total:', 1, 0, 'R');
         $this->Cell(4,$y,'$ '.$total, 1, 1, 'R');
+        $pagos = $model->pagos;
+        $totalPagado = 0;
+        foreach ($pagos as $pago) {
+            $totalPagado +=  $pago->efectivo + $pago->cheque + $pago->tarjeta;
+        }
+        $this->setX(13.5);
+        $this->Cell(3,$y,'Pago:', 1, 0, 'R');
+        $this->Cell(4,$y,'$ '.$totalPagado, 1, 1, 'R');
+        $this->setX(13.5);
+        $this->Cell(3,$y,'Saldo:', 1, 0, 'R');
+        $this->Cell(4,$y,'$ '.($total-$totalPagado), 1, 1, 'R');
 
         $this->ln(2);
         $this->setX(1);
