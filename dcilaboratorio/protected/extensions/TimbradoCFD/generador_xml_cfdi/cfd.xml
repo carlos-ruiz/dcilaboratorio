@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cfdi:Comprobante
-LugarExpedicion="MORELIA, MICHOACÁN"
+LugarExpedicion="BOCA DEL RIO, VERACRUZ"
 certificado="@CERTIFICADO"
 fecha="@FECHA"
 formaDePago="PAGO EN UNA SOLA EXHIBICION"

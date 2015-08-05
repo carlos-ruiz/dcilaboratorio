@@ -199,81 +199,81 @@ class FacturacionController extends Controller
 		$fullAnswer = $this->conectarConWS();
 		if ($fullAnswer['errorCode'] != 0) {
 			$mensaje="";
- 
+
 			switch ($fullAnswer['errorCode']) {
 				case '5102':
 					$mensaje ='Caracteres inválidos en campo token (fuera del rango UTF8)';
 					break;
-				
-				case '5103': 
+
+				case '5103':
 					$mensaje = 'Caracteres inválidos en campo xml (fuera del rango UTF8)';
 					break;
 
-				case '5201': 
+				case '5201':
 					$mensaje = 'Token de sesión inválido';
 					break;
 
-				case '5300': 
+				case '5300':
 					$mensaje = 'No más timbres disponibles';
 					break;
 
-				case '5400': 
+				case '5400':
 					$mensaje = 'RFC de CFD no autorizado para timbrar';
 					break;
 
-				case '301': 
+				case '301':
 					$mensaje = 'Error en la estructura del XML con respecto al ANEXO 20 de la Resolución Miscelánea Fiscal 2010';
 					break;
 
-				case '302': 
+				case '302':
 					$mensaje = 'Sello mal formado o inválido';
 					break;
 
-				case '303': 
+				case '303':
 					$mensaje = 'Sello de firma no corresponde a CSD del emisor';
 					break;
 
-				case '304': 
+				case '304':
 					$mensaje = 'CSD del contribuyente vencido o inválido';
 					break;
 
-				case '305': 
+				case '305':
 					$mensaje = 'La fecha de emisión no esta dentro de la vigencia del CSD del Emisor';
 					break;
 
-				case '306': 
+				case '306':
 					$mensaje = 'El certificado no es de tipo CSD';
 					break;
 
-				case '307': 
+				case '307':
 					$mensaje = 'El CFDI contiene un timbre previo';
 					break;
 
-				case '308': 
+				case '308':
 					$mensaje = 'Certificado no expedido por el SAT';
 					break;
 
-				case '401': 
+				case '401':
 					$mensaje = 'CFD fuera de fecha (emitido hace más de 72 horas)';
 					break;
 
-				case '402': 
+				case '402':
 					$mensaje = 'RFC del emisor no se encuentra en el régimen de contribuyentes';
 					break;
 
-				case '403': 
+				case '403':
 					$mensaje = 'La fecha de emisión no es posterior al 01 de enero 2012';
 					break;
 
-				case '404': 
+				case '404':
 					$mensaje = 'La fecha de emisión está en el futuro';
 					break;
 			}
-			
+
 			$titulo="Error al generar factura";
 			return array('titulo'=>$titulo, 'mensaje'=>$mensaje);
 		}
-		
+
 		$pdf = new ImprimirFactura('P','cm','letter');
 		$pdf->AddPage();
 		$pdf->cabeceraHorizontal($facturacionModel, $fullAnswer);
@@ -283,21 +283,22 @@ class FacturacionController extends Controller
 
 	public function generarCFD($id){
 		$xslt = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xslt/cadenaoriginal_3_2.xslt';
-
+		$xsltXmlOut = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/xsltXmlOut.xml';
 		$cerFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJA.cer';
+		$cerOutFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJAOut.txt';
 		$keyPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJA_s.key';
 		$keyPwd = '12345678a';
 		$pemPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_key.pem';
 		$pemCert = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_cer.pem';
 		$xmlPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/cfd.xml';
-
+		$xmlResultPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml';
 
 		# Valida contraseña de llave y genera el formato PEM
 		$errorCode = $this->validateKeyPass($keyPath,$keyPwd,$pemPath);
 		# Obtén número de certificado
 		$NO_CERTIFICADO = $this->getSerial($cerFile);
 		# Obtén certificado en PEM para insertar en CFD
-		$CERTIFICADO =  $this->certificadoF($cerFile);
+		$CERTIFICADO =  $this->certificadoF($cerFile, $cerOutFile);
 		# Obtén rfc a partir del certificado
 		$RFC_EMISOR = $this->getRFC($cerFile);
 		# Fecha y hora actuales
@@ -308,17 +309,11 @@ class FacturacionController extends Controller
 		if ($errorCode == 0){
 			# Determina sistema operativo
 			$os = PHP_OS;
-			if (strpos($os,'WIN') !== false) {
-				# Windows
-				$xmlResult = 'xml\cfdi.xml';
-			}
-			else{
-				# Unix like
-				$xmlResult = 'xml/cfdi.xml';
-			}
 			# Lee XML de CFD base
-			$cfd_xml = fopen($xmlPath,'r');
-			$cfd_xml = fread($cfd_xml, filesize($cfd_xml));
+			$cfd_xml_handler = fopen($xmlPath,'r');
+			$cfd_xml = fread($cfd_xml_handler, filesize($xmlPath));
+			fclose($cfd_xml_handler);
+
 			# Establece datos de emisor
 			$cfd_xml = str_replace('@CERTIFICADO',$CERTIFICADO,$cfd_xml);
 			$cfd_xml = str_replace('@NO_CERTIFICADO',$NO_CERTIFICADO,$cfd_xml);
@@ -326,35 +321,41 @@ class FacturacionController extends Controller
 			# Establece fecha de CFD
 			$cfd_xml = str_replace('@FECHA',$FECHA,$cfd_xml);
 			# Establece RFC de receptor aleatoriamente
-			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6');
+			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6', $cfd_xml);
 
 			# Elimina saltods de línea
-			$cfd_xml = str_replace('\n\r','',$cfd_xml);
-			$cfd_xml = str_replace('\r\n','',$cfd_xml);
-			$cfd_xml = str_replace('\n','',$cfd_xml);
-			$cfd_xml = str_replace('\r','',$cfd_xml);
+			$cfd_xml = preg_replace('/\n\r/','',$cfd_xml);
+			$cfd_xml = preg_replace('/\r\n/','',$cfd_xml);
+			$cfd_xml = preg_replace('/\n/','',$cfd_xml);
+			$cfd_xml = preg_replace('/\r/','',$cfd_xml);
+
 			# Guarda XML
-			$xmlResult = fopen($xmlResult,'w');
-			$xmlResult = fwrite($cfd_xml);
+			$xmlResult = fopen($xmlResultPath,'w');
+			fwrite($xmlResult,$cfd_xml);
+			fclose($xmlResult);
+
 			# Obtén cadena original
 			if (strpos($os,'WIN') !== false) {
 				# Windows
-				$command = 'msxsl.exe %s %s';
-				$command = sprintf($command, $xmlResult, $xslt);
-				$stringResult = popen($command, 'r');
-				$stringResult = fread($stringResult, filesize($stringResult));
+				$command = 'msxsl.exe %s %s -o %s';
+				$command = sprintf($command, $xmlResultPath, $xslt, $xsltXmlOut);
+
+				$string_result_handler = popen(strval($command), 'r');
+				$stringResult = fread($string_result_handler, filesize($xslt));
+				fclose($string_result_handler);
 			}
 			else{
 				# Unix like
 				$command = 'xsltproc %s %s 2>/dev/null';
-				$command = sprintf($command, $xslt, $xmlResult);
+				$command = sprintf(strval($command), $xslt, $xmlResult);
 				$stringResult = popen($command, 'r');
-				$stringResult = fread($stringResult, filesize($stringResult));
+				$stringResult = fread($stringResult, filesize($xslt));
 			}
 			echo $stringResult;
+			var_dump($stringResult);
 			# Crea sello
 			// $SELLO = selloCFD($stringResult,$pemPath);
-			// # Incluye sello 
+			// # Incluye sello
 			// $cfd_xml = cfd_xml.replace('@SELLO',SELLO)
 			// # Guarda XML con sello
 			// open('%s' % xmlResult,'w').write('%s' % cfd_xml)
@@ -414,7 +415,7 @@ class FacturacionController extends Controller
 	}
 
 	# Función para obtener el certificado en formato PEM para insertarlo en el CFD
-	public function certificadoF($cerFile){
+	public function certificadoF($cerFile, $outFile){
 		$os = PHP_OS;
 		if (strpos($os,'WIN') !== false) {
 			$command = 'set OPENSSL_CONF=C:\\OpenSSL-Win32\\bin\\openssl.cfg && C:\\OpenSSL-Win32\\bin\\openssl.exe';
@@ -423,16 +424,20 @@ class FacturacionController extends Controller
 			$command = 'openssl';
 		}
 
-		$command .= ' x509 -inform DER -outform PEM -in "%s"';
-		$command = sprintf($command, $cerFile);
-		$codificacion = popen($command, 'r');
-		$codificacion = fread($codificacion, filesize($cerFile));
+		$command .= ' x509 -inform DER -outform PEM -in "%s" -out "%s"';
+		$command = sprintf($command, $cerFile, $outFile);
+		echo $command.'<br><br>';
+		$codificacion_handler = popen($command, 'r');
+		$codificacion_handler = fopen($outFile, 'r');
+		$codificacion = fread($codificacion_handler, filesize($outFile));
+		fclose($codificacion_handler);
 		$codificacion = str_replace('-----BEGIN CERTIFICATE-----','',$codificacion);
 		$codificacion = str_replace('-----END CERTIFICATE-----','',$codificacion);
 		// $codificacion = str_replace('\n\r','',$codificacion);
 		// $codificacion = str_replace('\r\n','',$codificacion);
-		// $codificacion = str_replace('\n','',$codificacion);
-		// $codificacion = str_replace('\r','',$codificacion);
+		// $codificacion = str_replace('\n','**1',$codificacion);
+		// $codificacion = str_replace('\r','**2',$codificacion);
+		$codificacion = preg_replace('/\s/','',$codificacion);
 		$codificacion = trim($codificacion);
 		return $codificacion;
 	}
@@ -474,6 +479,7 @@ class FacturacionController extends Controller
 			echo "fallo al abrir la información";
 		}
 		// $key=EVP.load_key_string(sat_key)
+		$key=openssl_get_privatekey()
 		// #sha1
 		// key.reset_context(md='sha1')
 		// key.sign_init()
