@@ -281,6 +281,30 @@ class FacturacionController extends Controller
 		$pdf->Output();
 	}
 
+	# Función para sellar la cadena original
+	public function selloCFD($stringResult,$pemPath){
+		#cargar archivo pem
+		$sat_key = fopen(sprintf('%s', strval($pemPath)),'r');
+		$sat_key = fread($sat_key, filesize($pemPath));
+		$pkeyid = openssl_get_privatekey($priv_key);
+		echo $pkeyid;
+		if (openssl_open($sealed, $open, $env_key, $pkeyid)) {
+			echo "aquí está la información abierta: ", $open;
+		} else {
+			echo "fallo al abrir la información";
+		}
+		// $key=EVP.load_key_string(sat_key)
+		// $key=openssl_get_privatekey();
+		// #sha1
+		// key.reset_context(md='sha1')
+		// key.sign_init()
+		// #pongo la cadena
+		// key.sign_update(stringResult)
+		// signature=key.sign_final()
+		// #regreso el selloDigital en base64
+		// return base64.b64encode(signature)
+	}
+
 	public function generarCFD($id){
 		$xslt = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xslt/cadenaoriginal_3_2.xslt';
 		$xsltXmlOut = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/xsltXmlOut.xml';
@@ -297,7 +321,7 @@ class FacturacionController extends Controller
 		$errorCode = $this->validateKeyPass($keyPath,$keyPwd,$pemPath);
 		# Obtén número de certificado
 		$NO_CERTIFICADO = $this->getSerial($cerFile);
-		echo "$NO_CERTIFICADO **********************************************";
+		
 		# Obtén certificado en PEM para insertar en CFD
 		$CERTIFICADO =  $this->certificadoF($cerFile, $cerOutFile);
 		# Obtén rfc a partir del certificado
@@ -337,14 +361,15 @@ class FacturacionController extends Controller
 			fclose($xmlResult);
 
 			# Obtén cadena original
-			// if (strpos($os,'WIN') !== false) {
-			// 	# Windows
+			//if (strpos($os,'WIN') !== false) {
+			 	# Windows
 			// 	$command = 'msxsl.exe %s %s -o %s';
 			// 	$command = sprintf($command, $xmlResultPath, $xslt, $xsltXmlOut);
+			// 	echo $command ."<br />";
 			// 	$string_result_handler = popen($command, 'r');
 			// 	$stringResult = fread($string_result_handler, filesize($xslt));
 			// 	fclose($string_result_handler);
-			// }
+			//}
 			// else{
 			// 	# Unix like
 			// 	$command = 'xsltproc %s %s -o %s 2>/dev/null';
@@ -361,13 +386,12 @@ class FacturacionController extends Controller
 	        $proc = new XSLTProcessor();
 	        $proc->importStylesheet($xsltDoc);
 	        $datos = $proc->transformToXML($xmlDoc);
-			echo "------------------";
+
 			echo $datos;
-			echo "------------------";
 			// var_dump($stringResult);
-			return;
+			
 			# Crea sello
-			// $SELLO = selloCFD($stringResult,$pemPath);
+			$SELLO = $this->selloCFD($datos,$pemPath);
 			// # Incluye sello
 			// $cfd_xml = cfd_xml.replace('@SELLO',SELLO)
 			// # Guarda XML con sello
@@ -478,29 +502,6 @@ class FacturacionController extends Controller
 		return $rfc;
 	}
 
-	# Función para sellar la cadena original
-	public function selloCFD($stringResult,$pemPath){
-		#cargar archivo pem
-		$sat_key = fopen(sprintf('%s', strval($pemPath), 'r'));
-		$sat_key = fread($sat_key, filesize($pemPath));
-		$pkeyid = openssl_get_privatekey($priv_key);
-		echo $pkeyid;
-		if (openssl_open($sealed, $open, $env_key, $pkeyid)) {
-			echo "aquí está la información abierta: ", $open;
-		} else {
-			echo "fallo al abrir la información";
-		}
-		// $key=EVP.load_key_string(sat_key)
-		// $key=openssl_get_privatekey();
-		// #sha1
-		// key.reset_context(md='sha1')
-		// key.sign_init()
-		// #pongo la cadena
-		// key.sign_update(stringResult)
-		// signature=key.sign_final()
-		// #regreso el selloDigital en base64
-		// return base64.b64encode(signature)
-	}
 	public function obtenerPaciente($data, $row){
 		$paciente = $data->ordenFacturacion->paciente;
 		$completo = $paciente->obtenerNombreCompleto();
