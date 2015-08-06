@@ -297,6 +297,7 @@ class FacturacionController extends Controller
 		$errorCode = $this->validateKeyPass($keyPath,$keyPwd,$pemPath);
 		# Obtén número de certificado
 		$NO_CERTIFICADO = $this->getSerial($cerFile);
+		echo "$NO_CERTIFICADO **********************************************";
 		# Obtén certificado en PEM para insertar en CFD
 		$CERTIFICADO =  $this->certificadoF($cerFile, $cerOutFile);
 		# Obtén rfc a partir del certificado
@@ -324,10 +325,11 @@ class FacturacionController extends Controller
 			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6', $cfd_xml);
 
 			# Elimina saltods de línea
-			$cfd_xml = preg_replace('/\n\r/','',$cfd_xml);
-			$cfd_xml = preg_replace('/\r\n/','',$cfd_xml);
-			$cfd_xml = preg_replace('/\n/','',$cfd_xml);
-			$cfd_xml = preg_replace('/\r/','',$cfd_xml);
+			$cfd_xml = preg_replace('/\n\r/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\r\n/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\n/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\r/',' ',$cfd_xml);
+			$cfd_xml = str_replace('> <','><',$cfd_xml);
 
 			# Guarda XML
 			$xmlResult = fopen($xmlResultPath,'w');
@@ -335,24 +337,35 @@ class FacturacionController extends Controller
 			fclose($xmlResult);
 
 			# Obtén cadena original
-			if (strpos($os,'WIN') !== false) {
-				# Windows
-				$command = 'msxsl.exe %s %s -o %s';
-				$command = sprintf($command, $xmlResultPath, $xslt, $xsltXmlOut);
-
-				$string_result_handler = popen(strval($command), 'r');
-				$stringResult = fread($string_result_handler, filesize($xslt));
-				fclose($string_result_handler);
-			}
-			else{
-				# Unix like
-				$command = 'xsltproc %s %s 2>/dev/null';
-				$command = sprintf(strval($command), $xslt, $xmlResult);
-				$stringResult = popen($command, 'r');
-				$stringResult = fread($stringResult, filesize($xslt));
-			}
-			echo $stringResult;
-			var_dump($stringResult);
+			// if (strpos($os,'WIN') !== false) {
+			// 	# Windows
+			// 	$command = 'msxsl.exe %s %s -o %s';
+			// 	$command = sprintf($command, $xmlResultPath, $xslt, $xsltXmlOut);
+			// 	$string_result_handler = popen($command, 'r');
+			// 	$stringResult = fread($string_result_handler, filesize($xslt));
+			// 	fclose($string_result_handler);
+			// }
+			// else{
+			// 	# Unix like
+			// 	$command = 'xsltproc %s %s -o %s 2>/dev/null';
+			// 	$command = sprintf($command, $xslt, $xmlResultPath, $xsltXmlOut);
+			// 	echo $command;
+			// 	$stringResult_handler = popen($command, 'r');
+			// 	$stringResult = fread($stringResult_handler, filesize($xsltXmlOut));
+			// 	fclose($stringResult_handler);
+			// }
+			$xsltDoc = new DOMDocument();
+	        $xsltDoc->load($xslt);
+	        $xmlDoc = new DOMDocument();
+	        $xmlDoc->load($xmlResultPath);
+	        $proc = new XSLTProcessor();
+	        $proc->importStylesheet($xsltDoc);
+	        $datos = $proc->transformToXML($xmlDoc);
+			echo "------------------";
+			echo $datos;
+			echo "------------------";
+			// var_dump($stringResult);
+			return;
 			# Crea sello
 			// $SELLO = selloCFD($stringResult,$pemPath);
 			// # Incluye sello
@@ -410,7 +423,7 @@ class FacturacionController extends Controller
 		$num_cert = str_replace('\n','',$num_cert[1]);
 		$num_cert = str_replace('\r','',$num_cert);
 		$num_cert = trim($num_cert);
-		$num_cert = hex2bin($num_cert);
+		$num_cert = pack("H*", $num_cert);
 		return $num_cert;
 	}
 
@@ -426,7 +439,6 @@ class FacturacionController extends Controller
 
 		$command .= ' x509 -inform DER -outform PEM -in "%s" -out "%s"';
 		$command = sprintf($command, $cerFile, $outFile);
-		echo $command.'<br><br>';
 		$codificacion_handler = popen($command, 'r');
 		$codificacion_handler = fopen($outFile, 'r');
 		$codificacion = fread($codificacion_handler, filesize($outFile));
@@ -479,7 +491,7 @@ class FacturacionController extends Controller
 			echo "fallo al abrir la información";
 		}
 		// $key=EVP.load_key_string(sat_key)
-		$key=openssl_get_privatekey()
+		// $key=openssl_get_privatekey();
 		// #sha1
 		// key.reset_context(md='sha1')
 		// key.sign_init()
