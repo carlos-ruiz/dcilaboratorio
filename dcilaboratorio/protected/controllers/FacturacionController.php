@@ -50,8 +50,7 @@ class FacturacionController extends Controller
 
 	public function actionCreate()
 	{
-		$this->generarCFD(1);
-		return;
+		
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
 		$conceptosConError = null;
@@ -84,6 +83,7 @@ class FacturacionController extends Controller
 			if($model->validate() && $conceptosConError == null){
 				$mensaje="Listo para imprimir la factura correspondiente";
 				$titulo="Aviso";
+				$this->generarCFD(1);
 			}
 			// $model->attributes=$_POST['Examenes'];
 			// if($model->save())
@@ -281,29 +281,6 @@ class FacturacionController extends Controller
 		$pdf->Output();
 	}
 
-	# Función para sellar la cadena original
-	public function selloCFD($stringResult,$pemPath){
-		#cargar archivo pem
-		$sat_key = fopen(sprintf('%s', strval($pemPath)),'r');
-		$sat_key = fread($sat_key, filesize($pemPath));
-		$pkeyid = openssl_get_privatekey($priv_key);
-		echo $pkeyid;
-		if (openssl_open($sealed, $open, $env_key, $pkeyid)) {
-			echo "aquí está la información abierta: ", $open;
-		} else {
-			echo "fallo al abrir la información";
-		}
-		// $key=EVP.load_key_string(sat_key)
-		// $key=openssl_get_privatekey();
-		// #sha1
-		// key.reset_context(md='sha1')
-		// key.sign_init()
-		// #pongo la cadena
-		// key.sign_update(stringResult)
-		// signature=key.sign_final()
-		// #regreso el selloDigital en base64
-		// return base64.b64encode(signature)
-	}
 
 	public function generarCFD($id){
 		$xslt = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xslt/cadenaoriginal_3_2.xslt';
@@ -316,6 +293,9 @@ class FacturacionController extends Controller
 		$pemCert = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_cer.pem';
 		$xmlPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/cfd.xml';
 		$xmlResultPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml';
+		$cadenaOriginalPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cadenaOriginalOut.txt';
+		$signBinPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/sign.bin';
+		$selloPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/selloOut.txt';
 
 		# Valida contraseña de llave y genera el formato PEM
 		$errorCode = $this->validateKeyPass($keyPath,$keyPwd,$pemPath);
@@ -332,53 +312,13 @@ class FacturacionController extends Controller
 		$FECHA = substr($datetime, 0, 19);
 
 		if ($errorCode == 0){
-			# Determina sistema operativo
-			$os = PHP_OS;
+
 			# Lee XML de CFD base
 			$cfd_xml_handler = fopen($xmlPath,'r');
 			$cfd_xml = fread($cfd_xml_handler, filesize($xmlPath));
 			fclose($cfd_xml_handler);
 
-			# Establece datos de emisor
-			$cfd_xml = str_replace('@CERTIFICADO',$CERTIFICADO,$cfd_xml);
-			$cfd_xml = str_replace('@NO_CERTIFICADO',$NO_CERTIFICADO,$cfd_xml);
-			$cfd_xml = str_replace('@RFC_EMISOR',$RFC_EMISOR,$cfd_xml);
-			# Establece fecha de CFD
-			$cfd_xml = str_replace('@FECHA',$FECHA,$cfd_xml);
-			# Establece RFC de receptor aleatoriamente
-			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6', $cfd_xml);
-
-			# Elimina saltods de línea
-			$cfd_xml = preg_replace('/\n\r/',' ',$cfd_xml);
-			$cfd_xml = preg_replace('/\r\n/',' ',$cfd_xml);
-			$cfd_xml = preg_replace('/\n/',' ',$cfd_xml);
-			$cfd_xml = preg_replace('/\r/',' ',$cfd_xml);
-			$cfd_xml = str_replace('> <','><',$cfd_xml);
-
-			# Guarda XML
-			$xmlResult = fopen($xmlResultPath,'w');
-			fwrite($xmlResult,$cfd_xml);
-			fclose($xmlResult);
-
-			# Obtén cadena original
-			//if (strpos($os,'WIN') !== false) {
-			 	# Windows
-			// 	$command = 'msxsl.exe %s %s -o %s';
-			// 	$command = sprintf($command, $xmlResultPath, $xslt, $xsltXmlOut);
-			// 	echo $command ."<br />";
-			// 	$string_result_handler = popen($command, 'r');
-			// 	$stringResult = fread($string_result_handler, filesize($xslt));
-			// 	fclose($string_result_handler);
-			//}
-			// else{
-			// 	# Unix like
-			// 	$command = 'xsltproc %s %s -o %s 2>/dev/null';
-			// 	$command = sprintf($command, $xslt, $xmlResultPath, $xsltXmlOut);
-			// 	echo $command;
-			// 	$stringResult_handler = popen($command, 'r');
-			// 	$stringResult = fread($stringResult_handler, filesize($xsltXmlOut));
-			// 	fclose($stringResult_handler);
-			// }
+			#generamos la cadena original
 			$xsltDoc = new DOMDocument();
 	        $xsltDoc->load($xslt);
 	        $xmlDoc = new DOMDocument();
@@ -387,15 +327,35 @@ class FacturacionController extends Controller
 	        $proc->importStylesheet($xsltDoc);
 	        $datos = $proc->transformToXML($xmlDoc);
 
-			echo $datos;
-			// var_dump($stringResult);
+			#guardamos la cadena en un archivo
+			$cadenaOriginal = fopen($cadenaOriginalPath,'w');
+			fwrite($cadenaOriginal,$datos);
+			fclose($cadenaOriginal);
+
+			# generamos el sello
+			$SELLO = $this->selloCFD($datos,$pemPath,$cadenaOriginalPath,$selloPath,$signBinPath);
 			
-			# Crea sello
-			$SELLO = $this->selloCFD($datos,$pemPath);
-			// # Incluye sello
-			// $cfd_xml = cfd_xml.replace('@SELLO',SELLO)
-			// # Guarda XML con sello
-			// open('%s' % xmlResult,'w').write('%s' % cfd_xml)
+			# Establece datos de emisor
+			$cfd_xml = str_replace('@CERTIFICADO',$CERTIFICADO,$cfd_xml);
+			$cfd_xml = str_replace('@NO_CERTIFICADO',$NO_CERTIFICADO,$cfd_xml);
+			$cfd_xml = str_replace('@RFC_EMISOR',$RFC_EMISOR,$cfd_xml);
+			# Establece fecha de CFD
+			$cfd_xml = str_replace('@FECHA',$FECHA,$cfd_xml);
+			# Establece RFC de receptor aleatoriamente
+			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6', $cfd_xml);
+			# Incluye sello
+			$cfd_xml = str_replace('@SELLO',$SELLO, $cfd_xml);
+			# Elimina saltods de línea
+			$cfd_xml = preg_replace('/\n\r/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\r\n/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\n/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\r/',' ',$cfd_xml);
+			$cfd_xml = str_replace('> <','><',$cfd_xml);
+			
+			# Guarda XML
+			$xmlResult = fopen($xmlResultPath,'w');
+			fwrite($xmlResult,$cfd_xml);
+			fclose($xmlResult);
 		}
 	}
 
@@ -500,6 +460,38 @@ class FacturacionController extends Controller
 		$rfc = split(' /', $rfc[1]);
 		$rfc = $rfc[0];
 		return $rfc;
+	}
+
+	# Función para sellar la cadena original
+	public function selloCFD($stringResult,$pemPath,$cadenaOriginalPath,$selloPath,$signBinPath){
+
+		$os = PHP_OS;
+		if (strpos($os,'WIN') !== false) {
+			$command = 'set OPENSSL_CONF=C:\\OpenSSL-Win32\\bin\\openssl.cfg && C:\\OpenSSL-Win32\\bin\\openssl.exe';
+		}
+		else if (strpos($os,'Linux') !== false) {
+			$command = 'openssl';
+		}
+
+		$command .= ' dgst -sha1 -out %s -sign %s %s | '.$command.' enc -in %s -a -A -out %s';
+		$command = sprintf($command, strval($signBinPath), strval($pemPath), strval($cadenaOriginalPath), strval($signBinPath), strval($selloPath));
+		$f = popen(strval($command), 'r');
+		
+		$sello_handler = fopen($selloPath,'r');
+		$sellotemp = fread($sello_handler, filesize($selloPath));
+		fclose($sello_handler);
+
+		return $sellotemp;
+		// $key=EVP.load_key_string(sat_key)
+		// $key=openssl_get_privatekey();
+		// #sha1
+		// key.reset_context(md='sha1')
+		// key.sign_init()
+		// #pongo la cadena
+		// key.sign_update(stringResult)
+		// signature=key.sign_final()
+		// #regreso el selloDigital en base64
+		// return base64.b64encode(signature)
 	}
 
 	public function obtenerPaciente($data, $row){
