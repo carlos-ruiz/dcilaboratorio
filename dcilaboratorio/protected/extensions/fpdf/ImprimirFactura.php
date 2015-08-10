@@ -5,18 +5,19 @@ class ImprimirFactura extends FPDF{
 	function Header(){
         $y = 0.5;
 		$this->SetFont('Arial','B',14);
-        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/gvia_logo22.png',16,1.7,4.3,3.3);  
+        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/gvia_logo22.png',16,1.7,4.3,3.3);
 	}
 
 	function cabeceraHorizontal($model, $datosFactura)
 	{
-        $fecha = explode('-', $model->fecha);
-        $dia= substr($fecha[2], 0, 2);
-        $hora = explode(' ', $fecha[2]);
-        $hora = explode(':', $hora[1]);
+        // $fecha = explode('-', $model->fecha);
+        $fecha = $model->fecha;
+        // $dia= substr($fecha[2], 0, 2);
+        // $hora = explode(' ', $fecha[2]);
+        // $hora = explode(':', $hora[1]);
 
 
-        $fecha = $dia.'/'.$fecha[1].'/'.$fecha[0].'   '. $hora[0].':'.$hora[1];
+        // $fecha = $dia.'/'.$fecha[1].'/'.$fecha[0].'   '. $hora[0].':'.$hora[1];
 
         $y = 0.5;
         $this->SetXY(1, .75);
@@ -32,7 +33,7 @@ class ImprimirFactura extends FPDF{
         $this->Cell(.9, 2, 'Domicilio y Expendido en:', 0, 0, 'C');
         $this->SetX(2);
         $this->SetFont('Times','',8);
-        $this->Cell(1, 3, 'Gnl.Bravo #170', 0, 0, 'C');        
+        $this->Cell(1, 3, 'Gnl.Bravo #170', 0, 0, 'C');
         $this->Cell(1, 3.7, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
         $this->Cell(-2.4, 4.4, 'Morelia Michoacán', 0, 0, 'C');
 
@@ -43,13 +44,13 @@ class ImprimirFactura extends FPDF{
         $this->Cell(3.9, 3.7, 'Morelia, Michoacán', 0, 0, 'C');
         $this->SetFont('Times','B',8);
         $this->SetXY(2.4, 4);
-        $this->Cell(.6, 3.8, 'Datos del Receptor', 0, 0, 'C'); 
+        $this->Cell(.6, 3.8, 'Datos del Receptor', 0, 0, 'C');
         $this->SetXY(1, 4);
-        $this->Cell(2, 4.6, 'Cliente:', 0, 0, 'C'); 
+        $this->Cell(2, 4.6, 'Cliente:', 0, 0, 'C');
         $this->SetXY(2, 4);
-        $this->Cell(-0.2, 5.3, 'RFC:', 0, 0, 'C');   
-        $this->Cell(0, 5.5, 'Folio Fiscal: '.$datosFactura['uuid'], 0, 0, 'R');      
-        $this->ln(1.5); 
+        $this->Cell(-0.2, 5.3, 'RFC:', 0, 0, 'C');
+        $this->Cell(0, 5.5, 'Folio Fiscal: '.$datosFactura['uuid'], 0, 0, 'R');
+        $this->ln(1.5);
 
         $y = 0.5;
         $this->ln(.75);
@@ -82,10 +83,10 @@ class ImprimirFactura extends FPDF{
         $this->SetXY(-7.5,9.5);
         $this->Cell(0,0,'Método de pago y cuenta: TARJETA', 0, 1, 'R');
         $this->setX(-7.5);
-     
+
         $this->setX(-7.5);
         $this->Cell(0,.7,'Regimen Fiscal: Reg. de la PF con Act. Emp. y Prof.', 0, 1, 'R');
-       
+
 
 
         $this->ln(0.5);

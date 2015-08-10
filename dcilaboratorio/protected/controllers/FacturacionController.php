@@ -50,7 +50,7 @@ class FacturacionController extends Controller
 
 	public function actionCreate()
 	{
-		
+
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
 		$conceptosConError = null;
@@ -82,7 +82,7 @@ class FacturacionController extends Controller
 			}
 			if($model->validate() && $conceptosConError == null){
 				$this->prepararCFD($model);
-				$this->generarCFD(1);
+				$this->generarCFD();
 				$result = $this->imprimirFactura($model);
 				if (isset($result['titulo']) && isset($result['mensaje'])) {
 					$titulo = $result['titulo'];
@@ -183,6 +183,8 @@ class FacturacionController extends Controller
 				$titulo="Error";
 			}
 			if($model->validate() && $conceptosConError == null){
+				$this->prepararCFD($model);
+				$this->generarCFD();
 				$result = $this->imprimirFactura($model);
 				if (isset($result['titulo']) && isset($result['mensaje'])) {
 					$titulo = $result['titulo'];
@@ -304,7 +306,7 @@ class FacturacionController extends Controller
 		$cfd_xml = str_replace('@LOCALIDAD_RECEPTOR',strtoupper($model->localidad),$cfd_xml);
 		$cfd_xml = str_replace('@MUNICIPIO_RECEPTOR',strtoupper($model->municipio),$cfd_xml);
 		$cfd_xml = str_replace('@ESTADO_RECEPTOR',strtoupper($model->estado),$cfd_xml);
-		
+
 		$stringConceptos = "";
 		$stringTrasladados = "";
 		# Agregar conceptos al XML
@@ -314,13 +316,13 @@ class FacturacionController extends Controller
 			$precio = $concepto->precio;
 			$subTotal += $precio * 0.84;
 			$total += $precio;
-			$stringConceptos .= '<cfdi:Concepto cantidad="1" descripcion="'.$concepto->concepto.'" importe="'.number_format($precio*0.84, 2).'" noIdentificacion="'.$concepto->clave.'" unidad="EXAMEN" valorUnitario="'.number_format($precio*0.84, 2).'"/>';
-			$stringTrasladados .= '<cfdi:Traslado importe="'.number_format($precio*0.16, 2).'" impuesto="IVA" tasa="16.00"/>';
+			$stringConceptos .= '<cfdi:Concepto cantidad="1" descripcion="'.$concepto->concepto.'" importe="'.str_replace(",","",number_format($precio*0.84, 2)).'" noIdentificacion="'.$concepto->clave.'" unidad="EXAMEN" valorUnitario="'.str_replace(",","",number_format($precio*0.84, 2)).'"/>';
+			$stringTrasladados .= '<cfdi:Traslado importe="'.str_replace(",","",number_format($precio*0.16, 2)).'" impuesto="IVA" tasa="16.00"/>';
 		}
 		$cfd_xml = str_replace('@CONCEPTOS',$stringConceptos,$cfd_xml);
 		$cfd_xml = str_replace('@TRASLADADOS',$stringTrasladados,$cfd_xml);
-		$cfd_xml = str_replace("@SUBTOTAL", number_format($subTotal, 2), $cfd_xml);
-		$cfd_xml = str_replace("@TOTAL", number_format($total, 2), $cfd_xml);
+		$cfd_xml = str_replace("@SUBTOTAL", str_replace(",","",number_format($subTotal, 2)), $cfd_xml);
+		$cfd_xml = str_replace("@TOTAL", str_replace(",","",number_format($total, 2)), $cfd_xml);
 
 		# Guarda XML
 		$xmlResult = fopen($xmlTempPath,'w');
@@ -348,7 +350,7 @@ class FacturacionController extends Controller
 		$errorCode = $this->validateKeyPass($keyPath,$keyPwd,$pemPath);
 		# Obtén número de certificado
 		$NO_CERTIFICADO = $this->getSerial($cerFile);
-		
+
 		# Obtén certificado en PEM para insertar en CFD
 		$CERTIFICADO =  $this->certificadoF($cerFile, $cerOutFile);
 		# Obtén rfc a partir del certificado
@@ -373,14 +375,14 @@ class FacturacionController extends Controller
 			$cfd_xml = str_replace('@FECHA',$FECHA,$cfd_xml);
 			# Establece RFC de receptor aleatoriamente
 			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6', $cfd_xml);
-			
+
 			# Elimina saltods de línea
 			$cfd_xml = preg_replace('/\n\r/',' ',$cfd_xml);
 			$cfd_xml = preg_replace('/\r\n/',' ',$cfd_xml);
 			$cfd_xml = preg_replace('/\n/',' ',$cfd_xml);
 			$cfd_xml = preg_replace('/\r/',' ',$cfd_xml);
 			$cfd_xml = str_replace('> <','><',$cfd_xml);
-			
+
 			# Guarda XML
 			$xmlResult = fopen($xmlResultPath,'w');
 			fwrite($xmlResult,$cfd_xml);
@@ -402,7 +404,7 @@ class FacturacionController extends Controller
 
 			# generamos el sello
 			$SELLO = $this->selloCFD($datos,$pemPath,$cadenaOriginalPath,$selloPath,$signBinPath);
-			
+
 			# Incluye sello
 			$cfd_xml = str_replace('@SELLO',$SELLO, $cfd_xml);
 
@@ -483,10 +485,6 @@ class FacturacionController extends Controller
 		fclose($codificacion_handler);
 		$codificacion = str_replace('-----BEGIN CERTIFICATE-----','',$codificacion);
 		$codificacion = str_replace('-----END CERTIFICATE-----','',$codificacion);
-		// $codificacion = str_replace('\n\r','',$codificacion);
-		// $codificacion = str_replace('\r\n','',$codificacion);
-		// $codificacion = str_replace('\n','**1',$codificacion);
-		// $codificacion = str_replace('\r','**2',$codificacion);
 		$codificacion = preg_replace('/\s/','',$codificacion);
 		$codificacion = trim($codificacion);
 		return $codificacion;
@@ -529,23 +527,14 @@ class FacturacionController extends Controller
 
 		$command .= ' dgst -sha1 -out %s -sign %s %s | '.$command.' enc -in %s -a -A -out %s';
 		$command = sprintf($command, strval($signBinPath), strval($pemPath), strval($cadenaOriginalPath), strval($signBinPath), strval($selloPath));
-		$f = popen(strval($command), 'r');
-		
+		$f = popen($command, 'r');
+
+		sleep(5);
+
 		$sello_handler = fopen($selloPath,'r');
 		$sellotemp = fread($sello_handler, filesize($selloPath));
 		fclose($sello_handler);
-
 		return $sellotemp;
-		// $key=EVP.load_key_string(sat_key)
-		// $key=openssl_get_privatekey();
-		// #sha1
-		// key.reset_context(md='sha1')
-		// key.sign_init()
-		// #pongo la cadena
-		// key.sign_update(stringResult)
-		// signature=key.sign_final()
-		// #regreso el selloDigital en base64
-		// return base64.b64encode(signature)
 	}
 
 	public function obtenerPaciente($data, $row){
