@@ -156,18 +156,22 @@ $total = 0;
 				</section>
 				<section id="sumatorias">
 					<div class="row">
-						<div class="form-group col-md-10"></div>
-						<div class="form-group col-md-2">
-								<label class="control-label" for="subtotal">Subtotal $</label>
-								<div class="input-group">
-									<input size="45" maxlength="45" class="form-control" id="subtotal" type="text">
-								</div>						
+						<div class="form-group col-md-7"></div>
+						<div class="form-group col-md-3 align-right">
+							<label class="control-label" for="subtotal">Subtotal $</label>
+						</div>
+						<div class="form-group col-md-2 ">
+							<div class="input-group">
+								<input size="45" maxlength="45" class="form-control" id="subtotal" type="text" readonly>
+							</div>						
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-10"></div>
-						<div class="form-group col-md-2 <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
-							<?php echo $form->labelEx($model,'descuento', array('class'=>'control-label')); ?>
+						<div class="col-md-7"></div>
+						<div class="form-group col-md-3 align-right <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($model,'descuento'.' (%)', array('class'=>'control-label')); ?>
+						</div>
+						<div class="form-group col-md-2 ">	
 							<div class="input-group">
 								<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
 								<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
@@ -175,12 +179,35 @@ $total = 0;
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-10"></div>
-						<div class="form-group col-md-2 <?php if($form->error($model,'costo_extra')!=''){ echo 'has-error'; }?>">
-							<?php echo $form->labelEx($model,'costo_extra', array('class'=>'control-label')); ?>
+						<div class="col-md-7"></div>
+						<div class="form-group col-md-3 align-right">
+							<label class="control-label" for="FacturacionForm_subtotal_descuento">Subtotal con descuento</label>
+						</div>
+						<div class="form-group col-md-2 ">	
 							<div class="input-group">
-								<?php echo $form->textField($model,'costo_extra',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-								<?php echo $form->error($model,'costo_extra', array('class'=>'help-block')); ?>
+								<input size="45" maxlength="45" class="form-control" name="FacturacionForm[subtotal_descuento]" id="FacturacionForm_subtotal_descuento" type="text" value="" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-7"></div>
+						<div class="form-group col-md-3 align-right">
+							<label class="control-label" for="FacturacionForm_iva">IVA 16.00%</label>
+						</div>
+						<div class="form-group col-md-2 ">	
+							<div class="input-group">
+								<input size="45" maxlength="45" class="form-control" name="FacturacionForm[iva]" id="FacturacionForm_iva" type="text" value="" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-7"></div>
+						<div class="form-group col-md-3 align-right">
+							<label class="control-label" for="FacturacionForm_total">Total</label>	
+						</div>
+						<div class="form-group col-md-2 ">	
+							<div class="input-group">
+								<input size="45" maxlength="45" class="form-control" name="FacturacionForm[total]" id="FacturacionForm_total" type="text" value="" readonly>
 							</div>
 						</div>
 					</div>
@@ -212,8 +239,7 @@ $total = 0;
 				$("#examenesAgregados").append(data);
 				setConceptosIds();
 				activarScripts();
-				total=calcularTotal();
-				setTotal(total);
+				calcularSubTotal();
 				// granTotal=calcularGranTotal();
 				// setGranTotal(granTotal);
 				// debe=calcularDebe();
@@ -234,8 +260,7 @@ $total = 0;
 			};
 			conceptosIds=aux;
 			// setConceptosIds();
-			total=calcularTotal();
-			setTotal(total);
+			calcularSubTotal();
 			// granTotal=calcularGranTotal();
 			// setGranTotal(granTotal);
 			// debe=calcularDebe();
@@ -243,12 +268,11 @@ $total = 0;
 		});
 
 		$(".precioConcepto input").change(function() {
-		total = calcularTotal();
-		setTotal(total);
-	});
+			total = calcularSubTotal();
+		});
 	}
 
-	function calcularTotal() {
+	function calcularSubTotal() {
 		var suma=0;
 		$(".precioConcepto input").each(function(){
 			precio=parseFloat($(this).val());
@@ -256,13 +280,51 @@ $total = 0;
 				suma += precio;
 			}
 		});
-		return suma;
+		suma=Number((suma).toFixed(2));
+		$('#subtotal').val(suma);
+		calcularSubtotalConDescuento();
+		calcularIva();
+		calcularTotal();
 	}
 
-	function setTotal(total) {
-		total=Number((total).toFixed(2));
-		$('.total').html(total);
+	function getDescuento(){
+		descuento = parseFloat($('#FacturacionForm_descuento').val());
+		if(isNaN(descuento)){
+			descuento = 0;
+			$('#FacturacionForm_descuento').val(descuento);
+		}
+		return descuento;
+	}
+
+	function calcularSubtotalConDescuento(){
+		subtotal = $('#subtotal').val();
+		descuento = getDescuento();
+		subtotalConDescuento = subtotal*(100-descuento)/100;
+		$("#FacturacionForm_subtotal_descuento").val(subtotalConDescuento);
+	}
+
+	function calcularIva(){
+		subtotalConDescuento = $("#FacturacionForm_subtotal_descuento").val();
+		iva = subtotalConDescuento*0.16;
+		$("#FacturacionForm_iva").val(iva);
+	}
+
+	function calcularTotal(){
+		subtotalConDescuento = parseFloat($("#FacturacionForm_subtotal_descuento").val());
+		iva = parseFloat($("#FacturacionForm_iva").val());
+		total = (subtotalConDescuento+iva);
+		$("#FacturacionForm_total").val(total);
 	}
 
 	activarScripts();
+	calcularSubTotal();
+	$("#FacturacionForm_descuento").change(function() {
+		descuento = getDescuento();
+		if(descuento>100 || descuento<0){
+			alerta("El descuento debe ser un número entre 0 y 100", "Error");
+		}
+		else{
+			total = calcularSubTotal();
+		}
+	});
 </script>

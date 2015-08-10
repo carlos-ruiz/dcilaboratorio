@@ -81,9 +81,13 @@ class FacturacionController extends Controller
 				$conceptosConError = "No es posible generar una factura sin conceptos";
 			}
 			if($model->validate() && $conceptosConError == null){
-				$mensaje="Listo para imprimir la factura correspondiente";
-				$titulo="Aviso";
+				$this->prepararCFD($model);
 				$this->generarCFD(1);
+				$result = $this->imprimirFactura($model);
+				if (isset($result['titulo']) && isset($result['mensaje'])) {
+					$titulo = $result['titulo'];
+					$mensaje = $result['mensaje'];
+				}
 			}
 			// $model->attributes=$_POST['Examenes'];
 			// if($model->save())
@@ -281,8 +285,51 @@ class FacturacionController extends Controller
 		$pdf->Output();
 	}
 
+	public function prepararCFD($model){
+		$conceptos = $model->conceptos;
+		$xmlPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/cfd.xml';
+		$xmlTempPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/cfd.xml';
+		# Lee XML de CFD base
+		$cfd_xml_handler = fopen($xmlPath,'r');
+		$cfd_xml = fread($cfd_xml_handler, filesize($xmlPath));
+		fclose($cfd_xml_handler);
 
-	public function generarCFD($id){
+		# Agregar datos del receptor
+		$cfd_xml = str_replace('@NOMBRE_RECEPTOR',strtoupper($model->razon_social),$cfd_xml);
+		$cfd_xml = str_replace('@RFC_RECEPTOR',strtoupper($model->rfc),$cfd_xml);
+		$cfd_xml = str_replace('@CALLE_RECEPTOR',strtoupper($model->calle),$cfd_xml);
+		$cfd_xml = str_replace('@CP_RECEPTOR',strtoupper($model->codigo_postal),$cfd_xml);
+		$cfd_xml = str_replace('@COLONIA_RECEPTOR',strtoupper($model->colonia),$cfd_xml);
+		$cfd_xml = str_replace('@NO_RECEPTOR',strtoupper($model->numero),$cfd_xml);
+		$cfd_xml = str_replace('@LOCALIDAD_RECEPTOR',strtoupper($model->localidad),$cfd_xml);
+		$cfd_xml = str_replace('@MUNICIPIO_RECEPTOR',strtoupper($model->municipio),$cfd_xml);
+		$cfd_xml = str_replace('@ESTADO_RECEPTOR',strtoupper($model->estado),$cfd_xml);
+		
+		$stringConceptos = "";
+		$stringTrasladados = "";
+		# Agregar conceptos al XML
+		$subTotal = 0;
+		$total = 0;
+		foreach ($conceptos as $concepto) {
+			$precio = $concepto->precio;
+			$subTotal += $precio * 0.84;
+			$total += $precio;
+			$stringConceptos .= '<cfdi:Concepto cantidad="1" descripcion="'.$concepto->concepto.'" importe="'.number_format($precio*0.84, 2).'" noIdentificacion="'.$concepto->clave.'" unidad="EXAMEN" valorUnitario="'.number_format($precio*0.84, 2).'"/>';
+			$stringTrasladados .= '<cfdi:Traslado importe="'.number_format($precio*0.16, 2).'" impuesto="IVA" tasa="16.00"/>';
+		}
+		$cfd_xml = str_replace('@CONCEPTOS',$stringConceptos,$cfd_xml);
+		$cfd_xml = str_replace('@TRASLADADOS',$stringTrasladados,$cfd_xml);
+		$cfd_xml = str_replace("@SUBTOTAL", number_format($subTotal, 2), $cfd_xml);
+		$cfd_xml = str_replace("@TOTAL", number_format($total, 2), $cfd_xml);
+
+		# Guarda XML
+		$xmlResult = fopen($xmlTempPath,'w');
+		fwrite($xmlResult,$cfd_xml);
+		fclose($xmlResult);
+	}
+
+
+	public function generarCFD(){
 		$xslt = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xslt/cadenaoriginal_3_2.xslt';
 		$xsltXmlOut = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/xsltXmlOut.xml';
 		$cerFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJA.cer';
@@ -291,7 +338,7 @@ class FacturacionController extends Controller
 		$keyPwd = '12345678a';
 		$pemPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_key.pem';
 		$pemCert = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_cer.pem';
-		$xmlPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/cfd.xml';
+		$xmlPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/cfd.xml';
 		$xmlResultPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml';
 		$cadenaOriginalPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cadenaOriginalOut.txt';
 		$signBinPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/sign.bin';
@@ -318,6 +365,27 @@ class FacturacionController extends Controller
 			$cfd_xml = fread($cfd_xml_handler, filesize($xmlPath));
 			fclose($cfd_xml_handler);
 
+			# Establece datos de emisor
+			$cfd_xml = str_replace('@CERTIFICADO',$CERTIFICADO,$cfd_xml);
+			$cfd_xml = str_replace('@NO_CERTIFICADO',$NO_CERTIFICADO,$cfd_xml);
+			$cfd_xml = str_replace('@RFC_EMISOR',$RFC_EMISOR,$cfd_xml);
+			# Establece fecha de CFD
+			$cfd_xml = str_replace('@FECHA',$FECHA,$cfd_xml);
+			# Establece RFC de receptor aleatoriamente
+			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6', $cfd_xml);
+			
+			# Elimina saltods de línea
+			$cfd_xml = preg_replace('/\n\r/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\r\n/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\n/',' ',$cfd_xml);
+			$cfd_xml = preg_replace('/\r/',' ',$cfd_xml);
+			$cfd_xml = str_replace('> <','><',$cfd_xml);
+			
+			# Guarda XML
+			$xmlResult = fopen($xmlResultPath,'w');
+			fwrite($xmlResult,$cfd_xml);
+			fclose($xmlResult);
+
 			#generamos la cadena original
 			$xsltDoc = new DOMDocument();
 	        $xsltDoc->load($xslt);
@@ -335,23 +403,9 @@ class FacturacionController extends Controller
 			# generamos el sello
 			$SELLO = $this->selloCFD($datos,$pemPath,$cadenaOriginalPath,$selloPath,$signBinPath);
 			
-			# Establece datos de emisor
-			$cfd_xml = str_replace('@CERTIFICADO',$CERTIFICADO,$cfd_xml);
-			$cfd_xml = str_replace('@NO_CERTIFICADO',$NO_CERTIFICADO,$cfd_xml);
-			$cfd_xml = str_replace('@RFC_EMISOR',$RFC_EMISOR,$cfd_xml);
-			# Establece fecha de CFD
-			$cfd_xml = str_replace('@FECHA',$FECHA,$cfd_xml);
-			# Establece RFC de receptor aleatoriamente
-			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6', $cfd_xml);
 			# Incluye sello
 			$cfd_xml = str_replace('@SELLO',$SELLO, $cfd_xml);
-			# Elimina saltods de línea
-			$cfd_xml = preg_replace('/\n\r/',' ',$cfd_xml);
-			$cfd_xml = preg_replace('/\r\n/',' ',$cfd_xml);
-			$cfd_xml = preg_replace('/\n/',' ',$cfd_xml);
-			$cfd_xml = preg_replace('/\r/',' ',$cfd_xml);
-			$cfd_xml = str_replace('> <','><',$cfd_xml);
-			
+
 			# Guarda XML
 			$xmlResult = fopen($xmlResultPath,'w');
 			fwrite($xmlResult,$cfd_xml);
@@ -528,7 +582,11 @@ class FacturacionController extends Controller
 
 	public function conectarConWS(){
 		$url = 'http://www.bpimorelia.com/wstech/api.php';
-		$data = array('xmlfile' => '<?xml version="1.0" encoding="UTF-8"?><cfdi:Comprobante LugarExpedicion="BOCA DEL RIO, VERACRUZ" certificado="MIIELTCCAxWgAwIBAgIUMjAwMDEwMDAwMDAyMDAwMDAxNzkwDQYJKoZIhvcNAQEFBQAwggFcMRowGAYDVQQDDBFBLkMuIDIgZGUgcHJ1ZWJhczEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSkwJwYJKoZIhvcNAQkBFhphc2lzbmV0QHBydWViYXMuc2F0LmdvYi5teDEmMCQGA1UECQwdQXYuIEhpZGFsZ28gNzcsIENvbC4gR3VlcnJlcm8xDjAMBgNVBBEMBTA2MzAwMQswCQYDVQQGEwJNWDEZMBcGA1UECAwQRGlzdHJpdG8gRmVkZXJhbDESMBAGA1UEBwwJQ295b2Fjw6FuMTQwMgYJKoZIhvcNAQkCDCVSZXNwb25zYWJsZTogQXJhY2VsaSBHYW5kYXJhIEJhdXRpc3RhMB4XDTEyMTAyMjIwMDcwMloXDTE2MTAyMjIwMDcwMlowgacxHjAcBgNVBAMTFU1BUlRJTiBBUkJBSVpBIFFVSVJPWjEeMBwGA1UEKRMVTUFSVElOIEFSQkFJWkEgUVVJUk9aMR4wHAYDVQQKExVNQVJUSU4gQVJCQUlaQSBRVUlST1oxFjAUBgNVBC0TDUFBUU02MTA5MTdRSkExGzAZBgNVBAUTEkFBUU02MTA5MTdNREZSTk4wOTEQMA4GA1UECxMHTU9SRUxJQTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAuf5O30micrZtUGDgHlfQBPF9lyutJQJckUuMp+qpBZYYIpPTG2HlSWUgTnvWXpOajDTXF2pAJA2m1Y/lAIlyvVu6I6DwaVKm7n8mPCFVNnun0U5drlk5Xmu4cAG/OfF/KSgT8+u1R1auu1DPm1vUqzdRxP7mnmY9Y0eEc+qalfcCAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQEFBQADggEBAGdO8y+w0XytPTU2j/2WwJ4nQEtuw3GF09ZUFrVfHeyvTY9oaPL9uRnJ1PcCJd/d/GaXiCSUj1zzcycw/lu1OY/bMlwl9sM9/EfYasCUTOtApZL1+e4fr5tWKS3T4ZXjsXWafd8qu6kA7/sNwEgqpgKQguKQPSogTIYsPTTlqwDWYoEBoliKZU195Nl5t+YIcOfwm0RBCrqkGLlk5IO7Pq0FANHONBcFg5vQM5d/MDSYpwMXGXVuxaK6jIutsvwg6tyayVwl5LO9H1v2TIRZw9BRYTgTMLbxPjKx1Cgf5n8VgUj40oGoDBLOeyYDr/341gC+bXfqgTfbR2ESupooN04=" fecha="2015-07-29T08:58:25" formaDePago="PAGO EN UNA SOLA EXHIBICION" metodoDePago="EFECTIVO" noCertificado="20001000000200000179" sello="lEkR1Alib4tmjoG0gqXf1oyfOsOkXpUlkEnH3/Z1mS7UN+9nliozQnSQh8s1BRAWVcLBrmJuk+L+JvGecJH3iCdtxHKtj0V6rWX1fD4QwEeOUjIVogL5OtqWCg0t6HN8slUbSPy0+thjDHhV8VkbDLyzClUxbHWCVgZ2yEgAA40=" subTotal="1480.00" tipoDeComprobante="ingreso" total="1716.80" version="3.2" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd"><cfdi:Emisor nombre="EMPRESA AAQM610917QJA" rfc="AAQM610917QJA"><cfdi:DomicilioFiscal calle="JUAN PABLO II" codigoPostal="94294" colonia="FRACC. REFORMA" estado="VERACRUZ" municipio="BOCA DEL RIO" noExterior="258" pais="MEXICO"/><cfdi:RegimenFiscal Regimen="Regimen Simplificado"/></cfdi:Emisor><cfdi:Receptor nombre="EMPRESA CPA060516BG5" rfc="CPA060516BG5"><cfdi:Domicilio calle="EJERCITO MEXICANO" codigoPostal="91900" colonia="CARRANZA" estado="VERACRUZ" localidad="BOCA DEL RIO" municipio="BOCA DEL RIO" noExterior="234" pais="MEXICO"/></cfdi:Receptor><cfdi:Conceptos><cfdi:Concepto cantidad="15.0" descripcion="PERA" importe="25.25" noIdentificacion="PROD02" unidad="PIEZAS" valorUnitario="150.00"/><cfdi:Concepto cantidad="15.0" descripcion="SILLA" importe="750.00" noIdentificacion="PROD02" unidad="REMESA" valorUnitario="75.00"/><cfdi:Concepto cantidad="10.0" descripcion="MANZANA" importe="12.50" noIdentificacion="PROD02" unidad="PIEZAS" valorUnitario="3000.00"/></cfdi:Conceptos><cfdi:Impuestos><cfdi:Traslados><cfdi:Traslado importe="25.25" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="750.00" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="12.50" impuesto="IVA" tasa="16.00"/></cfdi:Traslados></cfdi:Impuestos></cfdi:Comprobante>', 'action' => 'upload');
+		$xmlResultPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml';
+		$cfdi_handler = fopen($xmlResultPath,'r');
+		$xml_file = fread($cfdi_handler, filesize($xmlResultPath));
+		fclose($cfdi_handler);
+		$data = array('xmlfile' => $xml_file, 'action' => 'upload');
 
 		// use key 'http' even if you send the request to https://...
 		$options = array(

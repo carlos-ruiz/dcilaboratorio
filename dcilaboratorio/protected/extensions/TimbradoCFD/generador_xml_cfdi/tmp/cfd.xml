@@ -7,9 +7,9 @@ formaDePago="PAGO EN UNA SOLA EXHIBICION"
 metodoDePago="EFECTIVO"
 noCertificado="@NO_CERTIFICADO"
 sello="@SELLO"
-subTotal="@SUBTOTAL"
+subTotal="523.32"
 tipoDeComprobante="ingreso"
-total="@TOTAL"
+total="623.00"
 version="3.2"
 xmlns:cfdi="http://www.sat.gob.mx/cfd/3"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,15 +18,15 @@ xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_inte
 <cfdi:DomicilioFiscal calle="JUAN PABLO II" codigoPostal="94294" colonia="FRACC. REFORMA" estado="VERACRUZ" municipio="BOCA DEL RIO" noExterior="258" pais="MEXICO"/>
 <cfdi:RegimenFiscal Regimen="Regimen Simplificado"/>
 </cfdi:Emisor>
-<cfdi:Receptor nombre="@NOMBRE_RECEPTOR" rfc="@RFC_RECEPTOR">
-<cfdi:Domicilio calle="@CALLE_RECEPTOR" codigoPostal="@CP_RECEPTOR" colonia="@COLONIA_RECEPTOR" estado="@ESTADO_RECEPTOR" localidad="@LOCALIDAD_RECEPTOR" municipio="@MUNICIPIO_RECEPTOR" noExterior="@NO_RECEPTOR" pais="MEXICO"/>
+<cfdi:Receptor nombre="CARLOS ALFREDO RUIZ CALDERON" rfc="RUCC9009253A6">
+<cfdi:Domicilio calle="JUAN DELGADO" codigoPostal="58000" colonia="CENTRO" estado="MICHOACAN" localidad="MORELIA" municipio="MORELIA" noExterior="143" pais="MEXICO"/>
 </cfdi:Receptor>
 <cfdi:Conceptos>
-@CONCEPTOS
+<cfdi:Concepto cantidad="1" descripcion="concepto de prueba" importe="103.32" noIdentificacion="clave1" unidad="EXAMEN" valorUnitario="103.32"/><cfdi:Concepto cantidad="1" descripcion="concepto de prueba numero 2" importe="420.00" noIdentificacion="clave2" unidad="EXAMEN" valorUnitario="420.00"/>
 </cfdi:Conceptos>
 <cfdi:Impuestos>
 <cfdi:Traslados>
-@TRASLADADOS
+<cfdi:Traslado importe="19.68" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="80.00" impuesto="IVA" tasa="16.00"/>
 </cfdi:Traslados>
 </cfdi:Impuestos>
 </cfdi:Comprobante>
