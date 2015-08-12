@@ -139,6 +139,7 @@ class FacturacionController extends Controller
 			}
 			$model->descuento = $orden->descuento;
 			$model->costo_extra = $orden->costo_emergencia;
+			$model->id_orden = $orden->id;
 			$conceptos = array();
 			$idExamen = 0;
 			foreach ($orden->ordenTieneExamenes as $index => $ordenExamen) {
@@ -278,6 +279,41 @@ class FacturacionController extends Controller
 
 			$titulo="Error al generar factura";
 			return array('titulo'=>$titulo, 'mensaje'=>$mensaje);
+		}
+
+		$facturaExpedida = new FacturasExpedidas;
+		$facturaExpedida->razon_social = $facturacionModel->razon_social;
+		$facturaExpedida->rfc = $facturacionModel->rfc;
+		$facturaExpedida->calle = $facturacionModel->calle;
+		$facturaExpedida->numero = $facturacionModel->numero;
+		$facturaExpedida->colonia = $facturacionModel->colonia;
+		$facturaExpedida->codigo_postal = $facturacionModel->codigo_postal;
+		$facturaExpedida->localidad = $facturacionModel->localidad;
+		$facturaExpedida->municipio = $facturacionModel->municipio;
+		$facturaExpedida->estado = $facturacionModel->estado;
+		$facturaExpedida->fecha_emision = $facturacionModel->fecha;
+		$facturaExpedida->fecha_certificacion = $fullAnswer['date'];
+		$facturaExpedida->uuid = $fullAnswer['uuid'];
+		$facturaExpedida->numero_comprobante = $fullAnswer['certNumber'];
+		$facturaExpedida->cadena_original = $fullAnswer['string'];
+		$facturaExpedida->sello_cfdi = $fullAnswer['cfdStamp'];
+		$facturaExpedida->sello_sat = $fullAnswer['satStamp'];
+		$facturaExpedida->id_ordenes = $facturacionModel->id_orden;
+
+		if($facturaExpedida->validate()){
+			if($facturaExpedida->save()){
+				$conceptos = $facturacionModel->conceptos;
+
+				foreach ($conceptos as $value) {
+					$concepto = new ConceptosFactura;
+					$concepto->clave = $value->clave;
+					$concepto->descripcion = $value->concepto;
+					$concepto->precio = $value->precio;
+					$concepto->id_facturas_expedidas = $facturaExpedida->id;
+					$concepto->save();
+				}
+
+			}
 		}
 
 		$pdf = new ImprimirFactura('P','cm','letter');
@@ -524,12 +560,23 @@ class FacturacionController extends Controller
 		else if (strpos($os,'Linux') !== false) {
 			$command = 'openssl';
 		}
+		$commandBase = $command;
 
-		$command .= ' dgst -sha1 -out %s -sign %s %s | '.$command.' enc -in %s -a -A -out %s';
-		$command = sprintf($command, strval($signBinPath), strval($pemPath), strval($cadenaOriginalPath), strval($signBinPath), strval($selloPath));
+		$command .= ' dgst -sha1 -out %s -sign %s %s';
+		$command = sprintf($command, strval($signBinPath), strval($pemPath), strval($cadenaOriginalPath));
 		$f = popen($command, 'r');
 
-		sleep(5);
+		sleep(1);
+
+		$command = $commandBase.' enc -in %s -a -A -out %s';
+		$command = sprintf($command, strval($signBinPath), strval($selloPath));
+		$f = popen($command, 'r');
+
+		// $command .= ' dgst -sha1 -out %s -sign %s %s | '.$command.' enc -in %s -a -A -out %s';
+		// $command = sprintf($command, strval($signBinPath), strval($pemPath), strval($cadenaOriginalPath), strval($signBinPath), strval($selloPath));
+		// $f = popen($command, 'r');
+
+		sleep(1);
 
 		$sello_handler = fopen($selloPath,'r');
 		$sellotemp = fread($sello_handler, filesize($selloPath));

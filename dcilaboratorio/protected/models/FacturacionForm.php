@@ -20,6 +20,7 @@ class FacturacionForm extends CFormModel
 	public $conceptos;
 	public $descuento;
 	public $costo_extra;
+	public $id_orden;
 
 	/**
 	 * Declares the validation rules.
