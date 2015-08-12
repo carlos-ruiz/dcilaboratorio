@@ -3,29 +3,45 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
 class ImprimirPdf extends FPDF{
 
 	function Header(){
+        $y = 0.5;
 		$this->SetFont('Arial','B',18);
-		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/gvia_logo22.png',1.5,1.5,3,3);
+		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1.5,1.5,3,3);
     // Move to the right
     //$this->Cell(8);
     // Title
-		$this->SetXY(4, 1);
-		$this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
-		$this->ln(0.75);
-		$this->SetFont('Times','',8);
-		$this->SetXY(4, 1.75);
-		$this->Cell(0,2.54,'UNIDAD CENTRAL                    UNIDAD FELIX IRETA                     UNIDAD AMADO NERVO                     UNIDAD DE CANCEROLOGIA',0,0,'C');
-		$this->SetXY(7, 2.30);
-		$this->Cell(0,2.54,'Gnl.Bravo #170                                      Tucurán #230                                   Amado Nervo $392-A                                 Francisco Madero #145',0,0,'L');
-		$this->SetXY(6.8, 2.65);
-		$this->Cell(0,2.54,'Col. Chapultepec Nte.                              Col. Félix Ireta                                          Col. Centro                                   Fracc. Ex Gob. Gildardo Magaña',0,0,'L');
-		$this->SetXY(7.35, 3);
-		$this->Cell(0,2.54,'C.P. 58260                                           C.P. 58070                                              C.P. 58000                                                     C.P. 58149',0,0,'L');
-		$this->SetXY(6.9, 3.35);
-		$this->Cell(0,2.54,'Tel.(443)232-0166                                Tel.(443)326-9891                                  Tel.(443)312-3490                                        Tel.(443)232-0165',0,0,'L');
-		$this->Cell(0,2.54,'',0,0,'C');
-	//	$this->SetLineWidth(0.07);
-	//	$this->line(0.54,5,27,5);       
-	}
+
+        $this->SetXY(4, .75);
+        $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
+        $this->ln(0.75);
+        $this->SetFont('Times','B',8);
+        $this->SetXY(4, 2.75);
+        $this->Cell(4, $y, 'UNIDAD CHAPULTPEC', 0, 0, 'C');
+        $this->Cell(6.9, $y, 'UNIDAD AMADO NERVO', 0, 0, 'C');
+        $this->Cell(5, $y, 'UNIDAD DE CANCEROLOGÍA', 0, 1, 'C');
+        $this->SetX(4);
+        $this->SetFont('Times','',8);
+        $y = 0.4;
+        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');       
+        $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
+        $this->Cell(5, $y, 'Francisco Madero #145', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');      
+        $this->Cell(6.5, $y, 'Col. Centro', 0, 0, 'C');
+        $this->Cell(5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');       
+        $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
+        $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');       
+        $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
+        $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');       
+        $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
+        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');
+    //  $this->SetLineWidth(0.07);
+    //  $this->line(0.54,5,27,5);       
 
 	function cabeceraHorizontal($cabecera)
 	{

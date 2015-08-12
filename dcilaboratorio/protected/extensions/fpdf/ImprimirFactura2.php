@@ -5,7 +5,7 @@ class ImprimirFactura2 extends FPDF{
 	function Header(){
         $y = 0.5;
 		$this->SetFont('Arial','B',14);
-        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/gvia_logo22.png',16,1.7,4.3,3.3);
+        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',16,1.7,4.3,3.3);
 		
     // Move to the right
     //$this->Cell(8);

@@ -5,7 +5,7 @@ class ImprimirOrden extends FPDF{
 	function Header(){
         $y = 0.5;
 		$this->SetFont('Arial','B',18);
-		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/gvia_logo22.png',1,1.7,2.3,2.3);
+		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1,1.7,2.3,2.3);
     // Move to the right
     //$this->Cell(8);
     // Title
@@ -13,33 +13,33 @@ class ImprimirOrden extends FPDF{
         $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
         $this->ln(0.75);
         $this->SetFont('Times','B',8);
-        $this->SetXY(3, 2.75);
-        $this->Cell(4.3, $y, 'UNIDAD CENTRAL', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'UNIDAD FÉLIX IRETA', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'UNIDAD AMADO NERVO', 0, 0, 'C');
-        $this->Cell(4.5, $y, 'UNIDAD DE CANCEROLOGÍA', 0, 1, 'C');
-        $this->SetX(3);
+        $this->SetXY(4, 2.75);
+        $this->Cell(4, $y, 'UNIDAD CHAPULTPEC', 0, 0, 'C');
+        $this->Cell(6.9, $y, 'UNIDAD AMADO NERVO', 0, 0, 'C');
+        $this->Cell(5, $y, 'UNIDAD DE CANCEROLOGÍA', 0, 1, 'C');
+        $this->SetX(4);
         $this->SetFont('Times','',8);
         $y = 0.4;
-        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'Tucurán #230', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'Amado Nervo #392-A', 0, 0, 'C');
-        $this->Cell(4.5, $y, 'Francisco Madero #145', 0, 1, 'C');
-        $this->SetX(3);
-        $this->Cell(4.3, $y, 'Col. Chapultepec Nte.', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'Col. Félix Ireta', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'Col. Centro', 0, 0, 'C');
-        $this->Cell(4.5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
-        $this->SetX(3);
-        $this->Cell(4.3, $y, 'C.P. 58260', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'C.P. 58070', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'C.P. 58000', 0, 0, 'C');
-        $this->Cell(4.5, $y, 'C.P. 58149', 0, 1, 'C');
-        $this->SetX(3);
-        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'Tel.(443)326-9891', 0, 0, 'C');
-        $this->Cell(4.3, $y, 'Tel.(443)312-3490', 0, 0, 'C');
-        $this->Cell(4.5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
+        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');       
+        $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
+        $this->Cell(5, $y, 'Francisco Madero #145', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');      
+        $this->Cell(6.5, $y, 'Col. Centro', 0, 0, 'C');
+        $this->Cell(5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');       
+        $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
+        $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');       
+        $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
+        $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');       
+        $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
+        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');
+        
 	}
 
 	function cabeceraHorizontal($model)
