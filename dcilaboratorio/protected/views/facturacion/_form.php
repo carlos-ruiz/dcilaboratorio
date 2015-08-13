@@ -159,7 +159,7 @@ $total = 0;
 										<input type='text' class='form-control' id='concepto_$index' name='concepto_$index' value='$numeroConcepto->concepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
 									</td>
 									<td class='precioConcepto'>
-										<input type='text' class='form-control' id='precio_$index' name='precio_$index' value='$numeroConcepto->precio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
+										<input type='text' class='form-control' data-row='$index' id='precio_$index' name='precio_$index' value='$numeroConcepto->precio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
 									</td>
 									<td>
 										<span id='total_desc_$index'>$totalDesc</span>
@@ -242,10 +242,6 @@ $total = 0;
 				setConceptosIds();
 				activarScripts();
 				calcularSubTotal();
-				// granTotal=calcularGranTotal();
-				// setGranTotal(granTotal);
-				// debe=calcularDebe();
-				// setDebe(debe);
 			}
 		);
 	});
@@ -261,15 +257,12 @@ $total = 0;
 				}
 			};
 			conceptosIds=aux;
-			// setConceptosIds();
 			calcularSubTotal();
-			// granTotal=calcularGranTotal();
-			// setGranTotal(granTotal);
-			// debe=calcularDebe();
-			// setDebe(debe);
 		});
 
 		$(".precioConcepto input").change(function() {
+			index = $(this).data('row');
+			actualizarImporteConcepto(index);
 			total = calcularSubTotal();
 		});
 	}
@@ -315,6 +308,16 @@ $total = 0;
 		total = (subtotal+iva);
 		$("#FacturacionForm_total").val(total);
 	}
+
+	function actualizarImporteConcepto(index){
+		precio = parseFloat($("#precio_"+index).val());
+		totalDesc = Number((precio*(100-getDescuento())/100).toFixed(2));
+		importeSinIva = Number((totalDesc/1.16).toFixed(2));
+		iva = (totalDesc-importeSinIva).toFixed(2);
+		$("#total_desc_"+index).text(totalDesc);
+		$("#importe_sin_iva_"+index).text(importeSinIva);
+		$("#iva_"+index).text(iva);
+	} 
 
 	activarScripts();
 	calcularSubTotal();
