@@ -120,6 +120,16 @@ $total = 0;
 							</div>
 						</div>
 						<?php } ?>
+						<div class="col-md-3"></div>
+						<div class="form-group col-md-3 align-right <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($model,'descuento'.' (%)', array('class'=>'control-label')); ?>
+						</div>
+						<div class="form-group col-md-2 ">
+							<div class="input-group">
+								<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+								<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
+							</div>
+						</div>
 					</div>
 
 					<table class="table table-striped table-bordered dataTable" id="tablaConceptos">
@@ -127,12 +137,18 @@ $total = 0;
 							<tr>
 								<th>Clave</th>
 								<th>Concepto</th>
-								<th>Precio</th>
+								<th>Total</th>
+								<th>Total - Descuento</th>
+								<th>Importe sin IVA</th>
+								<th>IVA</th>
 							</tr>
 						</thead>
 						<tbody id="examenesAgregados">
-							<?php foreach ($conceptos as $index => $numeroConcepto): 
+							<?php foreach ($conceptos as $index => $numeroConcepto):
 							$total += $numeroConcepto->precio;
+							$totalDesc = round(($numeroConcepto->precio * (100-$model->descuento)/100), 2, PHP_ROUND_HALF_UP);
+							$importeSinIva = round($totalDesc / 1.16, 2, PHP_ROUND_HALF_UP);
+							$iva = $totalDesc-$importeSinIva;
 							echo "
 								<tr class='row_$index' data-id='$index'>
 									<td>
@@ -144,6 +160,15 @@ $total = 0;
 									</td>
 									<td class='precioConcepto'>
 										<input type='text' class='form-control' id='precio_$index' name='precio_$index' value='$numeroConcepto->precio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
+									</td>
+									<td>
+										<span id='total_desc_$index'>$totalDesc</span>
+									</td>
+									<td class='importeSinIva'>
+										<span id='importe_sin_iva_$index'>$importeSinIva</span>
+									</td>
+									<td class='iva'>
+										<span id='iva_$index'>$iva</span>
 									</td>
 									<td>
 										<a href='javascript:void(0)' data-id='$index' class='eliminarConcepto'><span class='fa fa-trash'></span></a>
@@ -163,29 +188,6 @@ $total = 0;
 						<div class="form-group col-md-2 ">
 							<div class="input-group">
 								<input size="45" maxlength="45" class="form-control" id="subtotal" type="text" readonly>
-							</div>						
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-7"></div>
-						<div class="form-group col-md-3 align-right <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
-							<?php echo $form->labelEx($model,'descuento'.' (%)', array('class'=>'control-label')); ?>
-						</div>
-						<div class="form-group col-md-2 ">	
-							<div class="input-group">
-								<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
-								<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-7"></div>
-						<div class="form-group col-md-3 align-right">
-							<label class="control-label" for="FacturacionForm_subtotal_descuento">Subtotal con descuento</label>
-						</div>
-						<div class="form-group col-md-2 ">	
-							<div class="input-group">
-								<input size="45" maxlength="45" class="form-control" name="FacturacionForm[subtotal_descuento]" id="FacturacionForm_subtotal_descuento" type="text" value="" readonly>
 							</div>
 						</div>
 					</div>
@@ -194,7 +196,7 @@ $total = 0;
 						<div class="form-group col-md-3 align-right">
 							<label class="control-label" for="FacturacionForm_iva">IVA 16.00%</label>
 						</div>
-						<div class="form-group col-md-2 ">	
+						<div class="form-group col-md-2 ">
 							<div class="input-group">
 								<input size="45" maxlength="45" class="form-control" name="FacturacionForm[iva]" id="FacturacionForm_iva" type="text" value="" readonly>
 							</div>
@@ -203,9 +205,9 @@ $total = 0;
 					<div class="row">
 						<div class="col-md-7"></div>
 						<div class="form-group col-md-3 align-right">
-							<label class="control-label" for="FacturacionForm_total">Total</label>	
+							<label class="control-label" for="FacturacionForm_total">Total</label>
 						</div>
-						<div class="form-group col-md-2 ">	
+						<div class="form-group col-md-2 ">
 							<div class="input-group">
 								<input size="45" maxlength="45" class="form-control" name="FacturacionForm[total]" id="FacturacionForm_total" type="text" value="" readonly>
 							</div>
@@ -274,15 +276,14 @@ $total = 0;
 
 	function calcularSubTotal() {
 		var suma=0;
-		$(".precioConcepto input").each(function(){
-			precio=parseFloat($(this).val());
+		$(".importeSinIva span").each(function(){
+			precio=parseFloat($(this).text());
 			if (!isNaN(precio)) {
 				suma += precio;
 			}
 		});
 		suma=Number((suma).toFixed(2));
 		$('#subtotal').val(suma);
-		calcularSubtotalConDescuento();
 		calcularIva();
 		calcularTotal();
 	}
@@ -296,23 +297,22 @@ $total = 0;
 		return descuento;
 	}
 
-	function calcularSubtotalConDescuento(){
-		subtotal = $('#subtotal').val();
-		descuento = getDescuento();
-		subtotalConDescuento = subtotal*(100-descuento)/100;
-		$("#FacturacionForm_subtotal_descuento").val(subtotalConDescuento);
-	}
-
 	function calcularIva(){
-		subtotalConDescuento = $("#FacturacionForm_subtotal_descuento").val();
-		iva = subtotalConDescuento*0.16;
-		$("#FacturacionForm_iva").val(iva);
+		var suma=0;
+		$(".iva span").each(function(){
+			precio=parseFloat($(this).text());
+			if (!isNaN(precio)) {
+				suma += precio;
+			}
+		});
+		suma = Number((suma).toFixed(2));
+		$("#FacturacionForm_iva").val(suma);
 	}
 
 	function calcularTotal(){
-		subtotalConDescuento = parseFloat($("#FacturacionForm_subtotal_descuento").val());
+		subtotal = parseFloat($("#subtotal").val());
 		iva = parseFloat($("#FacturacionForm_iva").val());
-		total = (subtotalConDescuento+iva);
+		total = (subtotal+iva);
 		$("#FacturacionForm_total").val(total);
 	}
 

@@ -21,6 +21,7 @@
  * @property string $cadena_original
  * @property string $sello_cfdi
  * @property string $sello_sat
+ * @property string $descuento
  * @property integer $id_ordenes
  *
  * The followings are the available model relations:
@@ -56,7 +57,7 @@ class FacturasExpedidas extends CActiveRecord
 			array('rfc', 'match', 'pattern' => '^([a-zA-Z&Ññ]{3}|[a-zA-Z][aAeEiIoOuU][a-zA-Z]{2})\\d{2}((01|03|05|07|08|10|12)(0[1-9]|[12]\\d|3[01])|02(0[1-9]|[12]\\d)|(04|06|09|11)(0[1-9]|[12]\\d|30))([a-zA-Z0-9]{2}[0-9aA])$^', 'message' => 'El RFC es inválido.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, razon_social, rfc, calle, numero, colonia, codigo_postal, localidad, municipio, estado, fecha_emision, fecha_certificacion, uuid, numero_comprobante, cadena_original, sello_cfdi, sello_sat, id_ordenes', 'safe', 'on'=>'search'),
+			array('id, razon_social, rfc, calle, numero, colonia, codigo_postal, localidad, municipio, estado, fecha_emision, fecha_certificacion, uuid, numero_comprobante, cadena_original, sello_cfdi, sello_sat, id_ordenes, descuento', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -97,6 +98,7 @@ class FacturasExpedidas extends CActiveRecord
 			'sello_cfdi' => 'Sello CFDI',
 			'sello_sat' => 'Sello SAT',
 			'id_ordenes' => 'Órdenes',
+			'descuento' => 'Descuento',
 		);
 	}
 
@@ -136,6 +138,7 @@ class FacturasExpedidas extends CActiveRecord
 		$criteria->compare('sello_cfdi',$this->sello_cfdi,true);
 		$criteria->compare('sello_sat',$this->sello_sat,true);
 		$criteria->compare('id_ordenes',$this->id_ordenes);
+		$criteria->compare('descuento',$this->descuento);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

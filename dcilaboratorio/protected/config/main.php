@@ -21,6 +21,7 @@ return array(
 		'ext.fpdf.ImprimirOrden',
 		'ext.fpdf.ImprimirResultados',
 		'ext.fpdf.ImprimirFactura',
+		'ext.phpqrcode.qrlib'
 		// 'ext.Facturacion.conf.*',
 		// 'ext.Facturacion.php.*',
 	),

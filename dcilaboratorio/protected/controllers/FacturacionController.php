@@ -89,9 +89,6 @@ class FacturacionController extends Controller
 					$mensaje = $result['mensaje'];
 				}
 			}
-			// $model->attributes=$_POST['Examenes'];
-			// if($model->save())
-			// 	$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('_form', array(
@@ -155,6 +152,14 @@ class FacturacionController extends Controller
 				}
 				$idExamen = $examen->id;
 			}
+			if(isset($model->costo_extra) && $model->costo_extra > 0){
+				$conceptoExtra = new ConceptoForm;
+				$conceptoExtra->id = count($conceptos);
+				$conceptoExtra->clave = "EMRGNC";
+				$conceptoExtra->concepto = "Costo de emergencia";
+				$conceptoExtra->precio = $model->costo_extra;
+				array_push($conceptos, $conceptoExtra);
+			}
 			$model->conceptos = $conceptos;
 		}
 
@@ -184,12 +189,20 @@ class FacturacionController extends Controller
 				$titulo="Error";
 			}
 			if($model->validate() && $conceptosConError == null){
-				$this->prepararCFD($model);
-				$this->generarCFD();
-				$result = $this->imprimirFactura($model);
-				if (isset($result['titulo']) && isset($result['mensaje'])) {
-					$titulo = $result['titulo'];
-					$mensaje = $result['mensaje'];
+				if(isset($model->id_orden)){
+					$facturaExpedida = $this->facturaGeneradaAnteriormente($model->id_orden);
+					if (isset($facturaExpedida)) {
+						$this->reimprimirFactura($facturaExpedida);
+					}
+					else{
+						$this->prepararCFD($model);
+						$this->generarCFD();
+						$result = $this->imprimirFactura($model);
+						if (isset($result['titulo']) && isset($result['mensaje'])) {
+							$titulo = $result['titulo'];
+							$mensaje = $result['mensaje'];
+						}
+					}
 				}
 			}
 		}
@@ -200,6 +213,11 @@ class FacturacionController extends Controller
 			'conceptosConError' => $conceptosConError,
 			));
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
+	}
+
+	function facturaGeneradaAnteriormente($id){
+		$facturacionModel = FacturasExpedidas::model()->find("id_ordenes=?", array($id));
+		return $facturacionModel;
 	}
 
 	public function imprimirFactura($facturacionModel){
@@ -292,6 +310,7 @@ class FacturacionController extends Controller
 		$facturaExpedida->municipio = $facturacionModel->municipio;
 		$facturaExpedida->estado = $facturacionModel->estado;
 		$facturaExpedida->fecha_emision = $facturacionModel->fecha;
+		$facturaExpedida->descuento = $facturacionModel->descuento;
 		$facturaExpedida->fecha_certificacion = $fullAnswer['date'];
 		$facturaExpedida->uuid = $fullAnswer['uuid'];
 		$facturaExpedida->numero_comprobante = $fullAnswer['certNumber'];
@@ -312,7 +331,6 @@ class FacturacionController extends Controller
 					$concepto->id_facturas_expedidas = $facturaExpedida->id;
 					$concepto->save();
 				}
-
 			}
 		}
 
@@ -320,6 +338,51 @@ class FacturacionController extends Controller
 		$pdf->AddPage();
 		$pdf->cabeceraHorizontal($facturacionModel, $fullAnswer);
 		$pdf->contenido($facturacionModel, $fullAnswer);
+		$pdf->Output();
+	}
+
+	public function reimprimirFactura($facturaExpedida){
+		$factura = new FacturacionForm;
+		$factura->razon_social = $facturaExpedida->razon_social;
+		$factura->rfc = $facturaExpedida->rfc;
+		$factura->calle = $facturaExpedida->calle;
+		$factura->numero = $facturaExpedida->numero;
+		$factura->colonia = $facturaExpedida->colonia;
+		$factura->codigo_postal = $facturaExpedida->codigo_postal;
+		$factura->localidad = $facturaExpedida->localidad;
+		$factura->municipio = $facturaExpedida->municipio;
+		$factura->estado = $facturaExpedida->estado;
+		$factura->fecha = $facturaExpedida->fecha_emision;
+		$factura->id_orden = $facturaExpedida->id_ordenes;
+		$factura->descuento = $facturaExpedida->descuento;
+
+		$fullAnswer = array(
+			'date' => $facturaExpedida->fecha_certificacion,
+			'uuid' => $facturaExpedida->uuid,
+			'certNumber' => $facturaExpedida->numero_comprobante,
+			'string' => $facturaExpedida->cadena_original,
+			'cfdStamp' => $facturaExpedida->sello_cfdi,
+			'satStamp' => $facturaExpedida->sello_sat,
+			);
+
+		$conceptosExpedidos = $facturaExpedida->conceptos;
+
+		$conceptos = array();
+
+		foreach ($conceptosExpedidos as $concepto) {
+			$conceptoForm = new ConceptoForm;
+			$conceptoForm->clave = $concepto->clave;
+			$conceptoForm->concepto = $concepto->descripcion;
+			$conceptoForm->precio = $concepto->precio;
+			array_push($conceptos, $conceptoForm);
+		}
+
+		$factura->conceptos = $conceptos;
+
+		$pdf = new ImprimirFactura('P','cm','letter');
+		$pdf->AddPage();
+		$pdf->cabeceraHorizontal($factura, $fullAnswer);
+		$pdf->contenido($factura, $fullAnswer);
 		$pdf->Output();
 	}
 
@@ -350,10 +413,10 @@ class FacturacionController extends Controller
 		$total = 0;
 		foreach ($conceptos as $concepto) {
 			$precio = $concepto->precio;
-			$subTotal += $precio * 0.84;
+			$subTotal += ($precio / 1.16);
 			$total += $precio;
-			$stringConceptos .= '<cfdi:Concepto cantidad="1" descripcion="'.$concepto->concepto.'" importe="'.str_replace(",","",number_format($precio*0.84, 2)).'" noIdentificacion="'.$concepto->clave.'" unidad="EXAMEN" valorUnitario="'.str_replace(",","",number_format($precio*0.84, 2)).'"/>';
-			$stringTrasladados .= '<cfdi:Traslado importe="'.str_replace(",","",number_format($precio*0.16, 2)).'" impuesto="IVA" tasa="16.00"/>';
+			$stringConceptos .= '<cfdi:Concepto cantidad="1" descripcion="'.$concepto->concepto.'" importe="'.str_replace(",","",number_format($precio/1.16, 2)).'" noIdentificacion="'.$concepto->clave.'" unidad="EXAMEN" valorUnitario="'.str_replace(",","",number_format($precio/1.16, 2)).'"/>';
+			$stringTrasladados .= '<cfdi:Traslado importe="'.str_replace(",","",number_format($precio/1.16*0.16, 2)).'" impuesto="IVA" tasa="16.00"/>';
 		}
 		$cfd_xml = str_replace('@CONCEPTOS',$stringConceptos,$cfd_xml);
 		$cfd_xml = str_replace('@TRASLADADOS',$stringTrasladados,$cfd_xml);

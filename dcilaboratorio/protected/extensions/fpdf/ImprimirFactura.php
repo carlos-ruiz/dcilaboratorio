@@ -133,9 +133,6 @@ class ImprimirFactura extends FPDF{
         $this->Cell(3,$y,'Total con descuento:', 1, 0, 'R');
         $this->Cell(4,$y,'$ '.$totalOrden*(1-($model->descuento/100)), 1, 1, 'R');
         $this->setX(13.5);
-        $this->Cell(3,$y,'Costo emergencia:', 1, 0, 'R');
-        $this->Cell(4,$y,'$ '.$model->costo_extra, 1, 1, 'R');
-        $this->setX(13.5);
         $total = $totalOrden*(1-($model->descuento/100)) + $model->costo_extra;
         $this->Cell(3,$y,'Total:', 1, 0, 'R');
         $this->Cell(4,$y,'$ '.$total, 1, 1, 'R');
@@ -147,7 +144,7 @@ class ImprimirFactura extends FPDF{
         $this->MultiCell(0, $y, 'cfdStamp - '.$datosFactura['cfdStamp'], 0, 'L', false);
         $this->MultiCell(0, $y, 'Sello digital del emisor (certNumber) - '.$datosFactura['certNumber'], 0, 'L', false);
         $this->MultiCell(0, $y, 'Sello digital del SAT(satStamp) - '.$datosFactura['satStamp'], 0, 'L', false);
-         $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/qr.png',16,22,4,4);
+        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/qr.png',16,22,4,4);
     }
 
     function Footer()
