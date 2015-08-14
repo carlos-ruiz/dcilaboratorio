@@ -50,7 +50,6 @@ class FacturacionController extends Controller
 
 	public function actionCreate()
 	{
-
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
 		$conceptosConError = null;
@@ -395,6 +394,14 @@ class FacturacionController extends Controller
 		$cfd_xml = fread($cfd_xml_handler, filesize($xmlPath));
 		fclose($cfd_xml_handler);
 
+		# Fecha y hora de la orden
+		$fechaModel = $model->fecha;
+		$datetime = new DateTime($fechaModel);
+		$datetime = $datetime->format(DateTime::ISO8601);
+		$FECHA = substr($datetime, 0, 19);
+		# Establece fecha de CFD
+		$cfd_xml = str_replace('@FECHA',$FECHA,$cfd_xml);
+
 		# Agregar datos del receptor
 		$cfd_xml = str_replace('@NOMBRE_RECEPTOR',strtoupper($model->razon_social),$cfd_xml);
 		$cfd_xml = str_replace('@RFC_RECEPTOR',strtoupper($model->rfc),$cfd_xml);
@@ -454,10 +461,6 @@ class FacturacionController extends Controller
 		$CERTIFICADO =  $this->certificadoF($cerFile, $cerOutFile);
 		# Obtén rfc a partir del certificado
 		$RFC_EMISOR = $this->getRFC($cerFile);
-		# Fecha y hora actuales
-		$datetime = new DateTime();
-		$datetime = $datetime->format(DateTime::ISO8601);
-		$FECHA = substr($datetime, 0, 19);
 
 		if ($errorCode == 0){
 
@@ -470,8 +473,7 @@ class FacturacionController extends Controller
 			$cfd_xml = str_replace('@CERTIFICADO',$CERTIFICADO,$cfd_xml);
 			$cfd_xml = str_replace('@NO_CERTIFICADO',$NO_CERTIFICADO,$cfd_xml);
 			$cfd_xml = str_replace('@RFC_EMISOR',$RFC_EMISOR,$cfd_xml);
-			# Establece fecha de CFD
-			$cfd_xml = str_replace('@FECHA',$FECHA,$cfd_xml);
+
 			# Establece RFC de receptor aleatoriamente
 			$cfd_xml = str_replace('@RFC_RECEPTOR','RUCC9009253A6', $cfd_xml);
 
@@ -645,6 +647,25 @@ class FacturacionController extends Controller
 		$sellotemp = fread($sello_handler, filesize($selloPath));
 		fclose($sello_handler);
 		return $sellotemp;
+	}
+
+	public function cancelarCfdi($uuid){
+		$url = 'http://www.bpimorelia.com/wstech/api.php';
+
+		$data = array('uuidCancel' => $uuid);
+
+		// use key 'http' even if you send the request to https://...
+		$options = array(
+			'http' => array(
+				'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+				'method'  => 'POST',
+				'content' => http_build_query($data),
+				),
+			);
+		$context  = stream_context_create($options);
+		$user_info = file_get_contents($url, false, $context);
+		$user_info = json_decode($user_info, true);
+		return $user_info;
 	}
 
 	public function obtenerPaciente($data, $row){
