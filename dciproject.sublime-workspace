@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"cacl",
+				"calcularSubTotal"
+			],
+			[
+				"calcula",
+				"calcularIva"
+			],
+			[
+				"val",
+				"val"
+			],
+			[
+				"calc",
+				"calcularSubtotalConDescuento"
+			],
+			[
+				"subto",
+				"subtotalConDescuento"
+			],
+			[
+				"get",
+				"getDescuento"
+			],
+			[
+				"str_re",
+				"str_replace"
+			],
+			[
 				"local",
 				"localidad"
 			],
@@ -78,10 +106,6 @@
 			[
 				"precio",
 				"precioConcepto"
-			],
-			[
-				"val",
-				"value"
 			],
 			[
 				"orde",
@@ -491,32 +515,32 @@
 			"file": "dcilaboratorio/protected/controllers/FacturacionController.php",
 			"settings":
 			{
-				"buffer_size": 23831,
+				"buffer_size": 21337,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/tmp/cfd.xml",
+			"file": "dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/selloOut.txt",
 			"settings":
 			{
-				"buffer_size": 1555,
+				"buffer_size": 172,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml",
+			"file": "dcilaboratorio/protected/views/facturacion/_form.php",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 13151,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/cadenaOriginalOut.txt",
+			"file": "/C/Users/Carlos/AppData/Local/Temp/652a2f69-1040-43ca-97d9-39f7c29944ec/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
 			"settings":
 			{
-				"buffer_size": 0,
-				"line_ending": "Windows"
+				"buffer_size": 40379,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -624,17 +648,22 @@
 	[
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/custom",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/tmp",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models"
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/facturacion"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/cadenaOriginalOut.txt",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/tmp/cfd.xml",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/selloOut.txt",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/FacturacionController.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/generador.py",
@@ -647,7 +676,6 @@
 		"/C/Users/Carlos/Desktop/generar cfd.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/FacturacionForm.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/extensions/fpdf/ImprimirFactura.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/css/custom/customStyle.css",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/facturacion/_form.php",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers/EspecialidadesController.php",
@@ -759,10 +787,7 @@
 		"/C/Users/Carlos/AppData/Local/Temp/25c44905-d916-4e99-ac03-dacc59b3b21d/dcilaboratorio/protected/config/database.php",
 		"/C/Users/Carlos/Downloads/Doctores.php",
 		"/C/Users/Carlos/Downloads/webalizer.hist",
-		"/C/Users/Carlos/Downloads/application.log",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/UnidadTieneDoctores.php",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/runtime/.gitkeep",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/models/Contactos.php"
+		"/C/Users/Carlos/Downloads/application.log"
 	],
 	"find":
 	{
@@ -787,6 +812,16 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"facturacionModel",
+			"imprimirFactura",
+			"conectarConWS",
+			"precioConcepto",
+			"total",
+			"class*control",
+			"class*total",
+			"*total",
+			"\" ",
+			"SELLO",
 			"pemCert",
 			"/cfd.xml",
 			"xmlResultPath",
@@ -904,17 +939,7 @@
 			"LoginForm",
 			"My Web Application",
 			"My Web Appl",
-			"$section = \"",
-			"section=\"",
-			"usuario_edicion",
-			"operations",
-			"CGridView",
-			"bootstrap.min.css",
-			"bootstrap",
-			"components.css",
-			"portlet-config",
-			"datatable",
-			"data-table"
+			"$section = \""
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -932,7 +957,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -941,15 +966,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 23831,
+						"buffer_size": 21337,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9520,
-								9520
+								18655,
+								18664
 							]
 						],
 						"settings":
@@ -961,81 +986,19 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1835.0,
+						"translation.y": 9612.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/tmp/cfd.xml",
-					"semi_transient": false,
+					"file": "dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/selloOut.txt",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 1555,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/XML/XML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/XML/XML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "dcilaboratorio/protected/extensions/TimbradoCFD/generador_xml_cfdi/xml/cadenaOriginalOut.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 0,
+						"buffer_size": 172,
 						"regions":
 						{
 						},
@@ -1057,7 +1020,70 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "dcilaboratorio/protected/views/facturacion/_form.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13087,
+								13087
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 5849.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/Users/Carlos/AppData/Local/Temp/652a2f69-1040-43ca-97d9-39f7c29944ec/dcilaboratorio/dcilaboratorio/protected/runtime/application.log",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 40379,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 11070.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -1104,7 +1130,7 @@
 	},
 	"output.sftp":
 	{
-		"height": 130.0
+		"height": 254.0
 	},
 	"pinned_build_system": "",
 	"project": "dciproject.sublime-project",
