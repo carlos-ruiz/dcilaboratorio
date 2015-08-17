@@ -328,6 +328,11 @@
 				<i class="icon-list"></i>
 				Administrar</a>
 			</li>
+			<li <?php if($this->section=="Facturacion" && $this->subSection=="Expedidas"){ echo 'class="active open"';}?>>
+				<a href="<?php echo Yii::app()->request->baseUrl; ?>/facturacion/mostrarExpedidas">
+				<i class="icon-list"></i>
+				Facturas Expedidas</a>
+			</li>
 		</ul>
 	</li>
 

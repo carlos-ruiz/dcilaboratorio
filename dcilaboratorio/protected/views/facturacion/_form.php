@@ -242,6 +242,7 @@ $total = 0;
 				setConceptosIds();
 				activarScripts();
 				calcularSubTotal();
+				conceptosIds.push(numeroConcepto);
 			}
 		);
 	});
@@ -275,7 +276,7 @@ $total = 0;
 				suma += precio;
 			}
 		});
-		suma=Number((suma).toFixed(2));
+		suma=parseFloat(suma).toFixed(2);
 		$('#subtotal').val(suma);
 		calcularIva();
 		calcularTotal();
@@ -298,22 +299,22 @@ $total = 0;
 				suma += precio;
 			}
 		});
-		suma = Number((suma).toFixed(2));
+		suma = parseFloat(suma).toFixed(2);
 		$("#FacturacionForm_iva").val(suma);
 	}
 
 	function calcularTotal(){
-		subtotal = parseFloat($("#subtotal").val());
-		iva = parseFloat($("#FacturacionForm_iva").val());
-		total = (subtotal+iva);
+		subtotal = Number(parseFloat($("#subtotal").val()).toFixed(2));
+		iva = Number(parseFloat($("#FacturacionForm_iva").val()).toFixed(2));
+		total = parseFloat(subtotal+iva).toFixed(2);
 		$("#FacturacionForm_total").val(total);
 	}
 
 	function actualizarImporteConcepto(index){
-		precio = parseFloat($("#precio_"+index).val());
-		totalDesc = Number((precio*(100-getDescuento())/100).toFixed(2));
-		importeSinIva = Number((totalDesc/1.16).toFixed(2));
-		iva = (totalDesc-importeSinIva).toFixed(2);
+		precio = Number(parseFloat($("#precio_"+index).val())).toFixed(2);
+		totalDesc = Number(precio*(100-getDescuento())/100).toFixed(2);
+		importeSinIva = Number(totalDesc/1.16).toFixed(2);
+		iva = Number(totalDesc-importeSinIva).toFixed(2);
 		$("#total_desc_"+index).text(totalDesc);
 		$("#importe_sin_iva_"+index).text(importeSinIva);
 		$("#iva_"+index).text(iva);
@@ -327,6 +328,9 @@ $total = 0;
 			alerta("El descuento debe ser un número entre 0 y 100", "Error");
 		}
 		else{
+			for (var i = 0; i < conceptosIds.length; i++) {
+				actualizarImporteConcepto(conceptosIds[i]);
+			}
 			total = calcularSubTotal();
 		}
 	});

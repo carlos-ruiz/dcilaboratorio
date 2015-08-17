@@ -35,13 +35,13 @@ class ImprimirFactura extends FPDF{
         $this->SetFont('Times','',8);
         $this->Cell(1, 3, 'Gnl.Bravo #170', 0, 0, 'C');
         $this->Cell(1, 3.7, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
-        $this->Cell(-2.4, 4.4, 'Morelia Michoacán', 0, 0, 'C');
+        $this->Cell(-2.4, 4.4, 'Morelia, Michoacán', 0, 0, 'C');
 
         $this->SetXY(2.4, 3.7);
         $this->SetFont('Times','B',8);
         $this->Cell(1, 3.7, 'Lugar de expedición:', 0, 0, 'C');
         $this->SetFont('Times','',8);
-        $this->Cell(3.9, 3.7, 'Morelia, Michoacán', 0, 0, 'C');
+        $this->Cell(3.9, 3.7, ' Morelia, Michoacán', 0, 0, 'C');
         $this->SetFont('Times','B',8);
         $this->SetXY(2.4, 4);
         $this->Cell(.6, 3.8, 'Datos del Receptor', 0, 0, 'C');
@@ -65,7 +65,7 @@ class ImprimirFactura extends FPDF{
         $this->SetFont('Times','B',8);
         $this->setX(1.5);
         $this->Cell(0,0.1,'Domicilio', 0, 1, 'L');
-        $this->Cell(0,0.1,'Número de comprobante: '.$datosFactura['certNumber'], 0, 1, 'R');
+        $this->Cell(0,0.1,'Número de comprobante: '.$model->numeroFactura, 0, 1, 'R');
         $this->SetFont('Times','',8);
         $this->setX(1.5);
         $this->Cell(2,0.6,'Calle '.$model->calle.' N° '.$model->numero, 0, 1, 'L');
@@ -100,9 +100,11 @@ class ImprimirFactura extends FPDF{
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
         $this->SetTextColor(0, 0, 0); //Letra color blanco
 
-        $this->Cell(3.5,$y, 'Clave',1, 0 , 'C', true);
-        $this->Cell(12,$y, 'Descripción',1, 0 , 'C', true);
-        $this->Cell(4,$y, 'Costo',1, 1 , 'C', true);
+        $this->Cell(2,$y, 'Cantidad',1, 0 , 'C', true);
+        $this->Cell(2,$y, 'Unidad',1, 0 , 'C', true);
+        $this->Cell(9.5,$y, 'Descripción',1, 0 , 'C', true);
+        $this->Cell(3,$y, 'Precio unitario',1, 0 , 'C', true);
+        $this->Cell(3,$y, 'Importe',1, 1 , 'C', true);
     }
 
     function contenido($model, $datosFactura){
@@ -115,35 +117,60 @@ class ImprimirFactura extends FPDF{
         $conceptos = $model->conceptos;
         $idExamen = 0;
         $totalOrden = 0;
+        $subtotal = 0;
         $duracion = 0;
+        $descuento = isset($model->descuento)?$model->descuento:0;
         foreach ($conceptos as $concepto) {
-            $this->Cell(3.5,$y, $concepto->clave,1, 0);
-            $this->Cell(12,$y, $concepto->concepto,1, 0 );
-            $this->Cell(4,$y, '$ '.$concepto->precio,1, 1, 'R');
-            $totalOrden += $concepto->precio;
+            $this->Cell(2,$y, '1.00',1, 0);
+            $this->Cell(2,$y, 'N/A',1, 0);
+            $this->Cell(9.5,$y, $concepto->concepto,1, 0 );
+            $this->Cell(3,$y, '$ '.round(($concepto->precio*(1-($descuento/100))/1.16), 2),1, 0, 'R');
+            $this->Cell(3,$y, '$ '.round(($concepto->precio*(1-($descuento/100))/1.16), 2),1, 1, 'R');
+            $totalOrden += ($concepto->precio*(1-($descuento/100)));
+            $subtotal += round(($concepto->precio*(1-($descuento/100))/1.16), 2);
         }
-        $this->setX(13.5);
+        $this->setX(14.5);
         $this->SetFont('Arial','B',8);
-        $this->Cell(3,$y,'Total orden:', 1, 0, 'R');
-        $this->Cell(4,$y,'$ '.$totalOrden, 1, 1, 'R');
-        $this->setX(13.5);
-        $this->Cell(3,$y,'Descuento:', 1, 0, 'R');
-        $this->Cell(4,$y,isset($model->descuento)?$model->descuento:'0'.'%', 1, 1, 'R');
-        $this->setX(13.5);
-        $this->Cell(3,$y,'Total con descuento:', 1, 0, 'R');
-        $this->Cell(4,$y,'$ '.$totalOrden*(1-($model->descuento/100)), 1, 1, 'R');
-        $this->setX(13.5);
+        $this->Cell(3,$y,'Subtotal:', 0, 0, 'R');
+        $this->Cell(3,$y,'$ '.$subtotal, 0, 1, 'R');
+        $this->setX(14.5);
+        $this->Cell(3,$y,'I.V.A. 16.00%:', 0, 0, 'R');
+        $this->Cell(3,$y,'$ '.($totalOrden-$subtotal), 0, 1, 'R');
+        $this->setX(14.5);
+        // $this->Cell(3,$y,'Descuento:', 1, 0, 'R');
+        // $this->Cell(4,$y,isset($model->descuento)?$model->descuento:'0'.'%', 1, 1, 'R');
+        // $this->setX(13.5);
+        // $this->Cell(3,$y,'Total con descuento:', 1, 0, 'R');
+        // $this->Cell(4,$y,'$ '.$totalOrden*(1-($model->descuento/100)), 1, 1, 'R');
+        // $this->setX(13.5);
         $total = $totalOrden*(1-($model->descuento/100)) + $model->costo_extra;
-        $this->Cell(3,$y,'Total:', 1, 0, 'R');
-        $this->Cell(4,$y,'$ '.$total, 1, 1, 'R');
+        $this->Cell(3,$y,'Total:', 0, 0, 'R');
+        $this->Cell(3,$y,'$ '.$totalOrden, 0, 1, 'R');
 
         $this->ln(2);
         $this->setX(1);
 
-        $this->MultiCell(0, $y, 'Este documento es una representación impresa de un CFDI - '.$datosFactura['string'], 0, 'L', false);
-        $this->MultiCell(0, $y, 'cfdStamp - '.$datosFactura['cfdStamp'], 0, 'L', false);
-        $this->MultiCell(0, $y, 'Sello digital del emisor (certNumber) - '.$datosFactura['certNumber'], 0, 'L', false);
-        $this->MultiCell(0, $y, 'Sello digital del SAT(satStamp) - '.$datosFactura['satStamp'], 0, 'L', false);
+        $this->Cell(0, $y, '"Este documento es una representación impresa de un CFDI"', 0, 1, 'L');
+        $this->ln();
+        $this->Cell(10, $y, 'Número de serie del certificado de sello digital:', 0, 0, 'L');
+        $this->Cell(10, $y, 'Número de serie del certificado de sello digital del SAT:', 0, 1, 'L');
+        $this->SetFont('Arial','',8);
+        $this->Cell(10, $y, $datosFactura['certNumber'], 0, 0, 'L');
+        $this->Cell(10, $y, $datosFactura['certNumber'], 0, 1, 'L');
+        $this->ln();
+        $this->SetFont('Arial','B',8);
+        $this->Cell(10, $y, 'Cadena original del complemento de certificación digital del SAT: ', 0, 1, 'L');
+        $this->SetFont('Arial','',8);
+        $this->MultiCell(0, $y, $datosFactura['string'], 0, 'L', false);
+        $this->setX(1);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(0, $y, 'Sello Digital del Emisor:', 0, 1, 'L');
+        $this->SetFont('Arial','',8);
+        $this->MultiCell(15, $y,$datosFactura['cfdStamp'], 0, 'L', false);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(0, $y, 'Sello digital del SAT:', 0, 1, 'L');
+        $this->SetFont('Arial','',8);
+        $this->MultiCell(15, $y, $datosFactura['satStamp'], 0, 'L', false);
         $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/qr.png',16,22,4,4);
     }
 

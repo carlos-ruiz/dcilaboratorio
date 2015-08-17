@@ -39,7 +39,7 @@ class FacturacionController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index', 'create', 'admin', 'generarFactura', 'agregarConcepto'),
+				'actions'=>array('index', 'create', 'admin', 'mostrarExpedidas', 'generarFactura', 'cancelarCfdi', 'agregarConcepto'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -50,6 +50,10 @@ class FacturacionController extends Controller
 
 	public function actionCreate()
 	{
+		$uuid = "4E87CD17-DC9C-4858-A436-04185068B310";
+		$response = $this->obtenerQr($uuid);
+		print_r($response);
+		return;
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
 		$conceptosConError = null;
@@ -109,6 +113,19 @@ class FacturacionController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 			'filtroFactura'=>1,
+			));
+	}
+
+	public function actionMostrarExpedidas(){
+		$this->subSection = "Expedidas";
+		$model=new FacturasExpedidas('search');
+
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['FacturasExpedidas']))
+			$model->attributes=$_GET['FacturasExpedidas'];
+
+		$this->render('reimprimir',array(
+			'model'=>$model,
 			));
 	}
 
@@ -342,6 +359,7 @@ class FacturacionController extends Controller
 
 	public function reimprimirFactura($facturaExpedida){
 		$factura = new FacturacionForm;
+		$factura->numeroFactura = $facturaExpedida->id;
 		$factura->razon_social = $facturaExpedida->razon_social;
 		$factura->rfc = $facturaExpedida->rfc;
 		$factura->calle = $facturaExpedida->calle;
@@ -637,10 +655,6 @@ class FacturacionController extends Controller
 		$command = sprintf($command, strval($signBinPath), strval($selloPath));
 		$f = popen($command, 'r');
 
-		// $command .= ' dgst -sha1 -out %s -sign %s %s | '.$command.' enc -in %s -a -A -out %s';
-		// $command = sprintf($command, strval($signBinPath), strval($pemPath), strval($cadenaOriginalPath), strval($signBinPath), strval($selloPath));
-		// $f = popen($command, 'r');
-
 		sleep(1);
 
 		$sello_handler = fopen($selloPath,'r');
@@ -649,7 +663,7 @@ class FacturacionController extends Controller
 		return $sellotemp;
 	}
 
-	public function cancelarCfdi($uuid){
+	public function actionCancelarCfdi($uuid){
 		$url = 'http://www.bpimorelia.com/wstech/api.php';
 
 		$data = array('uuidCancel' => $uuid);
@@ -663,9 +677,62 @@ class FacturacionController extends Controller
 				),
 			);
 		$context  = stream_context_create($options);
-		$user_info = file_get_contents($url, false, $context);
-		$user_info = json_decode($user_info, true);
-		return $user_info;
+		$ws_response = file_get_contents($url, false, $context);
+		$ws_response = json_decode($ws_response, true);
+		if($ws_response['ok'] == true && $ws_response['errorCode'] == 0){
+			$facturaExpedida = FacturasExpedidas::model()->find("uuid=?", array($uuid));
+			$facturaExpedida->activa = 0;
+			if($facturaExpedida->save()){
+				$mensaje = "Factura cancelada correctamente";
+				$titulo = "Cancelación exitosa";
+			}
+		}
+		else{
+			$titulo = "Error";
+			$response = $ws_response['uuid'];
+			$error = split("\|", $response);
+			$errorCode = split(':', $error[0]);
+			$errorCode = $errorCode[1];
+			
+			switch ($errorCode) {
+				case '200':
+					$mensaje = "UUID en proceso de cancelación";
+					break;
+				case "202":
+					$mensaje = "UUID previamente cancelado";
+					break;
+				case "203":
+					$mensaje = "UUID consultado no pertenece a contribuyente";
+					break;
+				case "205":
+					$mensaje = "UUID consultado desconocido";
+					break;
+				case "206":
+					$mensaje = "UUID no solicitado para cancelación";
+					break;
+			}
+		}
+		$this->actionMostrarExpedidas();
+		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
+	}
+
+	public function obtenerQr($uuid){
+		$url = 'http://www.bpimorelia.com/wstech/api.php';
+
+		$data = array('uuidCBB' => $uuid);
+
+		// use key 'http' even if you send the request to https://...
+		$options = array(
+			'http' => array(
+				'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+				'method'  => 'POST',
+				'content' => http_build_query($data),
+				),
+			);
+		$context  = stream_context_create($options);
+		$ws_response = file_get_contents($url, false, $context);
+		$ws_response = json_decode($ws_response, true);
+		return $ws_response;
 	}
 
 	public function obtenerPaciente($data, $row){
@@ -692,7 +759,16 @@ class FacturacionController extends Controller
 				<input type='text' class='form-control' id='concepto_$numeroConcepto' name='concepto_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
 			</td>
 			<td class='precioConcepto'>
-				<input type='text' class='form-control' id='precio_$numeroConcepto' name='precio_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
+				<input type='text' class='form-control' data-row='$numeroConcepto' id='precio_$numeroConcepto' name='precio_$numeroConcepto' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />
+			</td>
+			<td>
+				<span id='total_desc_$numeroConcepto'></span>
+			</td>
+			<td class='importeSinIva'>
+				<span id='importe_sin_iva_$numeroConcepto'></span>
+			</td>
+			<td class='iva'>
+				<span id='iva_$numeroConcepto'></span>
 			</td>
 			<td>
 				<a href='javascript:void(0)' data-id='$numeroConcepto' class='eliminarConcepto'><span class='fa fa-trash'></span></a>

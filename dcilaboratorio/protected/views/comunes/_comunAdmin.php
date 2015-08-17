@@ -104,6 +104,15 @@
 								        					'title'=>'Facturar',
 								        				),
 											        ),
+											        'cancelarFactura'=>array(
+											        	'label'=>'<span class="fa fa-ban"></span>',
+								        				'visible'=>'(isset($data->activa) && $data->activa == 1)',
+								        				'imageUrl'=>false,
+								        				'url'=>'Yii::app()->controller->createUrl("cancelarCfdi",array("uuid"=>$data->uuid))',
+								        				'options'=>array(
+								        					'title'=>'Cancelar',
+								        				),
+											        ),
 											    ),
 											    'template'=>(!isset($buttonsTemplate))?'{activar} {view} {update} {borrar} {desactivar}':$buttonsTemplate,
 											));

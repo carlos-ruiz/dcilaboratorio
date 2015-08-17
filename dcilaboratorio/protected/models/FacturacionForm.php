@@ -6,7 +6,8 @@
  * user login form data. It is used by the 'login' action of 'SiteController'.
  */
 class FacturacionForm extends CFormModel
-{
+{	
+	public $numeroFactura;
 	public $razon_social;
 	public $rfc;
 	public $calle;
@@ -60,6 +61,7 @@ class FacturacionForm extends CFormModel
 			'conceptos'=>'Conceptos',
 			'descuento'=>'Descuento',
 			'costo_extra'=>'Costo de emergencia',
+			'numeroFactura'=>"Factura número",
 		);
 	}
 }
