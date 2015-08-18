@@ -53,6 +53,10 @@ class FacturacionController extends Controller
 		$uuid = "4E87CD17-DC9C-4858-A436-04185068B310";
 		$response = $this->obtenerQr($uuid);
 		print_r($response);
+		$png = base64_decode($response['b64cbb']);
+		$pngPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../../assets/qrcodes/qr.png';
+		file_put_contents($pngPath, $png);
+		echo "<BR/>PNG: <BR/>$png";
 		return;
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;

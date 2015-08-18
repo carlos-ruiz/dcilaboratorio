@@ -171,7 +171,7 @@ class ImprimirFactura extends FPDF{
         $this->Cell(0, $y, 'Sello digital del SAT:', 0, 1, 'L');
         $this->SetFont('Arial','',8);
         $this->MultiCell(15, $y, $datosFactura['satStamp'], 0, 'L', false);
-        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/qr.png',16,22,4,4);
+        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../assets/qrcodes/qr.png',16,22,4,4);
     }
 
     function Footer()
