@@ -5,19 +5,13 @@ class ImprimirFactura extends FPDF{
 	function Header(){
         $y = 0.5;
 		$this->SetFont('Arial','B',14);
-        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',16,1.7,4.3,3.3);
+
 	}
 
 	function cabeceraHorizontal($model, $datosFactura)
 	{
-        // $fecha = explode('-', $model->fecha);
+        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',16,1.7,4.3,3.3);
         $fecha = $model->fecha;
-        // $dia= substr($fecha[2], 0, 2);
-        // $hora = explode(' ', $fecha[2]);
-        // $hora = explode(':', $hora[1]);
-
-
-        // $fecha = $dia.'/'.$fecha[1].'/'.$fecha[0].'   '. $hora[0].':'.$hora[1];
 
         $y = 0.5;
         $this->SetXY(1, .75);
@@ -60,7 +54,7 @@ class ImprimirFactura extends FPDF{
         $this->Cell(0,0.1,'Comprobante Digital por Internet', 0, 1, 'R');
         $this->SetFont('Times','',8);
         $this->setX(2.5);
-        $this->Cell(5,0.6,$model->rfc, 0, 1, 'L');
+        $this->Cell(5,0.6,strtoupper($model->rfc), 0, 1, 'L');
         $this->ln(.2);
         $this->SetFont('Times','B',8);
         $this->setX(1.5);
@@ -87,14 +81,6 @@ class ImprimirFactura extends FPDF{
         $this->setX(-7.5);
         $this->Cell(0,.7,'Regimen Fiscal: Reg. de la PF con Act. Emp. y Prof.', 0, 1, 'R');
 
-
-
-        $this->ln(0.5);
-        $this->SetFont('Arial','B',12);
-        $this->SetTextColor(75, 141, 248);
-        $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
-        $this->SetTextColor(0, 0, 0);
-
         $this->ln(.5);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
@@ -110,9 +96,7 @@ class ImprimirFactura extends FPDF{
     function contenido($model, $datosFactura){
     	$this->SetTextColor(0, 0, 0); //Letra color blanco
     	$this->SetFont('Arial','',8);
-    	$posYOriginal = 7;
-    	$posYIncremento = 1.5;
-    	// $this->setXY(1,8.5);
+
     	$y = 0.5;
         $conceptos = $model->conceptos;
         $idExamen = 0;
@@ -145,9 +129,9 @@ class ImprimirFactura extends FPDF{
         // $this->setX(13.5);
         $total = $totalOrden*(1-($model->descuento/100)) + $model->costo_extra;
         $this->Cell(3,$y,'Total:', 0, 0, 'R');
-        $this->Cell(3,$y,'$ '.$totalOrden, 0, 1, 'R');
+        $this->Cell(3,$y,'$ '.number_format($totalOrden, 2), 0, 1, 'R');
 
-        $this->ln(2);
+        $this->ln(0.5);
         $this->setX(1);
 
         $this->Cell(0, $y, '"Este documento es una representación impresa de un CFDI"', 0, 1, 'L');
@@ -155,7 +139,7 @@ class ImprimirFactura extends FPDF{
         $this->Cell(10, $y, 'Número de serie del certificado de sello digital:', 0, 0, 'L');
         $this->Cell(10, $y, 'Número de serie del certificado de sello digital del SAT:', 0, 1, 'L');
         $this->SetFont('Arial','',8);
-        $this->Cell(10, $y, $datosFactura['certNumber'], 0, 0, 'L');
+        $this->Cell(10, $y, $model->csd_emisor, 0, 0, 'L');
         $this->Cell(10, $y, $datosFactura['certNumber'], 0, 1, 'L');
         $this->ln();
         $this->SetFont('Arial','B',8);
@@ -169,9 +153,12 @@ class ImprimirFactura extends FPDF{
         $this->MultiCell(15, $y,$datosFactura['cfdStamp'], 0, 'L', false);
         $this->SetFont('Arial','B',8);
         $this->Cell(0, $y, 'Sello digital del SAT:', 0, 1, 'L');
+        $yQr = $this->getY();
         $this->SetFont('Arial','',8);
         $this->MultiCell(15, $y, $datosFactura['satStamp'], 0, 'L', false);
-        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../assets/qrcodes/qr.png',16,22,4,4);
+        $yQr2 = $this->getY();
+        $yQr = ($yQr>$yQr2)?$yQr2:$yQr;
+        $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../assets/qrcodes/qr.png',17.5,$yQr,3,3);
     }
 
     function Footer()
@@ -181,6 +168,7 @@ class ImprimirFactura extends FPDF{
     //Arial italic 8
     $this->SetFont('Arial','I',8);
     //Page number
-    $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
+    $this->AliasNbPages();
+    $this->Cell(0,10,'Página '.$this->PageNo()."/{nb}",0,0,'C');
 	}
 }

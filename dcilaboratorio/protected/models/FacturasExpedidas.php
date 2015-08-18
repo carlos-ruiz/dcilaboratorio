@@ -21,6 +21,7 @@
  * @property string $cadena_original
  * @property string $sello_cfdi
  * @property string $sello_sat
+ * @property text $qr_png
  * @property string $descuento
  * @property integer $id_ordenes
  *
@@ -99,6 +100,7 @@ class FacturasExpedidas extends CActiveRecord
 			'sello_sat' => 'Sello SAT',
 			'id_ordenes' => 'Órdenes',
 			'descuento' => 'Descuento',
+			'qr_png' => 'Código QR',
 		);
 	}
 
@@ -139,6 +141,7 @@ class FacturasExpedidas extends CActiveRecord
 		$criteria->compare('sello_sat',$this->sello_sat,true);
 		$criteria->compare('id_ordenes',$this->id_ordenes);
 		$criteria->compare('descuento',$this->descuento);
+		$criteria->compare('qr_png',$this->qr_png);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

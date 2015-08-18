@@ -6,7 +6,7 @@
  * user login form data. It is used by the 'login' action of 'SiteController'.
  */
 class FacturacionForm extends CFormModel
-{	
+{
 	public $numeroFactura;
 	public $razon_social;
 	public $rfc;
@@ -22,6 +22,7 @@ class FacturacionForm extends CFormModel
 	public $descuento;
 	public $costo_extra;
 	public $id_orden;
+	public $csd_emisor;
 
 	/**
 	 * Declares the validation rules.

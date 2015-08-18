@@ -50,22 +50,25 @@ class FacturacionController extends Controller
 
 	public function actionCreate()
 	{
-		$uuid = "4E87CD17-DC9C-4858-A436-04185068B310";
-		$response = $this->obtenerQr($uuid);
-		print_r($response);
-		$png = base64_decode($response['b64cbb']);
-		$pngPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../../assets/qrcodes/qr.png';
-		file_put_contents($pngPath, $png);
-		echo "<BR/>PNG: <BR/>$png";
-		return;
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
+		$model->fecha = date('Y-m-d H:i:s');
 		$conceptosConError = null;
 		$conceptos = array();
 
 		if(isset($_POST['FacturacionForm']))
 		{
 			$model->attributes=$_POST['FacturacionForm'];
+
+			$date1 = date('H:i:s');
+			$time = split(":", $date1);
+			$date = date('Y-m-d H:i:s', strtotime($model->fecha.' + '.$time[0].' hours'));
+			$date = date('Y-m-d H:i:s', strtotime($date.' + '.$time[1].' minutes'));
+			$date = date('Y-m-d H:i:s', strtotime($date.' + '.$time[2].' seconds'));
+			$date = split(" ", $date);
+			$date = $date[0].'T'.$date[1];
+			$model->fecha = $date;
+
 			$conceptos = array();
 			if(isset($_POST['conceptos'])){
 				foreach ($_POST['conceptos'] as $key => $value) {
@@ -89,7 +92,7 @@ class FacturacionController extends Controller
 			}
 			if($model->validate() && $conceptosConError == null){
 				$this->prepararCFD($model);
-				$this->generarCFD();
+				$model->csd_emisor = $this->generarCFD();
 				$result = $this->imprimirFactura($model);
 				if (isset($result['titulo']) && isset($result['mensaje'])) {
 					$titulo = $result['titulo'];
@@ -186,6 +189,16 @@ class FacturacionController extends Controller
 		if(isset($_POST['FacturacionForm']))
 		{
 			$model->attributes=$_POST['FacturacionForm'];
+			if(strlen($model->fecha)<12){
+				$date1 = date('H:i:s');
+				$time = split(":", $date1);
+				$date = date('Y-m-d H:i:s', strtotime($model->fecha.' + '.$time[0].' hours'));
+				$date = date('Y-m-d H:i:s', strtotime($date.' + '.$time[1].' minutes'));
+				$date = date('Y-m-d H:i:s', strtotime($date.' + '.$time[2].' seconds'));
+				$date = split(" ", $date);
+				$date = $date[0].'T'.$date[1];
+				$model->fecha = $date;
+			}
 			$conceptos = array();
 			if (isset($_POST['conceptos'])) {
 				foreach ($_POST['conceptos'] as $key => $value) {
@@ -216,7 +229,7 @@ class FacturacionController extends Controller
 					}
 					else{
 						$this->prepararCFD($model);
-						$this->generarCFD();
+						$model->csd_emisor = $this->generarCFD();
 						$result = $this->imprimirFactura($model);
 						if (isset($result['titulo']) && isset($result['mensaje'])) {
 							$titulo = $result['titulo'];
@@ -339,9 +352,16 @@ class FacturacionController extends Controller
 		$facturaExpedida->sello_sat = $fullAnswer['satStamp'];
 		$facturaExpedida->id_ordenes = $facturacionModel->id_orden;
 
+		$response = $this->obtenerQr($facturaExpedida->uuid);
+		$png = base64_decode($response['b64cbb']);
+		$pngPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../../assets/qrcodes/qr.png';
+		file_put_contents($pngPath, $png);
+		$facturaExpedida->qr_png = $response['b64cbb'];
+
 		if($facturaExpedida->validate()){
 			if($facturaExpedida->save()){
 				$conceptos = $facturacionModel->conceptos;
+				$facturacionModel->numeroFactura = $facturaExpedida->id;
 
 				foreach ($conceptos as $value) {
 					$concepto = new ConceptosFactura;
@@ -386,6 +406,11 @@ class FacturacionController extends Controller
 			'satStamp' => $facturaExpedida->sello_sat,
 			);
 
+		$response = $this->obtenerQr($facturaExpedida->uuid);
+		$png = base64_decode($response['b64cbb']);
+		$pngPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../../assets/qrcodes/qr.png';
+		file_put_contents($pngPath, $png);
+
 		$conceptosExpedidos = $facturaExpedida->conceptos;
 
 		$conceptos = array();
@@ -409,6 +434,7 @@ class FacturacionController extends Controller
 
 	public function prepararCFD($model){
 		$conceptos = $model->conceptos;
+		$descuento = $model->descuento;
 		$xmlPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/cfd.xml';
 		$xmlTempPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/cfd.xml';
 		# Lee XML de CFD base
@@ -442,6 +468,7 @@ class FacturacionController extends Controller
 		$total = 0;
 		foreach ($conceptos as $concepto) {
 			$precio = $concepto->precio;
+			$precio = $precio*(1-($descuento/100));
 			$subTotal += ($precio / 1.16);
 			$total += $precio;
 			$stringConceptos .= '<cfdi:Concepto cantidad="1" descripcion="'.$concepto->concepto.'" importe="'.str_replace(",","",number_format($precio/1.16, 2)).'" noIdentificacion="'.$concepto->clave.'" unidad="EXAMEN" valorUnitario="'.str_replace(",","",number_format($precio/1.16, 2)).'"/>';
@@ -535,6 +562,10 @@ class FacturacionController extends Controller
 			$xmlResult = fopen($xmlResultPath,'w');
 			fwrite($xmlResult,$cfd_xml);
 			fclose($xmlResult);
+			return $NO_CERTIFICADO;
+		}
+		else{
+			return null;
 		}
 	}
 
@@ -697,7 +728,7 @@ class FacturacionController extends Controller
 			$error = split("\|", $response);
 			$errorCode = split(':', $error[0]);
 			$errorCode = $errorCode[1];
-			
+
 			switch ($errorCode) {
 				case '200':
 					$mensaje = "UUID en proceso de cancelación";
