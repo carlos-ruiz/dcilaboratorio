@@ -652,12 +652,12 @@ class OrdenesController extends Controller
 		$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($_POST['id'],$_POST['tarifa']));
 		$precio=isset($tarifa->precio)?$tarifa->precio:0;
 		$precioText=isset($tarifa->precio)?'$ '.$tarifa->precio:'No hay precio para el tarifario seleccionado';
-		$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
+		$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 		echo "<tr class='row_$examen->id' data-id='$examen->id'>
 		<td>$examen->clave</td>
 		<td>$examen->nombre</td>
 		<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-		<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+		<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 		</tr>";
 	}
 
@@ -670,12 +670,12 @@ class OrdenesController extends Controller
 				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examen->id,$_POST['tarifa']));
 				$precio=isset($tarifa->precio)?$tarifa->precio:0;
 				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
-				$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
+				$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 				echo "<tr class='row_$examen->id' data-id='$examen->id'>
 				<td>$examen->clave</td>
 				<td>$examen->nombre</td>
 				<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+				<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 				</tr>";
 			}
 		}
@@ -691,12 +691,12 @@ class OrdenesController extends Controller
 				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examenes[$i],$tarifario));
 				$precio=isset($tarifa->precio)?$tarifa->precio:0;
 				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
-				$agregarPrecio = isset($tarifa->precio)?"":"<a href='js:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
+				$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 				echo "<tr class='row_$examen->id' data-id='$examen->id'>
 				<td>$examen->clave</td>
 				<td>$examen->nombre</td>
 				<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-				<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+				<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 				</tr>";
 			}
 		}
@@ -721,7 +721,7 @@ class OrdenesController extends Controller
 		echo "<td>$examen->clave</td>
 		<td>$examen->nombre</td>
 		<td class='precioExamen' data-val='$precio'>$ $precio</td>
-		<td><a href='js:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+		<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 		";
 	}
 
