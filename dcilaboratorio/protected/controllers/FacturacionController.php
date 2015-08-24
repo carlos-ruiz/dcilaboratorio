@@ -52,7 +52,7 @@ class FacturacionController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
-		$model->fecha = date('Y-m-d H:i:s');
+		$model->fecha = date('Y-m-d');
 		$conceptosConError = null;
 		$conceptos = array();
 
@@ -254,7 +254,30 @@ class FacturacionController extends Controller
 	}
 
 	public function imprimirFactura($facturacionModel){
+		$currentDate = date('Y-m-d H:i:s');
+		$current = new DateTime($currentDate);
+		$emision = new DateTime($facturacionModel->fecha);
+		if($emision > $current){
+			$titulo = "Error revise fecha de emisión";
+			$mensaje = 'La fecha de emisión no debe ser mayor a la fecha actual<BR/>Actual: '.print_r($current).'emision<br/>'.print_r($emision);
+			return array('titulo'=>$titulo, 'mensaje'=>$mensaje);
+		}
+
 		$fullAnswer = $this->conectarConWS();
+		$anio = substr($currentDate, 0, 4);
+		$mes = substr($currentDate, 5, 2);
+		$conteo = ConteoTimbresUsados::model()->find('mes=? AND anio=?', array($mes, $anio));
+		if(isset($conteo)){
+			$conteo->cantidad = $conteo->cantidad + 1;
+		}
+		else{
+			$conteo = new ConteoTimbresUsados;
+			$conteo->cantidad = 1;
+			$conteo->anio = $anio;
+			$conteo->mes = $mes;
+		}
+		$conteo->save();
+
 		if ($fullAnswer['errorCode'] != 0) {
 			$mensaje="";
 
@@ -347,6 +370,7 @@ class FacturacionController extends Controller
 		$facturaExpedida->fecha_certificacion = $fullAnswer['date'];
 		$facturaExpedida->uuid = $fullAnswer['uuid'];
 		$facturaExpedida->numero_comprobante = $fullAnswer['certNumber'];
+		$facturaExpedida->numero_certificado_emisor = $facturacionModel->csd_emisor;
 		$facturaExpedida->cadena_original = $fullAnswer['string'];
 		$facturaExpedida->sello_cfdi = $fullAnswer['cfdStamp'];
 		$facturaExpedida->sello_sat = $fullAnswer['satStamp'];
@@ -374,11 +398,7 @@ class FacturacionController extends Controller
 			}
 		}
 
-		$pdf = new ImprimirFactura('P','cm','letter');
-		$pdf->AddPage();
-		$pdf->cabeceraHorizontal($facturacionModel, $fullAnswer);
-		$pdf->contenido($facturacionModel, $fullAnswer);
-		$pdf->Output();
+		$this->exportarPDF($facturacionModel, $fullAnswer);
 	}
 
 	public function reimprimirFactura($facturaExpedida){
@@ -396,6 +416,7 @@ class FacturacionController extends Controller
 		$factura->fecha = $facturaExpedida->fecha_emision;
 		$factura->id_orden = $facturaExpedida->id_ordenes;
 		$factura->descuento = $facturaExpedida->descuento;
+		$factura->csd_emisor = $facturaExpedida->numero_certificado_emisor;
 
 		$fullAnswer = array(
 			'date' => $facturaExpedida->fecha_certificacion,
@@ -425,11 +446,16 @@ class FacturacionController extends Controller
 
 		$factura->conceptos = $conceptos;
 
+		$this->exportarPDF($facturacionModel, $fullAnswer);
+	}
+
+	public function exportarPDF($facturacionModel, $fullAnswer){
 		$pdf = new ImprimirFactura('P','cm','letter');
 		$pdf->AddPage();
-		$pdf->cabeceraHorizontal($factura, $fullAnswer);
-		$pdf->contenido($factura, $fullAnswer);
+		$pdf->cabeceraHorizontal($facturacionModel, $fullAnswer);
+		$pdf->contenido($facturacionModel, $fullAnswer);
 		$pdf->Output();
+		$this->redirect('admin');
 	}
 
 	public function prepararCFD($model){
