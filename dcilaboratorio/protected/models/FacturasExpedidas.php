@@ -25,6 +25,7 @@
  * @property text $qr_png
  * @property string $descuento
  * @property integer $id_ordenes
+ * @property string $correo_electronico
  *
  * The followings are the available model relations:
  * @property ConceptosFactura[] $conceptosFacturas
@@ -103,6 +104,7 @@ class FacturasExpedidas extends CActiveRecord
 			'id_ordenes' => 'Órdenes',
 			'descuento' => 'Descuento',
 			'qr_png' => 'Código QR',
+			'correo_electronico' => 'Correo electrónico',
 		);
 	}
 
@@ -145,6 +147,7 @@ class FacturasExpedidas extends CActiveRecord
 		$criteria->compare('id_ordenes',$this->id_ordenes);
 		$criteria->compare('descuento',$this->descuento);
 		$criteria->compare('qr_png',$this->qr_png);
+		$criteria->compare('correo_electronico',$this->correo_electronico);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

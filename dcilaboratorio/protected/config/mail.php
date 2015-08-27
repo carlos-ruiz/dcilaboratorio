@@ -4,8 +4,6 @@ return array(
 	'viewPath' => 'application.views.mail',
 	'layoutPath' => 'application.views.layouts',
 	'baseDirPath' => 'webroot.images.mail', //note: 'webroot' alias in console apps may not be the same as in web apps
-	'savePath' => 'webroot.assets.mail',
-	'testMode' => false,
 	'layout' => 'mail',
 	'CharSet' => 'UTF-8',
 	'AltBody' => Yii::t('YiiMailer', 'You need an HTML capable viewer to read this message.'),
@@ -30,7 +28,7 @@ return array(
 		'variable_set' => Yii::t('YiiMailer', 'Cannot set or reset variable: ')
 	),
 	'savePath' => 'webroot.assets.mail',
-	'testMode' => false,
+	'testMode' => true,
 // if you want to use SMTP, uncomment and configure lines below to your needs
 	'Mailer' => 'smtp',
 	'Host' => 'smtp.ipage.com',

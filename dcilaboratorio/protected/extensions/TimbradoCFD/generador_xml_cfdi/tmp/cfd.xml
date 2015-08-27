@@ -2,14 +2,14 @@
 <cfdi:Comprobante
 LugarExpedicion="MORELIA, MICHOACÁN"
 certificado="@CERTIFICADO"
-fecha="2015-08-23T20:14:29"
+fecha="2015-08-27T08:55:30"
 formaDePago="PAGO EN UNA SOLA EXHIBICION"
 metodoDePago="EFECTIVO"
 noCertificado="@NO_CERTIFICADO"
 sello="@SELLO"
-subTotal="201.72"
+subTotal="258.62"
 tipoDeComprobante="ingreso"
-total="234.00"
+total="300.00"
 version="3.2"
 xmlns:cfdi="http://www.sat.gob.mx/cfd/3"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,15 +18,15 @@ xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_inte
 <cfdi:DomicilioFiscal calle="JUAN PABLO II" codigoPostal="94294" colonia="FRACC. REFORMA" estado="VERACRUZ" municipio="BOCA DEL RIO" noExterior="258" pais="MEXICO"/>
 <cfdi:RegimenFiscal Regimen="Regimen Simplificado"/>
 </cfdi:Emisor>
-<cfdi:Receptor nombre="CARLOS" rfc="RUCC9009253AA">
-<cfdi:Domicilio calle="JUAN MATA" codigoPostal="50000" colonia="CENTRO" estado="MICHOACAN" localidad="MORELIA" municipio="MUNICIPIO" noExterior="12" pais="MEXICO"/>
+<cfdi:Receptor nombre="CARLOS ALFREDO RUIZ CALDERóN" rfc="RUCC9009253A6">
+<cfdi:Domicilio calle="MAESTRO JUAN DELGADO" codigoPostal="58110" colonia="GRANJAS DEL MAESTRO" estado="MICHOACAN DE OCAMPO" localidad="MORELIA" municipio="MORELIA" noExterior="15" pais="MEXICO"/>
 </cfdi:Receptor>
 <cfdi:Conceptos>
-<cfdi:Concepto cantidad="1" descripcion="concepto de prueba" importe="201.72" noIdentificacion="test" unidad="EXAMEN" valorUnitario="201.72"/>
+<cfdi:Concepto cantidad="1" descripcion="Examen 1" importe="43.10" noIdentificacion="examensote1" unidad="EXAMEN" valorUnitario="43.10"/><cfdi:Concepto cantidad="1" descripcion="Examen 2" importe="86.21" noIdentificacion="examen2" unidad="EXAMEN" valorUnitario="86.21"/><cfdi:Concepto cantidad="1" descripcion="Costo de emergencia" importe="129.31" noIdentificacion="EMRGNC" unidad="EXAMEN" valorUnitario="129.31"/>
 </cfdi:Conceptos>
 <cfdi:Impuestos>
 <cfdi:Traslados>
-<cfdi:Traslado importe="32.28" impuesto="IVA" tasa="16.00"/>
+<cfdi:Traslado importe="6.90" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="13.79" impuesto="IVA" tasa="16.00"/><cfdi:Traslado importe="20.69" impuesto="IVA" tasa="16.00"/>
 </cfdi:Traslados>
 </cfdi:Impuestos>
 </cfdi:Comprobante>
