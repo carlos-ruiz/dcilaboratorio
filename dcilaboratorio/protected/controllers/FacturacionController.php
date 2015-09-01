@@ -230,6 +230,7 @@ class FacturacionController extends Controller
 					else{
 						$this->prepararCFD($model);
 						$model->csd_emisor = $this->generarCFD();
+						return;
 						$result = $this->imprimirFactura($model);
 						if (isset($result['titulo']) && isset($result['mensaje'])) {
 							$titulo = $result['titulo'];
@@ -613,6 +614,9 @@ class FacturacionController extends Controller
 		$f = popen($command, 'r');
 		$num_cert = fread($f, filesize($cerFile));
 		fclose($f);
+		
+		print_r($num_cert);
+		return;
 		$num_cert = split("=", $num_cert);
 		$num_cert = str_replace('\n','',$num_cert[1]);
 		$num_cert = str_replace('\r','',$num_cert);
