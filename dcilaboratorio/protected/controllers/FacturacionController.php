@@ -9,6 +9,10 @@ class FacturacionController extends Controller
 	public $section = "Facturacion";
 	public $subSection;
 	public $pageTitle="Facturación";
+
+	//pruebas para ambiente de prueba
+	//produccion para ambiente de produccion
+	public $modo = "pruebas";
 	/**
 	 * @return array action filters
 	 */
@@ -48,8 +52,7 @@ class FacturacionController extends Controller
 		);
 	}
 
-	public function actionCreate()
-	{
+	public function actionCreate(){
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
 		$model->fecha = date('Y-m-d');
@@ -123,16 +126,28 @@ class FacturacionController extends Controller
 			));
 	}
 
+	public function actionIndex(){
+		$this->redirect(array('admin'));
+	}
+
 	public function actionMostrarExpedidas(){
 		$this->subSection = "Expedidas";
 		$model=new FacturasExpedidas('search');
-
+		$mes = date('m');
+		$anio = date('Y');
+		$periodo = $mes.'/'.$anio;
+		$contador = ConteoTimbresUsados::model()->find("anio=? AND mes=?", array($anio, $mes));
+		$contador = $contador->cantidad;
+		$importe = number_format($contador*3, 2);
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['FacturasExpedidas']))
 			$model->attributes=$_GET['FacturasExpedidas'];
 
 		$this->render('reimprimir',array(
 			'model'=>$model,
+			'periodo'=> $periodo,
+			'importe'=>$importe,
+			'contador'=>$contador,
 			));
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
@@ -547,12 +562,22 @@ class FacturacionController extends Controller
 	public function generarCFD(){
 		$xslt = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xslt/cadenaoriginal_3_2.xslt';
 		$xsltXmlOut = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/xsltXmlOut.xml';
-		$cerFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJA.cer';
-		$cerOutFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJAOut.txt';
-		$keyPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJA_s.key';
-		$keyPwd = '12345678a';
-		$pemPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_key.pem';
-		$pemCert = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_cer.pem';
+		if($this->modo == "produccion"){
+			$cerFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/guls720801ny4.cer';
+			$cerOutFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/guls720801ny4Out.txt';
+			$keyPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/guls720801ny4.key';
+			$keyPwd = '12345678a';
+			$pemPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/guls720801ny4_key.pem';
+			$pemCert = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/guls720801ny4_cer.pem';
+		}
+		else{
+			$cerFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJA.cer';
+			$cerOutFile = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJAOut.txt';
+			$keyPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/cert_key/AAQM610917QJA_s.key';
+			$keyPwd = '12345678a';
+			$pemPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_key.pem';
+			$pemCert = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/AAQM610917QJA_cer.pem';
+		}
 		$xmlPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/tmp/cfd.xml';
 		$xmlResultPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml';
 		$cadenaOriginalPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cadenaOriginalOut.txt';
@@ -757,8 +782,12 @@ class FacturacionController extends Controller
 	}
 
 	public function actionCancelarCfdi($uuid){
-		$url = 'http://www.bpimorelia.com/wstech/api.php';
-
+		if($this->modo == "pruebas"){
+			$url = 'http://www.bpimorelia.com/wstech/api_test.php';
+		}
+		else{
+			$url = 'http://www.bpimorelia.com/wstech/api.php';
+		}
 		$data = array('uuidCancel' => $uuid);
 
 		// use key 'http' even if you send the request to https://...
@@ -889,5 +918,10 @@ class FacturacionController extends Controller
 		$user_info = file_get_contents($url, false, $context);
 		$user_info = json_decode($user_info, true);
 		return $user_info;
+	}
+
+	public function obtenerEstatus($data, $row){
+		$estatus = $data->activa == 1 ? 'Activa':'Cancelada';
+		return $estatus;
 	}
 }
