@@ -52,7 +52,7 @@ class FacturacionController extends Controller
 	{
 		$this->subSection = "Nuevo";
 		$model = new FacturacionForm;
-		$model->fecha = date('Y-m-d H:i:s');
+		$model->fecha = date('Y-m-d');
 		$conceptosConError = null;
 		$conceptos = array();
 
@@ -134,6 +134,7 @@ class FacturacionController extends Controller
 		$this->render('reimprimir',array(
 			'model'=>$model,
 			));
+		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
 	public function actionGenerarFactura($id){
@@ -157,6 +158,7 @@ class FacturacionController extends Controller
 				$model->estado = $orden->ordenFacturacion->datosFacturacion->direccion->estado->nombre;
 				$model->fecha = $orden->fecha_captura;
 			}
+			$model->correo_electronico = $orden->ordenFacturacion->paciente->email;
 			$model->descuento = $orden->descuento;
 			$model->costo_extra = $orden->costo_emergencia;
 			$model->id_orden = $orden->id;
@@ -255,7 +257,30 @@ class FacturacionController extends Controller
 	}
 
 	public function imprimirFactura($facturacionModel){
+		$currentDate = date('Y-m-d H:i:s');
+		$current = new DateTime($currentDate);
+		$emision = new DateTime($facturacionModel->fecha);
+		if($emision > $current){
+			$titulo = "Error revise fecha de emisión";
+			$mensaje = 'La fecha de emisión no debe ser mayor a la fecha actual<BR/>Actual: '.print_r($current).'emision<br/>'.print_r($emision);
+			return array('titulo'=>$titulo, 'mensaje'=>$mensaje);
+		}
+
 		$fullAnswer = $this->conectarConWS();
+		$anio = substr($currentDate, 0, 4);
+		$mes = substr($currentDate, 5, 2);
+		$conteo = ConteoTimbresUsados::model()->find('mes=? AND anio=?', array($mes, $anio));
+		if(isset($conteo)){
+			$conteo->cantidad = $conteo->cantidad + 1;
+		}
+		else{
+			$conteo = new ConteoTimbresUsados;
+			$conteo->cantidad = 1;
+			$conteo->anio = $anio;
+			$conteo->mes = $mes;
+		}
+		$conteo->save();
+
 		if ($fullAnswer['errorCode'] != 0) {
 			$mensaje="";
 
@@ -348,10 +373,12 @@ class FacturacionController extends Controller
 		$facturaExpedida->fecha_certificacion = $fullAnswer['date'];
 		$facturaExpedida->uuid = $fullAnswer['uuid'];
 		$facturaExpedida->numero_comprobante = $fullAnswer['certNumber'];
+		$facturaExpedida->numero_certificado_emisor = $facturacionModel->csd_emisor;
 		$facturaExpedida->cadena_original = $fullAnswer['string'];
 		$facturaExpedida->sello_cfdi = $fullAnswer['cfdStamp'];
 		$facturaExpedida->sello_sat = $fullAnswer['satStamp'];
 		$facturaExpedida->id_ordenes = $facturacionModel->id_orden;
+		$facturaExpedida->correo_electronico = $facturacionModel->correo_electronico;
 
 		$response = $this->obtenerQr($facturaExpedida->uuid);
 		$png = base64_decode($response['b64cbb']);
@@ -375,11 +402,7 @@ class FacturacionController extends Controller
 			}
 		}
 
-		$pdf = new ImprimirFactura('P','cm','letter');
-		$pdf->AddPage();
-		$pdf->cabeceraHorizontal($facturacionModel, $fullAnswer);
-		$pdf->contenido($facturacionModel, $fullAnswer);
-		$pdf->Output();
+		$this->exportarPDF($facturacionModel, $fullAnswer);
 	}
 
 	public function reimprimirFactura($facturaExpedida){
@@ -397,6 +420,8 @@ class FacturacionController extends Controller
 		$factura->fecha = $facturaExpedida->fecha_emision;
 		$factura->id_orden = $facturaExpedida->id_ordenes;
 		$factura->descuento = $facturaExpedida->descuento;
+		$factura->csd_emisor = $facturaExpedida->numero_certificado_emisor;
+		$factura->correo_electronico = $facturaExpedida->correo_electronico;
 
 		$fullAnswer = array(
 			'date' => $facturaExpedida->fecha_certificacion,
@@ -426,11 +451,44 @@ class FacturacionController extends Controller
 
 		$factura->conceptos = $conceptos;
 
+		$this->exportarPDF($factura, $fullAnswer);
+	}
+
+	public function exportarPDF($facturacionModel, $fullAnswer){
 		$pdf = new ImprimirFactura('P','cm','letter');
 		$pdf->AddPage();
-		$pdf->cabeceraHorizontal($factura, $fullAnswer);
-		$pdf->contenido($factura, $fullAnswer);
-		$pdf->Output();
+		$pdf->cabeceraHorizontal($facturacionModel, $fullAnswer);
+		$pdf->contenido($facturacionModel, $fullAnswer);
+		$respuesta = array();
+		if(isset($facturacionModel->correo_electronico)){
+			$pdf->Output(dirname(__FILE__).DIRECTORY_SEPARATOR."../../assets/facturas/factura".$facturacionModel->numeroFactura.'.pdf', "F");
+			$respuesta = $this->enviarArchivosPorCorreo($facturacionModel);
+		}
+		else{
+			$pdf->Output();
+		}
+		if (isset($respuesta['titulo']) && isset($respuesta['mensaje'])) {
+			$titulo = $respuesta['titulo'];
+			$mensaje = $respuesta['mensaje'];
+		}
+		$this->redirect(array('mostrarExpedidas', 'mensaje'=>$mensaje, 'titulo'=>$titulo));
+	}
+
+	public function enviarArchivosPorCorreo($facturacionModel){
+		$mail = new YiiMailer();
+		$mail->setView('enviarFactura');
+		$mail->setFrom('clientes@dcilaboratorio.com', 'DCI Laboratorio');
+		$mail->setTo($facturacionModel->correo_electronico);
+		$mail->setSubject('Envío de Factura Electrónica');
+		$mail->setAttachment(array(dirname(__FILE__).DIRECTORY_SEPARATOR."../../assets/facturas/factura".$facturacionModel->numeroFactura.'.pdf'=>'PDF', dirname(__FILE__).DIRECTORY_SEPARATOR."../extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml"=>"XML"));
+		if ($mail->send()) {
+			$titulo = 'Correo enviado exitosamente';
+			$mensaje = 'Su factura fue enviada exitosamente al correo electrónico proporcionado.';
+		} else {
+			$titulo = 'Error al enviar correo';
+			$mensaje = 'Hubo un error al enviar el correo electrónico';
+		}
+		return array('titulo'=>$titulo, 'mensaje'=>$mensaje);
 	}
 
 	public function prepararCFD($model){

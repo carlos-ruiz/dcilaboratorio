@@ -40,7 +40,15 @@ $total = 0;
 							<?php echo $form->error($model,'rfc', array('class'=>'help-block')); ?>
 						</div>
 					</div>
-
+					<div class="form-group col-md-6 <?php if($form->error($model,'correo_electronico')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($model,'correo_electronico', array('class'=>'control-label')); ?>
+						<div class="input-group">
+							<?php echo $form->textField($model,'correo_electronico',array('size'=>45,'maxlength'=>45, 'class'=>'form-control')); ?>
+							<?php echo $form->error($model,'correo_electronico', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+				</section>
+				<section id="domicilio-contribuyente" class="overflow-auto">
 					<div class="heading text-center">
 						<h4 style="color:#1e90ff ">Dirección fiscal</h4>
 					</div>

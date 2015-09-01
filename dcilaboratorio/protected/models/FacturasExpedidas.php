@@ -18,12 +18,14 @@
  * @property string $fecha_certificacion
  * @property string $uuid
  * @property string $numero_comprobante
+ * @property integer $numero_certificado_emisor
  * @property string $cadena_original
  * @property string $sello_cfdi
  * @property string $sello_sat
  * @property text $qr_png
  * @property string $descuento
  * @property integer $id_ordenes
+ * @property string $correo_electronico
  *
  * The followings are the available model relations:
  * @property ConceptosFactura[] $conceptosFacturas
@@ -95,12 +97,14 @@ class FacturasExpedidas extends CActiveRecord
 			'fecha_certificacion' => 'Fecha Certificación',
 			'uuid' => 'UUID',
 			'numero_comprobante' => 'Número Comprobante',
+			'numero_certificado_emisor' => 'Número  de certicado del emisor',
 			'cadena_original' => 'Cadena Original',
 			'sello_cfdi' => 'Sello CFDI',
 			'sello_sat' => 'Sello SAT',
 			'id_ordenes' => 'Órdenes',
 			'descuento' => 'Descuento',
 			'qr_png' => 'Código QR',
+			'correo_electronico' => 'Correo electrónico',
 		);
 	}
 
@@ -136,12 +140,14 @@ class FacturasExpedidas extends CActiveRecord
 		$criteria->compare('fecha_certificacion',$this->fecha_certificacion,true);
 		$criteria->compare('uuid',$this->uuid,true);
 		$criteria->compare('numero_comprobante',$this->numero_comprobante,true);
+		$criteria->compare('numero_certificado_emisor',$this->numero_certificado_emisor,true);
 		$criteria->compare('cadena_original',$this->cadena_original,true);
 		$criteria->compare('sello_cfdi',$this->sello_cfdi,true);
 		$criteria->compare('sello_sat',$this->sello_sat,true);
 		$criteria->compare('id_ordenes',$this->id_ordenes);
 		$criteria->compare('descuento',$this->descuento);
 		$criteria->compare('qr_png',$this->qr_png);
+		$criteria->compare('correo_electronico',$this->correo_electronico);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
