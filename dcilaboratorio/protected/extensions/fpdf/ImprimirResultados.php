@@ -3,7 +3,9 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
 class ImprimirResultados extends FPDF{
 
 	function Header(){
+
         $y = 0.5;
+        /*
 		$this->SetFont('Arial','B',18);
 		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1,1.7,2.3,2.3);
     // Move to the right
@@ -39,7 +41,7 @@ class ImprimirResultados extends FPDF{
         $this->SetX(4);
         $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');       
         $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
-        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');
+        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');*/
 	}
 
 	function cabeceraHorizontal($model)
@@ -86,7 +88,7 @@ class ImprimirResultados extends FPDF{
         $this->ln(0.5);
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
-        $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
+       // $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
         $this->SetTextColor(0, 0, 0); 
         
         
@@ -95,10 +97,10 @@ class ImprimirResultados extends FPDF{
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
         $this->SetTextColor(0, 0, 0); //Letra color blanco
         $x = 2;
-        $this->Cell(9,$y, 'Prueba',1, 0 , 'C', true);
+        $this->Cell(9,$y, 'Determinación Análitica',1, 0 , 'C', true);
         $this->Cell(3.5,$y, 'Resultado',1, 0 , 'C', true);
         $this->Cell(2,$y, 'Unidad',1, 0 , 'C', true);
-        $this->Cell(5,$y, 'Rango (Bajo-Prom-Alto)',1, 0 , 'C', true);
+        $this->Cell(5,$y, 'Intervalo de Referencia',1, 0 , 'C', true);
          $this->SetFillColor(219,239,253);
         //Atención!! el parámetro true rellena la celda con el color elegido
 		//$this->Cell(120,7, utf8_decode("hola mundo"),1, 0 , 'C', true);
@@ -120,17 +122,15 @@ class ImprimirResultados extends FPDF{
             $examen = $ordenExamen->detalleExamen->examenes;
             if($examen->id!=$idExamen){
             $this->SetFont('Arial','B',8);
-
-
-            $this->Cell(19.5,$y, $examen->nombre,1, 1 ,'C', true);                  
+            $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);               
             }
 
         $this->Cell(9,$y,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
         $this->Cell(3.5,$y,$ordenExamen->resultado,1, 0 , 'C');
         $this->Cell(2,$y, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
         $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-        $this->Cell(5,$y, $rango,1, 1 , 'C');
-            $idExamen = $examen->id;
+        $this->Cell(5,$y, $rango,1, 1 , 'C');      
+        $idExamen = $examen->id;
 
 
         }

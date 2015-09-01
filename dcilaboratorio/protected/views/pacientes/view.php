@@ -9,6 +9,7 @@
 		'a_materno',
 		'fecha_nacimiento',
 		'email',
+		'telefono',
 	),
 )); ?>
 <br />

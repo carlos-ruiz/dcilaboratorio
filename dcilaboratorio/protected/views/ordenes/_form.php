@@ -64,14 +64,7 @@ echo $form->errorSummary($datosFacturacion);
 						<h5 style="color:#1e90ff ">O agregue uno nuevo</h5>
 					</div>
 					<div class="row">
-						<div class="form-group col-md-6  <?php if($form->error($paciente,'nombre')!=''){ echo 'has-error'; }?>">
-							<?php echo $form->labelEx($paciente,'nombre', array('class'=>'control-label')); ?>
-							<div class="input-group">
-								<?php echo $form->textField($paciente,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>							
-								<?php echo $form->error($paciente,'nombre', array('class'=>'help-block')); ?>
-							</div>
-						</div>
-
+						
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'a_paterno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'a_paterno', array('class'=>'control-label')); ?>
 							<div class="input-group">
@@ -79,8 +72,6 @@ echo $form->errorSummary($datosFacturacion);
 								<?php echo $form->error($paciente,'a_paterno', array('class'=>'help-block')); ?>
 							</div>
 						</div>
-					</div>
-					<div class="row">
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'a_materno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'a_materno', array('class'=>'control-label')); ?>
 							<div class="input-group">
@@ -88,6 +79,16 @@ echo $form->errorSummary($datosFacturacion);
 								<?php echo $form->error($paciente,'a_materno', array('class'=>'help-block')); ?>
 							</div>
 						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-6  <?php if($form->error($paciente,'nombre')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($paciente,'nombre', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($paciente,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>							
+								<?php echo $form->error($paciente,'nombre', array('class'=>'help-block')); ?>
+							</div>
+						</div>
+						
 
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'fecha_nacimiento')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'fecha_nacimiento', array('class'=>'control-label')); ?>
@@ -112,6 +113,13 @@ echo $form->errorSummary($datosFacturacion);
 							<div class="input-group">
 								<?php echo $form->textField($paciente,'email',array('size'=>45,'maxlength'=>45, 'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>
 								<?php echo $form->error($paciente,'email', array('class'=>'help-block')); ?>
+							</div>
+						</div>
+						<div class="form-group col-md-6  <?php if($form->error($paciente,'telefono')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($paciente,'telefono', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($paciente,'telefono',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->error($paciente,'telefono', array('class'=>'help-block')); ?>
 							</div>
 						</div>
 					</div>
@@ -289,7 +297,7 @@ echo $form->errorSummary($datosFacturacion);
 				<section id="orden">
 
 					<div class="heading text-center">
-						<h3 style="color:#1e90ff ">¿Qué estudios necesita?</h3>
+						<h3 style="color:#1e90ff ">Determinaciones Solicitadas:</h3>
 						<hr/>
 					</div>
 					<div class="row">

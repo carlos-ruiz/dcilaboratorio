@@ -64,21 +64,27 @@ else{
 	
 	<div class="row">			
 		<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
-		Gral. Nocolás Bravo No. 170 Col. Chapultepec Norte .P 58260
-		<br />Tel. Fax. (443) 232 0166
+		Gral. Nicolás Bravo No. 170 
+		<br />Colonia Chapultepec Norte 
+		<br />Código Postal 58260
+		<br />Teléfono Fax. (443) 232 0166
 		<br />Lunes a Sábado de 07:00 a 20:00 hrs. 
 		<br /> Domingo 08:00 a 14:00 hrs.
 	</div>
 	<div class="row">			
 		<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
-		Francisco M. Díaz No. 145 Col. Ex Gobernador Gildardo Magaña .P 58149
+		Francisco M. Díaz No. 145 
+		<br />Colonia Ex Gobernador Gildardo Magaña 
+		<br />Código Postal 58149
 		<br />Tel. Fax. (443) 232 01 65
 		<br />Lunes a Sábado de 07:00 a 15:00 hrs. 
 	</div>
 	<div class="row">			
 		<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
-		Amado Nervo No. 392-4 Col. Centro .P 58000
-		<br />Tel. Fax. (443) 326 98 91
+		Amado Nervo No. 392-4 
+		<br />Colonia Centro 
+		<br />Código 58000
+		<br />Teléfono Fax. (443) 326 98 91
 		<br />Lunes a Sábado de 07:00 a 15:00 hrs. 
 	</div>
 

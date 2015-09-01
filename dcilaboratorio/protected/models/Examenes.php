@@ -43,11 +43,11 @@ class Examenes extends CActiveRecord
 			array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
 			array('clave,nombre', 'unique'),
 			array('duracion_dias, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('clave, nombre', 'length', 'max'=>45),
+			array('clave, nombre, tecnica', 'length', 'max'=>45),
 			array('descripcion, indicaciones_paciente, indicaciones_laboratorio', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, clave, nombre, descripcion, duracion_dias, indicaciones_paciente, indicaciones_laboratorio, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, clave, nombre, descripcion, tecnica, duracion_dias, indicaciones_paciente, indicaciones_laboratorio, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,6 +83,7 @@ class Examenes extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
+			'tecnica'=>'Técnica',
 		);
 	}
 
@@ -108,6 +109,7 @@ class Examenes extends CActiveRecord
 		$criteria->compare('clave',$this->clave,true);
 		$criteria->compare('nombre',$this->nombre,true);
 		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('tecnica',$this->tecnica,true);
 		$criteria->compare('duracion_dias',$this->duracion_dias);
 		$criteria->compare('indicaciones_paciente',$this->indicaciones_paciente,true);
 		$criteria->compare('indicaciones_laboratorio',$this->indicaciones_laboratorio,true);

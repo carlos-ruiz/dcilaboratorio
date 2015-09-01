@@ -15,7 +15,8 @@ $this->renderPartial(
 			'nombre',
 			'a_paterno',
 			'a_materno',
-			'fecha_nacimiento'
+			'fecha_nacimiento',
+			'telefono',
 		),
 		'buttonsTemplate'=>'{view} {update}'
 	)
