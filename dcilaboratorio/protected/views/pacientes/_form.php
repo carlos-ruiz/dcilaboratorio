@@ -24,15 +24,12 @@
 
 <div class="form-body">
 	
-	<div class="row">
-						<div class="form-group col-md-6  <?php if($form->error($model,'nombre')!=''){ echo 'has-error'; }?>">
-							<?php echo $form->labelEx($model,'nombre', array('class'=>'control-label')); ?>
-							<div class="input-group">
-								<?php echo $form->textField($model,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
-								<?php echo $form->error($model,'nombre', array('class'=>'help-block')); ?>
-							</div>
-						</div>
+	
+						
 
+						
+					
+					<div class="row">
 						<div class="form-group col-md-6  <?php if($form->error($model,'a_paterno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($model,'a_paterno', array('class'=>'control-label')); ?>
 							<div class="input-group">
@@ -40,13 +37,18 @@
 								<?php echo $form->error($model,'a_paterno', array('class'=>'help-block')); ?>
 							</div>
 						</div>
-					</div>
-					<div class="row">
 						<div class="form-group col-md-6  <?php if($form->error($model,'a_materno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($model,'a_materno', array('class'=>'control-label')); ?>
 							<div class="input-group">
 								<?php echo $form->textField($model,'a_materno',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
 								<?php echo $form->error($model,'a_materno', array('class'=>'help-block')); ?>
+							</div>
+						</div>
+						<div class="form-group col-md-6  <?php if($form->error($model,'nombre')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($model,'nombre', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($model,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->error($model,'nombre', array('class'=>'help-block')); ?>
 							</div>
 						</div>
 
@@ -75,6 +77,13 @@
 								<?php echo $form->error($model,'email', array('class'=>'help-block')); ?>
 							</div>
 						</div>
+						<div class="form-group col-md-6  <?php if($form->error($model,'telefono')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($model,'telefono', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($model,'telefono',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->error($model,'telefono', array('class'=>'help-block')); ?>
+							</div>
+						</div>					
 					</div>
 
 				<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>

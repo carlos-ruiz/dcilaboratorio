@@ -13,6 +13,7 @@
 		'clave',
 		'nombre',
 		'descripcion',
+		'tecnica',
 		'duracion_dias',
 		'indicaciones_paciente',
 		'indicaciones_laboratorio'

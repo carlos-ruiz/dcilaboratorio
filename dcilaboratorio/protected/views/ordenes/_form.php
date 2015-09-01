@@ -115,6 +115,13 @@ echo $form->errorSummary($datosFacturacion);
 								<?php echo $form->error($paciente,'email', array('class'=>'help-block')); ?>
 							</div>
 						</div>
+						<div class="form-group col-md-6  <?php if($form->error($paciente,'telefono')!=''){ echo 'has-error'; }?>">
+							<?php echo $form->labelEx($paciente,'telefono', array('class'=>'control-label')); ?>
+							<div class="input-group">
+								<?php echo $form->textField($paciente,'telefono',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->error($paciente,'telefono', array('class'=>'help-block')); ?>
+							</div>
+						</div>
 					</div>
 					<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$paciente)); ?>
 				</section>

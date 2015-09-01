@@ -122,17 +122,15 @@ class ImprimirResultados extends FPDF{
             $examen = $ordenExamen->detalleExamen->examenes;
             if($examen->id!=$idExamen){
             $this->SetFont('Arial','B',8);
-
-
-            $this->Cell(19.5,$y, $examen->nombre,1, 1 ,'C', true);                  
+            $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);               
             }
 
         $this->Cell(9,$y,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
         $this->Cell(3.5,$y,$ordenExamen->resultado,1, 0 , 'C');
         $this->Cell(2,$y, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
         $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-        $this->Cell(5,$y, $rango,1, 1 , 'C');
-            $idExamen = $examen->id;
+        $this->Cell(5,$y, $rango,1, 1 , 'C');      
+        $idExamen = $examen->id;
 
 
         }

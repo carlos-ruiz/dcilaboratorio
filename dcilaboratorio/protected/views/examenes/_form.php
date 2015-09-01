@@ -49,6 +49,14 @@
 			</div>
 	</div>
 
+	<div class="form-group <?php if($form->error($model,'tecnica')!=''){ echo 'has-error'; }?>">
+		<?php echo $form->labelEx($model,'tecnica', array('class'=>'control-label')); ?>
+			<div class="input-group" >
+			<?php echo $form->textField($model,'tecnica',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
+			<?php echo $form->error($model,'tecnica', array('class'=>'help-block')); ?>
+			</div>
+	</div>
+
 	<div class="form-group <?php if($form->error($model,'duracion_dias')!=''){ echo 'has-error'; }?>">
 		<?php echo $form->labelEx($model,'duracion_dias', array('class'=>'control-label')); ?>
 			<div class="input-group" >

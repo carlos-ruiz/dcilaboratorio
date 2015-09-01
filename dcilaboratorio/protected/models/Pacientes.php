@@ -41,11 +41,11 @@ class Pacientes extends CActiveRecord
 		return array(
 			array('nombre, a_paterno, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, fecha_nacimiento, sexo', 'required'),
 			array('id, sexo, usuario_ultima_edicion, usuario_creacion, activo', 'numerical', 'integerOnly'=>true),
-			array('nombre, a_paterno, a_materno, email', 'length', 'max'=>45),
+			array('nombre, a_paterno, a_materno, email, telefono', 'length', 'max'=>45),
 			array('fecha_nacimiento', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, a_paterno, a_materno, fecha_nacimiento, sexo, email, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo', 'safe', 'on'=>'search'),
+			array('id, nombre, a_paterno, a_materno, fecha_nacimiento, sexo, email, telefono, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,6 +80,7 @@ class Pacientes extends CActiveRecord
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
 			'activo' => 'Activo',
+			'telefono'=>'Teléfono / Celular',
 		);
 	}
 
@@ -108,6 +109,7 @@ class Pacientes extends CActiveRecord
 		$criteria->compare('fecha_nacimiento',$this->fecha_nacimiento,true);
 		$criteria->compare('sexo',$this->sexo);
 		$criteria->compare('email',$this->email,true);
+		$criteria->compare('telefono',$this->telefono,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);

@@ -28,7 +28,7 @@ return array(
 		'variable_set' => Yii::t('YiiMailer', 'Cannot set or reset variable: ')
 	),
 	'savePath' => 'webroot.assets.mail',
-	'testMode' => false,
+	'testMode' => true,
 // if you want to use SMTP, uncomment and configure lines below to your needs
 	'Mailer' => 'smtp',
 	'Host' => 'smtp.ipage.com',
