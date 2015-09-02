@@ -43,7 +43,7 @@ class FacturacionController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index', 'create', 'admin', 'mostrarExpedidas', 'generarFactura', 'cancelarCfdi', 'agregarConcepto'),
+				'actions'=>array('index', 'create', 'admin', 'mostrarExpedidas', 'reimprimirFactura', 'generarFactura', 'cancelarCfdi', 'agregarConcepto'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -132,6 +132,10 @@ class FacturacionController extends Controller
 
 	public function actionMostrarExpedidas(){
 		$this->subSection = "Expedidas";
+		if (isset($_GET['mensaje'])) {
+			$mensaje = $_GET['mensaje'];
+			$titulo = $_GET['titulo'];
+		}
 		$model=new FacturasExpedidas('search');
 		$mes = date('m');
 		$anio = date('Y');
@@ -242,12 +246,11 @@ class FacturacionController extends Controller
 				if(isset($model->id_orden)){
 					$facturaExpedida = $this->facturaGeneradaAnteriormente($model->id_orden);
 					if (isset($facturaExpedida)) {
-						$this->reimprimirFactura($facturaExpedida);
+						$this->redirect(array('reimprimirFactura', 'id'=>$facturaExpedida->id));
 					}
 					else{
 						$this->prepararCFD($model);
 						$model->csd_emisor = $this->generarCFD();
-						return;
 						$result = $this->imprimirFactura($model);
 						if (isset($result['titulo']) && isset($result['mensaje'])) {
 							$titulo = $result['titulo'];
@@ -417,10 +420,11 @@ class FacturacionController extends Controller
 			}
 		}
 
-		$this->exportarPDF($facturacionModel, $fullAnswer);
+		$this->redirect(array('reimprimirFactura', 'id' => $facturaExpedida->id));
 	}
 
-	public function reimprimirFactura($facturaExpedida){
+	public function actionReimprimirFactura($id){
+		$facturaExpedida = FacturasExpedidas::model()->findByPk($id);
 		$factura = new FacturacionForm;
 		$factura->numeroFactura = $facturaExpedida->id;
 		$factura->razon_social = $facturaExpedida->razon_social;
@@ -470,14 +474,16 @@ class FacturacionController extends Controller
 	}
 
 	public function exportarPDF($facturacionModel, $fullAnswer){
+		$user = Usuarios::model()->findByPk(Yii::app()->user->id);
 		$pdf = new ImprimirFactura('P','cm','letter');
 		$pdf->AddPage();
-		$pdf->cabeceraHorizontal($facturacionModel, $fullAnswer);
+		$pdf->cabeceraHorizontal($facturacionModel, $fullAnswer, $user->sucursal);
 		$pdf->contenido($facturacionModel, $fullAnswer);
 		$respuesta = array();
-		if(isset($facturacionModel->correo_electronico)){
+		if(isset($facturacionModel->correo_electronico) && strlen($facturacionModel->correo_electronico)>0){
 			$pdf->Output(dirname(__FILE__).DIRECTORY_SEPARATOR."../../assets/facturas/factura".$facturacionModel->numeroFactura.'.pdf', "F");
 			$respuesta = $this->enviarArchivosPorCorreo($facturacionModel);
+			$pdf->Output();
 		}
 		else{
 			$pdf->Output();
@@ -697,9 +703,7 @@ class FacturacionController extends Controller
 		$f = popen($command, 'r');
 		$num_cert = fread($f, filesize($cerFile));
 		fclose($f);
-		
-		print_r($num_cert);
-		return;
+
 		$num_cert = split("=", $num_cert);
 		$num_cert = str_replace('\n','',$num_cert[1]);
 		$num_cert = str_replace('\r','',$num_cert);
@@ -843,7 +847,12 @@ class FacturacionController extends Controller
 	}
 
 	public function obtenerQr($uuid){
-		$url = 'http://www.bpimorelia.com/wstech/api.php';
+		if($this->modo == "pruebas"){
+			$url = 'http://www.bpimorelia.com/wstech/api_test.php';
+		}
+		else{
+			$url = 'http://www.bpimorelia.com/wstech/api.php';
+		}
 
 		$data = array('uuidCBB' => $uuid);
 
@@ -903,7 +912,12 @@ class FacturacionController extends Controller
 	}
 
 	public function conectarConWS(){
-		$url = 'http://www.bpimorelia.com/wstech/api.php';
+		if($this->modo == "pruebas"){
+			$url = 'http://www.bpimorelia.com/wstech/api_test.php';
+		}
+		else{
+			$url = 'http://www.bpimorelia.com/wstech/api.php';
+		}
 		$xmlResultPath = dirname(__FILE__).DIRECTORY_SEPARATOR.'../extensions/TimbradoCFD/generador_xml_cfdi/xml/cfdi.xml';
 		$cfdi_handler = fopen($xmlResultPath,'r');
 		$xml_file = fread($cfdi_handler, filesize($xmlResultPath));

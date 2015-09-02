@@ -11,7 +11,7 @@ class ImprimirResultados extends FPDF{
     // Move to the right
     //$this->Cell(8);
     // Title
-		
+
         $this->SetXY(4, .75);
         $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
         $this->ln(0.75);
@@ -23,23 +23,23 @@ class ImprimirResultados extends FPDF{
         $this->SetX(4);
         $this->SetFont('Times','',8);
         $y = 0.4;
-        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
         $this->Cell(5, $y, 'Francisco Madero #145', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');      
+        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Col. Centro', 0, 0, 'C');
         $this->Cell(5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');
         $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
         $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
         $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
         $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');*/
 	}
@@ -55,7 +55,7 @@ class ImprimirResultados extends FPDF{
         $dia= substr($fecha[2], 0, 2);
         $hora = explode(' ', $fecha[2]);
         $hora = explode(':', $hora[1]);
-        
+
 
         $fecha = $dia.'/'.$fecha[1].'/'.$fecha[0].'   '. $hora[0].':'.$hora[1];
         $this->Cell(2,$y,$fecha, 0, 1);
@@ -64,7 +64,7 @@ class ImprimirResultados extends FPDF{
         $this->SetTextColor(75, 141, 248);
         $this->Cell(10,$y,'Orden de Trabajo', 0, 1);
         $this->SetFont('Arial','',8);
-        $this->SetTextColor(0, 0, 0); 
+        $this->SetTextColor(0, 0, 0);
         $this->Cell(3,$y,'Folio:', 0, 0);
         $this->SetFont('Arial','B',8);
         $this->Cell(3,$y,$model->id, 0, 1);
@@ -89,9 +89,9 @@ class ImprimirResultados extends FPDF{
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
        // $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
-        $this->SetTextColor(0, 0, 0); 
-        
-        
+        $this->SetTextColor(0, 0, 0);
+
+
         $this->SetXY(1, 10);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
@@ -122,26 +122,32 @@ class ImprimirResultados extends FPDF{
             $examen = $ordenExamen->detalleExamen->examenes;
             if($examen->id!=$idExamen){
             $this->SetFont('Arial','B',8);
-            $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);               
+            $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
             }
 
         $this->Cell(9,$y,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
+        if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
+            $this->SetFont('Times','BI',8);
+            $this->SetTextColor(255, 0, 0);
+        }
         $this->Cell(3.5,$y,$ordenExamen->resultado,1, 0 , 'C');
+        $this->SetTextColor(0, 0, 0);
+        $this->SetFont('Arial','B',8);
         $this->Cell(2,$y, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
         $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-        $this->Cell(5,$y, $rango,1, 1 , 'C');      
+        $this->Cell(5,$y, $rango,1, 1 , 'C');
         $idExamen = $examen->id;
 
 
         }
-        
+
         //Observaciones
         $this->ln(1);
         $this->ln(1);
         $this->SetFont('Arial','B',8);
         $this->Cell(19.5,$y,'RESPONSABLE:', 0, 1, 'C');
         $this->Cell(19.5,$y,'QFB. MARCO ANTONIO URTIS GARCÍA', 0, 1, 'C');
-        $this->Cell(19.5,$y,'CED. PROF. 1269174', 0, 1, 'C'); 
+        $this->Cell(19.5,$y,'CED. PROF. 1269174', 0, 1, 'C');
         $this->ln(1);
         $this->SetFont('Arial','B',8);
         $fecha = date("d/m/y  H:i");

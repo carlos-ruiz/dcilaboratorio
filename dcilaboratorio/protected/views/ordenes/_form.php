@@ -15,7 +15,7 @@
 	<div class="portlet-title">
 		<div class="caption">
 			Orden
-		</div>		
+		</div>
 	</div>
 	<div class="portlet-body form" style="display: block;">
 
@@ -27,7 +27,7 @@
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 )); ?>
-<?php 
+<?php
 /*
 echo $form->errorSummary($model);
 echo "<br /><br />";
@@ -64,18 +64,18 @@ echo $form->errorSummary($datosFacturacion);
 						<h5 style="color:#1e90ff ">O agregue uno nuevo</h5>
 					</div>
 					<div class="row">
-						
+
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'a_paterno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'a_paterno', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'a_paterno',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>							
+								<?php echo $form->textField($paciente,'a_paterno',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>
 								<?php echo $form->error($paciente,'a_paterno', array('class'=>'help-block')); ?>
 							</div>
 						</div>
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'a_materno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'a_materno', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'a_materno',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>							
+								<?php echo $form->textField($paciente,'a_materno',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>
 								<?php echo $form->error($paciente,'a_materno', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -84,16 +84,16 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'nombre')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'nombre', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>							
+								<?php echo $form->textField($paciente,'nombre',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>
 								<?php echo $form->error($paciente,'nombre', array('class'=>'help-block')); ?>
 							</div>
 						</div>
-						
+
 
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'fecha_nacimiento')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'fecha_nacimiento', array('class'=>'control-label')); ?>
-							<div class="input-group">	
-								<?php echo $form->textField($paciente,'fecha_nacimiento',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>													
+							<div class="input-group">
+								<?php echo $form->textField($paciente,'fecha_nacimiento',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>
 								<?php echo $form->error($paciente,'fecha_nacimiento', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -103,7 +103,7 @@ echo $form->errorSummary($datosFacturacion);
 							<?php echo $form->labelEx($paciente,'sexo', array('class'=>'control-label')); ?>
 							<div class="input-group">
 								<?php $accountStatus = array('0'=>'Hombre', '1'=>'Mujer');
-	              				  echo $form->radioButtonList($paciente,'sexo',$accountStatus,array('separator'=>'   ','class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled"));?>						
+	              				  echo $form->radioButtonList($paciente,'sexo',$accountStatus,array('separator'=>'   ','class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled"));?>
 								<?php echo $form->error($paciente,'sexo', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -118,7 +118,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'telefono')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'telefono', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'telefono',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($paciente,'telefono',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
 								<?php echo $form->error($paciente,'telefono', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -207,7 +207,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($datosFacturacion,'razon_social')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($datosFacturacion,'razon_social', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($datosFacturacion,'razon_social',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($datosFacturacion,'razon_social',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
 								<?php echo $form->error($datosFacturacion,'razon_social', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -215,7 +215,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($datosFacturacion,'RFC')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($datosFacturacion,'RFC', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($datosFacturacion,'RFC',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($datosFacturacion,'RFC',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
 								<?php echo $form->error($datosFacturacion,'RFC', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -292,7 +292,7 @@ echo $form->errorSummary($datosFacturacion);
 						</div>
 						<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$direccion)); ?>
 					</div>
-				</section>					    
+				</section>
 				<br />
 				<section id="orden">
 
@@ -316,7 +316,7 @@ echo $form->errorSummary($datosFacturacion);
 								</div>
 							</div>
 						</div>
-					
+
 						<div class="form-group col-md-3" >
 							<div class="input-group">
 								<input type="hidden" id="examenesIds" name="Examenes[ids]" value />
@@ -340,7 +340,7 @@ echo $form->errorSummary($datosFacturacion);
 									<td><?php echo $tarifaExamen->examen->clave; ?></td>
 									<td><?php echo $tarifaExamen->examen->nombre; ?></td>
 									<td class="precioExamen" data-val="<?php echo isset($tarifaExamen->precio)?$tarifaExamen->precio:0; ?>">
-									
+
 									<?php echo isset($tarifaExamen->precio)?
 										"$ ".$tarifaExamen->precio:
 										"<div style='margin:0px;' class='form-group ".($form->error($tarifaExamen,'precio')!=''?"has-error":"")."'>".
@@ -350,7 +350,7 @@ echo $form->errorSummary($datosFacturacion);
 											"</div><div class='help-block row' style='float:right; margin:0px;'>Debe agregar un precio para el examen en el multitarifario seleccionado.</div>".
 										"</div>"; ?>
 									</td>
-									
+
 									<td><a href='javascript:void(0)' data-id='<?php echo $tarifaExamen->id_examenes;?>' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 								</tr>
 							<?php endforeach; ?>
@@ -364,7 +364,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-4">
 							<div class="row">
 								<div class="form-group col-md-6 "> <center> Subtotal $</center></div>
-								<div class="form-group col-md-6 align-right total">0.00 <?php $total ?></div>						
+								<div class="form-group col-md-6 align-right total">0.00 <?php $total ?></div>
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6  <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
@@ -372,7 +372,7 @@ echo $form->errorSummary($datosFacturacion);
 								</div>
 								<div class="form-group col-md-6  <?php if($form->error($model,'costo_emergencia')!=''){ echo 'has-error'; }?>">
 										<div class="input-group">
-											<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45,'class'=>'form-control', 'onchange' => 'javascript:$("#descuentoAplicado").toggle()')); ?>							
+											<?php echo $form->textField($model,'descuento',array('size'=>45,'maxlength'=>45,'class'=>'form-control', 'onchange' => 'javascript:$("#descuentoAplicado").toggle()')); ?>
 											<?php echo $form->error($model,'descuento', array('class'=>'help-block')); ?>
 										</div>
 								</div>
@@ -383,12 +383,12 @@ echo $form->errorSummary($datosFacturacion);
 								</div>
 								<div class="form-group col-md-6  <?php if($form->error($model,'costo_emergencia')!=''){ echo 'has-error'; }?>">
 										<div class="input-group">
-											<?php echo $form->textField($model,'costo_emergencia',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+											<?php echo $form->textField($model,'costo_emergencia',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
 											<?php echo $form->error($model,'costo_emergencia', array('class'=>'help-block')); ?>
 										</div>
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 				</section>
@@ -399,14 +399,14 @@ echo $form->errorSummary($datosFacturacion);
 						<h3 style="color:#1e90ff ">Métodos de pago</h3>
 						<hr/>
 					</div>
-					
-					<?php 
+
+					<?php
 						$totalPagosAnteriores = 0;
 						//Obtener pagos de la orden en caso de que se esté editando
 						if (!$model->isNewRecord) {
 							$aux=$model->pagos;
 							foreach ($aux as $pago) {
-								$totalPagosAnteriores += $pago->efectivo + $pago->tarjeta + $pago->cheque; 
+								$totalPagosAnteriores += $pago->efectivo + $pago->tarjeta + $pago->cheque;
 							}
 						}
 					?>
@@ -418,11 +418,11 @@ echo $form->errorSummary($datosFacturacion);
 					<div class="row">
 						<div class="form-group col-md-8 text-right <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($pagos,'efectivo', array('class'=>'control-label ')); ?>
-							
+
 						</div>
 						<div class="form-group col-md-4 <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
 							<div class="input-group">
-								<?php echo $form->textField($pagos,'efectivo',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($pagos,'efectivo',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
 								<?php echo $form->error($pagos,'efectivo', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -430,11 +430,11 @@ echo $form->errorSummary($datosFacturacion);
 					<div class="row">
 						<div class="form-group col-md-8 text-right <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($pagos,'tarjeta', array('class'=>'control-label')); ?>
-							
+
 						</div>
 						<div class="form-group col-md-4 <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
 							<div class="input-group">
-								<?php echo $form->textField($pagos,'tarjeta',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($pagos,'tarjeta',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
 								<?php echo $form->error($pagos,'tarjeta', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -442,17 +442,17 @@ echo $form->errorSummary($datosFacturacion);
 					<div class="row">
 						<div class="form-group col-md-8 text-right <?php if($form->error($pagos,'tarjeta')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($pagos,'cheque', array('class'=>'control-label')); ?>
-							
+
 						</div>
 						<div class="form-group col-md-4 <?php if($form->error($pagos,'cheque')!=''){ echo 'has-error'; }?>">
 							<div class="input-group">
-								<?php echo $form->textField($pagos,'cheque',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>							
+								<?php echo $form->textField($pagos,'cheque',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
 								<?php echo $form->error($pagos,'cheque', array('class'=>'help-block')); ?>
 							</div>
 							<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$pagos)); ?>
 						</div>
 					</div>
-		
+
 					<div class="row">
 						<div class="form-group col-md-8 text-right" > <h3 style="color:#1e90ff">Pago </h3></div>
 						<div class="form-group col-md-4"><h3 style="color:#1e90ff" id="pagoTotal"> $999.00</h3></div>
@@ -462,14 +462,14 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-4"><h3 class="debe" id="debe"> $50.00</h3></div>
 					</div>
 
-					
+
 				</section>
 
-	
-	
+
+
 	<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
 
-	
+
 		<div class="form-actions" >
 			<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
 		</div>
@@ -664,7 +664,7 @@ echo $form->errorSummary($datosFacturacion);
 	setPago(pago);
 	debe=calcularDebe();
 	setDebe(debe);
-	
+
 
 
 	$("#Examenes_nombre").change(function(){
@@ -709,7 +709,7 @@ echo $form->errorSummary($datosFacturacion);
 					}
 				);
 			}
-			else{ 
+			else{
 				if(idGrupo>0){
 					block("examenes");
 					$.post(
@@ -819,12 +819,13 @@ echo $form->errorSummary($datosFacturacion);
 					},
 					function(data){
 						paciente=JSON.parse(data);
-						
+
 						$("#Pacientes_nombre").val(paciente.nombre);
 						$("#Pacientes_a_paterno").val(paciente.a_paterno);
 						$("#Pacientes_a_materno").val(paciente.a_materno);
 						$("#Pacientes_email").val(paciente.email);
 						$("#Pacientes_fecha_nacimiento").val(paciente.fecha_nacimiento);
+						$("#Pacientes_telefono").val(paciente.telefono);
 						if(paciente.sexo==0){
 							$("#ytPacientes_sexo").val(0);
 							$("#Pacientes_sexo_1").parent().removeClass("checked");

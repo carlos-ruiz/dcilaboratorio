@@ -5,9 +5,9 @@
 ?>
 
 <h1>Administrar pacientes</h1>
-<?php 
+<?php
 $this->renderPartial(
-	'/comunes/_comunAdmin', 
+	'/comunes/_comunAdmin',
 	array(
 		'model'=>$model,
 		'titulo'=>'Pacientes',
@@ -20,4 +20,4 @@ $this->renderPartial(
 		),
 		'buttonsTemplate'=>'{view} {update}'
 	)
-); 
+);

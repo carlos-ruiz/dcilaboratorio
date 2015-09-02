@@ -14,13 +14,13 @@
     	$totalOrden=($totalOrden-($totalOrden*$model->descuento)/100);
     }
     $totalConDescuento = $totalOrden;
-	if($model->costo_emergencia !=0) {	
-		$totalOrden=$totalOrden +$model->costo_emergencia; 
+	if($model->costo_emergencia !=0) {
+		$totalOrden=$totalOrden +$model->costo_emergencia;
 	}
-	
+
 	$pagos=$model->pagos;
 	$total=0;
-	foreach ($pagos as $pago):  
+	foreach ($pagos as $pago):
 		$total = $total + $pago->efectivo+$pago->tarjeta+$pago->cheque;
 	endforeach;
 
@@ -62,7 +62,7 @@
 			            'label'=>'Paciente',
 			            'type'=>'raw',
 			            'value'=>$this->obtenerPaciente($model, $this),
-			        ),     
+			        ),
 				),
 			)); ?>
 
@@ -85,35 +85,35 @@
 			            'value'=>$this->obtenerSioNoComparteDr($model, $this),
 			        ),
 					'informacion_clinica_y_terapeutica',
-					'comentarios',        
+					'comentarios',
 				),
 			)); ?>
 		</div>
 
-		
+
 		<div class="form-group col-md-4">
 
 			<div class="heading text-center">
 				<h3 style="color:#1e90ff ">Examenes</h3>
 			</div>
 
-			<?php 
+			<?php
 			$entrega=1;
 			if($total>=$totalOrden){ ?>
 				<?php
 				$aux=$model->ordenTieneExamenes;
 				$anterior=0;
-				
+
 				echo '<table class="table table-striped table-bordered dataTable">';
-				   		
-				 foreach ($aux as $ordenExamen): 
+
+				 foreach ($aux as $ordenExamen):
 					$detalleExamen=$ordenExamen->detalleExamen;
 					$examen=$detalleExamen->examenes;
 					if($examen->id!=$anterior){
 						if($examen->duracion_dias>$entrega)
 							$entrega=$examen->duracion_dias;
 
-						echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>		
+						echo '<thead><tr><th colspan="5" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
 				   		<tr><td>Descripción</td>
 				   		<td>Resultado</td>
 				   		<td>R. I.</td>
@@ -126,7 +126,11 @@
 						echo "Sin resultado";
 					}
 					else{
-						echo $ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura;
+						$color = "#000";
+						if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+							$color = "#f00";
+						}
+						echo "<span style='color: $color;'>".$ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura."</span>";
 					}
 
 					echo '</td><td>'.$detalleExamen->rango_inferior.'</td>
@@ -159,14 +163,14 @@
 		   		<td>Efectivo</td>
 		   		<td>Tarjeta</td>
 		   		<td>Cheque</td>';
-				 foreach ($aux as $pago):  
+				 foreach ($aux as $pago):
 				 	echo '<tr><td>'.date("d/m/Y H:i", strtotime($pago->fecha)).'</td>';
 					echo '<td> $'.$pago->efectivo.'</td>';
 					echo '<td> $'.$pago->tarjeta.'</td>';
 					echo '<td> $'.$pago->cheque.'</td></tr>';
 				 endforeach;
 				echo'</table>';
-				
+
 			   if($model->costo_emergencia !=0 || $model->descuento !=0) {
 					echo '<table class="table table-striped table-bordered dataTable"><tr>
 			    	<td>Total de exámenes </td><td>$ '.$totalSinDescuento.'</td><tr> </table>';
@@ -186,8 +190,8 @@
 				}
 
 
-			    
-			    
+
+
 
 			     echo '<table class="table table-striped table-bordered dataTable"><tr>
 			    <td>Total de la Orden </td><th colspan="3" style="color:#1e90ff ">$ '.$totalOrden.'</th></<tr> </table>';
@@ -201,7 +205,7 @@
 				  echo '<table class="table table-striped table-bordered dataTable"><tr>
 					   <td>'.($pagado>=0?"Total por pagar":"Cambio").'</td><td>$ '.($pagado>=0?$pagado:$pagado*-1).'</td></<tr> </table>';
 
-					
+
 			    echo '<table class="table table-striped table-bordered dataTable"><tr>
 			    <th colspan="3" style="color:#1e90ff "> <center>Tarda '.$entrega.' día(s) para entregarse</center></th></<tr>'; ?>
 
@@ -210,9 +214,9 @@
 
 		    //Aqui que solo aparezca los botones si esta pagado
 
-			if($total>=$totalOrden){ 
-			    echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn')); 
-			    echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn')); 
+			if($total>=$totalOrden){
+			    echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn'));
+			    echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn'));
 			} ?>
 		</div>
 	</div>

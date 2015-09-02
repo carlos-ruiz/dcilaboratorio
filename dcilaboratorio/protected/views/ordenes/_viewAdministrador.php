@@ -123,7 +123,7 @@
 			if($examen->duracion_dias>$entrega)
 				$entrega=$examen->duracion_dias;
 
-			echo '<thead><tr><th colspan="3" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
+			echo '<thead><tr><th colspan="5" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
 	   		<tr><td>Descripción</td>
 	   		<td>Resultado</td>
 	   		<td>R. I.</td>
@@ -136,7 +136,11 @@
 			echo "Sin resultado";
 		}
 		else{
-			echo $ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura;
+			$color = "#000";
+			if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+				$color = "#f00";
+			}
+			echo "<span style='color: $color;'>".$ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura."</span>";
 		}
 
 		echo '</td><td>'.$detalleExamen->rango_inferior.'</td>

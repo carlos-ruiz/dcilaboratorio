@@ -52,7 +52,7 @@ class PacientesController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id)
-	{	
+	{
 		if(Yii::app()->user->getState('perfil')=="Paciente")
 			$this->section="Pacientes";
 		$this->subSection="Pacientes";
@@ -179,12 +179,20 @@ class PacientesController extends Controller
 		}
 	}
 
-	public function obtenerGenero($data, $row){		
+	public function obtenerGenero($data, $row){
 		if ($data['sexo'] == 1)
 			$var = "Mujer";
 		else
 			$var = "Hombre";
 		return $var;
+	}
+
+	public function obtenerTelefono($data, $row){
+		$telefono = 'No asignado';
+		if (isset($data->telefono)){
+			$telefono = $data->telefono;
+		}
+		return $telefono;
 	}
 
 }

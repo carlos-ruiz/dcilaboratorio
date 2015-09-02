@@ -8,7 +8,7 @@ class ImprimirFactura extends FPDF{
 
 	}
 
-	function cabeceraHorizontal($model, $datosFactura)
+	function cabeceraHorizontal($model, $datosFactura, $sucursal)
 	{
         $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',16,1.7,4.3,3.3);
         $fecha = $model->fecha;
@@ -59,7 +59,7 @@ class ImprimirFactura extends FPDF{
         $this->SetFont('Times','B',8);
         $this->setX(1.5);
         $this->Cell(0,0.1,'Domicilio', 0, 1, 'L');
-        $this->Cell(0,0.1,'Número de comprobante: '.$model->numeroFactura, 0, 1, 'R');
+        $this->Cell(0,0.1,'Número de comprobante: '.$sucursal.sprintf("%03d", $model->numeroFactura), 0, 1, 'R');
         $this->SetFont('Times','',8);
         $this->setX(1.5);
         $this->Cell(2,0.6,'Calle '.$model->calle.' N° '.$model->numero, 0, 1, 'L');
