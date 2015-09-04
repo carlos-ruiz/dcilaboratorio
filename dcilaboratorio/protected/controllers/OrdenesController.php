@@ -30,17 +30,13 @@ class OrdenesController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-				),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf'),
-				'users'=>array('@'),
+				'actions'=>array('index','view', 'create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete'),
+				'users'=>Usuarios::model()->obtenerPorPerfil('Administrador'),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('delete'),
-				'users'=>array('admin'),
+				'actions'=>array('index','view','imprimirResultadosPdf'),
+				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Paciente'), Usuarios::model()->obtenerPorPerfil('Doctor')),
 				),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -91,7 +87,7 @@ class OrdenesController extends Controller
 			$model->attributes=$_POST['Ordenes'];
 			$paciente->attributes=$_POST['Pacientes'];
 			$pagos->attributes=$_POST['Pagos'];
-			
+
 			$fecha_creacion=date('Y-m-d H:i:s');
 			$fecha_edicion='2000-01-01 00:00:00';
 
@@ -100,7 +96,7 @@ class OrdenesController extends Controller
 			$pagos->fecha=$model->fecha_captura;
 			$validaRequiereFactura=true;
 
-			
+
 			if($model->requiere_factura==1){
 				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
 				$direccion->attributes=$_POST['Direcciones'];
@@ -122,7 +118,7 @@ class OrdenesController extends Controller
 				$validateExamenes=false;
 			}
 
-			
+
 			$examenes_precio = array();
 			foreach ($examenesIds as $idExamen) {
 				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
@@ -154,7 +150,7 @@ class OrdenesController extends Controller
 			if($totalAPagar<=$totalPagado){
 				$cambio = $totalPagado-$totalAPagar;
 				if ($pagos->efectivo >= $cambio) {
-					$pagos->efectivo -= $cambio; 
+					$pagos->efectivo -= $cambio;
 				}
 				else{
 					$cambio -= $pagos->efectivo;
@@ -176,7 +172,7 @@ class OrdenesController extends Controller
 						$examen_precio->id_ordenes = $model->id;
 						$examen_precio->save();
 					}
-					
+
 					foreach ($examenesIds as $idExamen) {
 						array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
 						$detallesExamen = DetallesExamen::model()->findByExamenId($idExamen);
@@ -230,13 +226,13 @@ class OrdenesController extends Controller
 						$datosFacturacion->save();
 						$ordenFacturacion->id_datos_facturacion=$datosFacturacion->id;
 					}
-					
+
 					$ordenFacturacion->id_pacientes=$paciente->id;
 					$ordenFacturacion->id_usuarios=$user->id;
-					
+
 					$ordenFacturacion->id_ordenes=$model->id;
 					$ordenFacturacion->save();
-					
+
 					$pagos->id_ordenes=$model->id;
 					if($totalPagado>0)
 						$pagos->save();
@@ -244,12 +240,12 @@ class OrdenesController extends Controller
 					$transaction->commit();
 					if(!isset($user))
 						$user=Usuarios::model()->findByPk($paciente->id_usuarios);
-					
+
 					$nombrePaciente = $paciente->nombre." ".$paciente->a_paterno." ".$paciente->a_materno;
 					$this->enviarAccesoPorCorreo($nombrePaciente, $user->usuario, base64_decode($user->contrasena), $paciente->email);
 					$this->redirect(array('view','id'=>$model->id));
 
-					
+
 				}catch(Exception $e){
 					//print_r($e);
 					//return;
@@ -258,7 +254,7 @@ class OrdenesController extends Controller
 					$titulo="Aviso";
 				}
 			}
-			
+
 		}
 
 		$this->render('create',array(
@@ -411,7 +407,7 @@ class OrdenesController extends Controller
 						if($totalAPagar<=$totalPagado){
 							$cambio = $totalPagado-$totalAPagar;
 							if ($pagos->efectivo >= $cambio) {
-								$pagos->efectivo -= $cambio; 
+								$pagos->efectivo -= $cambio;
 							}
 							else{
 								$cambio -= $pagos->efectivo;
@@ -464,7 +460,7 @@ class OrdenesController extends Controller
 			$model->activo=$model->activo==0?1:0;
 		else
 			$model->delete();
-		$model->save();	
+		$model->save();
 
 		$status = (!isset($model->activo)?"Eliminado":($model->activo==0?"Desactivado":"Activado"));
 		echo '{id:'.$model->id.', estatus:'.$status.'}';
@@ -488,7 +484,7 @@ class OrdenesController extends Controller
 	{
 		$this->subSection = "Admin";
 		$model=new Ordenes('search');
-		
+
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Ordenes']))
 			$model->attributes=$_GET['Ordenes'];
@@ -527,7 +523,7 @@ class OrdenesController extends Controller
 	}
 
 	/**
-	*Modal 
+	*Modal
 	*/
 
 	public function actionLoadModalContent($id_ordenes){
@@ -555,7 +551,7 @@ class OrdenesController extends Controller
 				if($totalOrden <= $totalPagado){
 					$cambio = $totalPagado-$totalOrden;
 					if ($pagos->efectivo >= $cambio) {
-						$pagos->efectivo -= $cambio; 
+						$pagos->efectivo -= $cambio;
 					}
 					else {
 						$cambio -= $pagos->efectivo;
@@ -595,7 +591,7 @@ class OrdenesController extends Controller
 			// There is a call to performAjaxValidation() commented in generated controller code.
 			// See class documentation of CActiveForm for details on this.
 			'enableAjaxValidation'=>false,
-			)); 
+			));
 		$this->renderPartial("_modalPagos",
 			array('pagos'=>$pagos,'form'=>$form, 'orden'=>$orden)
 			);
@@ -618,7 +614,7 @@ class OrdenesController extends Controller
 				$ordenExamenToSave->resultado = $value['resultado'];
 				$ordenExamenToSave->save();
 				if ($calificada) {
-					$calificada = $ordenExamenToSave->resultado!=""; 
+					$calificada = $ordenExamenToSave->resultado!="";
 				}
 			}
 			$statusPagada=Status::model()->findByName("Pagada");
@@ -679,7 +675,7 @@ class OrdenesController extends Controller
 				</tr>";
 			}
 		}
-		
+
 	}
 
 	public function actionActualizarPrecios(){
@@ -737,7 +733,7 @@ class OrdenesController extends Controller
 		} else {
 			Yii::app()->user->setFlash('error','Error while sending email: '.$mail->getError());
 		}
-	} 
+	}
 
 	public function actionDatosPacienteExistente(){
 		$paciente = Pacientes::model()->findByPk($_POST['id']);
@@ -751,14 +747,14 @@ class OrdenesController extends Controller
 		return $completo;
 	}
 
-	public function obtenerNombreCompletoDoctor($data, $row){		
+	public function obtenerNombreCompletoDoctor($data, $row){
 		$doctor =Doctores::model()->findByAttributes(array('id'=>$data['id_doctores']));
 		$titulo = TitulosForm::model()->findByPk($doctor->id_titulos);
 		$completo = $titulo->nombre.' '.$doctor->nombre.' '.$doctor->a_paterno.' '.$doctor->a_materno;
 		return $completo;
 	}
 
-	public function obtenerSioNoComparteDr($data, $row){		
+	public function obtenerSioNoComparteDr($data, $row){
 		if ($data['compartir_con_doctor'] == 1)
 			$var = "Sí";
 		else
@@ -766,7 +762,7 @@ class OrdenesController extends Controller
 		return $var;
 	}
 
-	public function obtenerGenero($data, $row){		
+	public function obtenerGenero($data, $row){
 		$paciente =Pacientes::model()->findByAttributes(array('id'=>$data['id_pacientes']));
 		if ($paciente['sexo'] == 1)
 			$var = "Mujer";
@@ -775,23 +771,23 @@ class OrdenesController extends Controller
 		return $var;
 	}
 
-	public function obtenerNombreNombreFactura($data, $row){		
+	public function obtenerNombreNombreFactura($data, $row){
 		$doctor =DatosFacturacion::model()->findByAttributes(array('id'=>$data['id_pacientes']));
 		$completo = $doctor->nombre.' '.$doctor->a_paterno.' '.$doctor->a_materno;
 		return $completo;
 	}
 
-	public function obtenerExamenes($data, $row){		
+	public function obtenerExamenes($data, $row){
 		$examen =OrdenTieneExamenes::model()->findByAttributes(array('id_ordenes'=>$data['id']));
 		$exam = $examen->nombre;
 		return $exam;
 	}
 
-	public function obtenerPagos($data, $row){		
+	public function obtenerPagos($data, $row){
 		$pagos =Pagos::model()->findByAttributes(array('id_ordenes'=>$data['id']));
 		return $pagos;
 	}
-	
+
 	public function actionGenerarPdf($id){
 		$model = $this->loadModel($id);
 		$pdf = new ImprimirOrden('P','cm','letter');

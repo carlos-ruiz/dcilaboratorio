@@ -123,4 +123,14 @@ class Usuarios extends CActiveRecord
 		$criteria->compare('id>',0);
 		return Yii::app()->db->commandBuilder->createFindCommand($this->tableName(),$criteria)->queryScalar();
 	}
+
+	public function obtenerPorPerfil($perfil) {
+		$perfil = Perfiles::model()->findByName($perfil);
+		$usuarios = $this->model()->findAll("id_perfiles=?", array($perfil->id));
+		$nombresDeUsuario = array();
+		foreach ($usuarios as $usuario) {
+			array_push($nombresDeUsuario, $usuario->usuario);
+		}
+		return $nombresDeUsuario;
+	}
 }

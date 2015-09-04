@@ -74,7 +74,7 @@ class Examenes extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'clave' => 'Clave',
-			'nombre' => 'Examen',
+			'nombre' => 'Determinación',
 			'descripcion' => 'Descripción',
 			'duracion_dias' => 'Duración en días',
 			'indicaciones_paciente' => 'Indicaciones Paciente',
@@ -83,7 +83,7 @@ class Examenes extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
-			'tecnica'=>'Método análitico',
+			'tecnica'=>'Método analítico',
 		);
 	}
 
@@ -142,7 +142,7 @@ class Examenes extends CActiveRecord
 	public function findExamenesInIds($ids){
 		if(sizeof($ids)>0){
 			$in='(';
-			for ($i=0; $i < sizeof($ids); $i++) { 
+			for ($i=0; $i < sizeof($ids); $i++) {
 				$in.=$i!=(sizeof($ids)-1)?'?,':'?)';
 			}
 			return $this->model()->findAll('id in '.$in.' AND activo = 1',$ids);

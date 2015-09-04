@@ -96,7 +96,7 @@ class UsuariosController extends Controller
 				$this->redirect(array('view','id'=>$model->id));
 			}
 			catch(Exception $e){
-			echo "<script>alert('No se pudo guardar ya existe el usuario');</script>";			
+			echo "<script>alert('No se pudo guardar ya existe el usuario');</script>";
 			}
 		}
 
@@ -117,7 +117,7 @@ class UsuariosController extends Controller
 			$model->activo=$model->activo==0?1:0;
 		else
 			$model->delete();
-		$model->save();	
+		$model->save();
 
 		$status = (!isset($model->activo)?"Eliminado":($model->activo==0?"Desactivado":"Activado"));
 		echo '{id:'.$model->id.', estatus:'.$status.'}';
@@ -193,4 +193,5 @@ class UsuariosController extends Controller
 		}
 		return $nombre;
 	}
+
 }

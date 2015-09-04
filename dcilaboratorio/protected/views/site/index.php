@@ -6,13 +6,13 @@ mb_internal_encoding('UTF-8');
 if(Yii::app()->user->isGuest){
 ?>
 
-<?php 
+<?php
 }
 ?>
 
 <?php
 if(Yii::app()->user->isGuest){
- 
+
 $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'login-form',
 	'htmlOptions'=>array('class' => 'login-form'),
@@ -51,64 +51,27 @@ $form=$this->beginWidget('CActiveForm', array(
 			<?php echo $form->error($model,'rememberMe'); ?>
 		</div>
 
-<?php $this->endWidget(); 
+<?php $this->endWidget();
 
 }
 else{
 ?>
-
-
-<div  class=" col-md-6 ">	
-		<h3  class="heading text-center" style="color:#1e90ff ">Nuestras sucursales</h3>
-		
-	
-	<div class="row">			
-		<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
-		Gral. Nicolás Bravo No. 170 
-		<br />Colonia Chapultepec Norte 
-		<br />Código Postal 58260
-		<br />Teléfono Fax. (443) 232 0166
-		<br />Lunes a Sábado de 07:00 a 20:00 hrs. 
-		<br /> Domingo 08:00 a 14:00 hrs.
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div  id="slider" class=" col-md-6 text-right">
+			<figure>
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab5.png" WIDTH=470 HEIGHT=365 alt="">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab1.jpg" WIDTH=470 HEIGHT=365  alt="">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab2.jpg" WIDTH=470 HEIGHT=365 alt="">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab.jpg" WIDTH=470 HEIGHT=365 alt="">
+			</figure>
+		</div>
 	</div>
-	<div class="row">			
-		<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
-		Francisco M. Díaz No. 145 
-		<br />Colonia Ex Gobernador Gildardo Magaña 
-		<br />Código Postal 58149
-		<br />Tel. Fax. (443) 232 01 65
-		<br />Lunes a Sábado de 07:00 a 15:00 hrs. 
-	</div>
-	<div class="row">			
-		<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
-		Amado Nervo No. 392-4 
-		<br />Colonia Centro 
-		<br />Código 58000
-		<br />Teléfono Fax. (443) 326 98 91
-		<br />Lunes a Sábado de 07:00 a 15:00 hrs. 
-	</div>
-
-		
-	</div>
-	
-
-<div  id="slider" class=" col-md-6 text-right">
-<figure>
-
-<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab5.png"  alt="">
-<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab1.jpg" WIDTH=450 HEIGHT=365  alt="">
-<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab2.jpg" WIDTH=450 HEIGHT=365 alt="">
-<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab.jpg" WIDTH=450 HEIGHT=365 alt="">
-</figure>
-</div>
-
-
-	
 <?php
 }
 ?>
 <style type="text/css">
-	
+
 	@keyframes slidy {
 0% { left: 0%; }
 20% { left: 0%; }
@@ -121,16 +84,16 @@ else{
 100% { left: -400%; }
 }
 
-body { margin: 0; } 
+body { margin: 0; }
 div#slider { overflow: hidden; }
 div#slider figure img { width: 20%; float: left; }
-div#slider figure { 
+div#slider figure {
   position: relative;
   width: 500%;
   margin: 0;
   left: 0;
   text-align: left;
   font-size: 0;
-  animation: 30s slidy infinite; 
+  animation: 30s slidy infinite;
 }
 </style>

@@ -7,7 +7,7 @@
 	<div class="portlet-title">
 		<div class="caption">
 			Resultado de examen
-		</div>		
+		</div>
 	</div>
 	<div class="portlet-body form" style="display: block;">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -24,8 +24,8 @@
 	<div class="form-group <?php if($form->error($model,'id_examenes')!=''){ echo 'has-error'; }?>">
 				<?php echo $form->labelEx($model,'id_examenes', array('class'=>'control-label')); ?>
 				<div class="input-group">
-					<?php echo $form->dropDownList($model,'id_examenes',$model->obtenerExamenes(), array("empty"=>"Seleccione una opción", 'class'=>'form-control')); ?>
-					
+					<?php echo $form->dropDownList($model,'id_examenes',$model->obtenerExamenes(), array("empty"=>"Seleccione una opción", 'class'=>'form-control select2me')); ?>
+
 					<?php echo $form->error($model,'id_examenes', array('class'=>'help-block')); ?>
 				</div>
 	</div>
@@ -42,7 +42,7 @@
 				<?php echo $form->labelEx($model,'id_unidades_medida', array('class'=>'control-label')); ?>
 				<div class="input-group">
 					<?php echo $form->dropDownList($model,'id_unidades_medida',$model->obtenerUnidadesMedida(), array("empty"=>"Seleccione una opción", 'class'=>'form-control')); ?>
-					
+
 					<?php echo $form->error($model,'id_unidades_medida', array('class'=>'help-block')); ?>
 				</div>
 	</div>

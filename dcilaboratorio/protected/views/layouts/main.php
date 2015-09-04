@@ -1,11 +1,11 @@
-<?php /* @var $this Controller */ 
+<?php /* @var $this Controller */
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 
-	<!-- blueprint CSS framework 
+	<!-- blueprint CSS framework
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection">
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print">
 	<[if lt IE 8]>
@@ -48,14 +48,14 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/layout.css" rel="stylesheet" type="text/css"/>
 	<link id="style_color" href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/themes/default.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout4/css/custom.css" rel="stylesheet" type="text/css"/>
-	
+
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css"/>
 	<!-- DATE TIME PICKERS-->
     <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datepicker/css/datepicker3.css"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-colorpicker/css/colorpicker.css"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
-	
+
 	<!-- END THEME STYLES -->
 	<link rel="shortcut icon" href="fav	icon.ico"/>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery.min.js" type="text/javascript"></script>
@@ -106,6 +106,7 @@
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 			</div>
 		</div>
+
 		<!-- END LOGO -->
 		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
 		<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
@@ -115,8 +116,8 @@
 		<div class="page-top">
 			<div class="top-menu">
 				<ul class="nav navbar-nav pull-right">
-					
-					
+
+
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 					<li class="dropdown dropdown-user dropdown-dark">
@@ -127,7 +128,7 @@
 						<i class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
-							
+
 <!--<li>
 								<a href="#">
 								<i class="icon-user"></i> Mi perfil </a>
@@ -148,14 +149,14 @@
 					</li>
 					<!-- END USER LOGIN DROPDOWN -->
 					<!-- BEGIN QUICK SIDEBAR TOGGLER -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte 
+					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte
 					<li class="dropdown dropdown-quick-sidebar-toggler">
 						<a href="javascript:;" class="dropdown-toggle">
 						<i class="icon-logout"></i>
 						</a>
 					</li>
 					 END QUICK SIDEBAR TOGGLER -->
-					 
+
 				</ul>
 			</div>
 		</div>
@@ -181,7 +182,7 @@
 			<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
 			<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-			<?php 
+			<?php
 			if(Yii::app()->user->getState('perfil')=='Administrador')
 				include_once("menu_admin.php");
 			if(Yii::app()->user->getState('perfil')=='Doctor')
@@ -212,7 +213,7 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" id="modalAceptarAviso" class="btn red" style="display:none" data-dismiss="modal">Aceptar</button>
-						</div> 
+						</div>
 					</div>
 					<!-- /.modal-content -->
 				</div>
@@ -234,7 +235,7 @@
 							<button type="button" id="modalCancelar" class="btn default" style="display:none" data-dismiss="modal">Cerrar</button>
 							<button type="button" id="modalGuardar" class="btn green" style="display:none" data-dismiss="modal">Guardar</button>
 							<button type="button" id="modalAceptar" class="btn red" style="display:none" data-dismiss="modal">Aceptar</button>
-						</div> 
+						</div>
 					</div>
 					<!-- /.modal-content -->
 				</div>
@@ -243,14 +244,44 @@
 			<!-- /.modal -->
 
 			<!-- BEGIN PAGE CONTENT-->
-			<div class="row">
-				<div class="col-md-12">
-					 <?php 
-					 echo $content; 
-					 ?>
+			<div class="portlet light">
+				<div class="direcciones-header row">
+					<div class="col-md-4">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
+						General Nicolás Bravo No. 170
+						<br />Colonia Chapultepec Norte
+						<br />Código Postal 58260
+						<br />Teléfono Fax. (443) 232 0166
+						<br />Lunes a Sábado de 07:00 a 20:00 hrs.
+						<br /> Domingo 08:00 a 14:00 hrs.
+					</div>
+					<div class="col-md-4">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
+						Francisco M. Díaz No. 145
+						<br />Colonia Ex Gobernador Gildardo Magaña
+						<br />Código Postal 58149
+						<br />Tel. Fax. (443) 232 01 65
+						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
+					</div>
+					<div class="col-md-4">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
+						Amado Nervo No. 392-4
+						<br />Colonia Centro
+						<br />Código 58000
+						<br />Teléfono Fax. (443) 326 98 91
+						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
+					</div>
 				</div>
+				<div class="row">
+					<div class="col-md-12">
+
+						<?php
+						echo $content;
+						?>
+					</div>
+				</div>
+				<!-- END PAGE CONTENT-->
 			</div>
-			<!-- END PAGE CONTENT-->
 		</div>
 	</div>
 	<!-- END CONTENT -->
@@ -260,7 +291,7 @@
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
 	<div class="page-footer-inner">
-		 
+
 	</div>
 	<div class="scroll-to-top">
 		<i class="icon-arrow-up"></i>
@@ -306,14 +337,14 @@
 -->
 
 <script>
-jQuery(document).ready(function() {  
+jQuery(document).ready(function() {
 
    	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 	QuickSidebar.init(); // init quick sidebar
 	Demo.init(); // init demo features
 	ComponentsPickers.init();
-	
+
 	$(".date-picker").datepicker({
 	    language: 'es',
 	});
