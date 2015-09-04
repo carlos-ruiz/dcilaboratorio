@@ -15,7 +15,7 @@ class ImprimirFactura extends FPDF{
 
         $y = 0.5;
         $this->SetXY(1, .75);
-        $this->Cell(0,2.54,'SILVIA GUERRA LAUCHINO',0,0,'C');
+        $this->Cell(0,2.54,'SILVIA GUERRA LACHINO',0,0,'C');
         $this->ln(0.5);
         $this->SetFont('Arial','B',12);
         $this->Cell(0,2.54,'RFC. GULS720801NY4',0,0,'C');
@@ -27,8 +27,8 @@ class ImprimirFactura extends FPDF{
         $this->Cell(.9, 2, 'Domicilio y Expendido en:', 0, 0, 'C');
         $this->SetX(2);
         $this->SetFont('Times','',8);
-        $this->Cell(1, 3, 'Gnl.Bravo #170', 0, 0, 'C');
-        $this->Cell(1, 3.7, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
+        $this->Cell(1, 3, 'General Bravo #170', 0, 0, 'C');
+        $this->Cell(1, 3.7, 'Colonia Chapultepec Norte C.P. 58260', 0, 0, 'C');
         $this->Cell(-2.4, 4.4, 'Morelia, Michoacán', 0, 0, 'C');
 
         $this->SetXY(2.4, 3.7);
