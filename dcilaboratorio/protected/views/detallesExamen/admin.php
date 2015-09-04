@@ -4,9 +4,9 @@
 
 ?>
 
-<h1>Administrar resultados de exámenes</h1>
+<h1>Administrar configuración test</h1>
 <div class="text-right">
-	<?php echo CHtml::link('<i class="icon-plus"></i> Nuevo resultado de examen', array('detallesExamen/create'), array('class'=>'btn')); ?>
+	<?php echo CHtml::link('<i class="icon-plus"></i> Nueva configuración test', array('detallesExamen/create'), array('class'=>'btn')); ?>
 </div>
 
 
@@ -16,7 +16,7 @@ $this->renderPartial(
 	array(
 		'model'=>$model,
 		'titulo'=>'Resultados de examenes',
-		'columnas'=>array('examenes.nombre','descripcion','unidadesMedida.nombre', 'rango_inferior','rango_superior')
+		'columnas'=>array('examenes.nombre','descripcion','unidadesMedida.nombre', 'rango_inferior','rango_promedio','rango_superior')
 	)
 ); 
 

@@ -71,7 +71,7 @@ class DetallesExamen extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'descripcion' => 'Descripción',
+			'descripcion' => 'Parámetro',
 			'id_unidades_medida' => 'Unidad Medida',
 			'id_examenes' => 'Examen',
 			'rango_inferior' => 'Rango Inferior',

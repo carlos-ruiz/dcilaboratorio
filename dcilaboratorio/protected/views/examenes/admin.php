@@ -4,13 +4,13 @@
 
 ?>
 
-<h1>Administrar exámenes</h1>
+<h1>Administrar determinaciones</h1>
 <?php 
 $this->renderPartial(
 	'/comunes/_comunAdmin', 
 	array(
 		'model'=>$model,
-		'titulo'=>'Ex&aacute;menes',
+		'titulo'=>'Determinaciones',
 		'columnas'=>array(
 			'clave',
 			'nombre',

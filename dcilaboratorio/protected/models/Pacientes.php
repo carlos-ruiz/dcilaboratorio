@@ -69,11 +69,11 @@ class Pacientes extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'nombre' => 'Nombre',
+			'nombre' => 'Nombre(s)',
 			'a_paterno' => 'Apellido Paterno',
 			'a_materno' => 'Apellido Materno',
 			'fecha_nacimiento' => 'Fecha Nacimiento',
-			'sexo' => 'Sexo',
+			'sexo' => 'Género',
 			'email' => 'Correo electrónico',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',

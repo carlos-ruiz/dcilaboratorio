@@ -1,3 +1,4 @@
+
 <?php
 /* @var $this DoctoresController */
 /* @var $model Doctores */
@@ -102,7 +103,7 @@ Yii::app()->clientScript->registerScript('timepicker', "
 				</div>
 
 				<div class="form-group col-md-6 <?php if($form->error($unidad,'id_unidades_responsables')!=''){ echo 'has-error'; }?>">
-					<?php echo $form->labelEx($unidad,'Unidades responsables', array('class'=>'control-label')); ?>
+					<?php echo $form->labelEx($unidad,'Unidad enlace', array('class'=>'control-label')); ?>
 					<div class="input-group">
 						<?php echo $form->listBox($unidad,'id_unidades_responsables',CHtml::listData($urs,'id','nombre'), array('class' => 'form-control', 'multiple'=>'true', 'options'=>$unidadesSeleccionadas)); ?>
 						<?php echo $form->error($unidad,'id_unidades_responsables', array('class'=>'help-block')); ?>
