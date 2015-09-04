@@ -84,11 +84,11 @@ class Ordenes extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'id_doctores' => 'Doctor',
+			'id_doctores' => 'Doctor(a)',
 			'id_status' => 'Id Status',
 			'id_unidades_responsables' => 'Id Unidades Responsables',
 			'fecha_captura' => 'Fecha Captura',
-			'informacion_clinica_y_terapeutica' => 'Informacion Clinica y Terapeutica',
+			'informacion_clinica_y_terapeutica' => 'Información Clínica y Terapéutica',
 			'comentarios' => 'Comentarios',
 			'requiere_factura' => '¿Requiere factura?',
 			'descuento' => '% de Descuento',

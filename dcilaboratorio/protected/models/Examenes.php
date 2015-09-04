@@ -83,7 +83,7 @@ class Examenes extends CActiveRecord
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
-			'tecnica'=>'Técnica',
+			'tecnica'=>'Método análitico',
 		);
 	}
 

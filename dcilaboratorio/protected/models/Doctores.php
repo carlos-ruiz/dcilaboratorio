@@ -85,12 +85,12 @@ class Doctores extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'nombre' => 'Nombre',
+			'nombre' => 'Nombre(s)',
 			'a_paterno' => 'Apellido paterno',
 			'a_materno' => 'Apellido materno',
 			'correo_electronico' => 'Correo electrónico',
-			'hora_consulta_de' => 'Hora consulta de',
-			'hora_consulta_hasta' => 'Hora consulta hasta',
+			'hora_consulta_de' => 'Inicia consilta',
+			'hora_consulta_hasta' => 'Termina consulta',
 			'id_especialidades' => 'Especialidad',
 			'id_titulos' => 'Título',
 			'id_usuarios' => 'Id Usuarios',

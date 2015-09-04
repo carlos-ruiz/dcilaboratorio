@@ -72,7 +72,7 @@
 	<li <?php if($this->section=="UnidadesResponsables"){ echo 'class="active open"';}?>>
 		<a href="javascript:;">
 		<i class="icon-grid"></i>
-		<span class="title">U. Responsables</span>
+		<span class="title">Unidades</span>
 		<?php if($this->section=="UnidadesResponsables"){?>
 		<span class="selected"></span>
 		<span class="arrow open"></span>
@@ -128,7 +128,7 @@
 	<li <?php if($this->section=="Examenes"){ echo 'class="active open"';}?>>
 		<a href="javascript:;">
 		<i class="icon-book-open"></i>
-		<span class="title">Exámenes</span>
+		<span class="title">Determinaciones</span>
 		<?php if($this->section=="Examenes"){?>
 		<span class="selected"></span>
 		<span class="arrow open"></span>
@@ -140,7 +140,7 @@
 			<li <?php if($this->section=="Examenes" && $this->subSection=="Nuevo"){ echo 'class="active"';}?>>
 				<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/create">
 				<i class="icon-plus"></i>
-				Nuevo</a>
+				Nueva</a>
 			</li>
 			<li <?php if($this->section=="Examenes" && $this->subSection=="Admin"){ echo 'class="active"';}?>>
 				<a href="<?php echo Yii::app()->request->baseUrl; ?>/examenes/admin">
@@ -150,13 +150,13 @@
 			<li <?php if($this->section=="Examenes" && $this->subSection=="Grupos"){ echo 'class="active"';}?>>
 				<a href="<?php echo Yii::app()->request->baseUrl; ?>/grupos/admin">
 				<i class="icon-layers"></i>
-				Grupos</a>
+				Perfiles</a>
 
 			</li>
 			<li <?php if($this->section=="Examenes" && $this->subSection=="Resultados"){ echo 'class="active"';}?>>
 				<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/admin">
 				<i class="icon-note"></i>
-				Resultado de examenes</a>
+				Configura test</a>
 			</li>
 			<li <?php if($this->section=="Examenes" && $this->subSection=="Tarifas"){ echo 'class="active"';}?>>
 				<a href="<?php echo Yii::app()->request->baseUrl; ?>/tarifasActivas/admin">
@@ -191,7 +191,7 @@
 		</ul>
 	</li>
 
-	<li <?php if($this->section=="PalabrasClave"){ echo 'class="active open"';}?>>
+	<!--li <?php if($this->section=="PalabrasClave"){ echo 'class="active open"';}?>>
 		<a href="javascript:;">
 		<i class="icon-puzzle"></i>
 		<span class="title">Palabras Clave</span>
@@ -214,7 +214,7 @@
 				Administrar</a>
 			</li>
 		</ul>
-	</li>
+	</li-->
 
 	<li <?php if($this->section=="Titulos"){ echo 'class="active open"';}?>>
 		<a href="javascript:;">

@@ -3,6 +3,6 @@
 /* @var $model Examenes */
 
 ?>
-<h1>Nuevo examen</h1>
+<h1>Nueva deerminación</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

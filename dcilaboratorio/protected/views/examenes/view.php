@@ -3,7 +3,7 @@
 /* @var $model Examenes */
 ?>
 
-<h1>Examen: <?php echo $model->nombre; ?></h1>
+<h1>Determinación: <?php echo $model->nombre; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
