@@ -113,6 +113,15 @@
 								        					'title'=>'Cancelar',
 								        				),
 											        ),
+											        'reimprimir'=>array(
+											        	'label'=>'<span class="fa fa-print"></span>',
+								        				'visible'=>'(isset($data->activa) && $data->activa == 1)',
+								        				'imageUrl'=>false,
+								        				'url'=>'Yii::app()->controller->createUrl("reimprimirFactura",array("id"=>$data->id))',
+								        				'options'=>array(
+								        					'title'=>'Reimprimir',
+								        				),
+											        ),
 											    ),
 											    'template'=>(!isset($buttonsTemplate))?'{activar} {view} {update} {borrar} {desactivar}':$buttonsTemplate,
 											));

@@ -245,13 +245,14 @@ class FacturacionController extends Controller
 			if($model->validate() && $conceptosConError == null){
 				if(isset($model->id_orden)){
 					$facturaExpedida = $this->facturaGeneradaAnteriormente($model->id_orden);
-					if (isset($facturaExpedida)) {
+					if (isset($facturaExpedida->id)) {
 						$this->redirect(array('reimprimirFactura', 'id'=>$facturaExpedida->id));
 					}
 					else{
 						$this->prepararCFD($model);
 						$model->csd_emisor = $this->generarCFD();
 						$result = $this->imprimirFactura($model);
+						
 						if (isset($result['titulo']) && isset($result['mensaje'])) {
 							$titulo = $result['titulo'];
 							$mensaje = $result['mensaje'];
@@ -404,7 +405,9 @@ class FacturacionController extends Controller
 		file_put_contents($pngPath, $png);
 		$facturaExpedida->qr_png = $response['b64cbb'];
 
+		
 		if($facturaExpedida->validate()){
+			
 			if($facturaExpedida->save()){
 				$conceptos = $facturacionModel->conceptos;
 				$facturacionModel->numeroFactura = $facturaExpedida->id;
@@ -418,9 +421,10 @@ class FacturacionController extends Controller
 					$concepto->save();
 				}
 			}
+			$this->redirect(array('reimprimirFactura', 'id' => $facturaExpedida->id));
 		}
 
-		$this->redirect(array('reimprimirFactura', 'id' => $facturaExpedida->id));
+		
 	}
 
 	public function actionReimprimirFactura($id){

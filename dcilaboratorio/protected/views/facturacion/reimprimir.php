@@ -8,7 +8,7 @@ Cantidad a pagar: $<?php echo $importe; ?>
 
 <?php
 
-	$btnTemplate = '{facturar} {cancelarFactura}';
+	$btnTemplate = '{facturar} {cancelarFactura} {reimprimir}';
 
 	$this->renderPartial(
 		'/comunes/_comunAdmin',

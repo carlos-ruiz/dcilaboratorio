@@ -37,6 +37,7 @@ class FacturacionForm extends CFormModel
 			array('razon_social, rfc, calle, numero, colonia, codigo_postal, localidad, municipio, estado, fecha, conceptos', 'required'),
 			// numerical
 			array('costo_extra', 'length', 'max'=>8),
+			array('numero', 'length', 'max'=>10),
 			array('descuento', 'numerical', 'integerOnly'=>true, 'min'=>0, 'max'=>100),
 			array('correo_electronico', 'email'),
 			//validate RFC
