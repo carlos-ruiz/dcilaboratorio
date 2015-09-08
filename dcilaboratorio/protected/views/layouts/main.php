@@ -114,9 +114,37 @@
 		<!-- END RESPONSIVE MENU TOGGLER -->
 		<!-- BEGIN TOP NAVIGATION MENU -->
 		<div class="page-top">
-			<div class="top-menu">
-				<ul class="nav navbar-nav pull-right">
 
+			<div class="top-menu">
+				<div class="floatLeft">
+					<div class="col-md-4 fontSize10">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
+						General Nicolás Bravo No. 170
+						<br />Colonia Chapultepec Norte
+						<br />Código Postal 58260
+						<br />Teléfono Fax. (443) 232 0166
+						<br />Lunes a Sábado de 07:00 a 20:00 hrs.
+						<br /> Domingo 08:00 a 14:00 hrs.
+					</div>
+					<div class="col-md-4 fontSize10">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
+						Francisco M. Díaz No. 145
+						<br />Colonia Ex Gobernador Gildardo Magaña
+						<br />Código Postal 58149
+						<br />Tel. Fax. (443) 232 01 65
+						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
+					</div>
+					<div class="col-md-4 fontSize10">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
+						Amado Nervo No. 392-4
+						<br />Colonia Centro
+						<br />Código 58000
+						<br />Teléfono Fax. (443) 326 98 91
+						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
+					</div>
+				</div>
+				
+				
 
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
@@ -128,19 +156,6 @@
 						<i class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
-
-<!--<li>
-								<a href="#">
-								<i class="icon-user"></i> Mi perfil </a>
-							</li>
-							<li class="divider">
-							</li>
-							<!--
-							<li>
-								<a href="extra_lock.html">
-								<i class="icon-lock"></i> Lock Screen </a>
-							</li>
-							-->
 							<li>
 								<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/logOut">
 								<i class="icon-key"></i> Cerrar sesión </a>
@@ -245,33 +260,7 @@
 
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="portlet light">
-				<div class="direcciones-header row">
-					<div class="col-md-4">
-						<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
-						General Nicolás Bravo No. 170
-						<br />Colonia Chapultepec Norte
-						<br />Código Postal 58260
-						<br />Teléfono Fax. (443) 232 0166
-						<br />Lunes a Sábado de 07:00 a 20:00 hrs.
-						<br /> Domingo 08:00 a 14:00 hrs.
-					</div>
-					<div class="col-md-4">
-						<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
-						Francisco M. Díaz No. 145
-						<br />Colonia Ex Gobernador Gildardo Magaña
-						<br />Código Postal 58149
-						<br />Tel. Fax. (443) 232 01 65
-						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
-					</div>
-					<div class="col-md-4">
-						<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
-						Amado Nervo No. 392-4
-						<br />Colonia Centro
-						<br />Código 58000
-						<br />Teléfono Fax. (443) 326 98 91
-						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
-					</div>
-				</div>
+				
 				<div class="row">
 					<div class="col-md-12">
 

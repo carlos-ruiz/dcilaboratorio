@@ -57,14 +57,19 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <div class=" col-md-6">
 <div class=" col-md-6 pull-right">
-<br /><br /><br /><br /><br /><br />
-	<?php 
+<div class="row col-12 padding-left">
+	<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/logoNuevo.png" height="100" alt=""/>
+</div>
+<br /><br />
+<?php 
 	 echo $content; 
 	?>
+	
 </div>
 </div>
 
 <div class=" col-md-6 ">
+	<br /><br /><br /><br />
 	<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php">
 	<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab5.png"  alt=""/>
 	</a>

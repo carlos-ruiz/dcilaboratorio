@@ -6,7 +6,7 @@ return array(
 	// uncomment the following lines to use a MySQL database
 	'connectionString' => 'mysql:host=localhost;dbname=dcilab',
 	'emulatePrepare' => true,
-	'username' => 'dcilaboratorio',
-	'password' => 'dcilaboratorio',
+	'username' => 'root',
+	'password' => '',
 	'charset' => 'utf8',
 );

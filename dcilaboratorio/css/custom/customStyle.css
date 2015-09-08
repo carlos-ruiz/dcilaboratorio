@@ -51,8 +51,13 @@ input[type="radio"]{
 	text-align: right;
 }
 
-.page-header {
-	/*overflow: auto;*/
-	/*height: auto !important;*/
-	/*padding: 1em 0 !important;*/
+.padding-left {	
+	padding-left: 25% !important;
+}
+.fontSize10{
+	font-size: 50% !important;
+}
+
+.floatLeft{
+	float:left !important;
 }
