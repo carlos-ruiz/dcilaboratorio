@@ -47,7 +47,7 @@ class EspecialidadesController extends Controller
 		);
 	}
 
-	
+
 
 	/**
 	 * Displays a particular model.
@@ -119,7 +119,7 @@ class EspecialidadesController extends Controller
 			$model->activo=$model->activo==0?1:0;
 		else
 			$model->delete();
-		$model->save();	
+		$model->save();
 
 		$status = (!isset($model->activo)?"Eliminado":($model->activo==0?"Desactivado":"Activado"));
 		echo '{id:'.$model->id.', estatus:'.$status.'}';

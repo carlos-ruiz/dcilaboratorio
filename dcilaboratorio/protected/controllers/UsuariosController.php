@@ -32,7 +32,7 @@ class UsuariosController extends Controller
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('index','view','admin','create','update','delete'),
-				'users'=>array('@'),
+				'users'=>Usuarios::model()->obtenerPorPerfil('Administrador'),
 			),
 			array('deny',  // deny all Usuarios
 				'users'=>array('*'),
