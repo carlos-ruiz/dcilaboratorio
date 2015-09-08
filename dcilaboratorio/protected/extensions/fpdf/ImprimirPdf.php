@@ -6,9 +6,6 @@ class ImprimirPdf extends FPDF{
         $y = 0.5;
 		$this->SetFont('Arial','B',18);
 		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1.5,1.5,3,3);
-    // Move to the right
-    //$this->Cell(8);
-    // Title
 
         $this->SetXY(4, .75);
         $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
@@ -21,27 +18,26 @@ class ImprimirPdf extends FPDF{
         $this->SetX(4);
         $this->SetFont('Times','',8);
         $y = 0.4;
-        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
         $this->Cell(5, $y, 'Francisco Madero #145', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');      
+        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Col. Centro', 0, 0, 'C');
         $this->Cell(5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');
         $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
         $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
         $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
         $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');
-    //  $this->SetLineWidth(0.07);
-    //  $this->line(0.54,5,27,5);       
+    }
 
 	function cabeceraHorizontal($cabecera)
 	{
@@ -76,7 +72,7 @@ class ImprimirPdf extends FPDF{
     				$fecha = explode(' ', $fecha[2]);
     				$this->Cell($columna['size'],($y*$posYIncremento),$fecha[0], 1, 1);
     			}
-    			$posX += $columna['size']; 
+    			$posX += $columna['size'];
     		}
     		if ($columna['id']=='month') {
     			foreach ($coleccion as $i => $value) {
@@ -256,7 +252,7 @@ class ImprimirPdf extends FPDF{
 				$posX += $columna['size'];
 				$posY = $posYOriginal;
 			}
-    		
+
     		//Tarifa
     			if ($columna['id']=='tarifa') {
     			foreach ($coleccion as $i => $value) {
@@ -275,12 +271,12 @@ class ImprimirPdf extends FPDF{
     }
 
     function Footer()
-	{
-	//Position at 1.5 cm from bottom
-    $this->SetY(-6);
-    //Arial italic 8
-    $this->SetFont('Arial','I',8);
-    //Page number
-    $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
-	}
+    {
+	    //Position at 1.5 cm from bottom
+        $this->SetY(-6);
+        //Arial italic 8
+        $this->SetFont('Arial','I',8);
+        //Page number
+        $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
+    }
 }
