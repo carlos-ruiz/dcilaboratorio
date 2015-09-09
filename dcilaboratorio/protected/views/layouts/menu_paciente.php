@@ -15,7 +15,7 @@
 					<?php }?>
 					</a>
 				</li>
-
+<!--
 				<li <?php if($this->section=="Pacientes"){ echo 'class="startactive open"';}?>>
 					<a href="<?php echo Yii::app()->controller->createUrl('/pacientes/view',array('id'=>$user->ordenFacturacion->id_pacientes)); ?>">
 					<i class="icon-home"></i>
@@ -28,7 +28,7 @@
 					<?php }?>
 					</a>
 				</li>
-
+-->
 				<li <?php if($this->section=='Ordenes'&&$this->subSection!="Pacientes"){ echo 'class="startactive open"';}?>>
 					<a href="<?php echo Yii::app()->controller->createUrl('/ordenes/view',array('id'=>$user->ordenFacturacion->id_ordenes)); ?>">
 					<i class="icon-chemistry"></i>

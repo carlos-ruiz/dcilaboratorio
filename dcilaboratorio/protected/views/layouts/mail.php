@@ -25,7 +25,7 @@
 			</p>
 		</section>
 		<div style="background-color:#3B3F51; color: white;">
-			<p style="text-align: center;"> ¡DCI Laboratorio agradece tu peferencia! <br/>
+			<p style="text-align: center;"> “Diagnóstico Clínico Integral agradece su confianza y preferencia para utilizar nuestros servicios, ponemos a su disposición  un equipo humano y tecnológico de vanguardia para brindarle seguridad y calidad en nuestras determinaciones. La consulta o impresión de sus resultados puede realizarla en el sitio www.dcilaboratorio.com con las claves de usuario y contraseña indicadas.” <br/>
 				Para cualquier aclaración comunicarse al: (443) 3-22-11-22.
 			</p>
 		</div>

@@ -6,7 +6,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			Examen
+			Determinación
 		</div>		
 	</div>
 	<div class="portlet-body form" style="display: block;">

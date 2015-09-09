@@ -61,3 +61,32 @@ input[type="radio"]{
 .floatLeft{
 	float:left !important;
 }
+
+.side-bar {
+	background-color: #fff;
+	padding-top: 50px;
+	height: 100%;
+	border-right:10px inset rgba(0, 0, 255, 0.12);
+}
+
+.page-header.navbar{
+	height: auto !important;
+	padding-bottom: 5px !important;
+	margin-bottom: 10px !important;
+}
+
+.page-header.navbar .page-logo{
+	padding-top: 10px;
+}
+
+.page-header.navbar .page-top{
+	padding-top: 10px;
+}
+
+@media(min-width: 992px){
+	.page-sidebar-fixed .page-sidebar {
+	    position: fixed !important;
+	    margin-left: 0;
+	    top: 125px !important;
+	}
+}

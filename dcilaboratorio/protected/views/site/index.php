@@ -67,6 +67,14 @@ else{
 			</figure>
 		</div>
 	</div>
+	<div class="row text-center">
+		<h2>Slogan<?php if(Yii::app()->user->getState('perfil')=='Administrador') { ?>
+			<a href="<?php echo CController::createUrl('site/loadModalSlogan');?>" data-target="#modal" data-toggle="modal"><i class='fa fa-pencil'></i></a>
+		<?php
+		}
+		?></h2>
+
+	</div>
 <?php
 }
 ?>

@@ -106,6 +106,33 @@
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 			</div>
 		</div>
+		<div class="floatLeft col-md-8">
+			<div class="col-md-4 fontSize10">
+				<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
+				General Nicolás Bravo No. 170
+				<br />Colonia Chapultepec Norte
+				<br />Código Postal 58260
+				<br />Teléfono Fax. (443) 232 0166
+				<br />Lunes a Sábado de 07:00 a 20:00 hrs.
+				<br /> Domingo 08:00 a 14:00 hrs.
+			</div>
+			<div class="col-md-4 fontSize10">
+				<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
+				Francisco M. Díaz No. 145
+				<br />Colonia Ex Gobernador Gildardo Magaña
+				<br />Código Postal 58149
+				<br />Tel. Fax. (443) 232 01 65
+				<br />Lunes a Sábado de 07:00 a 15:00 hrs.
+			</div>
+			<div class="col-md-4 fontSize10">
+				<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
+				Amado Nervo No. 392-4
+				<br />Colonia Centro
+				<br />Código 58000
+				<br />Teléfono Fax. (443) 326 98 91
+				<br />Lunes a Sábado de 07:00 a 15:00 hrs.
+			</div>
+		</div>
 
 		<!-- END LOGO -->
 		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -114,40 +141,10 @@
 		<!-- END RESPONSIVE MENU TOGGLER -->
 		<!-- BEGIN TOP NAVIGATION MENU -->
 		<div class="page-top">
-
 			<div class="top-menu">
-				<div class="floatLeft">
-					<div class="col-md-4 fontSize10">
-						<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
-						General Nicolás Bravo No. 170
-						<br />Colonia Chapultepec Norte
-						<br />Código Postal 58260
-						<br />Teléfono Fax. (443) 232 0166
-						<br />Lunes a Sábado de 07:00 a 20:00 hrs.
-						<br /> Domingo 08:00 a 14:00 hrs.
-					</div>
-					<div class="col-md-4 fontSize10">
-						<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
-						Francisco M. Díaz No. 145
-						<br />Colonia Ex Gobernador Gildardo Magaña
-						<br />Código Postal 58149
-						<br />Tel. Fax. (443) 232 01 65
-						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
-					</div>
-					<div class="col-md-4 fontSize10">
-						<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
-						Amado Nervo No. 392-4
-						<br />Colonia Centro
-						<br />Código 58000
-						<br />Teléfono Fax. (443) 326 98 91
-						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
-					</div>
-				</div>
-				
-				
-
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+				<ul class="nav navbar-nav pull-right">
 					<li class="dropdown dropdown-user dropdown-dark">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 						<img alt="" class="img-circle" src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/avatar.png"/>
@@ -259,7 +256,7 @@
 			<!-- /.modal -->
 
 			<!-- BEGIN PAGE CONTENT-->
-			<div class="portlet light">
+			<div >
 				
 				<div class="row">
 					<div class="col-md-12">
@@ -337,6 +334,8 @@ jQuery(document).ready(function() {
 	$(".date-picker").datepicker({
 	    language: 'es',
 	});
+
+	$('.page-container').css('margin-top', $('.page-header').height());
 
 });
 

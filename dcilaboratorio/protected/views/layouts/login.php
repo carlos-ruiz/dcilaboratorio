@@ -40,6 +40,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/css/layout.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
 <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/custom/customStyle.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="favicon.ico"/>
 
@@ -52,44 +53,64 @@ License: You must have a valid license purchased only from themeforest(the above
 </div>
 <!-- END SIDEBAR TOGGLER BUTTON -->
 <!-- BEGIN LOGO -->
-<br /><br />
-
-
-<div class=" col-md-6">
-<div class=" col-md-6 pull-right">
-<div class="row col-12 padding-left">
-	<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/logoNuevo.png" height="100" alt=""/>
+<div class="side-bar col-md-3">
+	<div class="row col-12" style="text-align:center;">
+		<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/logoNuevo.png" height="100" alt=""/>
+	</div>
+	<br/>
+	<div class="floatLeft">
+					<div class="col-md-12">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
+						General Nicolás Bravo No. 170
+						<br />Colonia Chapultepec Norte
+						<br />Código Postal 58260
+						<br />Teléfono Fax. (443) 232 0166
+						<br />Lunes a Sábado de 07:00 a 20:00 hrs.
+						<br /> Domingo 08:00 a 14:00 hrs.
+					</div>
+					<div class="col-md-12">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
+						Francisco M. Díaz No. 145
+						<br />Colonia Ex Gobernador Gildardo Magaña
+						<br />Código Postal 58149
+						<br />Tel. Fax. (443) 232 01 65
+						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
+					</div>
+					<div class="col-md-12">
+						<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
+						Amado Nervo No. 392-4
+						<br />Colonia Centro
+						<br />Código 58000
+						<br />Teléfono Fax. (443) 326 98 91
+						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
+					</div>
+				</div>	
 </div>
-<br /><br />
-<?php 
-	 echo $content; 
-	?>
-	
-</div>
-</div>
-
-<div class=" col-md-6 ">
-	<br /><br /><br /><br />
-	<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php">
-	<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab5.png"  alt=""/>
-	</a>
-</div>
-
-
-
-
-
-<div class=" col-md-12  copyright">
-	DCILaboratorio 2015 © Techinc.
-</div>
-<div class="page-footer">
-	<div class="page-footer-inner">
+<div class="col-md-9">
+	<div class=" col-md-6">
+		<div class=" col-md-12 pull-right">
 		
+		<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+		<?php 
+			 echo $content; 
+		?>		
+		</div>
+					
+
 	</div>
-	<div class="scroll-to-top">
-		<i class="icon-arrow-up"></i>
+
+	<div class=" col-md-6 ">
+		<br /><br /><br />
+		<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php">
+		<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab5.png"  alt=""/>
+		</a>
+	<div class=" col-md-12  copyright">
+		DCILaboratorio 2015 © Techinc.
+	</div>
 	</div>
 </div>
+
+
 <!-- END FOOTER -->
 
 <!-- END LOGIN -->
@@ -121,6 +142,7 @@ Metronic.init(); // init metronic core components
 Layout.init(); // init current layout
 Login.init();
 Demo.init();
+$('.side-bar').css('height', $(window).height());
 });
 </script>
 <!-- END JAVASCRIPTS -->
