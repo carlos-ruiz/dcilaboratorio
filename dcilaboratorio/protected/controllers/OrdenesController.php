@@ -31,7 +31,7 @@ class OrdenesController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','view', 'create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete'),
+				'actions'=>array('index','view', 'create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen'),
 				'users'=>Usuarios::model()->obtenerPorPerfil('Administrador'),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -659,10 +659,11 @@ class OrdenesController extends Controller
 
 	public function actionAgregarGrupoExamen(){
 		//print_r($_POST);
+		$idsExamenes = split(",", $_POST['idsExamenes']);
 		$grupo=Grupos::model()->findByPk($_POST['id']);
 		foreach ($grupo->grupoTiene as $tiene) {
 			$examen=$tiene->examen;
-			if($examen->activo==1 && sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos()){
+			if($examen->activo==1 && sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos() && !in_array($examen->id, $idsExamenes)){
 				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examen->id,$_POST['tarifa']));
 				$precio=isset($tarifa->precio)?$tarifa->precio:0;
 				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
@@ -804,5 +805,10 @@ class OrdenesController extends Controller
 		$pdf->cabeceraHorizontal($model);
 		$pdf->contenido($model);
 		$pdf->Output();
+	}
+
+	public function actionGruposPorExamen(){
+		$idExamen = $_POST['id'];
+		echo "String con id de grupos";
 	}
 }

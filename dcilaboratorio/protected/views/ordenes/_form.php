@@ -303,14 +303,14 @@ echo $form->errorSummary($datosFacturacion);
 					<div class="row">
 						<div class="form-group col-md-9">
 							<div class="form-group col-md-6">
-								<?php echo "<label class='control-label'>Examen</label>"?>
+								<?php echo "<label class='control-label'>Determinación</label>"?>
 								<div class="input-group">
 									<?php echo $form->dropDownList($examenes,'clave', Examenes::model()->selectListWithClave(), array('class'=>'form-control input-medium select2me')); ?>
 								</div>
 							</div>
 
 							<div class="form-group col-md-6">
-								<?php echo "<label class='control-label'>Grupo de exámenes</label>"?>
+								<?php echo "<label class='control-label'>Perfiles</label>"?>
 								<div class="input-group">
 									<?php echo $form->dropDownList($examenes,'nombre', Grupos::model()->selectList(), array('class'=>'form-control input-medium select2me')); ?>
 								</div>
@@ -320,6 +320,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-3" >
 							<div class="input-group">
 								<input type="hidden" id="examenesIds" name="Examenes[ids]" value />
+								<input type="hidden" id="gruposIds" name="Examenes[idsGrupos]" value />
 								<a href="javascript:void(0);" class="btn default blue-stripe" id="agregarExamen">Agregar</a>
 							</div>
 						</div>
@@ -482,6 +483,7 @@ echo $form->errorSummary($datosFacturacion);
 
 <script type="text/javascript">
 	examenesIds=[];
+	gruposIds=[];
 
 	function block(target) {
         Metronic.blockUI({
@@ -566,6 +568,16 @@ echo $form->errorSummary($datosFacturacion);
 			setGranTotal(granTotal);
 			debe=calcularDebe();
 			setDebe(debe);
+			$.post(
+					"<?php echo $this->createUrl('ordenes/gruposPorExamen/');?>",
+					{
+						id:$(this).data('id')
+					},
+					function(data){
+						//data es lo que regreso la action del controller
+						alert(data);
+					}
+				);
 		});
 		activarAgregarPrecio();
 	}
@@ -716,19 +728,21 @@ echo $form->errorSummary($datosFacturacion);
 						"<?php echo $this->createUrl('ordenes/agregarGrupoExamen/');?>",
 						{
 							id:idGrupo,
+							idsExamenes:examenesIds.join(","),
 							tarifa:idMultitarifario
 						},
 						function(data){
-							for(var i=0;i<examenesIds.length;i++){
-								$(".row_"+examenesIds[i]).hide(400);
-								$(".row_"+examenesIds[i]).html("");
+							// for(var i=0;i<examenesIds.length;i++){
+							// 	$(".row_"+examenesIds[i]).hide(400);
+							// 	$(".row_"+examenesIds[i]).html("");
 								examenesIds=[];
-								$("#examenesAgregados").html("");
-							}
-							$("#examenesAgregados").html(data);
+							// 	$("#examenesAgregados").html("");
+							// }
+							$("#examenesAgregados").append(data);
 							$(".eliminarExamen").each(function(){
 								examenesIds.push($(this).data('id'));
 							});
+							gruposIds.push(idGrupo);
 							activarEliminacion();
 							setExamenesIds();
 							total=calcularTotal();

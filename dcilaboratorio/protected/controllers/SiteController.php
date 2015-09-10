@@ -37,7 +37,7 @@ class SiteController extends Controller
 	{
 		//Para inicializar el sistema
 		$this->init();
-
+		$sloganActual = Slogan::model()->findByPk(1);
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		//$this->render('index');
@@ -61,8 +61,8 @@ class SiteController extends Controller
 				$this->redirect(Yii::app()->user->returnUrl);
 		}
 		// display the login form
-		$this->render('index',array('model'=>$model));
-		
+		$this->render('index',array('model'=>$model, 'sloganActual'=>$sloganActual));
+
 	}
 
 	/**
@@ -313,16 +313,25 @@ class SiteController extends Controller
 	}
 
 	public function actionLoadModalSlogan(){
+		$slogan = Slogan::model()->findByPk(1);
+		if(!isset($slogan)){
+			$slogan = new Slogan;
+		}
+		if (isset($_POST['Slogan'])) {
+			$slogan->attributes=$_POST['Slogan'];
+			if($slogan->save())
+				$this->redirect(array('index'));
+		}
 		$form=$this->beginWidget('CActiveForm', array(
-			'id'=>'pagos-form',
+			'id'=>'slogan-form',
 			// Please note: When you enable ajax validation, make sure the corresponding
 			// controller action is handling ajax validation correctly.
 			// There is a call to performAjaxValidation() commented in generated controller code.
 			// See class documentation of CActiveForm for details on this.
 			'enableAjaxValidation'=>false,
 			));
-		$this->renderPartial("_modalPagos",
-			array('pagos'=>$pagos,'form'=>$form, 'orden'=>$orden)
+		$this->renderPartial("_modalSlogan",
+			array('slogan'=>$slogan,'form'=>$form)
 			);
 		$this->endWidget();
 	}
