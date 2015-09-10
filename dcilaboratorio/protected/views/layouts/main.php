@@ -128,7 +128,7 @@
 				<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
 				Amado Nervo No. 392-4
 				<br />Colonia Centro
-				<br />Código 58000
+				<br />Código Postal 58000
 				<br />Teléfono Fax. (443) 326 98 91
 				<br />Lunes a Sábado de 07:00 a 15:00 hrs.
 			</div>
@@ -257,7 +257,7 @@
 
 			<!-- BEGIN PAGE CONTENT-->
 			<div >
-				
+
 				<div class="row">
 					<div class="col-md-12">
 

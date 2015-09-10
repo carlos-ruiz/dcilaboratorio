@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- 
+<!--
 Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.2
 Version: 3.3.0
 Author: KeenThemes
@@ -80,22 +80,22 @@ License: You must have a valid license purchased only from themeforest(the above
 						<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
 						Amado Nervo No. 392-4
 						<br />Colonia Centro
-						<br />Código 58000
+						<br />Código Postal 58000
 						<br />Teléfono Fax. (443) 326 98 91
 						<br />Lunes a Sábado de 07:00 a 15:00 hrs.
 					</div>
-				</div>	
+				</div>
 </div>
 <div class="col-md-9">
 	<div class=" col-md-6">
 		<div class=" col-md-12 pull-right">
-		
+
 		<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-		<?php 
-			 echo $content; 
-		?>		
+		<?php
+			 echo $content;
+		?>
 		</div>
-					
+
 
 	</div>
 
@@ -118,7 +118,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/respond.min.js"></script>
-<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/excanvas.min.js"></script> 
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/excanvas.min.js"></script>
 <![endif]-->
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
@@ -137,7 +137,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/login.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
-jQuery(document).ready(function() {     
+jQuery(document).ready(function() {
 Metronic.init(); // init metronic core components
 Layout.init(); // init current layout
 Login.init();
