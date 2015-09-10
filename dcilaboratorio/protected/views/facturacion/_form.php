@@ -326,7 +326,7 @@ $total = 0;
 		$("#total_desc_"+index).text(totalDesc);
 		$("#importe_sin_iva_"+index).text(importeSinIva);
 		$("#iva_"+index).text(iva);
-	} 
+	}
 
 	activarScripts();
 	calcularSubTotal();
