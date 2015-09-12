@@ -576,6 +576,7 @@ echo $form->errorSummary($datosFacturacion);
 					function(data){
 						//data es lo que regreso la action del controller
 						alert(data);
+						var idsGrupos = data.split(',');
 					}
 				);
 		});

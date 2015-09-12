@@ -106,7 +106,7 @@
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 			</div>
 		</div>
-		<div class="floatLeft col-md-8">
+		<div class="floatLeft col-md-7">
 			<div class="col-md-4 fontSize10">
 				<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
 				General Nicolás Bravo No. 170

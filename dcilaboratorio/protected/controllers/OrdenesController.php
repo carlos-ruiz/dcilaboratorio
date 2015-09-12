@@ -808,7 +808,15 @@ class OrdenesController extends Controller
 	}
 
 	public function actionGruposPorExamen(){
-		$idExamen = $_POST['id'];
-		echo "String con id de grupos";
+		$grupos =  GrupoExamenes::model()->findAll('id_examenes=?',array($_POST['id']));
+		$grupo = $grupos[0];
+		$ids = "".$grupo->id_grupos_examenes;
+		foreach($grupos as $index=>$grupo){
+			if($index>0){
+			$ids .= ",".$grupo->id_grupos_examenes;
+			}
+		}
+		
+		echo $ids;
 	}
 }
