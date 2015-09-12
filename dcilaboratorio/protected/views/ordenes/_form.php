@@ -575,8 +575,20 @@ echo $form->errorSummary($datosFacturacion);
 					},
 					function(data){
 						//data es lo que regreso la action del controller
-						alert(data);
+						//alert(data);
 						var idsGrupos = data.split(',');
+						var aux=[];
+						stringIds="";
+						for(j=0;j<gruposIds.length;j++){
+							if(idsGrupos.indexOf(gruposIds[j])<0){
+								aux.push(gruposIds[j]);
+							}
+						}
+						gruposIds=aux;
+						stringIds=gruposIds.slice(",");
+						//alert($("#gruposIds").val());
+						$("#gruposIds").val(stringIds);
+						//alert(stringIds);
 					}
 				);
 		});
@@ -744,6 +756,8 @@ echo $form->errorSummary($datosFacturacion);
 								examenesIds.push($(this).data('id'));
 							});
 							gruposIds.push(idGrupo);
+							$("#gruposIds").val(gruposIds.slice(','));
+
 							activarEliminacion();
 							setExamenesIds();
 							total=calcularTotal();
@@ -752,6 +766,7 @@ echo $form->errorSummary($datosFacturacion);
 							setGranTotal(granTotal);
 							debe=calcularDebe();
 							setDebe(debe);
+
 							unblock("examenes");
 						}
 					);

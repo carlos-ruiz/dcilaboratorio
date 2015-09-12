@@ -114,20 +114,82 @@ class ImprimirOrden extends FPDF{
         $idExamen = 0;
         $totalOrden = 0;
         $duracion = 0;
+
+        //examenes de la orden
+        $idsExamenes=array();
         foreach ($ordenTieneExamenes as $ordenExamen) {
-            $examen = $ordenExamen->detalleExamen->examenes;
-            if($examen->id!=$idExamen){
-                $this->Cell(3.5,$y, $examen->clave,1, 0);
-                $this->Cell(12,$y, $examen->nombre,1, 0 );
-                $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
-                $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
-                $totalOrden += $precio->precio;
-                if ($examen->duracion_dias > $duracion) {
-                    $duracion = $examen->duracion_dias;
+            array_push($idsExamenes, $ordenExamen->detalleExamen->id_examenes);
+        }
+
+        //grupos de la orden
+        $grupos = Grupos::findAll();
+        $gruposExistentesEnOrden=array();
+        foreach ($grupos as $grupo) {
+            $examenes=GrupoExamenes::model()->find("id_grupos_examenes=?",array($grupo->id));
+            $tiene=true;
+            foreach($examenes as $grupoExamen){
+                if(!in_array($grupoExamen->id_examenes, $idsExamenes)){
+                    $tiene=false;
+                    break;
                 }
             }
-            $idExamen = $examen->id;
+            if($tiene){
+             array_push($gruposExistentesEnOrden,$grupo->id);   
+            }
         }
+
+        $examenesImpresos=array();
+        foreach ($gruposExistentesEnOrden as $grupo) {
+            $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
+            $examenesIds=array();
+
+            $this->Cell(12,$y, $grupo->nombre ,1, 1);
+
+            foreach ($examenesEnGrupo as $grupoExamen) {
+                array_push($examenesIds, $grupoExamen->id_examenes);
+            }
+            foreach ($ordenTieneExamenes as $ordenExamen) {
+                $examen = $ordenExamen->detalleExamen->examenes;
+                if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
+                    //Pintamos el examen
+                    array_push($examenesImpresos, $examen->id);
+                    if($examen->id!=$idExamen){
+                        $this->Cell(3.5,$y, $examen->clave,1, 0);
+                        $this->Cell(12,$y, $examen->nombre,1, 0 );
+                        $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
+                        $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
+                        $totalOrden += $precio->precio;
+                        if ($examen->duracion_dias > $duracion) {
+                            $duracion = $examen->duracion_dias;
+                        }
+                    }
+                    $idExamen = $examen->id;
+                }
+            }
+            
+        }
+
+        if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
+            $this->Cell(12,$y, "Exámenes individuales" ,1, 1);
+        }
+        foreach ($idsExamenes as $idExamen) {
+            if(!in_array($idExamen,$examenesImpresos)){
+                $examen=Examenes::model()->findByPk($idExamen);
+                if($examen->id!=$idExamen){
+                    $this->Cell(3.5,$y, $examen->clave,1, 0);
+                    $this->Cell(12,$y, $examen->nombre,1, 0 );
+                    $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
+                    $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
+                    $totalOrden += $precio->precio;
+                    if ($examen->duracion_dias > $duracion) {
+                        $duracion = $examen->duracion_dias;
+                    }
+                }
+            }
+        }
+
+        
+
         $this->setX(16.5);
         $this->SetFont('Arial','B',8);
         $this->Cell(4,$y,'Total orden: $'.$totalOrden, 1, 1, 'R');
