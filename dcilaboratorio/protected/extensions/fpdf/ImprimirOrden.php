@@ -6,9 +6,6 @@ class ImprimirOrden extends FPDF{
         $y = 0.5;
 		$this->SetFont('Arial','B',18);
 		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1,1.7,2.3,2.3);
-    // Move to the right
-    //$this->Cell(8);
-    // Title
 		$this->SetXY(4, .75);
         $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
         $this->ln(0.75);
@@ -38,8 +35,7 @@ class ImprimirOrden extends FPDF{
         $this->SetX(4);
         $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');       
         $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
-        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');
-        
+        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C'); 
 	}
 
 	function cabeceraHorizontal($model)
@@ -114,7 +110,6 @@ class ImprimirOrden extends FPDF{
         $idExamen = 0;
         $totalOrden = 0;
         $duracion = 0;
-
         //examenes de la orden
         $idsExamenes=array();
         foreach ($ordenTieneExamenes as $ordenExamen) {
@@ -122,11 +117,13 @@ class ImprimirOrden extends FPDF{
         }
 
         //grupos de la orden
-        $grupos = Grupos::findAll();
+        $grupos = Grupos::model()->findAll();
         $gruposExistentesEnOrden=array();
+
         foreach ($grupos as $grupo) {
-            $examenes=GrupoExamenes::model()->find("id_grupos_examenes=?",array($grupo->id));
+            $examenes=GrupoExamenes::model()->findAll("id_grupos_examenes=?",array($grupo->id));
             $tiene=true;
+            // print_r($examenes);return;
             foreach($examenes as $grupoExamen){
                 if(!in_array($grupoExamen->id_examenes, $idsExamenes)){
                     $tiene=false;
@@ -140,10 +137,11 @@ class ImprimirOrden extends FPDF{
 
         $examenesImpresos=array();
         foreach ($gruposExistentesEnOrden as $grupo) {
+            $grupo = Grupos::model()->findByPk($grupo);
             $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
             $examenesIds=array();
-
-            $this->Cell(12,$y, $grupo->nombre ,1, 1);
+            $this->SetFillColor(213, 224, 241);
+            $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
 
             foreach ($examenesEnGrupo as $grupoExamen) {
                 array_push($examenesIds, $grupoExamen->id_examenes);
@@ -165,12 +163,11 @@ class ImprimirOrden extends FPDF{
                     }
                     $idExamen = $examen->id;
                 }
-            }
-            
+            } 
         }
 
         if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
-            $this->Cell(12,$y, "Exámenes individuales" ,1, 1);
+            $this->Cell(19.5,$y, "Exámenes individuales" ,1, 1, 'C', true);
         }
         foreach ($idsExamenes as $idExamen) {
             if(!in_array($idExamen,$examenesImpresos)){
@@ -236,11 +233,11 @@ class ImprimirOrden extends FPDF{
 
     function Footer()
 	{
-	//Position at 1.5 cm from bottom
-    $this->SetY(-6);
-    //Arial italic 8
-    $this->SetFont('Arial','I',8);
-    //Page number
-    $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
+    	//Position at 1.5 cm from bottom
+        $this->SetY(-6);
+        //Arial italic 8
+        $this->SetFont('Arial','I',8);
+        //Page number
+        $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
 	}
 }
