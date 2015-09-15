@@ -17,25 +17,25 @@ class ImprimirOrden extends FPDF{
         $this->SetX(4);
         $this->SetFont('Times','',8);
         $y = 0.4;
-        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
         $this->Cell(5, $y, 'Francisco Madero #145', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');      
+        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Col. Centro', 0, 0, 'C');
         $this->Cell(5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');
         $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
         $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
         $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
-        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C'); 
+        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');
 	}
 
 	function cabeceraHorizontal($model)
@@ -131,7 +131,7 @@ class ImprimirOrden extends FPDF{
                 }
             }
             if($tiene){
-             array_push($gruposExistentesEnOrden,$grupo->id);   
+             array_push($gruposExistentesEnOrden,$grupo->id);
             }
         }
 
@@ -163,16 +163,17 @@ class ImprimirOrden extends FPDF{
                     }
                     $idExamen = $examen->id;
                 }
-            } 
+            }
         }
 
         if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
             $this->Cell(19.5,$y, "Exámenes individuales" ,1, 1, 'C', true);
         }
+        $idExamenExiste = 0;
         foreach ($idsExamenes as $idExamen) {
             if(!in_array($idExamen,$examenesImpresos)){
                 $examen=Examenes::model()->findByPk($idExamen);
-                if($examen->id!=$idExamen){
+                if($examen->id!=$idExamenExiste){
                     $this->Cell(3.5,$y, $examen->clave,1, 0);
                     $this->Cell(12,$y, $examen->nombre,1, 0 );
                     $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
@@ -182,10 +183,9 @@ class ImprimirOrden extends FPDF{
                         $duracion = $examen->duracion_dias;
                     }
                 }
+                $idExamenExiste = $examen->id;
             }
         }
-
-        
 
         $this->setX(16.5);
         $this->SetFont('Arial','B',8);
