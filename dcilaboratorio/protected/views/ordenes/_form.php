@@ -64,7 +64,6 @@ echo $form->errorSummary($datosFacturacion);
 						<h5 style="color:#1e90ff ">O agregue uno nuevo</h5>
 					</div>
 					<div class="row">
-
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'a_paterno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'a_paterno', array('class'=>'control-label')); ?>
 							<div class="input-group">
@@ -502,6 +501,11 @@ echo $form->errorSummary($datosFacturacion);
 		$("#examenesIds").val(ids);
 	}
 
+	function setGruposIds(){
+		var ids=gruposIds.join();
+		$("#gruposIds").val(ids);
+	}
+
 	function setColorDebe(){
 		granTotal=calcularGranTotal();
 		pago=calcularPago();
@@ -536,6 +540,7 @@ echo $form->errorSummary($datosFacturacion);
 						$(".row_"+id_examen).html(data);
 						activarEliminacion();
 						setExamenesIds();
+						setGruposIds();
 						total=calcularTotal();
 						setTotal(total);
 						debe=calcularDebe();
@@ -562,6 +567,7 @@ echo $form->errorSummary($datosFacturacion);
 			};
 			examenesIds=aux;
 			setExamenesIds();
+			setGruposIds();
 			total=calcularTotal();
 			setTotal(total);
 			granTotal=calcularGranTotal();
@@ -591,6 +597,34 @@ echo $form->errorSummary($datosFacturacion);
 						//alert(stringIds);
 					}
 				);
+		});
+		$(".eliminarGrupo").click(function(){
+			alert("eliminando grupo");
+			$(".row_grupo_"+$(this).data('idgrupo')).hide(400);
+			$(".row_grupo_"+$(this).data('idgrupo')).html("");
+			examenesIds=[];
+							// 	$("#examenesAgregados").html("");
+							// }
+							
+			$(".eliminarExamen").each(function(){
+				examenesIds.push($(this).data('id'));
+			});
+			$(".eliminarGrupo").each(function(){
+				idsExamenesGrupo=$(this).data('id').split(',');
+				for(i=0;i<idsExamenesGrupo.length;i++){
+					if(examenesIds.indexOf(idsExamenesGrupo[i])<0)
+						examenesIds.push(idsExamenesGrupo[i]);
+				}								
+			});
+			
+			setExamenesIds();
+			setGruposIds();
+			total=calcularTotal();
+			setTotal(total);
+			granTotal=calcularGranTotal();
+			setGranTotal(granTotal);
+			debe=calcularDebe();
+			setDebe(debe);
 		});
 		activarAgregarPrecio();
 	}
@@ -681,6 +715,7 @@ echo $form->errorSummary($datosFacturacion);
 	});
 	activarEliminacion();
 	setExamenesIds();
+	setGruposIds();
 	total=calcularTotal();
 	setTotal(total);
 	granTotal=calcularGranTotal();
@@ -708,7 +743,7 @@ echo $form->errorSummary($datosFacturacion);
 			if(idExamen>0){
 				for(var i=0;i<examenesIds.length;i++){
 					if(idExamen==examenesIds[i]){
-						alerta("El examen seleccionado ya se encuentra en la lista de examenes a realizar");
+						alerta("La determinación seleccionada ya se encuentra agregada a la orden");
 						return;
 					}
 				}
@@ -724,6 +759,7 @@ echo $form->errorSummary($datosFacturacion);
 						examenesIds.push(idExamen);
 						activarEliminacion();
 						setExamenesIds();
+						setGruposIds();
 						total=calcularTotal();
 						setTotal(total);
 						granTotal=calcularGranTotal();
@@ -736,6 +772,12 @@ echo $form->errorSummary($datosFacturacion);
 			}
 			else{
 				if(idGrupo>0){
+					for(var i=0;i<examenesIds.length;i++){
+						if(idGrupo==gruposIds[i]){
+							alerta("El perfil seleccionado ya se encuentra agregado a la orden");
+							return;
+						}
+					}
 					block("examenes");
 					$.post(
 						"<?php echo $this->createUrl('ordenes/agregarGrupoExamen/');?>",
@@ -755,11 +797,19 @@ echo $form->errorSummary($datosFacturacion);
 							$(".eliminarExamen").each(function(){
 								examenesIds.push($(this).data('id'));
 							});
+							$(".eliminarGrupo").each(function(){
+								idsExamenesGrupo=$(this).data('id').split(',');
+								for(i=0;i<idsExamenesGrupo.length;i++){
+									if(examenesIds.indexOf(idsExamenesGrupo[i])<0)
+									examenesIds.push(idsExamenesGrupo[i]);
+								}								
+							});
 							gruposIds.push(idGrupo);
 							$("#gruposIds").val(gruposIds.slice(','));
 
 							activarEliminacion();
 							setExamenesIds();
+							setGruposIds();
 							total=calcularTotal();
 							setTotal(total);
 							granTotal=calcularGranTotal();

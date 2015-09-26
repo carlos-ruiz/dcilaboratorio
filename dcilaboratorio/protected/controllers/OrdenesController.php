@@ -661,20 +661,29 @@ class OrdenesController extends Controller
 		//print_r($_POST);
 		$idsExamenes = split(",", $_POST['idsExamenes']);
 		$grupo=Grupos::model()->findByPk($_POST['id']);
+		$sumaPrecios=0;
+		$idsExamenesGrupos="";
+		$agregoGrupo=false;
 		foreach ($grupo->grupoTiene as $tiene) {
 			$examen=$tiene->examen;
 			if($examen->activo==1 && sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos() && !in_array($examen->id, $idsExamenes)){
 				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examen->id,$_POST['tarifa']));
 				$precio=isset($tarifa->precio)?$tarifa->precio:0;
-				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
-				$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
-				echo "<tr class='row_$examen->id' data-id='$examen->id'>
-				<td>$examen->clave</td>
-				<td>$examen->nombre</td>
-				<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-				<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-				</tr>";
+				$sumaPrecios+=$precio;
+				$idsExamenesGrupos.=$examen->id.",";
+				$agregoGrupo=true;
+				//$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
+				//$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
 			}
+		}
+		if($agregoGrupo){
+			$idsExamenesGrupos = substr($idsExamenesGrupos, 0, strlen($idsExamenesGrupos)-1);
+			echo "<tr class='row_grupo_$grupo->id' data-id='$grupo->id'>
+				<td>-</td>
+				<td>$grupo->nombre</td>
+				<td class='precioExamen' data-val='$sumaPrecios'>$ $sumaPrecios</td>
+				<td><a href='javascript:void(0)' data-id='$idsExamenesGrupos' data-idgrupo='$grupo->id' class='eliminarGrupo'><span class='fa fa-trash'></span></a></td>
+				</tr>";
 		}
 
 	}
