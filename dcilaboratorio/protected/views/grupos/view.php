@@ -10,7 +10,10 @@
 	'htmlOptions'=>array('class'=>'table table-striped table-bordered dataTable'),
 	'attributes'=>array(
 		'id',
-		'nombre'
+		'clave',
+		'nombre',
+		'comentarios'
+
 	),
 
 )); ?>

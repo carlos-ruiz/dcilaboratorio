@@ -32,13 +32,14 @@ class Grupos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-array('nombre', 'unique'),
+			array('nombre, ultima_edicion,  usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('nombre', 'unique'),
 			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre', 'length', 'max'=>250),
+			array('comentarios', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, nombre,  comentarios, clave, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,6 +63,8 @@ array('nombre', 'unique'),
 		return array(
 			'id' => 'ID',
 			'nombre' => 'Nombre',
+			'comentarios'=>'Comentarios',
+			'clave'=>'Clave',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
@@ -88,7 +91,9 @@ array('nombre', 'unique'),
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('clave',$this->clave,true);
 		$criteria->compare('nombre',$this->nombre,true);
+		$criteria->compare('comentarios',$this->comentarios,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);

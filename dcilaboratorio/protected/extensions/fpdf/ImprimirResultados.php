@@ -151,6 +151,7 @@ class ImprimirResultados extends FPDF{
             $examenesIds=array();
             $this->SetFillColor(117, 163, 240);
             $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
+            
 
             foreach ($examenesEnGrupo as $grupoExamen) {
                 array_push($examenesIds, $grupoExamen->id_examenes);
@@ -180,6 +181,9 @@ class ImprimirResultados extends FPDF{
                 }
                 $idExamen = $examen->id;
             }
+            if($grupo->comentarios!=null){
+             $this->Cell(19.5,$y, 'Comentarios: '.$grupo->comentarios ,1, 1, 'L', false);
+            }
         }
 
         if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
@@ -188,6 +192,8 @@ class ImprimirResultados extends FPDF{
         }
         $idExamenExiste = 0;
         $examen = null;
+        
+        return;
         foreach ($idsExamenes as $idExamen) {
             if(!in_array($idExamen,$examenesImpresos)){
                 $examen=Examenes::model()->findByPk($idExamen);
@@ -208,8 +214,9 @@ class ImprimirResultados extends FPDF{
                 $this->Cell(2,$y, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
                 $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
                 $this->Cell(5,$y, $rango,1, 1 , 'C');
+                $idExamenExiste = $examen->id;
             }
-            $idExamenExiste = $examen->id;
+           
         }
 
         //Observaciones
