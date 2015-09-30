@@ -256,6 +256,19 @@ class OrdenesController extends Controller
 			}
 
 		}
+		$grupos=Grupos::model()->findAll("activo=1");
+		$gruposTieneExamenes=array();
+		foreach ($grupos as $grupo) {
+			if(sizeof($grupo->grupoTiene)>0){
+				$examensPorGrupo=$grupo->grupoTiene;
+				$idsExemenesDelGrupo="";
+				foreach ($examensPorGrupo as $examenGrupo) {
+					$idsExemenesDelGrupo.=$examenGrupo->id_examenes.",";
+				}
+				$idsExemenesDelGrupo=substr($idsExemenesDelGrupo, 0,strlen($idsExemenesDelGrupo)-1);
+				$gruposTieneExamenes[$grupo->id]=$idsExemenesDelGrupo;
+			}
+		}
 
 		$this->render('create',array(
 			'model'=>$model,
@@ -265,6 +278,7 @@ class OrdenesController extends Controller
 			'pagos'=>$pagos,
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
+			'examenesPorGrupo'=>$gruposTieneExamenes,
 			));
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
@@ -435,6 +449,17 @@ class OrdenesController extends Controller
 				return;
 			}
 		}
+		$grupos=Grupos::model()->findAll("activo=1");
+		$gruposTieneExamenes=array();
+		foreach ($grupos as $grupo) {
+			$examensPorGrupo=$gruposTieneExamenes;
+			$idsExemenesDelGrupo="";
+			foreach ($examensPorGrupo as $examenGrupo) {
+				$idsExemenesDelGrupo.=$examenGrupo->id_examenes;
+			}
+			$idsExemenesDelGrupo=substr($idsExemenesDelGrupo, 0,strlen($idsExemenesDelGrupo)-1);
+			$gruposTieneExamenes[$grupo->id]=$idsExemenesDelGrupo;
+		}
 
 		$this->render('update',array(
 			'model'=>$model,
@@ -444,6 +469,7 @@ class OrdenesController extends Controller
 			'pagos'=>$pagos,
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
+			'examenesPorGrupo'=>$gruposTieneExamenes,
 			));
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
@@ -811,7 +837,7 @@ class OrdenesController extends Controller
 		$model = $this->loadModel($id);
 		$pdf = new ImprimirResultados('P','cm','letter');
 		$pdf->AddPage();
-		$pdf->cabeceraHorizontal($model);
+		//$pdf->cabeceraHorizontal($model);
 		$pdf->contenido($model);
 		$pdf->Output();
 	}

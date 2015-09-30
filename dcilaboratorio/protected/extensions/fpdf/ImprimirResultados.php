@@ -3,45 +3,7 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
 class ImprimirResultados extends FPDF{
 
 	function Header(){
-
-        $y = 0.5;
-        /*
-		$this->SetFont('Arial','B',18);
-		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1,1.7,2.3,2.3);
-    // Move to the right
-    //$this->Cell(8);
-    // Title
-
-        $this->SetXY(4, .75);
-        $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
-        $this->ln(0.75);
-        $this->SetFont('Times','B',8);
-        $this->SetXY(4, 2.75);
-        $this->Cell(4, $y, 'UNIDAD CHAPULTPEC', 0, 0, 'C');
-        $this->Cell(6.9, $y, 'UNIDAD AMADO NERVO', 0, 0, 'C');
-        $this->Cell(5, $y, 'UNIDAD DE CANCEROLOGÍA', 0, 1, 'C');
-        $this->SetX(4);
-        $this->SetFont('Times','',8);
-        $y = 0.4;
-        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');
-        $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
-        $this->Cell(5, $y, 'Francisco Madero #145', 0, 1, 'C');
-        $this->SetX(4);
-        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
-        $this->Cell(6.5, $y, 'Col. Centro', 0, 0, 'C');
-        $this->Cell(5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
-        $this->SetX(4);
-        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');
-        $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
-        $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
-        $this->SetX(4);
-        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');
-        $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
-        $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
-        $this->SetX(4);
-        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');
-        $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
-        $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');*/
+        $this->ln(6);
 	}
 
 	function cabeceraHorizontal($model)
@@ -108,6 +70,7 @@ class ImprimirResultados extends FPDF{
     }
 
     function contenido($model){
+        $this->cabeceraHorizontal($model);
     	$this->SetTextColor(0, 0, 0); //Letra color blanco
     	$this->SetFont('Arial','',8);
     	$posYOriginal = 7;
@@ -128,9 +91,27 @@ class ImprimirResultados extends FPDF{
         $grupos = Grupos::model()->findAll();
         $gruposExistentesEnOrden=array();
 
+        $gruposOrdenados=array();
+        for($i=0;$i<sizeof($grupos);$i++){
+            $cuantosExamenesTiene=sizeof($grupos[$i]->grupoTiene)*100;
+            if(!array_key_exists($cuantosExamenesTiene, $gruposOrdenados))
+                $gruposOrdenados[$cuantosExamenesTiene]=$grupos[$i];
+            else{
+                $j=1;
+                while(array_key_exists($cuantosExamenesTiene+$j, $gruposOrdenados)){
+                    $j++;
+                }
+                $gruposOrdenados[$cuantosExamenesTiene+$j]=$grupos[$i];
+            }
+            
+        }
+        krsort($gruposOrdenados);
+        $grupos=$gruposOrdenados;
+        //return;
         //Obtener grupos incluidos en la orden
         foreach ($grupos as $grupo) {
             $examenes=GrupoExamenes::model()->findAll("id_grupos_examenes=?",array($grupo->id));
+
             $tiene=true;
             // print_r($examenes);return;
             foreach($examenes as $grupoExamen){
@@ -146,16 +127,34 @@ class ImprimirResultados extends FPDF{
 
         $examenesImpresos=array();
         foreach ($gruposExistentesEnOrden as $grupo) {
+
             $grupo = Grupos::model()->findByPk($grupo);
             $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
             $examenesIds=array();
-            $this->SetFillColor(117, 163, 240);
-            $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
-            
 
             foreach ($examenesEnGrupo as $grupoExamen) {
                 array_push($examenesIds, $grupoExamen->id_examenes);
             }
+            if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
+                $this->SetFillColor(117, 163, 240);
+                $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
+            }
+            foreach($gruposExistentesEnOrden as $grupoY){
+                if($grupoY!=$grupo->id){
+                    $examenesEnGrupoY=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupoY));
+                    $examenesIdsY=array();
+                    foreach ($examenesEnGrupoY as $grupoExamenY) {
+                        array_push($examenesIdsY, $grupoExamenY->id_examenes);
+                    }
+                    if(count(array_intersect($examenesIdsY, $examenesIds)) == count($examenesIdsY)){
+                        $grupoY=Grupos::model()->findByPk($grupoY);
+                        $this->SetFillColor(117, 163, 240);
+                        $this->Cell(19.5,$y, $grupoY->nombre ,1, 1, 'C', true);
+                    }
+                }
+            }
+
+            
             foreach ($ordenTieneExamenes as $ordenExamen) {
                 $examen = $ordenExamen->detalleExamen->examenes;
                 if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
@@ -193,7 +192,7 @@ class ImprimirResultados extends FPDF{
         $idExamenExiste = 0;
         $examen = null;
         
-        return;
+        //return;
         foreach ($idsExamenes as $idExamen) {
             if(!in_array($idExamen,$examenesImpresos)){
                 $examen=Examenes::model()->findByPk($idExamen);

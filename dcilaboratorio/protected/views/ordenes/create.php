@@ -12,4 +12,5 @@
 	'pagos'=>$pagos,
 	'direccion' => $direccion,
 	'listaTarifasExamenes'=>$listaTarifasExamenes,
+	'examenesPorGrupo'=>$examenesPorGrupo,
  	)); ?>

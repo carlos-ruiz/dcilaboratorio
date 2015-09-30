@@ -481,6 +481,11 @@ echo $form->errorSummary($datosFacturacion);
 </div><!-- form -->
 
 <script type="text/javascript">
+var examenesGrupo=[];
+<?php foreach ($examenesPorGrupo as $key => $value)  {
+	echo "examenesGrupo['grupo".$key."']='".$value."';";
+} ?>
+	
 	examenesIds=[];
 	gruposIds=[];
 
@@ -772,6 +777,18 @@ echo $form->errorSummary($datosFacturacion);
 			}
 			else{
 				if(idGrupo>0){
+					var idsExamenesDelGrupo=examenesGrupo['grupo'+idGrupo].split(',');
+					var grupoYaExistenteEnLaOrden=true;
+					for(var i=0;i<idsExamenesDelGrupo.length;i++){
+						if(examenesIds.indexOf(idsExamenesDelGrupo[i])<0){
+							grupoYaExistenteEnLaOrden=false;
+							break;
+						}
+					}
+					if(grupoYaExistenteEnLaOrden){
+						alerta("El perfil seleccionado ya se encuentra agregado a la orden");
+							return;
+					}
 					for(var i=0;i<examenesIds.length;i++){
 						if(idGrupo==gruposIds[i]){
 							alerta("El perfil seleccionado ya se encuentra agregado a la orden");
