@@ -137,4 +137,13 @@ class Grupos extends CActiveRecord
 		}
 		return $data;
 	}
+
+	public function perfilEsHijoDe($idHijo, $idPadre){
+		$resultado = GruposPerfiles::model()->find('id_grupo_padre=? AND id_grupo_hijo=?',array($idPadre, $idHijo));
+		if (isset($resultado)) {
+			return 1;
+		}else {
+			return 0;
+		}
+	}
 }

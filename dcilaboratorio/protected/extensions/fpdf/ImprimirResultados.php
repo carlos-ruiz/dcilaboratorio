@@ -3,13 +3,13 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
 class ImprimirResultados extends FPDF{
 
 	function Header(){
-        $this->ln(6);
+        $this->ln(4);
 	}
 
 	function cabeceraHorizontal($model)
 	{
         $y = 0.5;
-        $this->SetXY(-5, 6);
+        $this->SetXY(-5, 5.1);
         $this->SetFont('Arial','',8);
         $this->Cell(1,$y,'Fecha:', 0, 0);
         $this->SetFont('Arial','B',8);
@@ -24,12 +24,14 @@ class ImprimirResultados extends FPDF{
         $this->setX(1);
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
-        $this->Cell(10,$y,'Orden de Trabajo', 0, 1);
+        $this->setXY(1.5, 4.1);
+        // $this->Cell(10,$y,'Resultados de Laboratorio', 0, 1);
         $this->SetFont('Arial','',8);
         $this->SetTextColor(0, 0, 0);
         $this->Cell(3,$y,'Folio:', 0, 0);
         $this->SetFont('Arial','B',8);
         $this->Cell(3,$y,$model->id, 0, 1);
+        $this->setX(1.5);
         $this->SetFont('Arial','',8);
         $this->Cell(3,$y,'Paciente', 0, 0);
         $this->SetFont('Arial','B',8);
@@ -39,7 +41,7 @@ class ImprimirResultados extends FPDF{
         $this->Cell(1,$y,'Sexo:', 0, 0);
         $this->SetFont('Arial','B',8);
         $this->Cell(2,$y,$model->ordenFacturacion->paciente->sexo==0?'Masculino':'Femenino', 0, 1);
-        $this->setX(1);
+        $this->setX(1.5);
         $this->SetFont('Arial','',8);
         $this->Cell(3,$y,'Médico:', 0, 0);
         $this->SetFont('Arial','B',8);
@@ -54,7 +56,7 @@ class ImprimirResultados extends FPDF{
         $this->SetTextColor(0, 0, 0);
 
 
-        $this->SetXY(1, 10);
+        $this->SetXY(1, 6.5);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
         $this->SetTextColor(0, 0, 0); //Letra color blanco
@@ -73,9 +75,7 @@ class ImprimirResultados extends FPDF{
         $this->cabeceraHorizontal($model);
     	$this->SetTextColor(0, 0, 0); //Letra color blanco
     	$this->SetFont('Arial','',8);
-    	$posYOriginal = 7;
-    	$posYIncremento = 1.5;
-    	$this->setXY(1,10.5);
+    	$this->setXY(1,7);
     	$y = 0.5;
         $ordenTieneExamenes = $model->ordenTieneExamenes;
         $idExamen = 0;
@@ -103,7 +103,7 @@ class ImprimirResultados extends FPDF{
                 }
                 $gruposOrdenados[$cuantosExamenesTiene+$j]=$grupos[$i];
             }
-            
+
         }
         krsort($gruposOrdenados);
         $grupos=$gruposOrdenados;
@@ -126,6 +126,16 @@ class ImprimirResultados extends FPDF{
         }
 
         $examenesImpresos=array();
+        // krsort($gruposExistentesEnOrden);
+        // $gruposMayores = array();
+        // foreach ($gruposExistentesEnOrden as $grupo) {
+        //         foreach ($gruposMayores as $grupoMayor) {
+        //             if(Grupos::model()->perfilEsHijoDe($grupo, $grupoMayor) != 1){
+
+        //             }
+        //         }
+        //     }
+        // }
         foreach ($gruposExistentesEnOrden as $grupo) {
 
             $grupo = Grupos::model()->findByPk($grupo);
@@ -154,7 +164,7 @@ class ImprimirResultados extends FPDF{
                 }
             }
 
-            
+
             foreach ($ordenTieneExamenes as $ordenExamen) {
                 $examen = $ordenExamen->detalleExamen->examenes;
                 if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
@@ -166,17 +176,18 @@ class ImprimirResultados extends FPDF{
                     $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
                     }
 
-                    $this->Cell(9,$y,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
+                    $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
+                    $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
+                    $this->Cell(9,$heightRow,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
                     if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
                         $this->SetFont('Times','BI',8);
                         $this->SetTextColor(255, 0, 0);
                     }
-                    $this->Cell(3.5,$y,$ordenExamen->resultado,1, 0 , 'C');
+                    $this->Cell(3.5,$heightRow,$ordenExamen->resultado,1, 0 , 'C');
                     $this->SetTextColor(0, 0, 0);
                     $this->SetFont('Arial','B',8);
-                    $this->Cell(2,$y, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
-                    $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-                    $this->Cell(5,$y, $rango,1, 1 , 'C');
+                    $this->Cell(2,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
+                    $this->MultiCell(5,$y, $rango,1, 'C');
                 }
                 $idExamen = $examen->id;
             }
@@ -191,7 +202,7 @@ class ImprimirResultados extends FPDF{
         }
         $idExamenExiste = 0;
         $examen = null;
-        
+
         //return;
         foreach ($idsExamenes as $idExamen) {
             if(!in_array($idExamen,$examenesImpresos)){
@@ -215,7 +226,7 @@ class ImprimirResultados extends FPDF{
                 $this->Cell(5,$y, $rango,1, 1 , 'C');
                 $idExamenExiste = $examen->id;
             }
-           
+
         }
 
         //Observaciones

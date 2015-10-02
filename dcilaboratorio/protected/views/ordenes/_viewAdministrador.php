@@ -25,7 +25,6 @@
 	endforeach;
 
 	$pagado=$totalOrden-$total;
-
 ?>
 <div class="portlet light">
 	<div class="row">
@@ -89,72 +88,21 @@
 				'informacion_clinica_y_terapeutica',
 				'comentarios',
 			),
-		)); ?>
-		</div>
+		));
 
-
-		<div class="form-group col-md-4">
-
-
-		<div class="heading text-center">
-			<h3 style="color:#1e90ff ">Examenes</h3>
-		</div>
-	<?php
-
-	// Aqui la leyenda de que pague.
-
-
-
-
-
-
-
-
-	$aux=$model->ordenTieneExamenes;
-	$anterior=0;
-	$entrega=1;
-	echo '<table class="table table-striped table-bordered dataTable">';
-
-
-	 foreach ($aux as $ordenExamen):
-		$detalleExamen=$ordenExamen->detalleExamen;
-		$examen=$detalleExamen->examenes;
-		if($examen->id!=$anterior){
-			if($examen->duracion_dias>$entrega)
-				$entrega=$examen->duracion_dias;
-
-			echo '<thead><tr><th colspan="5" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
-	   		<tr><td>Descripción</td>
-	   		<td>Resultado</td>
-	   		<td>R. I.</td>
-	   		<td>R. P.</td>
-	   		<td>R. S.</td></tr>';
-		}
-
-		echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
-		if ($ordenExamen->resultado=='') {
-			echo "Sin resultado";
-		}
-		else{
-			$color = "#000";
-			if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
-				$color = "#f00";
+		$aux=$model->ordenTieneExamenes;
+		$anterior=0;
+		$entrega=1;
+		foreach ($aux as $ordenExamen){
+			$detalleExamen=$ordenExamen->detalleExamen;
+			$examen=$detalleExamen->examenes;
+			if($examen->id!=$anterior){
+				if($examen->duracion_dias>$entrega)
+					$entrega=$examen->duracion_dias;
 			}
-			echo "<span style='color: $color;'>".$ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura."</span>";
 		}
+		 ?>
 
-		echo '</td><td>'.$detalleExamen->rango_inferior.'</td>
-		<td>'.$detalleExamen->rango_promedio.'</td>
-		<td>'.$detalleExamen->rango_superior.'</td>
-		</tr>';
-
-		$anterior=$examen->id;
-	 endforeach;
-	 echo'</table>';
-	 ?>
-	</div>
-
-	<div class="form-group col-md-4">
 		<div class="heading text-center">
 			<h3 style="color:#1e90ff ">Pagos</h3>
 		</div>
@@ -227,6 +175,65 @@
 		     	echo CHtml::link('<i class="icon-printer"></i> Imprimir factura',Yii::app()->createUrl('facturacion/generarFactura',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
 		     }
 		    ?>
+		</div>
+
+
+		<div class="form-group col-md-8">
+
+
+		<div class="heading text-center">
+			<h3 style="color:#1e90ff ">Examenes</h3>
+		</div>
+	<?php
+
+	// Aqui la leyenda de que pague.
+
+	$aux=$model->ordenTieneExamenes;
+	$anterior=0;
+	$entrega=1;
+	echo '<table class="table table-striped table-bordered dataTable">';
+
+
+	 foreach ($aux as $ordenExamen):
+		$detalleExamen=$ordenExamen->detalleExamen;
+		$examen=$detalleExamen->examenes;
+		if($examen->id!=$anterior){
+			if($examen->duracion_dias>$entrega)
+				$entrega=$examen->duracion_dias;
+
+			echo '<thead><tr><th colspan="5" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
+	   		<tr><td>Descripción</td>
+	   		<td>Resultado</td>
+	   		<td>R. I.</td>
+	   		<td>R. P.</td>
+	   		<td>R. S.</td></tr>';
+		}
+
+		echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
+		if ($ordenExamen->resultado=='') {
+			echo "Sin resultado";
+		}
+		else{
+			$color = "#000";
+			if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+				$color = "#f00";
+			}
+			echo "<span style='color: $color;'>".$ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura."</span>";
+		}
+
+		echo '</td><td>'.$detalleExamen->rango_inferior.'</td>
+		<td>'.$detalleExamen->rango_promedio.'</td>
+		<td>'.$detalleExamen->rango_superior.'</td>
+		</tr>';
+
+		$anterior=$examen->id;
+	 endforeach;
+	 echo'</table>';
+	 ?>
+	</div>
+
+	<div class="form-group col-md-4" style="display: block;">
+
 	</div>
 
 

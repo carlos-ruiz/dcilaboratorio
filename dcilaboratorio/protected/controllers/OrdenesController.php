@@ -452,7 +452,7 @@ class OrdenesController extends Controller
 		$grupos=Grupos::model()->findAll("activo=1");
 		$gruposTieneExamenes=array();
 		foreach ($grupos as $grupo) {
-			$examensPorGrupo=$gruposTieneExamenes;
+			$examensPorGrupo=$grupo->grupoTiene;
 			$idsExemenesDelGrupo="";
 			foreach ($examensPorGrupo as $examenGrupo) {
 				$idsExemenesDelGrupo.=$examenGrupo->id_examenes;
@@ -851,7 +851,7 @@ class OrdenesController extends Controller
 			$ids .= ",".$grupo->id_grupos_examenes;
 			}
 		}
-		
+
 		echo $ids;
 	}
 }
