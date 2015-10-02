@@ -66,26 +66,57 @@ class GruposController extends Controller
 	{
 		$model=new Grupos;
 		$examenes=Examenes::model()->getAll();
-		$tiene=array();
+		$model->examenes=array();
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Grupos']))
 		{
-			$tiene=split(',',$_POST['Grupos']['tiene']);
 			$model->attributes=$_POST['Grupos'];
+			$model->examenes=$_POST['Grupos']["examenes"];
+			$model->grupos=$_POST['Grupos']["grupos"];
+
 			if($model->save()){
+				$examenesGuardados=array();
 				$error=false;
-				for($i=0;$i<sizeof($tiene)-1;$i++){
+				for($i=0;$i<sizeof($model->examenes);$i++){
 					$grupoExamenes = new GrupoExamenes;
-					$grupoExamenes->id_examenes=$tiene[$i];
+					$grupoExamenes->id_examenes=$model->examenes[$i];
 					$grupoExamenes->id_grupos_examenes = $model->id;
 					$grupoExamenes->ultima_edicion = $model->ultima_edicion;
 					$grupoExamenes->usuario_ultima_edicion = $model->usuario_ultima_edicion;
 					$grupoExamenes->creacion = $model->creacion;
 					$grupoExamenes->usuario_creacion = $model->usuario_creacion;
-					if(!$grupoExamenes->save())
+					if(!$grupoExamenes->save()){
 						$error=true;
+					}else{array_push($examenesGuardados,$model->examenes[$i]);}
+				}
+
+				for($i=0;$i<sizeof($model->grupos);$i++){
+					$gpo = Grupos::model()->find("id=?",array($model->grupos[$i]));
+					$gpoPerfiles=new GruposPerfiles;
+					$gpoPerfiles->id_grupo_padre=$model->id;
+					$gpoPerfiles->id_grupo_hijo=$model->grupos[$i];
+					$gpoPerfiles->ultima_edicion = $model->ultima_edicion;
+					$gpoPerfiles->usuario_ultima_edicion = $model->usuario_ultima_edicion;
+					$gpoPerfiles->creacion = $model->creacion;
+					$gpoPerfiles->usuario_creacion = $model->usuario_creacion;
+					$gpoPerfiles->save();
+					foreach ($gpo->grupoTiene as $exam) {
+						if(!in_array($exam->id_examenes,$examenesGuardados)){
+							$grupoExamenes = new GrupoExamenes;
+							$grupoExamenes->id_examenes=$exam->id_examenes;
+							$grupoExamenes->id_grupos_examenes = $model->id;
+							$grupoExamenes->ultima_edicion = $model->ultima_edicion;
+							$grupoExamenes->usuario_ultima_edicion = $model->usuario_ultima_edicion;
+							$grupoExamenes->creacion = $model->creacion;
+							$grupoExamenes->usuario_creacion = $model->usuario_creacion;
+							if(!$grupoExamenes->save()){
+								$error=true;
+							}else{array_push($examenesGuardados,$exam->id_examenes);}
+						}
+					}
+
 				}
 				if(!$error)
 					$this->redirect(array('admin'));
@@ -95,7 +126,7 @@ class GruposController extends Controller
 		$this->render('create',array(
 			'model'=>$model,
 			'examenes'=>$examenes,
-			'tiene'=>$tiene,
+			'tiene'=>$model->examenes,
 		));
 	}
 

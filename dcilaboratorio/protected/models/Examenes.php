@@ -136,7 +136,7 @@ class Examenes extends CActiveRecord
 	}
 
 	public function getAll(){
-		return $this->model()->findAll('activo=1');
+		return $this->model()->findAll('activo=1 ORDER BY nombre ASC');
 	}
 
 	public function findExamenesInIds($ids){
@@ -164,6 +164,16 @@ class Examenes extends CActiveRecord
 	public function selectListWithClave(){
 		$examenes = $this->model()->findAll('activo=1');
 		$data = array(null=>"--Seleccione--");
+		foreach ($examenes as $examen) {
+			if(sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos())
+				$data[$examen->id]=$examen->clave." - ".$examen->nombre;
+		}
+		return $data;
+	}
+
+	public function selectListMultipleWithClave(){
+		$examenes = $this->model()->findAll('activo=1');
+		$data = array();
 		foreach ($examenes as $examen) {
 			if(sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos())
 				$data[$examen->id]=$examen->clave." - ".$examen->nombre;

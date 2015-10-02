@@ -146,7 +146,7 @@ class ImprimirResultados extends FPDF{
                     foreach ($examenesEnGrupoY as $grupoExamenY) {
                         array_push($examenesIdsY, $grupoExamenY->id_examenes);
                     }
-                    if(count(array_intersect($examenesIdsY, $examenesIds)) == count($examenesIdsY)){
+                    if(count(array_intersect($examenesIdsY, $examenesIds)) == count($examenesIdsY)&&sizeof($idsExamenes)!=sizeof($examenesImpresos)){
                         $grupoY=Grupos::model()->findByPk($grupoY);
                         $this->SetFillColor(117, 163, 240);
                         $this->Cell(19.5,$y, $grupoY->nombre ,1, 1, 'C', true);

@@ -36,7 +36,26 @@
 			<?php echo $form->error($model,'nombre', array('class'=>'help-block')); ?>
 		</div>
 	</div>
+	<div class="form-group">
+		<label class="control-label" for="isPerfilote">¿Es perfil de perfiles?.</label>
+		<div class="input-group">
+			<input type="checkbox" id="isPerfilote" value="0" />
+		</div>
+	</div>
+	
+	<div class="form-group <?php if($form->error($model,'examenes')!=''){ echo 'has-error'; }?>">
+		<label class="control-label" for="Grupos_examenes">Seleccione los examenes pertenecientes al perfil.</label>
+		<div class="input-group">
+			<?php echo $form->dropDownList($model,'examenes',Examenes::model()->selectListMultipleWithClave(), array("class" => "form-control select2","multiple"=>"multiple")); ?>
+		</div>
+	</div>
 
+	<div class="form-group" id="perfilote">
+		<label class="control-label" for="Grupos_grupos">Seleccione los perfiles pertenecientes al perfil.</label>
+		<div class="input-group">
+			<?php echo $form->dropDownList($model,'grupos',Grupos::model()->selectListMultiple(), array("class" => "form-control select2","multiple"=>"multiple")); ?>
+		</div>
+	</div>
 	<div class="form-group <?php if($form->error($model,'comentarios')!=''){ echo 'has-error'; }?>">
 		<?php echo $form->labelEx($model,'comentarios', array('class'=>'control-label')); ?>
 		<div class="input-group">
@@ -46,15 +65,8 @@
 	</div>
 
 	<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
-	Seleccione los examenes pertenecientes al grupo. <br />
-	<input type="hidden" value="" name="Grupos[tiene]" id="idsTiene" />
-	<div class="form-group <?php if($form->error($model,'nombre')!=''){ echo 'has-error'; }?>">
-		<div class="input-group">
-			<?php foreach ($examenes as $examen) {
-				echo '<input type="checkbox" class="examen" value="'.$examen->id.'" '.(in_array($examen->id, $tiene)?'checked':'').' /> '.$examen->nombre.'<br />';
-			}?>
-		</div>
-	</div>
+	
+
 	<div class="form-actions">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Nuevo' : 'Actualizar',array('class'=>'btn blue-stripe')); ?>
 	</div>
@@ -64,21 +76,22 @@
 </div><!-- form -->
 
 <script type="text/javascript">
-	var checks="";
+
 	$( "input[type=checkbox]" ).each(function(){
 		if($(this).is(':checked')){
-			checks+=$(this).val()+",";
+			$("#perfilote").show(400);
+		}else{
+			$("#perfilote").hide(400);
 		}
 	});
-	$("#idsTiene").val(checks.replace(/on,/g, ''));
-
 	$( "input[type=checkbox]" ).click(function(){
-		var checks="";
-		$( "input[type=checkbox]" ).each(function(){
-			if($(this).is(':checked')){
-				checks+=$(this).val()+",";
-			}
-		});
-		$("#idsTiene").val(checks.replace(/on,/g, ''));
+		if($(this).is(':checked')){
+			$("#perfilote").show(400);
+		}else{
+			$("#perfilote").hide(400);
+		}
 	});
+
+
+	
 </script>

@@ -1,31 +1,30 @@
 <?php
 
 /**
- * This is the model class for table "grupos_examenes".
+ * This is the model class for table "grupos_perfiles".
  *
- * The followings are the available columns in table 'grupos_examenes':
+ * The followings are the available columns in table 'grupos_perfiles':
  * @property integer $id
- * @property string $nombre
+ * @property integer $id_grupo_padre
+ * @property integer $id_grupo_hijo
  * @property string $ultima_edicion
  * @property integer $usuario_ultima_edicion
  * @property string $creacion
  * @property integer $usuario_creacion
+ * @property integer $activo
  *
  * The followings are the available model relations:
- * @property GrupoTieneExamenes[] $grupoTieneExamenes
+ * @property GruposExamenes $idGrupoHijo
+ * @property GruposExamenes $idGrupoPadre
  */
-
-class Grupos extends CActiveRecord
+class GruposPerfiles extends CActiveRecord
 {
-
-	public $examenes;
-	public $grupos;
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'grupos_examenes';
+		return 'grupos_perfiles';
 	}
 
 	/**
@@ -36,14 +35,11 @@ class Grupos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, ultima_edicion, clave, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('nombre', 'unique'),
-			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('nombre', 'length', 'max'=>250),
-			array('comentarios', 'length', 'max'=>250),
+			array('id_grupo_padre, id_grupo_hijo, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('id_grupo_padre, id_grupo_hijo, usuario_ultima_edicion, usuario_creacion, activo', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre,  comentarios, clave, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, id_grupo_padre, id_grupo_hijo, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,7 +51,8 @@ class Grupos extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'grupoTiene' => array(self::HAS_MANY, 'GrupoExamenes', 'id_grupos_examenes','together'=>true),
+			'idGrupoHijo' => array(self::BELONGS_TO, 'GruposExamenes', 'id_grupo_hijo'),
+			'idGrupoPadre' => array(self::BELONGS_TO, 'GruposExamenes', 'id_grupo_padre'),
 		);
 	}
 
@@ -66,13 +63,13 @@ class Grupos extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'nombre' => 'Nombre',
-			'comentarios'=>'Comentarios',
-			'clave'=>'Clave',
+			'id_grupo_padre' => 'Id Grupo Padre',
+			'id_grupo_hijo' => 'Id Grupo Hijo',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
 			'usuario_creacion' => 'Usuario Creacion',
+			'activo' => 'Activo',
 		);
 	}
 
@@ -95,17 +92,16 @@ class Grupos extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('clave',$this->clave,true);
-		$criteria->compare('nombre',$this->nombre,true);
-		$criteria->compare('comentarios',$this->comentarios,true);
+		$criteria->compare('id_grupo_padre',$this->id_grupo_padre);
+		$criteria->compare('id_grupo_hijo',$this->id_grupo_hijo);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
-		$this->dbCriteria->order='activo DESC, nombre ASC';
+		$criteria->compare('activo',$this->activo);
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>false,
 		));
 	}
 
@@ -113,28 +109,10 @@ class Grupos extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return GruposExamenes the static model class
+	 * @return GruposPerfiles the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
-	}
-
-	public function selectList(){
-		$grupos = $this->model()->findAll('activo=1');
-		$data = array(null=>"--Seleccione--");
-		foreach ($grupos as $grupo) {
-				$data[$grupo->id]=$grupo->nombre;
-		}
-		return $data;
-	}
-
-	public function selectListMultiple(){
-		$grupos = $this->model()->findAll('activo=1');
-		$data = array();
-		foreach ($grupos as $grupo) {
-				$data[$grupo->id]=$grupo->nombre;
-		}
-		return $data;
 	}
 }

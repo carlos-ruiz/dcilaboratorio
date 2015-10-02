@@ -705,7 +705,7 @@ class OrdenesController extends Controller
 		if($agregoGrupo){
 			$idsExamenesGrupos = substr($idsExamenesGrupos, 0, strlen($idsExamenesGrupos)-1);
 			echo "<tr class='row_grupo_$grupo->id' data-id='$grupo->id'>
-				<td>-</td>
+				<td>$grupo->clave</td>
 				<td>$grupo->nombre</td>
 				<td class='precioExamen' data-val='$sumaPrecios'>$ $sumaPrecios</td>
 				<td><a href='javascript:void(0)' data-id='$idsExamenesGrupos' data-idgrupo='$grupo->id' class='eliminarGrupo'><span class='fa fa-trash'></span></a></td>

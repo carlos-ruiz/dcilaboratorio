@@ -41,6 +41,8 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
+
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-multi-select/css/multi-select.css"/>
 	<!-- END GLOBAL MANDATORY STYLES -->
 	<!-- BEGIN THEME STYLES -->
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css"/>
@@ -313,6 +315,8 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/components-pickers.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/components-dropdowns.js" type="text/javascript"></script>
+
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/ui-extended-modals.js" type="text/javascript"></script>
 
 <!--
@@ -330,7 +334,10 @@ jQuery(document).ready(function() {
 	QuickSidebar.init(); // init quick sidebar
 	Demo.init(); // init demo features
 	ComponentsPickers.init();
-
+	$('.select2').select2({
+            placeholder: "--Seleccione--",
+            allowClear: true
+        });
 	$(".date-picker").datepicker({
 	    language: 'es',
 	});
