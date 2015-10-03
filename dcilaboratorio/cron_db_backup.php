@@ -1,0 +1,2 @@
+<?php
+	exec('mysqldump --user=dcilab --password=dcilab --host=techinccommx.ipagemysql.com --databases dcilab > '.dirname(__FILE__).DIRECTORY_SEPARATOR.'assets/database_backups/db_'.date('Y-m-d').'.sql');
