@@ -118,7 +118,6 @@ class OrdenesController extends Controller
 				$validateExamenes=false;
 			}
 
-
 			$examenes_precio = array();
 			foreach ($examenesIds as $idExamen) {
 				$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
@@ -138,6 +137,11 @@ class OrdenesController extends Controller
 					$validateExamenes=false;
 				}
 			}
+
+			if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
+				$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
+			}
+
 			if(isset($model->descuento)){
 				$totalAPagar=$totalAPagar * (1-($model->descuento/100));
 			}
@@ -183,9 +187,20 @@ class OrdenesController extends Controller
 							$ordenTieneExamenes->ultima_edicion=$fecha_edicion;
 							$ordenTieneExamenes->usuario_ultima_edicion=Yii::app()->user->id;;
 							$ordenTieneExamenes->creacion=$fecha_creacion;
-							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;;
+							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;
 							$ordenTieneExamenes->save();
 						}
+					}
+
+					foreach ($gruposIds as $grupoId) {
+						$ordenTieneGrupos = new OrdenTieneGrupos;
+						$ordenTieneGrupos->id_ordenes = $model->id;
+						$ordenTieneGrupos->id_grupos = $grupoId;
+						$ordenTieneGrupos->ultima_edicion=$fecha_edicion;
+						$ordenTieneGrupos->usuario_ultima_edicion=Yii::app()->user->id;;
+						$ordenTieneGrupos->creacion=$fecha_creacion;
+						$ordenTieneGrupos->usuario_creacion=Yii::app()->user->id;
+						$ordenTieneGrupos->save();
 					}
 
 					if(isset($paciente->id)&&$paciente->id>0){

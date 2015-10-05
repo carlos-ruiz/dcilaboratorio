@@ -126,16 +126,7 @@ class ImprimirResultados extends FPDF{
         }
 
         $examenesImpresos=array();
-        // krsort($gruposExistentesEnOrden);
-        // $gruposMayores = array();
-        // foreach ($gruposExistentesEnOrden as $grupo) {
-        //         foreach ($gruposMayores as $grupoMayor) {
-        //             if(Grupos::model()->perfilEsHijoDe($grupo, $grupoMayor) != 1){
 
-        //             }
-        //         }
-        //     }
-        // }
         foreach ($gruposExistentesEnOrden as $grupo) {
 
             $grupo = Grupos::model()->findByPk($grupo);
