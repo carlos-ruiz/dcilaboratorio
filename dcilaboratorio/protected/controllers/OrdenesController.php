@@ -78,7 +78,7 @@ class OrdenesController extends Controller
 		$pagos=new Pagos;
 		$direccion = new Direcciones;
 		$listaTarifasExamenes=array();
-
+		$ordenTieneGrupos=array();
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -140,7 +140,21 @@ class OrdenesController extends Controller
 
 			if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
 				$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
+			}else{
+				$gruposIds=array();
 			}
+			foreach ($gruposIds as $grupoId) {
+				$ordenTieneGrupo = new OrdenTieneGrupos;
+				$ordenTieneGrupo->id_ordenes = $model->id;
+				$ordenTieneGrupo->id_grupos = $grupoId;
+				$ordenTieneGrupo->ultima_edicion=$fecha_edicion;
+				$ordenTieneGrupo->usuario_ultima_edicion=Yii::app()->user->id;;
+				$ordenTieneGrupo->creacion=$fecha_creacion;
+				$ordenTieneGrupo->usuario_creacion=Yii::app()->user->id;
+				
+				array_push($ordenTieneGrupos, $ordenTieneGrupo);
+			}
+
 
 			if(isset($model->descuento)){
 				$totalAPagar=$totalAPagar * (1-($model->descuento/100));
@@ -192,15 +206,8 @@ class OrdenesController extends Controller
 						}
 					}
 
-					foreach ($gruposIds as $grupoId) {
-						$ordenTieneGrupos = new OrdenTieneGrupos;
-						$ordenTieneGrupos->id_ordenes = $model->id;
-						$ordenTieneGrupos->id_grupos = $grupoId;
-						$ordenTieneGrupos->ultima_edicion=$fecha_edicion;
-						$ordenTieneGrupos->usuario_ultima_edicion=Yii::app()->user->id;;
-						$ordenTieneGrupos->creacion=$fecha_creacion;
-						$ordenTieneGrupos->usuario_creacion=Yii::app()->user->id;
-						$ordenTieneGrupos->save();
+					foreach ($ordenTieneGrupos as $ordenTieneGrupo) {
+						$ordenTieneGrupo->save();
 					}
 
 					if(isset($paciente->id)&&$paciente->id>0){
@@ -294,6 +301,7 @@ class OrdenesController extends Controller
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
 			'examenesPorGrupo'=>$gruposTieneExamenes,
+			'ordenTieneGrupos'=>$ordenTieneGrupos,
 			));
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
@@ -318,6 +326,8 @@ class OrdenesController extends Controller
 		$pagos = new Pagos;
 		$listaTarifasExamenes = array();
 		$ordenExamenes = $model->ordenTieneExamenes;
+		$ordenGrupos = $model->ordenTieneGrupos;
+		$ordenTieneGrupos=array();
 		$examenesEncontradosIds = array();
 		$examenesIds = array();
 		foreach ($ordenExamenes as $ordenExamen) {
@@ -360,6 +370,9 @@ class OrdenesController extends Controller
 				foreach ($ordenExamenes as $ordenExamen) {
 					$ordenExamen->delete();
 				}
+				foreach ($ordenGrupos as $ordenGrupo) {
+					$ordenGrupo->delete();
+				}
 				if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids'])){
 					$examenesIds = split(',',$_POST['Examenes']['ids']);
 				}
@@ -369,6 +382,22 @@ class OrdenesController extends Controller
 					$validateExamenes=false;
 				}
 
+				if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
+				$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
+				}else{
+					$gruposIds=array();
+				}
+				foreach ($gruposIds as $grupoId) {
+					$ordenTieneGrupo = new OrdenTieneGrupos;
+					$ordenTieneGrupo->id_ordenes = $model->id;
+					$ordenTieneGrupo->id_grupos = $grupoId;
+					$ordenTieneGrupo->ultima_edicion=$fecha_edicion;
+					$ordenTieneGrupo->usuario_ultima_edicion=Yii::app()->user->id;;
+					$ordenTieneGrupo->creacion=$fecha_creacion;
+					$ordenTieneGrupo->usuario_creacion=Yii::app()->user->id;
+					
+					array_push($ordenTieneGrupos, $ordenTieneGrupo);
+				}
 
 				$examenes_precio = array();
 				$totalAPagar = 0;
@@ -415,6 +444,11 @@ class OrdenesController extends Controller
 							$ordenTieneExamenes->save();
 						}
 					}
+
+					foreach ($ordenTieneGrupos as $ordenTieneGrupo) {
+						$ordenTieneGrupo->save();
+					}
+
 					if(isset($model->descuento)){
 						$totalAPagar=$totalAPagar * (1-($model->descuento/100));
 					}
@@ -459,9 +493,8 @@ class OrdenesController extends Controller
 					$this->redirect(array('view','id'=>$model->id));
 				}
 			}catch(Exception $ex){
-				$transaction->rollback();
-				print_r($ex);
-				return;
+				$mensaje="Error inesperado";
+				$titulo="Error";
 			}
 		}
 		$grupos=Grupos::model()->findAll("activo=1");
@@ -476,6 +509,9 @@ class OrdenesController extends Controller
 			$gruposTieneExamenes[$grupo->id]=$idsExemenesDelGrupo;
 		}
 
+		if(isset($mensaje))
+			$transaction->rollback();
+
 		$this->render('update',array(
 			'model'=>$model,
 			'paciente'=>$paciente,
@@ -485,7 +521,9 @@ class OrdenesController extends Controller
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
 			'examenesPorGrupo'=>$gruposTieneExamenes,
+			'ordenTieneGrupos'=>$model->ordenTieneGrupos,
 			));
+		
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
@@ -731,20 +769,52 @@ class OrdenesController extends Controller
 
 	public function actionActualizarPrecios(){
 		$examenes=split(',',$_POST['examenes']);
+		$grupos=split(',',$_POST['grupos']);
 		$tarifario = $_POST['tarifa'];
+
+		$examenesAgregados=array();
+		for($i=0; $i<sizeof($grupos); $i++){
+			$precio=0;
+			$grupo=Grupos::model()->findByPk($grupos[$i]);
+			$cadenaIdsExamenesGrupo="";
+			foreach ($grupo->grupoTiene as $grupoExamenes) {
+				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($grupoExamenes->id_examenes,$tarifario));
+				$cadenaIdsExamenesGrupo.=$grupoExamenes->id_examenes.",";
+				
+				if(isset($tarifa)&&!in_array($grupoExamenes->id_examenes, $examenesAgregados)){
+					$precio+=$tarifa->precio;
+					array_push($examenesAgregados, $grupoExamenes->id_examenes);
+				}
+			}
+			$cadenaIdsExamenesGrupo=substr($cadenaIdsExamenesGrupo, 0, strlen($cadenaIdsExamenesGrupo)-1);
+								
+			$precioText="$ ".$precio;
+			echo "<tr class='row_grupo_$grupo->id' data-id='$grupo->id'>
+			<td>$grupo->clave</td>
+			<td>$grupo->nombre</td>
+			<td class='precioExamen' data-val='$precio'>$precioText</td>
+			<td><a href='javascript:void(0)' data-id='$cadenaIdsExamenesGrupo' data-idgrupo='$grupo->id' class='eliminarGrupo'><span class='fa fa-trash'></span></a></td>
+				
+									
+			</tr>";
+			
+		}
+
 		for ($i=0; $i<sizeof($examenes); $i++) {
-			$examen=Examenes::model()->findByPk($examenes[$i]);
-			if(sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos()){
-				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examenes[$i],$tarifario));
-				$precio=isset($tarifa->precio)?$tarifa->precio:0;
-				$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
-				$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
-				echo "<tr class='row_$examen->id' data-id='$examen->id'>
-				<td>$examen->clave</td>
-				<td>$examen->nombre</td>
-				<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-				<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
-				</tr>";
+			if(!in_array($examenes[$i], $examenesAgregados)){
+				$examen=Examenes::model()->findByPk($examenes[$i]);
+				if(sizeof($examen->detallesExamenes)>0 && $examen->tieneResultadosActivos()){
+					$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($examenes[$i],$tarifario));
+					$precio=isset($tarifa->precio)?$tarifa->precio:0;
+					$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
+					$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
+					echo "<tr class='row_$examen->id' data-id='$examen->id'>
+					<td>$examen->clave</td>
+					<td>$examen->nombre</td>
+					<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
+					<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+					</tr>";
+				}
 			}
 		}
 	}

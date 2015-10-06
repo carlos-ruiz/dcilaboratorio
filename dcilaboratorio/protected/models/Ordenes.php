@@ -67,6 +67,7 @@ class Ordenes extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'ordenTieneExamenes' => array(self::HAS_MANY, 'OrdenTieneExamenes', 'id_ordenes'),
+			'ordenTieneGrupos' => array(self::HAS_MANY, 'OrdenTieneGrupos', 'id_ordenes'),
 			'doctor' => array(self::BELONGS_TO, 'Doctores', 'id_doctores'),
 			'multitarifarios' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
 			'status' => array(self::BELONGS_TO, 'Status', 'id_status'),

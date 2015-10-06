@@ -335,7 +335,58 @@ echo $form->errorSummary($datosFacturacion);
 							</tr>
 						</thead>
 						<tbody id="examenesAgregados">
+							<?php $listaExamenesEnGrupos=array();?>
+
+							<?php foreach ($ordenTieneGrupos as $ordenGrupo): ?>
+
+								<?php 
+								$sumaPrecios=0;
+								$arrayGrupoExamenes=$ordenGrupo->grupo->grupoTiene;
+								$cadenaParametros="";
+								$valoresParametros=array($model->id);
+								$cadenaIdsExamenesGrupo="";
+
+								foreach ($arrayGrupoExamenes as $grupoExamen) {
+									$cadenaParametros.="?,";
+									array_push($valoresParametros, $grupoExamen->id_examenes);
+									$cadenaIdsExamenesGrupo.=$grupoExamen->id_examenes.",";
+									$tarifaActiva=TarifasActivas::model()->find("id_examenes=? AND id_multitarifarios=?",array($grupoExamen->id_examenes,$model->id_multitarifarios));
+									if(isset($tarifaActiva->precio)){
+										$sumaPrecios+=$tarifaActiva->precio;
+										if($model->isNewRecord){
+											array_push($listaExamenesEnGrupos, $tarifaActiva->id_examenes);
+										}
+									}
+									
+								}
+								$cadenaParametros=substr($cadenaParametros, 0, strlen($cadenaParametros)-1);
+								$cadenaIdsExamenesGrupo=substr($cadenaIdsExamenesGrupo, 0, strlen($cadenaIdsExamenesGrupo)-1);
+								if(!$model->isNewRecord){
+									$sumaPrecios=0;
+									$tarifasExamenGrupo=OrdenPrecioExamen::model()->findAll("id_ordenes=? AND id_examenes in (".$cadenaParametros.")",$valoresParametros);
+									foreach ($tarifasExamenGrupo as $tarifaExamen){
+										if(!in_array($tarifaExamen->id_examenes, $listaExamenesEnGrupos)){
+											$sumaPrecios+=$tarifaExamen->precio;
+											array_push($listaExamenesEnGrupos, $tarifaExamen->id_examenes);
+										}
+									}
+								}
+								?>
+								<tr class='row_grupo_<?php echo $ordenGrupo->id_grupos;?>' data-id='<?php echo $ordenGrupo->id_grupos;?>'>
+									<td><?php echo $ordenGrupo->grupo->clave; ?></td>
+									<td><?php echo $ordenGrupo->grupo->nombre; ?></td>
+									<td class="precioExamen" data-val="<?php echo $sumaPrecios; ?>">
+										<?php echo "$ ".$sumaPrecios; ?>
+									</td>
+
+									<td>
+										<a href='javascript:void(0)' data-id="<?php echo $cadenaIdsExamenesGrupo;?>" data-idgrupo="<?php echo $ordenGrupo->id_grupos;?>" class='eliminarGrupo'><span class='fa fa-trash'></span></a>
+									</td>
+									
+								</tr>
+							<?php endforeach; ?>
 							<?php foreach ($listaTarifasExamenes as $tarifaExamen): ?>
+								<?php if(!in_array($tarifaExamen->id_examenes, $listaExamenesEnGrupos)){?>
 								<tr class='row_<?php echo $tarifaExamen->id_examenes;?>' data-id='<?php echo $tarifaExamen->id_examenes;?>'>
 									<td><?php echo $tarifaExamen->examen->clave; ?></td>
 									<td><?php echo $tarifaExamen->examen->nombre; ?></td>
@@ -353,6 +404,7 @@ echo $form->errorSummary($datosFacturacion);
 
 									<td><a href='javascript:void(0)' data-id='<?php echo $tarifaExamen->id_examenes;?>' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 								</tr>
+								<?php } ?>
 							<?php endforeach; ?>
 						</tbody>
 					</table>
@@ -488,7 +540,9 @@ var examenesGrupo=[];
 	
 	examenesIds=[];
 	gruposIds=[];
-
+	<?php foreach ($ordenTieneGrupos as $i => $value)  {
+		echo "gruposIds[".$i."]='".$value->grupo->id."';";
+	} ?>
 	function block(target) {
         Metronic.blockUI({
             target: '#'+target,
@@ -604,16 +658,20 @@ var examenesGrupo=[];
 				);
 		});
 		$(".eliminarGrupo").click(function(){
-			alert("eliminando grupo");
 			$(".row_grupo_"+$(this).data('idgrupo')).hide(400);
 			$(".row_grupo_"+$(this).data('idgrupo')).html("");
 			examenesIds=[];
-							// 	$("#examenesAgregados").html("");
-							// }
-							
+			gruposIds=[];			
+
 			$(".eliminarExamen").each(function(){
 				examenesIds.push($(this).data('id'));
 			});
+
+			var idGrupoActual=$(this).data('idgrupo');// }
+			$(".eliminarGrupo").each(function(){
+				if(idGrupoActual!=$(this).data('idgrupo'))
+					gruposIds.push($(this).data('idgrupo'));
+			});	
 			$(".eliminarGrupo").each(function(){
 				idsExamenesGrupo=$(this).data('id').split(',');
 				for(i=0;i<idsExamenesGrupo.length;i++){
@@ -621,6 +679,7 @@ var examenesGrupo=[];
 						examenesIds.push(idsExamenesGrupo[i]);
 				}								
 			});
+
 			
 			setExamenesIds();
 			setGruposIds();
@@ -851,6 +910,7 @@ var examenesGrupo=[];
 	$("#Ordenes_id_multitarifarios").change(function(){
 		var ids="";
 		var idMultitarifario = $(this).val();
+
 		if(examenesIds.length>0){
 			ids=examenesIds.join();
 			block("examenes");
@@ -858,7 +918,8 @@ var examenesGrupo=[];
 					"<?php echo $this->createUrl('ordenes/actualizarPrecios/');?>",
 					{
 						examenes:ids,
-						tarifa:idMultitarifario
+						tarifa:idMultitarifario,
+						grupos: gruposIds.join()
 					},
 					function(data){
 						$("#examenesAgregados").html(data);

@@ -50,7 +50,7 @@ class OrdenTieneGrupos extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'grupo' => array(self::BELONGS_TO, 'GruposExamenes', 'id_grupos'),
+			'grupo' => array(self::BELONGS_TO, 'Grupos', 'id_grupos'),
 			'orden' => array(self::BELONGS_TO, 'Ordenes', 'id_ordenes'),
 		);
 	}
