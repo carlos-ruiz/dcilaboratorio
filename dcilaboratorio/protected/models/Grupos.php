@@ -129,10 +129,11 @@ class Grupos extends CActiveRecord
 		return $data;
 	}
 
-	public function selectListMultiple(){
+	public function selectListMultiple($idPadre=0){
 		$grupos = $this->model()->findAll('activo=1');
 		$data = array();
 		foreach ($grupos as $grupo) {
+			if($grupo->id!==$idPadre)
 				$data[$grupo->id]=$grupo->nombre;
 		}
 		return $data;

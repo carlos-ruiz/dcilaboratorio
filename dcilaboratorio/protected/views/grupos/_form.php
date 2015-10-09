@@ -7,7 +7,7 @@
 	<div class="portlet-title">
 		<div class="caption">
 			Perfil
-		</div>		
+		</div>
 	</div>
 	<div class="portlet-body form" style="display: block;">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -39,10 +39,10 @@
 	<div class="form-group">
 		<label class="control-label" for="isPerfilote">¿Es perfil de perfiles?.</label>
 		<div class="input-group">
-			<input type="checkbox" id="isPerfilote" value="0" />
+			<input type="checkbox" id="isPerfilote" value="0" <?php echo sizeof($model->grupos)>0?"checked":"";?>/>
 		</div>
 	</div>
-	
+
 	<div class="form-group <?php if($form->error($model,'examenes')!=''){ echo 'has-error'; }?>">
 		<label class="control-label" for="Grupos_examenes">Seleccione los examenes pertenecientes al perfil.</label>
 		<div class="input-group">
@@ -53,7 +53,7 @@
 	<div class="form-group" id="perfilote">
 		<label class="control-label" for="Grupos_grupos">Seleccione los perfiles pertenecientes al perfil.</label>
 		<div class="input-group">
-			<?php echo $form->dropDownList($model,'grupos',Grupos::model()->selectListMultiple(), array("class" => "form-control select2","multiple"=>"multiple")); ?>
+			<?php echo $form->dropDownList($model,'grupos',Grupos::model()->selectListMultiple($model->id), array("class" => "form-control select2","multiple"=>"multiple")); ?>
 		</div>
 	</div>
 	<div class="form-group <?php if($form->error($model,'comentarios')!=''){ echo 'has-error'; }?>">
@@ -65,7 +65,7 @@
 	</div>
 
 	<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
-	
+
 
 	<div class="form-actions">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Nuevo' : 'Actualizar',array('class'=>'btn blue-stripe')); ?>
@@ -93,5 +93,5 @@
 	});
 
 
-	
+
 </script>

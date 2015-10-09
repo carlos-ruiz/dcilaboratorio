@@ -1,55 +1,15 @@
 <?php
 require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
-class ImprimirResultados extends FPDF{
+class ImprimirResultadosArchivo extends FPDF{
 
 	function Header(){
-        if(Yii::app()->user->getState('perfil')=='Administrador')
-            $this->ln(4);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
-            $y = 0.5;
-            $this->SetFont('Arial','B',18);
-            $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1,1.7,2.3,2.3);
-            $this->SetXY(4, .75);
-            $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
-            $this->ln(0.75);
-            $this->SetFont('Times','B',8);
-            $this->SetXY(4, 2.75);
-            $this->Cell(4, $y, 'UNIDAD CHAPULTPEC', 0, 0, 'C');
-            $this->Cell(6.9, $y, 'UNIDAD AMADO NERVO', 0, 0, 'C');
-            $this->Cell(5, $y, 'UNIDAD DE CANCEROLOGÍA', 0, 1, 'C');
-            $this->SetX(4);
-            $this->SetFont('Times','',8);
-            $y = 0.4;
-            $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');
-            $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
-            $this->Cell(5, $y, 'Francisco Madero #145', 0, 1, 'C');
-            $this->SetX(4);
-            $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
-            $this->Cell(6.5, $y, 'Col. Centro', 0, 0, 'C');
-            $this->Cell(5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
-            $this->SetX(4);
-            $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');
-            $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
-            $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
-            $this->SetX(4);
-            $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');
-            $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
-            $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
-            $this->SetX(4);
-            $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');
-            $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
-            $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');
-            $this->ln();
-        }
+        $this->ln(2);
 	}
 
 	function cabeceraHorizontal($model)
 	{
         $y = 0.5;
-        $this->SetXY(-5, 5.1);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
-            $this->SetXY(-5, 7.1);
-        }
+        $this->SetXY(-5, 3.1);
         $this->SetFont('Arial','',8);
         $this->Cell(1,$y,'Fecha:', 0, 0);
         $this->SetFont('Arial','B',8);
@@ -64,10 +24,8 @@ class ImprimirResultados extends FPDF{
         $this->setX(1);
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
-        $this->setXY(1.5, 4.1);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
-            $this->setXY(1.5, 6.1);
-        }
+        $this->setXY(1.5, 2.1);
+
         // $this->Cell(10,$y,'Resultados de Laboratorio', 0, 1);
         $this->SetFont('Arial','',8);
         $this->SetTextColor(0, 0, 0);
@@ -99,18 +57,16 @@ class ImprimirResultados extends FPDF{
         $this->SetTextColor(0, 0, 0);
 
 
-        $this->SetXY(1, 6.5);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
-            $this->SetXY(1, 8.5);
-        }
+        $this->SetXY(1, 4.5);
+
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
         $this->SetTextColor(0, 0, 0); //Letra color blanco
         $x = 2;
-        $this->Cell(9,$y, 'Determinación Análitica',1, 0 , 'C', true);
-        $this->Cell(3.5,$y, 'Resultado',1, 0 , 'C', true);
-        $this->Cell(2,$y, 'Unidad',1, 0 , 'C', true);
-        $this->Cell(5,$y, 'Intervalo de Referencia',1, 0 , 'C', true);
+        $this->Cell(4.5,$y, 'Determinación Análitica',1, 0 , 'C', true);
+        $this->Cell(1.75,$y, 'Resultado',1, 0 , 'C', true);
+        $this->Cell(1,$y, 'Unidad',1, 0 , 'C', true);
+        $this->Cell(2.5,$y, 'Rango Normal',1, 0 , 'C', true);
         // $this->SetFillColor(219,239,253);
         //Atención!! el parámetro true rellena la celda con el color elegido
 		//$this->Cell(120,7, utf8_decode("hola mundo"),1, 0 , 'C', true);
@@ -121,7 +77,7 @@ class ImprimirResultados extends FPDF{
         $this->cabeceraHorizontal($model);
     	$this->SetTextColor(0, 0, 0); //Letra color blanco
     	$this->SetFont('Arial','',8);
-    	$this->setXY(1,7);
+    	$this->setXY(1,5);
         if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
             $this->setXY(1,9);
         }

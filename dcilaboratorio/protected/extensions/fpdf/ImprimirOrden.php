@@ -83,11 +83,11 @@ class ImprimirOrden extends FPDF{
         $this->ln(0.5);
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
-        $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
+        // $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
         $this->SetTextColor(0, 0, 0);
 
 
-        $this->SetXY(1, 9.5);
+        $this->SetXY(1, 8.5);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
         $this->SetTextColor(0, 0, 0); //Letra color blanco
@@ -105,7 +105,7 @@ class ImprimirOrden extends FPDF{
     	$this->SetFont('Arial','',8);
     	$posYOriginal = 7;
     	$posYIncremento = 1.5;
-    	$this->setXY(1,10);
+    	$this->setXY(1,9);
     	$y = 0.5;
         $ordenTieneExamenes = $model->ordenTieneExamenes;
         $idExamen = 0;
@@ -139,36 +139,39 @@ class ImprimirOrden extends FPDF{
         $examenesImpresos=array();
         foreach ($gruposExistentesEnOrden as $grupo) {
             $grupo = Grupos::model()->findByPk($grupo);
-            $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
-            $examenesIds=array();
-            $this->SetFillColor(213, 224, 241);
+            $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupo->id));
+            if (isset($ordenTieneGrupo)) {
+                $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
+                $examenesIds=array();
+                $this->SetFillColor(213, 224, 241);
 
-            foreach ($examenesEnGrupo as $grupoExamen) {
-                array_push($examenesIds, $grupoExamen->id_examenes);
-            }
-            $totalPrecioGrupo = 0;
-            foreach ($ordenTieneExamenes as $ordenExamen) {
-                $examen = $ordenExamen->detalleExamen->examenes;
-                if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
-                    //Pintamos el examen
-                    array_push($examenesImpresos, $examen->id);
-                    if($examen->id!=$idExamen){
-                        // $this->Cell(3.5,$y, $examen->clave,1, 0);
-                        // $this->Cell(12,$y, $examen->nombre,1, 0 );
-                        $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
-                        // $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
-                        $totalOrden += $precio->precio;
-                        $totalPrecioGrupo += $precio->precio;
-                        if ($examen->duracion_dias > $duracion) {
-                            $duracion = $examen->duracion_dias;
-                        }
-                    }
-                    $idExamen = $examen->id;
+                foreach ($examenesEnGrupo as $grupoExamen) {
+                    array_push($examenesIds, $grupoExamen->id_examenes);
                 }
+                $totalPrecioGrupo = 0;
+                foreach ($ordenTieneExamenes as $ordenExamen) {
+                    $examen = $ordenExamen->detalleExamen->examenes;
+                    if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
+                        //Pintamos el examen
+                        array_push($examenesImpresos, $examen->id);
+                        if($examen->id!=$idExamen){
+                            // $this->Cell(3.5,$y, $examen->clave,1, 0);
+                            // $this->Cell(12,$y, $examen->nombre,1, 0 );
+                            $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
+                            // $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
+                            $totalOrden += $precio->precio;
+                            $totalPrecioGrupo += $precio->precio;
+                            if ($examen->duracion_dias > $duracion) {
+                                $duracion = $examen->duracion_dias;
+                            }
+                        }
+                        $idExamen = $examen->id;
+                    }
+                }
+                $this->Cell(3.5,$y, $grupo->clave,1, 0);
+                $this->Cell(12,$y, $grupo->nombre ,1, 0, 'C', false);
+                $this->Cell(4,$y, '$ '.$totalPrecioGrupo,1, 1, 'R');
             }
-            $this->Cell(3.5,$y, $grupo->clave,1, 0);
-            $this->Cell(12,$y, $grupo->nombre ,1, 0, 'C', false);
-            $this->Cell(4,$y, '$ '.$totalPrecioGrupo,1, 1, 'R');
         }
 
         if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){

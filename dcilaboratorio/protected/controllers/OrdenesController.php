@@ -31,12 +31,16 @@ class OrdenesController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','view', 'create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen'),
+				'actions'=>array('index','view', 'create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen','imprimirResultadosArchivo'),
 				'users'=>Usuarios::model()->obtenerPorPerfil('Administrador'),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('index','view','imprimirResultadosPdf'),
 				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Paciente'), Usuarios::model()->obtenerPorPerfil('Doctor')),
+				),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('generarPdf'),
+				'users'=>Usuarios::model()->obtenerPorPerfil('Paciente'),
 				),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -151,7 +155,7 @@ class OrdenesController extends Controller
 				$ordenTieneGrupo->usuario_ultima_edicion=Yii::app()->user->id;;
 				$ordenTieneGrupo->creacion=$fecha_creacion;
 				$ordenTieneGrupo->usuario_creacion=Yii::app()->user->id;
-				
+
 				array_push($ordenTieneGrupos, $ordenTieneGrupo);
 			}
 
@@ -395,7 +399,7 @@ class OrdenesController extends Controller
 					$ordenTieneGrupo->usuario_ultima_edicion=Yii::app()->user->id;;
 					$ordenTieneGrupo->creacion=$fecha_creacion;
 					$ordenTieneGrupo->usuario_creacion=Yii::app()->user->id;
-					
+
 					array_push($ordenTieneGrupos, $ordenTieneGrupo);
 				}
 
@@ -523,7 +527,7 @@ class OrdenesController extends Controller
 			'examenesPorGrupo'=>$gruposTieneExamenes,
 			'ordenTieneGrupos'=>$model->ordenTieneGrupos,
 			));
-		
+
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
 	}
 
@@ -780,24 +784,24 @@ class OrdenesController extends Controller
 			foreach ($grupo->grupoTiene as $grupoExamenes) {
 				$tarifa=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?',array($grupoExamenes->id_examenes,$tarifario));
 				$cadenaIdsExamenesGrupo.=$grupoExamenes->id_examenes.",";
-				
+
 				if(isset($tarifa)&&!in_array($grupoExamenes->id_examenes, $examenesAgregados)){
 					$precio+=$tarifa->precio;
 					array_push($examenesAgregados, $grupoExamenes->id_examenes);
 				}
 			}
 			$cadenaIdsExamenesGrupo=substr($cadenaIdsExamenesGrupo, 0, strlen($cadenaIdsExamenesGrupo)-1);
-								
+
 			$precioText="$ ".$precio;
 			echo "<tr class='row_grupo_$grupo->id' data-id='$grupo->id'>
 			<td>$grupo->clave</td>
 			<td>$grupo->nombre</td>
 			<td class='precioExamen' data-val='$precio'>$precioText</td>
 			<td><a href='javascript:void(0)' data-id='$cadenaIdsExamenesGrupo' data-idgrupo='$grupo->id' class='eliminarGrupo'><span class='fa fa-trash'></span></a></td>
-				
-									
+
+
 			</tr>";
-			
+
 		}
 
 		for ($i=0; $i<sizeof($examenes); $i++) {
@@ -921,6 +925,15 @@ class OrdenesController extends Controller
 	public function actionImprimirResultadosPdf($id){
 		$model = $this->loadModel($id);
 		$pdf = new ImprimirResultados('P','cm','letter');
+		$pdf->AddPage();
+		//$pdf->cabeceraHorizontal($model);
+		$pdf->contenido($model);
+		$pdf->Output();
+	}
+
+	public function actionImprimirResultadosArchivo($id){
+		$model = $this->loadModel($id);
+		$pdf = new ImprimirResultadosArchivo('P','cm','letter');
 		$pdf->AddPage();
 		//$pdf->cabeceraHorizontal($model);
 		$pdf->contenido($model);

@@ -171,6 +171,7 @@ $pagado=$totalOrden-$total;
 							<?php
 							echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
 							echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
+							echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados columnas',Yii::app()->createUrl('ordenes/imprimirResultadosArchivo',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
 							if (($model->status->nombre == 'Pagada' || $model->status->nombre == 'Finalizada') && $model->requiere_factura == 1) {
 								echo CHtml::link('<i class="icon-printer"></i> Imprimir factura',Yii::app()->createUrl('facturacion/generarFactura',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
 							}
