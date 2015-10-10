@@ -142,14 +142,15 @@ class OrdenesController extends Controller
 				}
 			}
 
+			
 			if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
-				$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
+			$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
 			}else{
 				$gruposIds=array();
 			}
+
 			foreach ($gruposIds as $grupoId) {
 				$ordenTieneGrupo = new OrdenTieneGrupos;
-				$ordenTieneGrupo->id_ordenes = $model->id;
 				$ordenTieneGrupo->id_grupos = $grupoId;
 				$ordenTieneGrupo->ultima_edicion=$fecha_edicion;
 				$ordenTieneGrupo->usuario_ultima_edicion=Yii::app()->user->id;;
@@ -158,7 +159,6 @@ class OrdenesController extends Controller
 
 				array_push($ordenTieneGrupos, $ordenTieneGrupo);
 			}
-
 
 			if(isset($model->descuento)){
 				$totalAPagar=$totalAPagar * (1-($model->descuento/100));
@@ -209,11 +209,13 @@ class OrdenesController extends Controller
 							$ordenTieneExamenes->save();
 						}
 					}
-
+					
 					foreach ($ordenTieneGrupos as $ordenTieneGrupo) {
+						$ordenTieneGrupo->id_ordenes = $model->id;
 						$ordenTieneGrupo->save();
+						
 					}
-
+					
 					if(isset($paciente->id)&&$paciente->id>0){
 						$paciente = Pacientes::model()->findByPk($paciente->id);
 					}

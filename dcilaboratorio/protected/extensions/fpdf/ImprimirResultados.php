@@ -202,7 +202,10 @@ class ImprimirResultados extends FPDF{
                     if(count(array_intersect($examenesIdsY, $examenesIds)) == count($examenesIdsY)&&sizeof($idsExamenes)!=sizeof($examenesImpresos)){
                         $grupoY=Grupos::model()->findByPk($grupoY);
                         $this->SetFillColor(117, 163, 240);
-                        $this->Cell(19.5,$y, $grupoY->nombre ,1, 1, 'C', true);
+                        $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupoY->id));
+                        if(isset($ordenTieneGrupo)){
+                            $this->Cell(19.5,$y, $grupoY->nombre ,1, 1, 'C', true);
+                        }
                     }
                 }
             }
