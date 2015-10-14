@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 				'users'=>Usuarios::model()->obtenerPorPerfil('Administrador'),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view','imprimirResultadosPdf'),
+				'actions'=>array('admin','index','view','imprimirResultadosPdf'),
 				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Paciente'), Usuarios::model()->obtenerPorPerfil('Doctor')),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -142,7 +142,7 @@ class OrdenesController extends Controller
 				}
 			}
 
-			
+
 			if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
 			$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
 			}else{
@@ -209,13 +209,13 @@ class OrdenesController extends Controller
 							$ordenTieneExamenes->save();
 						}
 					}
-					
+
 					foreach ($ordenTieneGrupos as $ordenTieneGrupo) {
 						$ordenTieneGrupo->id_ordenes = $model->id;
 						$ordenTieneGrupo->save();
-						
+
 					}
-					
+
 					if(isset($paciente->id)&&$paciente->id>0){
 						$paciente = Pacientes::model()->findByPk($paciente->id);
 					}
