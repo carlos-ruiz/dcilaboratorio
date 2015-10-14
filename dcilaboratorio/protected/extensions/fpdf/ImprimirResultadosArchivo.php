@@ -78,8 +78,9 @@ class ImprimirResultadosArchivo extends FPDF{
     	$this->SetTextColor(0, 0, 0); //Letra color blanco
     	$this->SetFont('Arial','',8);
     	$this->setXY(1,5);
-        
-    	$y = 0.5;
+        $y = 0.5;
+        $limiteY = $this->h-$this->bMargin-$y; //Límite de impresión abajo
+        $numeroColumna = 1;
         $ordenTieneExamenes = $model->ordenTieneExamenes;
         $idExamen = 0;
         $totalOrden = 0;
@@ -131,7 +132,25 @@ class ImprimirResultadosArchivo extends FPDF{
         $examenesImpresos=array();
 
         foreach ($gruposExistentesEnOrden as $grupo) {
-            
+            if($numeroColumna==1 && $this->y>$limiteY){
+                $numeroColumna = 2;
+                $this->SetLeftMargin(11);
+                $this->setY(4.5);
+                $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
+                $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
+                $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
+                $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
+            }
+            if($numeroColumna==2 && $this->y>$limiteY){
+                $numeroColumna = 1;
+                $this->Cell(4.39,$y, '',0, 0 , 'C', false);
+                $this->SetLeftMargin(1);
+                $this->setY(2);
+                $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
+                $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
+                $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
+                $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
+            }
             $grupo = Grupos::model()->findByPk($grupo);
             $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
             $examenesIds=array();
@@ -165,6 +184,25 @@ class ImprimirResultadosArchivo extends FPDF{
             }
 
             foreach ($ordenTieneExamenes as $ordenExamen) {
+                if($numeroColumna==1 && $this->y>$limiteY){
+                    $numeroColumna = 2;
+                    $this->SetLeftMargin(11);
+                    $this->setY(4.5);
+                    $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
+                    $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
+                    $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
+                    $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
+                }
+                if($numeroColumna==2 && $this->y>$limiteY){
+                    $numeroColumna = 1;
+                    $this->Cell(4.39,$y, '',0, 0 , 'C', false);
+                    $this->SetLeftMargin(1);
+                    $this->setY(2);
+                    $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
+                    $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
+                    $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
+                    $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
+                }
                 $examen = $ordenExamen->detalleExamen->examenes;
                 if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
                     //Pintamos el examen
@@ -203,7 +241,7 @@ class ImprimirResultadosArchivo extends FPDF{
                         $this->MultiCell(2.39,$y, $rango,'B', 'C');
                         //$this->setXY($xActual+4.39,$this->y-$heightRow);
                     }
-                    
+
                 }
                 $idExamen = $examen->id;
             }
@@ -211,10 +249,10 @@ class ImprimirResultadosArchivo extends FPDF{
             $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupo->id));
             if(isset($ordenTieneGrupo)){
                 if($grupo->comentarios!=null){
-                 $this->Cell(9.71,$y, 'Comentarios: '.$grupo->comentarios ,1, 1, 'L', false);
+                 $this->Cell(9.71,$y, 'COMENTARIOS: '.$grupo->comentarios ,"B", 1, 'L', false);
                 }
             }
-            
+
         }
 
         if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
@@ -226,6 +264,25 @@ class ImprimirResultadosArchivo extends FPDF{
 
         //return;
         foreach ($idsExamenes as $idExamen) {
+            if($numeroColumna==1 && $this->y>$limiteY){
+                $numeroColumna = 2;
+                $this->SetLeftMargin(11);
+                $this->setY(4.5);
+                $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
+                $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
+                $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
+                $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
+            }
+            if($numeroColumna==2 && $this->y>$limiteY){
+                $numeroColumna = 1;
+                $this->Cell(4.39,$y, '',0, 0 , 'C', false);
+                $this->SetLeftMargin(1);
+                $this->setY(2);
+                $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
+                $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
+                $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
+                $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
+            }
             if(!in_array($idExamen,$examenesImpresos)){
                 $examen=Examenes::model()->findByPk($idExamen);
                 /*if($examen->id!=$idExamenExiste){
@@ -261,7 +318,7 @@ class ImprimirResultadosArchivo extends FPDF{
                     $this->MultiCell(2.39,$y, $rango,'B', 'C');
                     //$this->setXY($xActual+4.39,$this->y-$heightRow);
                 }
-                
+
                 //$this->Cell(2.39,$y, $rango,1, 1 , 'C');
                 $idExamenExiste = $examen->id;
             }
@@ -269,6 +326,17 @@ class ImprimirResultadosArchivo extends FPDF{
         }
 
         //Observaciones
+        if($numeroColumna==1 && $this->y>$limiteY-4.5){
+            $numeroColumna = 2;
+            $this->SetLeftMargin(11);
+            $this->setY(4.5);
+        }
+        if($numeroColumna==2 && $this->y>$limiteY-4.5){
+            $numeroColumna = 1;
+            $this->Cell(4.39,5, '',0, 0 , 'C', false);
+            $this->SetLeftMargin(1);
+            $this->setY(4.5);
+        }
         $this->ln(1);
         $this->ln(1);
         $this->SetFont('Arial','B',8);
@@ -285,10 +353,10 @@ class ImprimirResultadosArchivo extends FPDF{
     function Footer()
 	{
 	//Position at 1.5 cm from bottom
-    $this->SetY(-6);
+    $this->SetXY(1,-1.5);
     //Arial italic 8
     $this->SetFont('Arial','I',8);
     //Page number
-    $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
+    $this->Cell(0,0.5,'Página '.$this->PageNo(),0,0,'C');
 	}
 }
