@@ -145,6 +145,7 @@ class Ordenes extends CActiveRecord
 		}
 		if(Yii::app()->user->getState('perfil')=='Doctor'){	
 			$criteria->compare('id_doctores',Yii::app()->user->getState('id_persona'));
+			$criteria->compare('compartir_con_doctor',1);
 		}
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

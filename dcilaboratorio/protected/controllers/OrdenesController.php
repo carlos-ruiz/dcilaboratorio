@@ -54,18 +54,37 @@ class OrdenesController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$orden = $this->loadModel($id);
+		if(Yii::app()->user->getState('perfil')=='Doctor'){	
+			$doctor = Doctores::model()->find("id_usuarios=?",array(Yii::app()->user->id));
+			if(!($orden->id_doctores==$doctor->id && $orden->compartir_con_doctor==1)){
+				$this->render('/site/error',array(
+					'code'=>403,
+					'message'=>"Usted no se encuentra autorizado a realizar esta acción.",
+				));
+			}
+		}
+		if(Yii::app()->user->getState('perfil')=='Paciente'){
+			$ordenUsuario = OrdenesFacturacion::model()->find("id_usuarios=? AND id_ordenes=?",array(Yii::app()->user->id,$id));
+			if(!isset($ordenUsuario)){
+				$this->render('/site/error',array(
+					'code'=>403,
+					'message'=>"Usted no se encuentra autorizado a realizar esta acción.",
+				));
+			}
+		}	
 		$section = "Ordenes";
 		$pagos=new Pagos('search');
 		$datosFacturacion=new DatosFacturacion('search');
 		$paciente =new Pacientes;
 		$examenes=new Examenes('search');
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$orden,
 			'paciente'=>$paciente,
 			'pagos'=>$pagos,
 			'datosFacturacion'=>$datosFacturacion,
 			'examenes'=>$examenes,
-			));
+		));
 	}
 
 	/**
@@ -590,7 +609,7 @@ class OrdenesController extends Controller
 	{
 		$model=Ordenes::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new CHttpException(404,'La página solicitada no existe.');
 		return $model;
 	}
 

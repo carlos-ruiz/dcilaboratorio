@@ -254,7 +254,7 @@ class UnidadesResponsablesController extends Controller
 	{
 		$model=UnidadesResponsables::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new CHttpException(404,'La página solicitada no existe.');
 		return $model;
 	}
 

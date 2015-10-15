@@ -197,6 +197,9 @@
 			<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
 			<?php
+			//echo base64_decode("bGFiJDMz");
+			//sil33dci - lab$33
+			//J. 31dci - lab?31
 			if(Yii::app()->user->getState('perfil')=='Administrador')
 				include_once("menu_admin.php");
 			if(Yii::app()->user->getState('perfil')=='Doctor')
