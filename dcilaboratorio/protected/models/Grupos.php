@@ -67,7 +67,7 @@ class Grupos extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'nombre' => 'Nombre',
-			'comentarios'=>'Comentarios',
+			'comentarios'=>'Método',
 			'clave'=>'Clave',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',

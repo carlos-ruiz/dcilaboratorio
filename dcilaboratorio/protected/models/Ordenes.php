@@ -143,7 +143,7 @@ class Ordenes extends CActiveRecord
 			$criteria->with=array('ordenFacturacion');
 			$criteria->compare('ordenFacturacion.id_usuarios',Yii::app()->user->id);
 		}
-		if(Yii::app()->user->getState('perfil')=='Doctor'){	
+		if(Yii::app()->user->getState('perfil')=='Doctor'){
 			$criteria->compare('id_doctores',Yii::app()->user->getState('id_persona'));
 			$criteria->compare('compartir_con_doctor',1);
 		}
@@ -179,7 +179,7 @@ class Ordenes extends CActiveRecord
 			$criteria->with=array('ordenFacturacion');
 			$criteria->compare('ordenFacturacion.id_usuarios',Yii::app()->user->id);
 		}
-		if(Yii::app()->user->getState('perfil')=='Doctor'){	
+		if(Yii::app()->user->getState('perfil')=='Doctor'){
 			$criteria->compare('id_doctores',Yii::app()->user->getState('id_persona'));
 		}
 		return new CActiveDataProvider($this, array(
@@ -200,7 +200,7 @@ class Ordenes extends CActiveRecord
 	}
 
 	public function obtenerDoctores(){
-		return CHtml::listData(Doctores::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
+		return CHtml::listData(Doctores::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombreCompleto');
 	}
 
 	public function obtenerMultitarifarios(){

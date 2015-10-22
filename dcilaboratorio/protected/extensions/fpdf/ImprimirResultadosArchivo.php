@@ -249,7 +249,7 @@ class ImprimirResultadosArchivo extends FPDF{
             $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupo->id));
             if(isset($ordenTieneGrupo)){
                 if($grupo->comentarios!=null){
-                 $this->Cell(9.71,$y, 'COMENTARIOS: '.$grupo->comentarios ,"B", 1, 'L', false);
+                 $this->Cell(9.71,$y, 'MÉTODO: '.$grupo->comentarios ,"B", 1, 'L', false);
                 }
             }
 

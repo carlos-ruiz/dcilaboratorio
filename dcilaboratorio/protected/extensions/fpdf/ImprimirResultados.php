@@ -238,7 +238,7 @@ class ImprimirResultados extends FPDF{
                 $idExamen = $examen->id;
             }
             if($grupo->comentarios!=null){
-             $this->Cell(19.5,$y, 'Comentarios: '.$grupo->comentarios ,1, 1, 'L', false);
+             $this->Cell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 1, 'L', false);
             }
         }
 
