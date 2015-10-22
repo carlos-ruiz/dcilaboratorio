@@ -90,3 +90,7 @@ input[type="radio"]{
 	    top: 125px !important;
 	}
 }
+
+input[type=text] {
+	min-width: 200px;
+}
