@@ -339,7 +339,7 @@ echo $form->errorSummary($datosFacturacion);
 
 							<?php foreach ($ordenTieneGrupos as $ordenGrupo): ?>
 
-								<?php 
+								<?php
 								$sumaPrecios=0;
 								$arrayGrupoExamenes=$ordenGrupo->grupo->grupoTiene;
 								$cadenaParametros="";
@@ -357,7 +357,7 @@ echo $form->errorSummary($datosFacturacion);
 											array_push($listaExamenesEnGrupos, $tarifaActiva->id_examenes);
 										}
 									}
-									
+
 								}
 								$cadenaParametros=substr($cadenaParametros, 0, strlen($cadenaParametros)-1);
 								$cadenaIdsExamenesGrupo=substr($cadenaIdsExamenesGrupo, 0, strlen($cadenaIdsExamenesGrupo)-1);
@@ -382,7 +382,7 @@ echo $form->errorSummary($datosFacturacion);
 									<td>
 										<a href='javascript:void(0)' data-id="<?php echo $cadenaIdsExamenesGrupo;?>" data-idgrupo="<?php echo $ordenGrupo->id_grupos;?>" class='eliminarGrupo'><span class='fa fa-trash'></span></a>
 									</td>
-									
+
 								</tr>
 							<?php endforeach; ?>
 							<?php foreach ($listaTarifasExamenes as $tarifaExamen): ?>
@@ -537,7 +537,7 @@ var examenesGrupo=[];
 <?php foreach ($examenesPorGrupo as $key => $value)  {
 	echo "examenesGrupo['grupo".$key."']='".$value."';";
 } ?>
-	
+
 	examenesIds=[];
 	gruposIds=[];
 	<?php foreach ($ordenTieneGrupos as $i => $value)  {
@@ -661,7 +661,7 @@ var examenesGrupo=[];
 			$(".row_grupo_"+$(this).data('idgrupo')).hide(400);
 			$(".row_grupo_"+$(this).data('idgrupo')).html("");
 			examenesIds=[];
-			gruposIds=[];			
+			gruposIds=[];
 
 			$(".eliminarExamen").each(function(){
 				examenesIds.push($(this).data('id'));
@@ -671,16 +671,16 @@ var examenesGrupo=[];
 			$(".eliminarGrupo").each(function(){
 				if(idGrupoActual!=$(this).data('idgrupo'))
 					gruposIds.push($(this).data('idgrupo'));
-			});	
+			});
 			$(".eliminarGrupo").each(function(){
 				idsExamenesGrupo=$(this).data('id').split(',');
 				for(i=0;i<idsExamenesGrupo.length;i++){
 					if(examenesIds.indexOf(idsExamenesGrupo[i])<0)
 						examenesIds.push(idsExamenesGrupo[i]);
-				}								
+				}
 			});
 
-			
+
 			setExamenesIds();
 			setGruposIds();
 			total=calcularTotal();
@@ -878,7 +878,7 @@ var examenesGrupo=[];
 								for(i=0;i<idsExamenesGrupo.length;i++){
 									if(examenesIds.indexOf(idsExamenesGrupo[i])<0)
 									examenesIds.push(idsExamenesGrupo[i]);
-								}								
+								}
 							});
 							gruposIds.push(idGrupo);
 							$("#gruposIds").val(gruposIds.slice(','));
@@ -934,14 +934,16 @@ var examenesGrupo=[];
 
 	$("#Ordenes_descuento").change(function(){
 		granTotal=calcularGranTotal();
-		$("#granTotal").text("$ "+granTotal);
+		// $("#granTotal").text("$ "+granTotal);
+		setGranTotal(granTotal);
 		debe=calcularDebe();
 		setDebe(debe);
 	});
 
 	$("#Ordenes_costo_emergencia").change(function(){
 		granTotal=calcularGranTotal();
-		$("#granTotal").text("$ "+granTotal);
+		setGranTotal(granTotal);
+		// $("#granTotal").text("$ "+granTotal);
 		debe=calcularDebe();
 		setDebe(debe);
 	});

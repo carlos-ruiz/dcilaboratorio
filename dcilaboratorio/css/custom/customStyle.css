@@ -91,6 +91,6 @@ input[type="radio"]{
 	}
 }
 
-input[type=text] {
+.select2-container input[type=text] {
 	min-width: 200px;
 }
