@@ -144,16 +144,16 @@ $pagado=$totalOrden-$total;
 								}
 
 								echo '<table class="table table-striped table-bordered dataTable"><tr>
-								<td>Total de la Orden </td><th colspan="3" style="color:#1e90ff ">$ '.$totalOrden.'</th></<tr> </table>';
+								<td>Total de la Orden </td><th colspan="3" style="color:#1e90ff ">$ '.number_format($totalOrden, 2).'</th></<tr> </table>';
 
 
 								echo '<table class="table table-striped table-bordered dataTable"><tr>
-								<td>Total pagado </td><td>$ '.$total.'</td></<tr> </table>';
+								<td>Total pagado </td><td>$ '.number_format($total, 2).'</td></<tr> </table>';
 
 								$pagado=$totalOrden-$total;
 
 								echo '<table class="table table-striped table-bordered dataTable"><tr>
-								<td>'.($pagado>=0?"Total por pagar":"Cambio").'</td><td>$ '.($pagado>=0?$pagado:$pagado*-1).'</td></<tr> </table>';
+								<td>'.($pagado>=0?"Total por pagar":"Cambio").'</td><td>$ '.number_format(($pagado>=0?$pagado:$pagado*-1), 2).'</td></<tr> </table>';
 
 
 								echo '<table class="table table-striped table-bordered dataTable"><tr>

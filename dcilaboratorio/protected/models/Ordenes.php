@@ -232,5 +232,6 @@ class Ordenes extends CActiveRecord
 		}
 		return 0;
 	}
+	
 
 }

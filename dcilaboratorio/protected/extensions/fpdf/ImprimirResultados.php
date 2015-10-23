@@ -192,73 +192,7 @@ class ImprimirResultados extends FPDF{
             $this->imprimirGrupo($grupo);
         }
 
-/*
-        foreach ($gruposExistentesEnOrden as $grupo) {
 
-            $grupo = Grupos::model()->findByPk($grupo);
-            $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
-            $examenesIds=array();
-
-            foreach ($examenesEnGrupo as $grupoExamen) {
-                array_push($examenesIds, $grupoExamen->id_examenes);
-            }
-            if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
-                $this->SetFillColor(117, 163, 240);
-                $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupo->id));
-                if(isset($ordenTieneGrupo)){
-                    $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
-                }
-            }
-            foreach($gruposExistentesEnOrden as $grupoY){
-                if($grupoY!=$grupo->id){
-                    $examenesEnGrupoY=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupoY));
-                    $examenesIdsY=array();
-                    foreach ($examenesEnGrupoY as $grupoExamenY) {
-                        array_push($examenesIdsY, $grupoExamenY->id_examenes);
-                    }
-                    if(count(array_intersect($examenesIdsY, $examenesIds)) == count($examenesIdsY)&&sizeof($idsExamenes)!=sizeof($examenesImpresos)){
-                        $grupoY=Grupos::model()->findByPk($grupoY);
-                        $this->SetFillColor(117, 163, 240);
-                        $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupoY->id));
-                        if(isset($ordenTieneGrupo)){
-                            $this->Cell(19.5,$y, $grupoY->nombre ,1, 1, 'C', true);
-                        }
-                    }
-                }
-            }
-
-
-            foreach ($ordenTieneExamenes as $ordenExamen) {
-                $examen = $ordenExamen->detalleExamen->examenes;
-                if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
-                    //Pintamos el examen
-                    array_push($examenesImpresos, $examen->id);
-                    if($examen->id!=$idExamen){
-                    $this->SetFont('Arial','B',8);
-                    $this->SetFillColor(213, 224, 241);
-                    //$this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
-                    }
-
-                    $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-                    $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
-                    $this->Cell(9,$heightRow,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
-                    if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
-                        $this->SetFont('Times','BI',8);
-                        $this->SetTextColor(255, 0, 0);
-                    }
-                    $this->Cell(3.5,$heightRow,$ordenExamen->resultado,1, 0 , 'C');
-                    $this->SetTextColor(0, 0, 0);
-                    $this->SetFont('Arial','B',8);
-                    $this->Cell(2,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
-                    $this->MultiCell(5,$y, $rango,1, 'C');
-                }
-                $idExamen = $examen->id;
-            }
-            if($grupo->comentarios!=null){
-             $this->Cell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 1, 'L', false);
-            }this->
-        }
-*/
         if(sizeof($idsExamenes)!=sizeof($this->examenesImpresos)){
             $this->SetFillColor(117, 163, 240);
             $this->Cell(19.5,$y, "EXÁMENES INDIVIDUALES" ,1, 1, 'C', true);
