@@ -170,7 +170,7 @@ class ImprimirOrden extends FPDF{
                 }
                 $this->Cell(3.5,$y, $grupo->clave,1, 0);
                 $this->Cell(12,$y, $grupo->nombre ,1, 0, 'C', false);
-                $this->Cell(4,$y, '$ '.$totalPrecioGrupo,1, 1, 'R');
+                $this->Cell(4,$y, '$ '.number_format($totalPrecioGrupo, 2),1, 1, 'R');
             }
         }
 
@@ -185,7 +185,7 @@ class ImprimirOrden extends FPDF{
                     $this->Cell(3.5,$y, $examen->clave,1, 0);
                     $this->Cell(12,$y, $examen->nombre,1, 0 );
                     $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
-                    $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
+                    $this->Cell(4,$y, '$ '.number_format($precio->precio, 2),1, 1, 'R');
                     $totalOrden += $precio->precio;
                     if ($examen->duracion_dias > $duracion) {
                         $duracion = $examen->duracion_dias;
@@ -195,27 +195,34 @@ class ImprimirOrden extends FPDF{
             }
         }
 
-        $this->setX(16.5);
+        $this->setX(12.5);
         $this->SetFont('Arial','B',8);
-        $this->Cell(4,$y,'Total orden: $'.$totalOrden, 1, 1, 'R');
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Descuento: '.$model->descuento.'%', 1, 1, 'R');
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Total con descuento: $'.$totalOrden*(1-($model->descuento/100)), 1, 1, 'R');
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Costo emergencia: $'.$model->costo_emergencia, 1, 1, 'R');
-        $this->setX(16.5);
+        $this->Cell(4,$y,'Total orden', 0, 0, 'R');
+        $this->Cell(4,$y,'$'.number_format($totalOrden, 2), 'B', 1, 'R');
+        $this->setX(12.5);
+        $this->Cell(4,$y,'Descuento', 0, 0, 'R');
+        $this->Cell(4,$y,isset($model->descuento)?$model->descuento:'0'.' %', 'B', 1, 'R');
+        $this->setX(12.5);
+        $this->Cell(4,$y,'Total con descuento', 0, 0, 'R');
+        $this->Cell(4,$y,'$'.number_format($totalOrden*(1-($model->descuento/100)), 2), 'B', 1, 'R');
+        $this->setX(12.5);
+        $this->Cell(4,$y,'Costo emergencia', 0, 0, 'R');
+        $this->Cell(4,$y,'$'.number_format($model->costo_emergencia, 2), 'B', 1, 'R');
+        $this->setX(12.5);
         $total = $totalOrden*(1-($model->descuento/100)) + $model->costo_emergencia;
-        $this->Cell(4,$y,'Total: $'.$total, 1, 1, 'R');
+        $this->Cell(4,$y,'Total', 0, 0, 'R');
+        $this->Cell(4,$y,'$'.number_format($total, 2), 'B', 1, 'R');
         $pagos = $model->pagos;
         $totalPagado = 0;
         foreach ($pagos as $pago) {
             $totalPagado +=  $pago->efectivo + $pago->cheque + $pago->tarjeta;
         }
-        $this->setX(16.5);
-        $this->Cell(4,$y,'Pago: $'.$totalPagado, 1, 1, 'R');
-        $this->setX(16.5);
-        $this->Cell(4,$y,(($total-$totalPagado)>0?'Saldo':'Cambio').': $'.abs($total-$totalPagado), 1, 1, 'R');
+        $this->setX(12.5);
+        $this->Cell(4,$y,'Pago', 0, 0, 'R');
+        $this->Cell(4,$y,'$'.number_format($totalPagado, 2), 'B', 1, 'R');
+        $this->setX(12.5);
+        $this->Cell(4,$y,(($total-$totalPagado)>0?'Saldo':'Cambio'), 0, 0, 'R');
+        $this->Cell(4,$y,'$'.number_format(abs($total-$totalPagado), 2), 'B', 1, 'R');
 
         //Observaciones
         $this->ln(1);
