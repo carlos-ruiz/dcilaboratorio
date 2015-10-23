@@ -1,6 +1,8 @@
 <?php
 require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
 class ImprimirResultados extends FPDF{
+    public $model;
+    public $examenesImpresos = array();
 
 	function Header(){
         if(Yii::app()->user->getState('perfil')=='Administrador')
@@ -174,8 +176,14 @@ class ImprimirResultados extends FPDF{
             }
         }
 
-        $examenesImpresos=array();
+//        $this->examenesImpresos=array();
 
+        //AQUI VA  A EMPEZAR LA IMPRESION DE RESULTADOS
+        foreach ($gruposExistentesEnOrden as $grupo) {
+            $this->imprimirGrupo($grupo);
+        }
+
+/*
         foreach ($gruposExistentesEnOrden as $grupo) {
 
             $grupo = Grupos::model()->findByPk($grupo);
@@ -219,7 +227,7 @@ class ImprimirResultados extends FPDF{
                     if($examen->id!=$idExamen){
                     $this->SetFont('Arial','B',8);
                     $this->SetFillColor(213, 224, 241);
-                    $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
+                    //$this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
                     }
 
                     $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
@@ -239,10 +247,10 @@ class ImprimirResultados extends FPDF{
             }
             if($grupo->comentarios!=null){
              $this->Cell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 1, 'L', false);
-            }
+            }this->
         }
-
-        if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
+*/
+        if(sizeof($idsExamenes)!=sizeof($this->examenesImpresos)){
             $this->SetFillColor(117, 163, 240);
             $this->Cell(19.5,$y, "EXÁMENES INDIVIDUALES" ,1, 1, 'C', true);
         }
@@ -251,7 +259,7 @@ class ImprimirResultados extends FPDF{
 
         //return;
         foreach ($idsExamenes as $idExamen) {
-            if(!in_array($idExamen,$examenesImpresos)){
+            if(!in_array($idExamen,$this->examenesImpresos)){
                 $examen=Examenes::model()->findByPk($idExamen);
                 if($examen->id!=$idExamenExiste){
                     $this->SetFont('Arial','B',8);
@@ -287,6 +295,45 @@ class ImprimirResultados extends FPDF{
         $fecha = date("d/m/y  H:i");
         $this->Cell(10,$y,'Impresión en Morelia, Mich. a '.$fecha, 0, 1);
 
+    }
+
+    function imprimirGrupo($idGrupo){
+        $y = 0.5;
+        $grupo = Grupos::model()->findByPk($idGrupo);
+        $this->SetFillColor(117, 163, 240);
+        //Imprimir si esta en la orden o es hijo de uno que si este en la orden y no haya sido impreso antes
+        $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
+        
+        $perfilDePerfiles = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
+        if(empty($perfilDePerfiles)){
+            foreach ($grupo->grupoTiene as $grupoExamen) {
+                foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
+                    if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
+                        //Pintamos el examen
+                        array_push($this->examenesImpresos, $detalleExamen->id_examenes);
+      
+                        $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
+                        $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
+                        $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
+                        $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
+                        if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                            $this->SetFont('Times','BI',8);
+                            $this->SetTextColor(255, 0, 0);
+                        }
+                        $this->Cell(3.5,$heightRow,$ordenExamen->resultado,1, 0 , 'C');
+                        $this->SetTextColor(0, 0, 0);
+                        $this->SetFont('Arial','B',8);
+                        $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
+                        $this->MultiCell(5,$y, $rango,1, 'C');
+                    }
+                }
+            }
+        }else{
+            $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
+            foreach ($hijos as $grupoHijo) {
+                $this->imprimirGrupo($grupoHijo->id_grupo_hijo);
+            }
+        }
     }
 
     function Footer()
