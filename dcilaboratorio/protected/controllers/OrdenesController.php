@@ -134,7 +134,7 @@ class OrdenesController extends Controller
 			$validateExamenes=true;
 			$examenesIds=array();
 			if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids']))
-				$examenesIds = split(',',$_POST['Examenes']['ids']);
+				$examenesIds = array_unique(split(',',$_POST['Examenes']['ids']));
 			else{
 				$mensaje="Debe agregar al menos un examen a la orden";
 				$titulo="Aviso";
@@ -160,7 +160,6 @@ class OrdenesController extends Controller
 					$validateExamenes=false;
 				}
 			}
-
 
 			if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
 			$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
@@ -392,19 +391,22 @@ class OrdenesController extends Controller
 						$direccion->delete();
 					}
 				}
+				if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids'])){
+					$examenesIds = array_unique(split(',',$_POST['Examenes']['ids']));
+				}else{
+					$mensaje="Debe agregar al menos un examen a la orden";
+					$titulo="Aviso";
+					$validateExamenes=false;
+				}
+
+				$examenesCalificados=array();
 				foreach ($ordenExamenes as $ordenExamen) {
+					if(isset($ordenExamen->resultado))
+						$examenesCalificados[$ordenExamen->id_detalles_examen]=$ordenExamen->resultado;
 					$ordenExamen->delete();
 				}
 				foreach ($ordenGrupos as $ordenGrupo) {
 					$ordenGrupo->delete();
-				}
-				if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids'])){
-					$examenesIds = split(',',$_POST['Examenes']['ids']);
-				}
-				else{
-					$mensaje="Debe agregar al menos un examen a la orden";
-					$titulo="Aviso";
-					$validateExamenes=false;
 				}
 
 				if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
@@ -465,7 +467,9 @@ class OrdenesController extends Controller
 							$ordenTieneExamenes->ultima_edicion=$fecha_edicion;
 							$ordenTieneExamenes->usuario_ultima_edicion=Yii::app()->user->id;;
 							$ordenTieneExamenes->creacion=$fecha_creacion;
-							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;;
+							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;
+							if(isset($examenesCalificados[$detalle->id]))
+								$ordenTieneExamenes->resultado=$examenesCalificados[$detalle->id];
 							$ordenTieneExamenes->save();
 						}
 					}
@@ -528,7 +532,7 @@ class OrdenesController extends Controller
 			$examensPorGrupo=$grupo->grupoTiene;
 			$idsExemenesDelGrupo="";
 			foreach ($examensPorGrupo as $examenGrupo) {
-				$idsExemenesDelGrupo.=$examenGrupo->id_examenes;
+				$idsExemenesDelGrupo.=$examenGrupo->id_examenes.",";
 			}
 			$idsExemenesDelGrupo=substr($idsExemenesDelGrupo, 0,strlen($idsExemenesDelGrupo)-1);
 			$gruposTieneExamenes[$grupo->id]=$idsExemenesDelGrupo;
@@ -947,6 +951,7 @@ class OrdenesController extends Controller
 		$model = $this->loadModel($id);
 		$pdf = new ImprimirResultados('P','cm','letter');
 		$pdf->AddPage();
+		$pdf->model = $model;
 		//$pdf->cabeceraHorizontal($model);
 		$pdf->contenido($model);
 		$pdf->Output();

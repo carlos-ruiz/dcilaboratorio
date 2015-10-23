@@ -386,10 +386,12 @@ echo $form->errorSummary($datosFacturacion);
 								</tr>
 							<?php endforeach; ?>
 							<?php foreach ($listaTarifasExamenes as $tarifaExamen): ?>
+
 								<?php if(!in_array($tarifaExamen->id_examenes, $listaExamenesEnGrupos)){?>
+
 								<tr class='row_<?php echo $tarifaExamen->id_examenes;?>' data-id='<?php echo $tarifaExamen->id_examenes;?>'>
-									<td><?php echo $tarifaExamen->examen->clave; ?></td>
-									<td><?php echo $tarifaExamen->examen->nombre; ?></td>
+									<td><?php if(isset($tarifaExamen->examen->clave))echo $tarifaExamen->examen->clave; ?></td>
+									<td><?php if(isset($tarifaExamen->examen->nombre))echo $tarifaExamen->examen->nombre; ?></td>
 									<td class="precioExamen" data-val="<?php echo isset($tarifaExamen->precio)?$tarifaExamen->precio:0; ?>">
 
 									<?php echo isset($tarifaExamen->precio)?
@@ -536,7 +538,10 @@ echo $form->errorSummary($datosFacturacion);
 var examenesGrupo=[];
 <?php foreach ($examenesPorGrupo as $key => $value)  {
 	echo "examenesGrupo['grupo".$key."']='".$value."';";
+	
 } ?>
+	
+
 
 	examenesIds=[];
 	gruposIds=[];
@@ -563,6 +568,16 @@ var examenesGrupo=[];
 	function setGruposIds(){
 		var ids=gruposIds.join();
 		$("#gruposIds").val(ids);
+	}
+
+	function agregarExamenesDeGruposALaOrden(id){
+		var idsExamenesGrupo = examenesGrupo['grupo'+id].split(',');
+		for(var i=0; i<idsExamenesGrupo.length; i++){
+			if(examenesIds.indexOf(idsExamenesGrupo[i])<0){
+				examenesIds.push(idsExamenesGrupo[i]);
+			}
+		}
+		setExamenesIds();
 	}
 
 	function setColorDebe(){
@@ -777,9 +792,21 @@ var examenesGrupo=[];
 	$(".eliminarExamen").each(function(){
 		examenesIds.push($(this).data('id'));
 	});
+
+	//Se ejeccuta al cargar la pgina
 	activarEliminacion();
+
+	//le pone lo ids de examenes individuales
 	setExamenesIds();
+	
+	//le pone al hidden de grupos los grupos de la orden
 	setGruposIds();
+
+	//le pone al hidden de examenes los ids de los examenes en los grupos
+	for (var i = 0; i<gruposIds.length; i++) {
+		agregarExamenesDeGruposALaOrden(gruposIds[i]);
+	}
+	
 	total=calcularTotal();
 	setTotal(total);
 	granTotal=calcularGranTotal();
