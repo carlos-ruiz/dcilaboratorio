@@ -8,9 +8,9 @@
 	<?php echo CHtml::link('<i class="icon-plus"></i> Nuevo perfil / p. perfil', array('grupos/create'), array('class'=>'btn')); ?>
 </div>
 
-<?php 
+<?php
 $this->renderPartial(
-	'/comunes/_comunAdmin', 
+	'/comunes/_comunAdmin',
 	array(
 		'model'=>$model,
 		'titulo'=>'Grupos de ex&aacute;menes',
@@ -19,7 +19,7 @@ $this->renderPartial(
 			'nombre'
 		)
 	)
-); 
+);
 
 ?>
 

@@ -141,7 +141,12 @@ class FacturacionController extends Controller
 		$anio = date('Y');
 		$periodo = $mes.'/'.$anio;
 		$contador = ConteoTimbresUsados::model()->find("anio=? AND mes=?", array($anio, $mes));
-		$contador = $contador->cantidad;
+		if(isset($contador)){
+			$contador = $contador->cantidad;
+		}
+		else{
+			$contador = 0;
+		}
 		$importe = number_format($contador*3, 2);
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['FacturasExpedidas']))
@@ -252,7 +257,7 @@ class FacturacionController extends Controller
 						$this->prepararCFD($model);
 						$model->csd_emisor = $this->generarCFD();
 						$result = $this->imprimirFactura($model);
-						
+
 						if (isset($result['titulo']) && isset($result['mensaje'])) {
 							$titulo = $result['titulo'];
 							$mensaje = $result['mensaje'];
@@ -405,9 +410,9 @@ class FacturacionController extends Controller
 		file_put_contents($pngPath, $png);
 		$facturaExpedida->qr_png = $response['b64cbb'];
 
-		
+
 		if($facturaExpedida->validate()){
-			
+
 			if($facturaExpedida->save()){
 				$conceptos = $facturacionModel->conceptos;
 				$facturacionModel->numeroFactura = $facturaExpedida->id;
@@ -424,7 +429,7 @@ class FacturacionController extends Controller
 			$this->redirect(array('reimprimirFactura', 'id' => $facturaExpedida->id));
 		}
 
-		
+
 	}
 
 	public function actionReimprimirFactura($id){

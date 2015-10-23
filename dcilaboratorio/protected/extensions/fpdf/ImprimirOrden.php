@@ -6,9 +6,6 @@ class ImprimirOrden extends FPDF{
         $y = 0.5;
 		$this->SetFont('Arial','B',18);
 		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1,1.7,2.3,2.3);
-    // Move to the right
-    //$this->Cell(8);
-    // Title
 		$this->SetXY(4, .75);
         $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
         $this->ln(0.75);
@@ -20,26 +17,25 @@ class ImprimirOrden extends FPDF{
         $this->SetX(4);
         $this->SetFont('Times','',8);
         $y = 0.4;
-        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Gnl.Bravo #170', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
         $this->Cell(5, $y, 'Francisco Madero #145', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');      
+        $this->Cell(4.3, $y, 'Col. Chapultepec Nte. C.P. 58260', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Col. Centro', 0, 0, 'C');
         $this->Cell(5, $y, 'Fracc. Ex Gob. Gildardo Magaña', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');
         $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
         $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Lun-Vie 07:00 a 20:00', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
         $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
         $this->SetX(4);
-        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');       
+        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');
         $this->Cell(6.5, $y, 'Lun-Sab 07:00 a 15:00', 0, 0, 'C');
         $this->Cell(5, $y, 'Lun-Sab 07:00 a 15:00', 0, 1, 'C');
-        
 	}
 
 	function cabeceraHorizontal($model)
@@ -57,10 +53,11 @@ class ImprimirOrden extends FPDF{
 
         $fecha = $dia.'/'.$fecha[1].'/'.$fecha[0].'   '. $hora[0].':'.$hora[1];
         $this->Cell(2,$y,$fecha, 0, 1);
+        $this->setY(6);
         $this->setX(1);
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
-        $this->Cell(10,$y,'Orden de Trabajo', 0, 1);
+        // $this->Cell(10,$y,'Orden de Trabajo', 0, 1);
         $this->SetFont('Arial','',8);
         $this->SetTextColor(0, 0, 0);
         $this->Cell(3,$y,'Folio:', 0, 0);
@@ -86,11 +83,11 @@ class ImprimirOrden extends FPDF{
         $this->ln(0.5);
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
-        $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
+        // $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
         $this->SetTextColor(0, 0, 0);
 
 
-        $this->SetXY(1, 10);
+        $this->SetXY(1, 8.5);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
         $this->SetTextColor(0, 0, 0); //Letra color blanco
@@ -108,26 +105,96 @@ class ImprimirOrden extends FPDF{
     	$this->SetFont('Arial','',8);
     	$posYOriginal = 7;
     	$posYIncremento = 1.5;
-    	$this->setXY(1,10.5);
+    	$this->setXY(1,9);
     	$y = 0.5;
         $ordenTieneExamenes = $model->ordenTieneExamenes;
         $idExamen = 0;
         $totalOrden = 0;
         $duracion = 0;
+        //examenes de la orden
+        $idsExamenes=array();
         foreach ($ordenTieneExamenes as $ordenExamen) {
-            $examen = $ordenExamen->detalleExamen->examenes;
-            if($examen->id!=$idExamen){
-                $this->Cell(3.5,$y, $examen->clave,1, 0);
-                $this->Cell(12,$y, $examen->nombre,1, 0 );
-                $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
-                $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
-                $totalOrden += $precio->precio;
-                if ($examen->duracion_dias > $duracion) {
-                    $duracion = $examen->duracion_dias;
+            array_push($idsExamenes, $ordenExamen->detalleExamen->id_examenes);
+        }
+
+        //grupos de la orden
+        $grupos = Grupos::model()->findAll();
+        $gruposExistentesEnOrden=array();
+
+        foreach ($grupos as $grupo) {
+            $examenes=GrupoExamenes::model()->findAll("id_grupos_examenes=?",array($grupo->id));
+            $tiene=true;
+            // print_r($examenes);return;
+            foreach($examenes as $grupoExamen){
+                if(!in_array($grupoExamen->id_examenes, $idsExamenes)){
+                    $tiene=false;
+                    break;
                 }
             }
-            $idExamen = $examen->id;
+            if($tiene){
+             array_push($gruposExistentesEnOrden,$grupo->id);
+            }
         }
+
+        $examenesImpresos=array();
+        foreach ($gruposExistentesEnOrden as $grupo) {
+            $grupo = Grupos::model()->findByPk($grupo);
+            $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupo->id));
+            if (isset($ordenTieneGrupo)) {
+                $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
+                $examenesIds=array();
+                $this->SetFillColor(213, 224, 241);
+
+                foreach ($examenesEnGrupo as $grupoExamen) {
+                    array_push($examenesIds, $grupoExamen->id_examenes);
+                }
+                $totalPrecioGrupo = 0;
+                foreach ($ordenTieneExamenes as $ordenExamen) {
+                    $examen = $ordenExamen->detalleExamen->examenes;
+                    if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
+                        //Pintamos el examen
+                        array_push($examenesImpresos, $examen->id);
+                        if($examen->id!=$idExamen){
+                            // $this->Cell(3.5,$y, $examen->clave,1, 0);
+                            // $this->Cell(12,$y, $examen->nombre,1, 0 );
+                            $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
+                            // $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
+                            $totalOrden += $precio->precio;
+                            $totalPrecioGrupo += $precio->precio;
+                            if ($examen->duracion_dias > $duracion) {
+                                $duracion = $examen->duracion_dias;
+                            }
+                        }
+                        $idExamen = $examen->id;
+                    }
+                }
+                $this->Cell(3.5,$y, $grupo->clave,1, 0);
+                $this->Cell(12,$y, $grupo->nombre ,1, 0, 'C', false);
+                $this->Cell(4,$y, '$ '.$totalPrecioGrupo,1, 1, 'R');
+            }
+        }
+
+        if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
+            $this->Cell(19.5,$y, "Exámenes individuales" ,1, 1, 'C', true);
+        }
+        $idExamenExiste = 0;
+        foreach ($idsExamenes as $idExamen) {
+            if(!in_array($idExamen,$examenesImpresos)){
+                $examen=Examenes::model()->findByPk($idExamen);
+                if($examen->id!=$idExamenExiste){
+                    $this->Cell(3.5,$y, $examen->clave,1, 0);
+                    $this->Cell(12,$y, $examen->nombre,1, 0 );
+                    $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
+                    $this->Cell(4,$y, '$ '.$precio->precio,1, 1, 'R');
+                    $totalOrden += $precio->precio;
+                    if ($examen->duracion_dias > $duracion) {
+                        $duracion = $examen->duracion_dias;
+                    }
+                }
+                $idExamenExiste = $examen->id;
+            }
+        }
+
         $this->setX(16.5);
         $this->SetFont('Arial','B',8);
         $this->Cell(4,$y,'Total orden: $'.$totalOrden, 1, 1, 'R');
@@ -148,7 +215,7 @@ class ImprimirOrden extends FPDF{
         $this->setX(16.5);
         $this->Cell(4,$y,'Pago: $'.$totalPagado, 1, 1, 'R');
         $this->setX(16.5);
-        $this->Cell(4,$y,'Saldo: $'.($total-$totalPagado), 1, 1, 'R');
+        $this->Cell(4,$y,(($total-$totalPagado)>0?'Saldo':'Cambio').': $'.abs($total-$totalPagado), 1, 1, 'R');
 
         //Observaciones
         $this->ln(1);
@@ -174,11 +241,11 @@ class ImprimirOrden extends FPDF{
 
     function Footer()
 	{
-	//Position at 1.5 cm from bottom
-    $this->SetY(-6);
-    //Arial italic 8
-    $this->SetFont('Arial','I',8);
-    //Page number
-    $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
+    	//Position at 1.5 cm from bottom
+        $this->SetY(-6);
+        //Arial italic 8
+        $this->SetFont('Arial','I',8);
+        //Page number
+        $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
 	}
 }

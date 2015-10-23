@@ -161,7 +161,7 @@ class UsuariosController extends Controller
 	{
 		$model=Usuarios::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404,'no existe la página solicitada.');
+			throw new CHttpException(404,'La página solicitada no existe.');
 		return $model;
 	}
 

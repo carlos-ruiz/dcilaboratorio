@@ -7,8 +7,8 @@ var ComponentsDropdowns = function () {
             allowClear: true
         });
 
-        $('#select2_sample2').select2({
-            placeholder: "Select a State",
+        $('.select2').select2({
+            placeholder: "--Seleccione--",
             allowClear: true
         });
 

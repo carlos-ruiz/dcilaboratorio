@@ -172,6 +172,10 @@ class Doctores extends CActiveRecord
 		return $this->titulo->nombre.' '.$this->nombre.' '.$this->a_paterno.' '.$this->a_materno;
 	}
 
+	public function getNombreCompleto(){
+		return $this->nombre.' '.$this->a_paterno.' '.$this->a_materno;
+	}
+
 	public function obtenerPorUserId($id){
 		return $this->model()->find("id_usuarios=?",array($id));
 	}

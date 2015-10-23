@@ -41,6 +41,8 @@
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
+
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-multi-select/css/multi-select.css"/>
 	<!-- END GLOBAL MANDATORY STYLES -->
 	<!-- BEGIN THEME STYLES -->
 	<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css"/>
@@ -106,7 +108,7 @@
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 			</div>
 		</div>
-		<div class="floatLeft col-md-8">
+		<div class="floatLeft col-md-7">
 			<div class="col-md-4 fontSize10">
 				<h5  class="heading" style="color:#1e90ff ">Unidad Chapultepec</h5>
 				General Nicolás Bravo No. 170
@@ -128,7 +130,7 @@
 				<h5  class="heading" style="color:#1e90ff ">Unidad Amado Nervo</h5>
 				Amado Nervo No. 392-4
 				<br />Colonia Centro
-				<br />Código 58000
+				<br />Código Postal 58000
 				<br />Teléfono Fax. (443) 326 98 91
 				<br />Lunes a Sábado de 07:00 a 15:00 hrs.
 			</div>
@@ -195,6 +197,9 @@
 			<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
 			<?php
+			//echo base64_decode("bGFiJDMz");
+			//sil33dci - lab$33
+			//J. 31dci - lab?31
 			if(Yii::app()->user->getState('perfil')=='Administrador')
 				include_once("menu_admin.php");
 			if(Yii::app()->user->getState('perfil')=='Doctor')
@@ -257,7 +262,7 @@
 
 			<!-- BEGIN PAGE CONTENT-->
 			<div >
-				
+
 				<div class="row">
 					<div class="col-md-12">
 
@@ -313,6 +318,8 @@
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/components-pickers.js" type="text/javascript"></script>
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/components-dropdowns.js" type="text/javascript"></script>
+
 <script src="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/scripts/ui-extended-modals.js" type="text/javascript"></script>
 
 <!--
@@ -330,7 +337,10 @@ jQuery(document).ready(function() {
 	QuickSidebar.init(); // init quick sidebar
 	Demo.init(); // init demo features
 	ComponentsPickers.init();
-
+	$('.select2').select2({
+            placeholder: "--Seleccione--",
+            allowClear: true
+        });
 	$(".date-picker").datepicker({
 	    language: 'es',
 	});

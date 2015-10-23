@@ -14,8 +14,12 @@
  * The followings are the available model relations:
  * @property GrupoTieneExamenes[] $grupoTieneExamenes
  */
+
 class Grupos extends CActiveRecord
 {
+
+	public $examenes;
+	public $grupos;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -32,13 +36,14 @@ class Grupos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-array('nombre', 'unique'),
+			array('nombre, ultima_edicion, clave, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('nombre', 'unique'),
 			array('usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
 			array('nombre', 'length', 'max'=>250),
+			array('comentarios', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nombre, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
+			array('id, nombre,  comentarios, clave, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,7 +55,7 @@ array('nombre', 'unique'),
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'grupoTiene' => array(self::HAS_MANY, 'GrupoExamenes', 'id_grupos_examenes'),
+			'grupoTiene' => array(self::HAS_MANY, 'GrupoExamenes', 'id_grupos_examenes','together'=>true),
 		);
 	}
 
@@ -62,6 +67,8 @@ array('nombre', 'unique'),
 		return array(
 			'id' => 'ID',
 			'nombre' => 'Nombre',
+			'comentarios'=>'Método',
+			'clave'=>'Clave',
 			'ultima_edicion' => 'Ultima Edicion',
 			'usuario_ultima_edicion' => 'Usuario Ultima Edicion',
 			'creacion' => 'Creacion',
@@ -88,7 +95,9 @@ array('nombre', 'unique'),
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('clave',$this->clave,true);
 		$criteria->compare('nombre',$this->nombre,true);
+		$criteria->compare('comentarios',$this->comentarios,true);
 		$criteria->compare('ultima_edicion',$this->ultima_edicion,true);
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
@@ -118,5 +127,24 @@ array('nombre', 'unique'),
 				$data[$grupo->id]=$grupo->nombre;
 		}
 		return $data;
+	}
+
+	public function selectListMultiple($idPadre=0){
+		$grupos = $this->model()->findAll('activo=1');
+		$data = array();
+		foreach ($grupos as $grupo) {
+			if($grupo->id!==$idPadre)
+				$data[$grupo->id]=$grupo->nombre;
+		}
+		return $data;
+	}
+
+	public function perfilEsHijoDe($idHijo, $idPadre){
+		$resultado = GruposPerfiles::model()->find('id_grupo_padre=? AND id_grupo_hijo=?',array($idPadre, $idHijo));
+		if (isset($resultado)) {
+			return 1;
+		}else {
+			return 0;
+		}
 	}
 }

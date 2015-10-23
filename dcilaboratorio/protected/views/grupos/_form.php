@@ -21,6 +21,14 @@
 
 <div class="form-body">
 
+	<div class="form-group <?php if($form->error($model,'clave')!=''){ echo 'has-error'; }?>">
+		<?php echo $form->labelEx($model,'clave', array('class'=>'control-label')); ?>
+		<div class="input-group">
+			<?php echo $form->textField($model,'clave',array('size'=>45,'maxlength'=>250, 'class'=>'form-control')); ?>
+			<?php echo $form->error($model,'clave', array('class'=>'help-block')); ?>
+		</div>
+	</div>
+
 	<div class="form-group <?php if($form->error($model,'nombre')!=''){ echo 'has-error'; }?>">
 		<?php echo $form->labelEx($model,'nombre', array('class'=>'control-label')); ?>
 		<div class="input-group">
@@ -48,21 +56,22 @@
 </div><!-- form -->
 
 <script type="text/javascript">
-	var checks="";
+
 	$( "input[type=checkbox]" ).each(function(){
 		if($(this).is(':checked')){
-			checks+=$(this).val()+",";
+			$("#perfilote").show(400);
+		}else{
+			$("#perfilote").hide(400);
 		}
 	});
-	$("#idsTiene").val(checks.replace(/on,/g, ''));
-
 	$( "input[type=checkbox]" ).click(function(){
-		var checks="";
-		$( "input[type=checkbox]" ).each(function(){
-			if($(this).is(':checked')){
-				checks+=$(this).val()+",";
-			}
-		});
-		$("#idsTiene").val(checks.replace(/on,/g, ''));
+		if($(this).is(':checked')){
+			$("#perfilote").show(400);
+		}else{
+			$("#perfilote").hide(400);
+		}
 	});
+
+
+
 </script>

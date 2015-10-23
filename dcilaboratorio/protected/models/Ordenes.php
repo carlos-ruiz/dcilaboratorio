@@ -67,6 +67,7 @@ class Ordenes extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'ordenTieneExamenes' => array(self::HAS_MANY, 'OrdenTieneExamenes', 'id_ordenes'),
+			'ordenTieneGrupos' => array(self::HAS_MANY, 'OrdenTieneGrupos', 'id_ordenes'),
 			'doctor' => array(self::BELONGS_TO, 'Doctores', 'id_doctores'),
 			'multitarifarios' => array(self::BELONGS_TO, 'Multitarifarios', 'id_multitarifarios'),
 			'status' => array(self::BELONGS_TO, 'Status', 'id_status'),
@@ -142,8 +143,9 @@ class Ordenes extends CActiveRecord
 			$criteria->with=array('ordenFacturacion');
 			$criteria->compare('ordenFacturacion.id_usuarios',Yii::app()->user->id);
 		}
-		if(Yii::app()->user->getState('perfil')=='Doctor'){	
+		if(Yii::app()->user->getState('perfil')=='Doctor'){
 			$criteria->compare('id_doctores',Yii::app()->user->getState('id_persona'));
+			$criteria->compare('compartir_con_doctor',1);
 		}
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -177,7 +179,7 @@ class Ordenes extends CActiveRecord
 			$criteria->with=array('ordenFacturacion');
 			$criteria->compare('ordenFacturacion.id_usuarios',Yii::app()->user->id);
 		}
-		if(Yii::app()->user->getState('perfil')=='Doctor'){	
+		if(Yii::app()->user->getState('perfil')=='Doctor'){
 			$criteria->compare('id_doctores',Yii::app()->user->getState('id_persona'));
 		}
 		return new CActiveDataProvider($this, array(
@@ -198,7 +200,7 @@ class Ordenes extends CActiveRecord
 	}
 
 	public function obtenerDoctores(){
-		return CHtml::listData(Doctores::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombre');
+		return CHtml::listData(Doctores::model()->findAll(array('condition'=>'activo=1','order'=>'nombre')), 'id', 'nombreCompleto');
 	}
 
 	public function obtenerMultitarifarios(){
