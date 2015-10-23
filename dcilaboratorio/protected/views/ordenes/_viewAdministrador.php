@@ -231,6 +231,10 @@ $pagado=$totalOrden-$total;
 							endforeach;
 							echo'</table>';
 							?>
+							<br />
+							<?php if(isset($model->comentarios_resultados))
+									echo "COMENTARIOS: ".$model->comentarios_resultados;
+							 ?>
 						</div>
 
 					</div>

@@ -50,11 +50,11 @@ class Ordenes extends CActiveRecord
 		return array(
 			array('id_status, fecha_captura, id_multitarifarios, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
 			array('id_doctores, id_status, id_unidades_responsables, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),
-			array('informacion_clinica_y_terapeutica, comentarios', 'length', 'max'=>256),
+			array('informacion_clinica_y_terapeutica, comentarios, comentarios_resultados', 'length', 'max'=>256),
 			array('costo_emergencia', 'length', 'max'=>8),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, id_doctores, id_status, id_unidades_responsables, fecha_captura, informacion_clinica_y_terapeutica, comentarios, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, costo_emergencia, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search, searchRequiereFactura'),
+			array('id, id_doctores, id_status, id_unidades_responsables, fecha_captura, informacion_clinica_y_terapeutica, comentarios, comentarios_resultados, requiere_factura, descuento, id_multitarifarios, compartir_con_doctor, costo_emergencia, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'safe', 'on'=>'search, searchRequiereFactura'),
 		);
 	}
 
@@ -91,6 +91,7 @@ class Ordenes extends CActiveRecord
 			'fecha_captura' => 'Fecha Captura',
 			'informacion_clinica_y_terapeutica' => 'Información Clínica y Terapéutica',
 			'comentarios' => 'Comentarios',
+			'comentarios_resultados' => 'Comentarios sobre resultados',
 			'requiere_factura' => '¿Requiere factura?',
 			'descuento' => '% de Descuento',
 			'id_multitarifarios' => 'Multitarifario',
@@ -130,6 +131,7 @@ class Ordenes extends CActiveRecord
 		$criteria->compare('fecha_captura',$this->fecha_captura,true);
 		$criteria->compare('informacion_clinica_y_terapeutica',$this->informacion_clinica_y_terapeutica,true);
 		$criteria->compare('comentarios',$this->comentarios,true);
+		$criteria->compare('comentarios_resultados',$this->comentarios_resultados,true);
 		$criteria->compare('requiere_factura',$this->requiere_factura);
 		$criteria->compare('descuento',$this->descuento);
 		$criteria->compare('id_multitarifarios',$this->id_multitarifarios);
@@ -139,6 +141,7 @@ class Ordenes extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		$criteria->order = 'fecha_captura DESC';
 		if(Yii::app()->user->getState('perfil')=='Paciente'){
 			$criteria->with=array('ordenFacturacion');
 			$criteria->compare('ordenFacturacion.id_usuarios',Yii::app()->user->id);
@@ -166,6 +169,7 @@ class Ordenes extends CActiveRecord
 		$criteria->compare('fecha_captura',$this->fecha_captura,true);
 		$criteria->compare('informacion_clinica_y_terapeutica',$this->informacion_clinica_y_terapeutica,true);
 		$criteria->compare('comentarios',$this->comentarios,true);
+		$criteria->compare('comentarios_resultados',$this->comentarios_resultados,true);
 		$criteria->compare('requiere_factura','1');
 		$criteria->compare('descuento',$this->descuento);
 		$criteria->compare('id_multitarifarios',$this->id_multitarifarios);
@@ -175,6 +179,7 @@ class Ordenes extends CActiveRecord
 		$criteria->compare('usuario_ultima_edicion',$this->usuario_ultima_edicion);
 		$criteria->compare('creacion',$this->creacion,true);
 		$criteria->compare('usuario_creacion',$this->usuario_creacion);
+		$criteria->order = 'fecha_captura DESC';
 		if(Yii::app()->user->getState('perfil')=='Paciente'){
 			$criteria->with=array('ordenFacturacion');
 			$criteria->compare('ordenFacturacion.id_usuarios',Yii::app()->user->id);

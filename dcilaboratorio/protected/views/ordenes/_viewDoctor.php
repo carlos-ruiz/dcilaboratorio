@@ -124,6 +124,10 @@
 				 endforeach;
 				 echo'</table>';
 				 ?>
+				 <br />
+				<?php if(isset($model->comentarios_resultados))
+						echo "COMENTARIOS: ".$model->comentarios_resultados;
+				 ?>
 			<?php }else{ ?>
 				<div style="width:100%" class="text-center">
 					<h1>Resultados no disponibles</h1>

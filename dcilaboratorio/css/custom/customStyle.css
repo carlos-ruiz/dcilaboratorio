@@ -94,3 +94,7 @@ input[type="radio"]{
 .select2-container input[type=text] {
 	min-width: 200px;
 }
+
+.width-all{
+	width:100%;
+}

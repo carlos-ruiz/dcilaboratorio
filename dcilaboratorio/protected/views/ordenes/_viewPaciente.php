@@ -223,6 +223,10 @@
 				 endforeach;
 				 echo'</table>';
 				 ?>
+				 <br />
+				<?php if(isset($model->comentarios_resultados))
+						echo "COMENTARIOS: ".$model->comentarios_resultados;
+				 ?>
 			<?php }else{ ?>
 				<div style="width:100%" class="text-center">
 					<h1>Para vel el resultado debes cubrir el costo total de la orden</h1>

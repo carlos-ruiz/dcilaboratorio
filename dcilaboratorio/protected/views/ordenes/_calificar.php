@@ -91,7 +91,17 @@
 			 ?>
 
 				<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
-				
+				<br />
+				<div class="row">
+					<div class="form-group col-md-12 <?php if($form->error($model,'comentarios_resultados')!=''){ echo 'has-error'; }?>">
+						<?php echo $form->labelEx($model,'comentarios_resultados', array('class'=>'control-label')); ?>
+						<div class="input-group width-all">
+							<?php echo $form->textArea($model,'comentarios_resultados',array('rows'=>3, 'cols'=>45, 'class'=>'form-control width-all')); ?>
+							<?php echo $form->error($model,'comentarios_resultados', array('class'=>'help-block')); ?>
+						</div>
+					</div>
+				</div>
+
 				<div class="form-actions" >
 						<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
 					</div>

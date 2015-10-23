@@ -3,6 +3,7 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
 class ImprimirResultados extends FPDF{
     public $model;
     public $examenesImpresos = array();
+    public $nivelImpresionSubgrupo=0;
 
 	function Header(){
         if(Yii::app()->user->getState('perfil')=='Administrador')
@@ -138,7 +139,7 @@ class ImprimirResultados extends FPDF{
             array_push($idsExamenes, $ordenExamen->detalleExamen->id_examenes);
         }
 
-        //grupos de la orden
+        //grupos de la orden de acuerdo a los examenes que tiene la orden
         $grupos = Grupos::model()->findAll();
         $gruposExistentesEnOrden=array();
 
@@ -172,13 +173,21 @@ class ImprimirResultados extends FPDF{
                 }
             }
             if($tiene){
-             array_push($gruposExistentesEnOrden,$grupo->id);
+                $this->nivelImpresionSubgrupo++;
+                array_push($gruposExistentesEnOrden,$grupo->id);
+                $this->nivelImpresionSubgrupo--;
             }
         }
 
 //        $this->examenesImpresos=array();
 
         //AQUI VA  A EMPEZAR LA IMPRESION DE RESULTADOS
+        $ordenTieneGrupos = OrdenTieneGrupos::model()->findAll('id_ordenes=?',array($model->id));
+        $gruposExistentesEnOrden=array();
+        foreach ($ordenTieneGrupos as $ordenTieneGrupo) {
+            array_push($gruposExistentesEnOrden,$ordenTieneGrupo->id_grupos);
+        }
+
         foreach ($gruposExistentesEnOrden as $grupo) {
             $this->imprimirGrupo($grupo);
         }
@@ -264,7 +273,7 @@ class ImprimirResultados extends FPDF{
                 if($examen->id!=$idExamenExiste){
                     $this->SetFont('Arial','B',8);
                     $this->SetFillColor(213, 224, 241);
-                    $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
+                    $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Método empleado: '.$examen->tecnica.')',1, 1 ,'C', true);
                 }
 
                 $this->Cell(9,$y,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
@@ -282,7 +291,9 @@ class ImprimirResultados extends FPDF{
             }
 
         }
-
+        $this->ln(1);
+        if($model->comentarios_resultados)
+            $this->Cell(19.5,$y,"COMENTARIOS: ".$model->comentarios_resultados, 0, 1, 'L');
         //Observaciones
         $this->ln(1);
         $this->ln(1);
@@ -301,7 +312,6 @@ class ImprimirResultados extends FPDF{
         $y = 0.5;
         $grupo = Grupos::model()->findByPk($idGrupo);
         $this->SetFillColor(117, 163, 240);
-        //Imprimir si esta en la orden o es hijo de uno que si este en la orden y no haya sido impreso antes
         $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
         
         $perfilDePerfiles = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
@@ -328,10 +338,52 @@ class ImprimirResultados extends FPDF{
                     }
                 }
             }
+            if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
+                $this->Cell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 1, 'L', false);
+            }
         }else{
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
+            
             foreach ($hijos as $grupoHijo) {
+                $this->nivelImpresionSubgrupo++;
                 $this->imprimirGrupo($grupoHijo->id_grupo_hijo);
+                $this->nivelImpresionSubgrupo--;
+            }
+
+            $examenesEnGruposHijo=array();
+            foreach ($hijos as $grupoHijo) {
+                $grupoExamenes=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupoHijo->id_grupo_hijo));
+                foreach ($grupoExamenes as $grupoExamen) {
+                    array_push($examenesEnGruposHijo, $grupoExamen->examen);
+                }
+            }
+            if(sizeof($grupo->grupoTiene)>sizeof($examenesEnGruposHijo)){
+                $this->SetFillColor(117, 163, 240);
+                $this->Cell(19.5,$y, "OTROS" ,1, 1, 'C', true);
+                foreach ($grupo->grupoTiene as $grupoExamen) {
+                    if(!in_array($grupoExamen->examen, $examenesEnGruposHijo) && !in_array($grupoExamen->examen->id, $this->examenesImpresos)){
+                        
+                        array_push($this->examenesImpresos, $grupoExamen->examen->id);
+                        foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {                        
+                            $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
+                            $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
+                            $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
+                            $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
+                            if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                                $this->SetFont('Times','BI',8);
+                                $this->SetTextColor(255, 0, 0);
+                            }
+                            $this->Cell(3.5,$heightRow,$ordenExamen->resultado,1, 0 , 'C');
+                            $this->SetTextColor(0, 0, 0);
+                            $this->SetFont('Arial','B',8);
+                            $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
+                            $this->MultiCell(5,$y, $rango,1, 'C');
+                        }
+                    }
+                }
+            }
+            if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
+                $this->Cell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 1, 'L', false);
             }
         }
     }

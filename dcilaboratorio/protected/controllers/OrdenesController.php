@@ -714,9 +714,12 @@ class OrdenesController extends Controller
 		foreach ($ordenTieneExamenes as $ordenExamen) {
 			array_push($ordenExamenes, $ordenExamen);
 		}
-
+		if(isset($_POST['Ordenes'])){
+			$model->comentarios_resultados=$_POST['Ordenes']['comentarios_resultados'];
+		}
 		if (isset($_POST['OrdenTieneExamenes'])) {
 			$calificada = true;
+
 			foreach ($_POST['OrdenTieneExamenes'] as $i => $value) {
 				$ordenExamenToSave = $ordenExamenes[$i];
 				$ordenExamenToSave->resultado = $value['resultado'];
@@ -732,16 +735,17 @@ class OrdenesController extends Controller
 
 			if($model->id_status == $statusPagada->id && $calificada){
 				$model->id_status = $statusFinalizada->id;
-				$model->save();
+				
 			}
 			elseif (!$calificada && $model->id_status == $statusFinalizada->id) {
 				$model->id_status = $statusPagada->id;
-				$model->save();
+				
 			}
 			elseif ($calificada && $model->id_status == $statusCreada->id) {
 				$model->id_status = $statusCalificada->id;
-				$model->save();
+				
 			}
+			$model->save();
 			$this->redirect(array('view','id'=>$model->id));
 		}
 		$this->render('_calificar',array(
@@ -961,6 +965,7 @@ class OrdenesController extends Controller
 		$model = $this->loadModel($id);
 		$pdf = new ImprimirResultadosArchivo('P','cm','letter');
 		$pdf->AddPage();
+		$pdf->model = $model;
 		//$pdf->cabeceraHorizontal($model);
 		$pdf->contenido($model);
 		$pdf->Output();
