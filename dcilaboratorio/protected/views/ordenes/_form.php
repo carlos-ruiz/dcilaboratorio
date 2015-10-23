@@ -310,7 +310,7 @@ echo $form->errorSummary($datosFacturacion);
 							</div>
 
 							<div class="form-group col-md-6">
-								<?php echo "<label class='control-label'>Perfiles</label>"?>
+								<?php echo "<label class='control-label'>Perfiles / P. perfiles </label>"?>
 								<div class="input-group">
 									<?php echo $form->dropDownList($examenes,'nombre', Grupos::model()->selectList(), array('class'=>'form-control input-medium select2me')); ?>
 								</div>

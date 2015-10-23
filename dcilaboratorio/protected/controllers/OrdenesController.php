@@ -803,8 +803,8 @@ class OrdenesController extends Controller
 		$pdf = new ImprimirResultados('P','cm','letter');
 		$pdf->AddPage();
 		$pdf->cabeceraHorizontal($model);
-		$pdf->contenido($model);
-		$pdf->Output();
+		$pdf->contenido($model);		 
+		$pdf->Output("OfficeForm.pdf",'I');
 	}
 
 	public function actionGruposPorExamen(){

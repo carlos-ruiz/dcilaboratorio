@@ -30,7 +30,7 @@
 	</div>
 
 	<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
-	Seleccione los examenes pertenecientes al grupo. <br />
+	Seleccione las determinaciones pertenecientes al perfil. <br />
 	<input type="hidden" value="" name="Grupos[tiene]" id="idsTiene" />
 	<div class="form-group <?php if($form->error($model,'nombre')!=''){ echo 'has-error'; }?>">
 		<div class="input-group">

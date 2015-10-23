@@ -73,7 +73,7 @@ class DetallesExamen extends CActiveRecord
 			'id' => 'ID',
 			'descripcion' => 'Parámetro',
 			'id_unidades_medida' => 'Unidad Medida',
-			'id_examenes' => 'Examen',
+			'id_examenes' => 'Determinación',
 			'rango_inferior' => 'Rango Inferior',
 			'rango_promedio'=>'Rango Promedio',
 			'rango_superior' => 'Rango Superior',

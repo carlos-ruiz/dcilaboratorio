@@ -89,7 +89,7 @@ class Doctores extends CActiveRecord
 			'a_paterno' => 'Apellido paterno',
 			'a_materno' => 'Apellido materno',
 			'correo_electronico' => 'Correo electrónico',
-			'hora_consulta_de' => 'Inicia consilta',
+			'hora_consulta_de' => 'Inicia consulta',
 			'hora_consulta_hasta' => 'Termina consulta',
 			'id_especialidades' => 'Especialidad',
 			'id_titulos' => 'Título',
