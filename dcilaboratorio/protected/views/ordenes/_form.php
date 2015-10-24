@@ -717,7 +717,8 @@ var examenesGrupo=[];
 	}
 
 	function setTotal(total){
-		total=Number((total).toFixed(2));
+		//total=Number((total).toFixed(2));
+		total=parseFloat(Math.round(total*100)/100).toFixed(2);
 		$(".total").text("$ "+total);
 	}
 
@@ -744,7 +745,8 @@ var examenesGrupo=[];
 	}
 
 	function setGranTotal(granTotal){
-		granTotal=Number((granTotal).toFixed(2));
+		//granTotal=Number((granTotal).toFixed(2));
+		granTotal=parseFloat(Math.round(granTotal*100)/100).toFixed(2);
 		$("#granTotal").text("$ "+granTotal);
 	}
 
@@ -769,6 +771,8 @@ var examenesGrupo=[];
 
 	function setPago(pago){
 		pago=Number((pago).toFixed(2));
+		pago=parseFloat(Math.round(pago*100)/100).toFixed(2);
+		
 		$("#pagoTotal").text("$ "+pago);
 		setColorDebe();
 	}
@@ -784,8 +788,20 @@ var examenesGrupo=[];
 		debe=Number((debe).toFixed(2));
 		if(debe<0)
 			debe=debe*(-1);
+		debe=parseFloat(Math.round(debe*100)/100).toFixed(2);
+		
 		$("#debe").text("$ "+debe);
 		setColorDebe();
+	}
+
+	function actualizarDecimalesPreciosTabla(){
+
+		$(".precioExamen").each(function(){
+			precio = $(this).data('val');
+			precio = parseFloat(Math.round(precio*100)/100).toFixed(2);
+			$(this).text("$ "+precio);
+		});
+		
 	}
 
 	//Inicializamos los ids por si viene una lista de examenes
@@ -815,7 +831,7 @@ var examenesGrupo=[];
 	setPago(pago);
 	debe=calcularDebe();
 	setDebe(debe);
-
+	actualizarDecimalesPreciosTabla();
 
 
 	$("#Examenes_nombre").change(function(){
@@ -826,6 +842,7 @@ var examenesGrupo=[];
 		$("#Examenes_nombre").select2('val',null);
 	});
 
+	//acomodar precios a dos decimales	
 	$("#agregarExamen").click(function(){
 		var idMultitarifario = $("#Ordenes_id_multitarifarios").val();
 		var idExamen = $("#Examenes_clave").val();
@@ -857,6 +874,7 @@ var examenesGrupo=[];
 						setGranTotal(granTotal);
 						debe=calcularDebe();
 						setDebe(debe);
+						actualizarDecimalesPreciosTabla();
 						unblock("examenes");
 					}
 				);
@@ -919,7 +937,7 @@ var examenesGrupo=[];
 							setGranTotal(granTotal);
 							debe=calcularDebe();
 							setDebe(debe);
-
+							actualizarDecimalesPreciosTabla();
 							unblock("examenes");
 						}
 					);
@@ -934,10 +952,14 @@ var examenesGrupo=[];
 		}
 	});
 
+	//acomodar precios a dos decimales
 	$("#Ordenes_id_multitarifarios").change(function(){
 		var ids="";
 		var idMultitarifario = $(this).val();
-
+		if(!idMultitarifario>0){
+			alerta("El multitarifario es obligatorio");
+			return;
+		}
 		if(examenesIds.length>0){
 			ids=examenesIds.join();
 			block("examenes");
@@ -953,6 +975,7 @@ var examenesGrupo=[];
 						activarEliminacion();
 						total=calcularTotal();
 						setTotal(total);
+						actualizarDecimalesPreciosTabla();
 						unblock("examenes");
 					}
 				);

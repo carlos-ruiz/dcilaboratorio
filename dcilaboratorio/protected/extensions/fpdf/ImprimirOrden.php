@@ -201,7 +201,7 @@ class ImprimirOrden extends FPDF{
         $this->Cell(4,$y,'$'.number_format($totalOrden, 2), 'B', 1, 'R');
         $this->setX(12.5);
         $this->Cell(4,$y,'Descuento', 0, 0, 'R');
-        $this->Cell(4,$y,isset($model->descuento)?$model->descuento:'0'.' %', 'B', 1, 'R');
+        $this->Cell(4,$y,(isset($model->descuento)?$model->descuento:'0').' %', 'B', 1, 'R');
         $this->setX(12.5);
         $this->Cell(4,$y,'Total con descuento', 0, 0, 'R');
         $this->Cell(4,$y,'$'.number_format($totalOrden*(1-($model->descuento/100)), 2), 'B', 1, 'R');
