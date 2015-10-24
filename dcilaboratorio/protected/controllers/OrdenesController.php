@@ -372,7 +372,6 @@ class OrdenesController extends Controller
 		{
 			$validaRequiereFactura=true;
 
-
 			if($model->requiere_factura==1){
 				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
 				$direccion->attributes=$_POST['Direcciones'];
@@ -418,10 +417,11 @@ class OrdenesController extends Controller
 				}
 
 				if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
-				$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
+					$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
 				}else{
 					$gruposIds=array();
 				}
+
 				foreach ($gruposIds as $grupoId) {
 					$ordenTieneGrupo = new OrdenTieneGrupos;
 					$ordenTieneGrupo->id_ordenes = $model->id;
@@ -434,6 +434,7 @@ class OrdenesController extends Controller
 					array_push($ordenTieneGrupos, $ordenTieneGrupo);
 				}
 
+
 				$examenes_precio = array();
 				$totalAPagar = 0;
 				$ordenPrecioExamenes = $model->precios;
@@ -443,7 +444,8 @@ class OrdenesController extends Controller
 				foreach ($examenesIds as $idExamen) {
 					$tarifaActiva=TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios));
 					if(isset($tarifaActiva)){
-						array_push($listaTarifasExamenes, $tarifaActiva);
+						if(!in_array($tarifaActiva, $listaTarifasExamenes))
+							array_push($listaTarifasExamenes, $tarifaActiva);
 						$totalAPagar+=$tarifaActiva->precio;
 						$examen_precio = new OrdenPrecioExamen;
 						$examen_precio->precio = $tarifaActiva->precio;
@@ -558,7 +560,7 @@ class OrdenesController extends Controller
 			'direccion' => $direccion,
 			'listaTarifasExamenes'=>$listaTarifasExamenes,
 			'examenesPorGrupo'=>$gruposTieneExamenes,
-			'ordenTieneGrupos'=>$model->ordenTieneGrupos,
+			'ordenTieneGrupos'=>empty($ordenTieneGrupos)?$model->ordenTieneGrupos:$ordenTieneGrupos,
 			));
 
 		$this->renderPartial('/comunes/mensaje',array('mensaje'=>isset($mensaje)?$mensaje:"",'titulo'=>isset($titulo)?$titulo:""));
