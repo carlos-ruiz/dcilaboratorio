@@ -68,7 +68,7 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-6  <?php if($form->error($paciente,'a_paterno')!=''){ echo 'has-error'; }?>">
 							<?php echo $form->labelEx($paciente,'a_paterno', array('class'=>'control-label')); ?>
 							<div class="input-group">
-								<?php echo $form->textField($paciente,'a_paterno',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"")); ?>
+								<?php echo $form->textField($paciente,'a_paterno',array('size'=>45,'maxlength'=>45,'class'=>'form-control', $model->isNewRecord ?"":"disabled"=>"disabled")); ?>
 								<?php echo $form->error($paciente,'a_paterno', array('class'=>'help-block')); ?>
 							</div>
 						</div>
@@ -368,15 +368,10 @@ echo $form->errorSummary($datosFacturacion);
 								$cadenaIdsExamenesGrupo=substr($cadenaIdsExamenesGrupo, 0, strlen($cadenaIdsExamenesGrupo)-1);
 								if(!$model->isNewRecord){
 									$sumaPrecios=0;
-									$tarifasExamenGrupo=OrdenPrecioExamen::model()->findAll("id_ordenes=? AND id_examenes in (".$cadenaParametros.")",$valoresParametros);
-									//$tarifasExamenGrupo=$model->precios;
-									print_r($arrayGrupoExamenes);
-									echo "<br />";
-									print_r($cadenaParametros);
-									echo "<br />";
-									print_r($valoresParametros);
+									$tarifasExamenGrupo=$model->precios;
+									$valoresParametrosUpdate = array_slice($valoresParametros, 1);
 									foreach ($tarifasExamenGrupo as $tarifaExamen){
-										if(!in_array($tarifaExamen->id_examenes, $listaExamenesEnGrupos)){
+										if(in_array($tarifaExamen->id_examenes, $valoresParametrosUpdate) && !in_array($tarifaExamen->id_examenes, $listaExamenesEnGrupos)){
 											$sumaPrecios+=$tarifaExamen->precio;
 											array_push($listaExamenesEnGrupos, $tarifaExamen->id_examenes);
 										}

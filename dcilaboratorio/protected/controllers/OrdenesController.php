@@ -371,16 +371,16 @@ class OrdenesController extends Controller
 		if(isset($_POST['Ordenes']))
 		{
 			$validaRequiereFactura=true;
-
-			if($model->requiere_factura==1){
-				$datosFacturacion->attributes=$_POST['DatosFacturacion'];
-				$direccion->attributes=$_POST['Direcciones'];
-				$validaRequiereFactura=($datosFacturacion->validate()&$direccion->validate());
-			}
+			
 			$validateExamenes = true;
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
 				$model->attributes=$_POST['Ordenes'];
+				if($model->requiere_factura==1){
+					$datosFacturacion->attributes=$_POST['DatosFacturacion'];
+					$direccion->attributes=$_POST['Direcciones'];
+					$validaRequiereFactura=($datosFacturacion->validate()&$direccion->validate());
+				}
 				if($model->requiere_factura==1){
 					$datosFacturacion->attributes=$_POST['DatosFacturacion'];
 					$direccion->attributes=$_POST['Direcciones'];
