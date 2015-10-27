@@ -148,6 +148,8 @@ class GruposController extends Controller
 		$examenesEnGrupos=array();
 
 		$gruposForGrupo=GruposPerfiles::model()->findGruposForGrupo($id);
+		if(sizeof($gruposForGrupo)>0)
+			$model->esPerfilote=1;
 		$model->grupos=array();
 		foreach ($gruposForGrupo as $grupo) {
 			array_push($model->grupos, $grupo->id_grupo_hijo);
@@ -181,8 +183,21 @@ class GruposController extends Controller
 				$model->attributes=$_POST['Grupos'];
 				if(isset($_POST['Grupos']["examenes"]))
 					$model->examenes=$_POST['Grupos']["examenes"];
+				else
+					$model->examenes=array();
 				if(isset($_POST['Grupos']["grupos"]))
 					$model->grupos=$_POST['Grupos']["grupos"];
+				else
+					$model->grupos=array();
+				if(sizeof($model->grupos)==0&&sizeof($model->examenes)==0){
+					$this->render('update',array(
+						'model'=>$model,
+						'examenes'=>$examenes,
+
+					));
+					$this->renderPartial('/comunes/mensaje',array('titulo'=>'Error','mensaje'=>'Debes seleccionar al menos una determinación o perfil'));
+					return;
+				}
 
 				if($model->save()){
 					$examenesGuardados=array();
@@ -200,31 +215,37 @@ class GruposController extends Controller
 						}else{array_push($examenesGuardados,$model->examenes[$i]);}
 					}
 
-					for($i=0;$i<sizeof($model->grupos);$i++){
-						$gpo = Grupos::model()->find("id=?",array($model->grupos[$i]));
-						$gpoPerfiles=new GruposPerfiles;
-						$gpoPerfiles->id_grupo_padre=$model->id;
-						$gpoPerfiles->id_grupo_hijo=$model->grupos[$i];
-						$gpoPerfiles->ultima_edicion = $model->ultima_edicion;
-						$gpoPerfiles->usuario_ultima_edicion = $model->usuario_ultima_edicion;
-						$gpoPerfiles->creacion = $model->creacion;
-						$gpoPerfiles->usuario_creacion = $model->usuario_creacion;
-						$gpoPerfiles->save();
-						foreach ($gpo->grupoTiene as $exam) {
-							if(!in_array($exam->id_examenes,$examenesGuardados)){
-								$grupoExamenes = new GrupoExamenes;
-								$grupoExamenes->id_examenes=$exam->id_examenes;
-								$grupoExamenes->id_grupos_examenes = $model->id;
-								$grupoExamenes->ultima_edicion = $model->ultima_edicion;
-								$grupoExamenes->usuario_ultima_edicion = $model->usuario_ultima_edicion;
-								$grupoExamenes->creacion = $model->creacion;
-								$grupoExamenes->usuario_creacion = $model->usuario_creacion;
-								if(!$grupoExamenes->save()){
-									$error=true;
-								}else{array_push($examenesGuardados,$exam->id_examenes);}
+					GruposPerfiles::model()->deleteAll('id_grupo_padre=?',array($model->id));
+
+					if(sizeof($model->grupos)>0&&$_POST['Grupos']["esPerfilote"]==1){
+						$model->esPerfilote=1;
+						for($i=0;$i<sizeof($model->grupos);$i++){
+							$gpo = Grupos::model()->find("id=?",array($model->grupos[$i]));
+							$gpoPerfiles=new GruposPerfiles;
+							$gpoPerfiles->id_grupo_padre=$model->id;
+							$gpoPerfiles->id_grupo_hijo=$model->grupos[$i];
+							$gpoPerfiles->ultima_edicion = $model->ultima_edicion;
+							$gpoPerfiles->usuario_ultima_edicion = $model->usuario_ultima_edicion;
+							$gpoPerfiles->creacion = $model->creacion;
+							$gpoPerfiles->usuario_creacion = $model->usuario_creacion;
+							$gpoPerfiles->save();
+							foreach ($gpo->grupoTiene as $exam) {
+								if(!in_array($exam->id_examenes,$examenesGuardados)){
+									$grupoExamenes = new GrupoExamenes;
+									$grupoExamenes->id_examenes=$exam->id_examenes;
+									$grupoExamenes->id_grupos_examenes = $model->id;
+									$grupoExamenes->ultima_edicion = $model->ultima_edicion;
+									$grupoExamenes->usuario_ultima_edicion = $model->usuario_ultima_edicion;
+									$grupoExamenes->creacion = $model->creacion;
+									$grupoExamenes->usuario_creacion = $model->usuario_creacion;
+									if(!$grupoExamenes->save()){
+										$error=true;
+									}else{array_push($examenesGuardados,$exam->id_examenes);}
+								}
 							}
 						}
-
+					}else{
+						$model->esPerfilote=0;
 					}
 					if(!$error){
 						$transaction->commit();

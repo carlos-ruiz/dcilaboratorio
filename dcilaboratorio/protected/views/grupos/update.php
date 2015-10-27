@@ -4,6 +4,6 @@
 
 ?>
 
-<h1>Actualizar grupo de exámenes <?php echo $model->nombre; ?></h1>
+<h1>Actualizar perfil/p. perfiles: <?php echo $model->nombre; ?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model,'examenes'=>$examenes)); ?>

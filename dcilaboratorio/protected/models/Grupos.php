@@ -20,6 +20,7 @@ class Grupos extends CActiveRecord
 
 	public $examenes;
 	public $grupos;
+	public $esPerfilote;
 	/**
 	 * @return string the associated database table name
 	 */

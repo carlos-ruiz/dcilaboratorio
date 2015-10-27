@@ -6,8 +6,8 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			Grupo de Exámenes
-		</div>		
+			Perfil
+		</div>
 	</div>
 	<div class="portlet-body form" style="display: block;">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -17,6 +17,7 @@
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+
 )); ?>
 
 <div class="form-body">
@@ -36,17 +37,37 @@
 			<?php echo $form->error($model,'nombre', array('class'=>'help-block')); ?>
 		</div>
 	</div>
-
-	<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
-	Seleccione las determinaciones pertenecientes al perfil. <br />
-	<input type="hidden" value="" name="Grupos[tiene]" id="idsTiene" />
-	<div class="form-group <?php if($form->error($model,'nombre')!=''){ echo 'has-error'; }?>">
+	<div class="form-group">
+		<label class="control-label" for="isPerfilote">¿Es perfil de perfiles?.</label>
 		<div class="input-group">
-			<?php foreach ($examenes as $examen) {
-				echo '<input type="checkbox" class="examen" value="'.$examen->id.'" '.(in_array($examen->id, $tiene)?'checked':'').' /> '.$examen->nombre.'<br />';
-			}?>
+			<?php echo $form->checkBox($model,'esPerfilote',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>					
 		</div>
 	</div>
+
+	<div class="form-group <?php if($form->error($model,'examenes')!=''){ echo 'has-error'; }?>">
+		<label class="control-label" for="Grupos_examenes">Seleccione las determinaciones pertenecientes al perfil.</label>
+		<div class="input-group">
+			<?php echo $form->dropDownList($model,'examenes',Examenes::model()->selectListMultipleWithClave(), array("class" => "form-control select2","multiple"=>"multiple")); ?>
+		</div>
+	</div>
+
+	<div class="form-group" id="perfilote">
+		<label class="control-label" for="Grupos_grupos">Seleccione los perfiles pertenecientes al perfil.</label>
+		<div class="input-group">
+			<?php echo $form->dropDownList($model,'grupos',Grupos::model()->selectListMultiple($model->id), array("class" => "form-control select2","multiple"=>"multiple")); ?>
+		</div>
+	</div>
+	<div class="form-group <?php if($form->error($model,'comentarios')!=''){ echo 'has-error'; }?>">
+		<?php echo $form->labelEx($model,'comentarios', array('class'=>'control-label')); ?>
+		<div class="input-group">
+			<?php echo $form->textArea($model,'comentarios',array('rows'=>3, 'cols'=>45, 'class'=>'form-control')); ?>
+			<?php echo $form->error($model,'comentarios', array('class'=>'help-block')); ?>
+		</div>
+	</div>
+
+	<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
+
+
 	<div class="form-actions">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Nuevo' : 'Actualizar',array('class'=>'btn blue-stripe')); ?>
 	</div>
