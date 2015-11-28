@@ -55,7 +55,7 @@ class OrdenesController extends Controller
 	public function actionView($id)
 	{
 		$orden = $this->loadModel($id);
-		if(Yii::app()->user->getState('perfil')=='Doctor'){	
+		if(Yii::app()->user->getState('perfil')=='Doctor'){
 			$doctor = Doctores::model()->find("id_usuarios=?",array(Yii::app()->user->id));
 			if(!($orden->id_doctores==$doctor->id && $orden->compartir_con_doctor==1)){
 				$this->render('/site/error',array(
@@ -72,7 +72,7 @@ class OrdenesController extends Controller
 					'message'=>"Usted no se encuentra autorizado a realizar esta acción.",
 				));
 			}
-		}	
+		}
 		$section = "Ordenes";
 		$pagos=new Pagos('search');
 		$datosFacturacion=new DatosFacturacion('search');
@@ -371,7 +371,7 @@ class OrdenesController extends Controller
 		if(isset($_POST['Ordenes']))
 		{
 			$validaRequiereFactura=true;
-			
+
 			$validateExamenes = true;
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
@@ -654,6 +654,12 @@ class OrdenesController extends Controller
 		foreach ($precios as $precio) {
 			$totalOrden += $precio->precio;
 		}
+		if($orden->descuento > 0){
+			$totalOrden = $totalOrden*(1-($orden->descuento/100));
+		}
+		if($orden->costo_emergencia > 0){
+			$totalOrden= $totalOrden + $orden->costo_emergencia;
+		}
 		$pagosAnteriores = $orden->pagos;
 		foreach ($pagosAnteriores as $pagoRealizado) {
 			$totalPagado += $pagoRealizado->efectivo + $pagoRealizado->tarjeta + $pagoRealizado->cheque;
@@ -685,6 +691,7 @@ class OrdenesController extends Controller
 					else{
 						$orden->id_status = $statusPagada->id;
 					}
+
 					$orden->ultima_edicion = date('Y-m-d H:i:s');
 					$orden->usuario_ultima_edicion = Yii::app()->user->id;
 					$orden->save();
@@ -745,15 +752,15 @@ class OrdenesController extends Controller
 
 			if($model->id_status == $statusPagada->id && $calificada){
 				$model->id_status = $statusFinalizada->id;
-				
+
 			}
 			elseif (!$calificada && $model->id_status == $statusFinalizada->id) {
 				$model->id_status = $statusPagada->id;
-				
+
 			}
 			elseif ($calificada && $model->id_status == $statusCreada->id) {
 				$model->id_status = $statusCalificada->id;
-				
+
 			}
 			$model->save();
 			$this->redirect(array('view','id'=>$model->id));

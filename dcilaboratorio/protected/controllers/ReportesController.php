@@ -62,41 +62,43 @@ class ReportesController extends Controller
 
 		if(isset($_POST['BusquedaForm']))
 		{
-			
+
 			$model->attributes=$_POST['BusquedaForm'];
 			if(!$model->validate()){
 				$this->render('generar', array('model'=>$model));
 			}
+			$final_date = date('Y-m-d', strtotime( "$model->fecha_final + 1 day" ));
+			$model->fecha_final = $final_date;
 
 			$query = Yii::app()->db->createCommand();
 			//$query->select('ordenes.id');
 			$query->selectDistinct('ordenes.id');
 			$query->from('ordenes');
 			if ((isset($model->id_pacientes) && $model->id_pacientes > 0)|| $model->nombre_paciente == 1 || $model->id_paciente == 1)
-			{			 
+			{
 				$query->join('ordenes_facturacion', 'ordenes.id=ordenes_facturacion.id_ordenes');
-			}	
-			if ((isset($model->clave_examen) && $model->clave_examen > 0)|| $model->id_examen==1) 
-			{		
+			}
+			if ((isset($model->clave_examen) && $model->clave_examen > 0)|| $model->id_examen==1)
+			{
 				$query->join('orden_tiene_examenes', 'ordenes.id=orden_tiene_examenes.id_ordenes');
 				$query->join('detalles_examen', 'orden_tiene_examenes.id_detalles_examen=detalles_examen.id');
 			}
 
 			$query->where('ordenes.fecha_captura>:start and ordenes.fecha_captura<:end', array('start'=>$model->fecha_inicial, 'end'=>$model->fecha_final));
-			
+
 			if (isset($model->id_multitarifarios) && $model->id_multitarifarios > 0) {
 				$query->andWhere('ordenes.id_multitarifarios=:idMultitarifario', array('idMultitarifario'=>$model->id_multitarifarios));
 			}
-			if (isset($model->id_doctores) && $model->id_doctores > 0) {				
+			if (isset($model->id_doctores) && $model->id_doctores > 0) {
 				$query->andWhere('ordenes.id_doctores=:idDoctor', array('idDoctor'=>$model->id_doctores));
 			}
-			if (isset($model->id_pacientes) && $model->id_pacientes > 0) {			 	
+			if (isset($model->id_pacientes) && $model->id_pacientes > 0) {
 				$query->andWhere('ordenes_facturacion.id_pacientes=:idPaciente', array('idPaciente'=>$model->id_pacientes));
 			}
-			if (isset($model->clave_examen) && $model->clave_examen > 0) {			 
+			if (isset($model->clave_examen) && $model->clave_examen > 0) {
 				$query->andWhere('detalles_examen.id_examenes=:idExamen', array('idExamen'=>$model->clave_examen));
 			}
-			
+
 			$resultados=$query->queryAll();
 			$mostrarTodos = (
 				$model->dia==0 &&
@@ -155,7 +157,7 @@ class ReportesController extends Controller
 			$pdf->Output();
 		}
 		$this->render('generar', array('model'=>$model));
-	}	
+	}
 
 	/**
 	 * Manages all models.

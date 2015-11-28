@@ -195,7 +195,9 @@ class ImprimirResultados extends FPDF{
 
         if(sizeof($idsExamenes)!=sizeof($this->examenesImpresos)){
             $this->SetFillColor(117, 163, 240);
+            $this->SetFont('Arial','B',8);
             $this->Cell(19.5,$y, "EXÁMENES INDIVIDUALES" ,1, 1, 'C', true);
+            $this->SetFont('Arial','',7.5);
         }
         $idExamenExiste = 0;
         $examen = null;
@@ -205,7 +207,7 @@ class ImprimirResultados extends FPDF{
             if(!in_array($idExamen,$this->examenesImpresos)){
                 $examen=Examenes::model()->findByPk($idExamen);
                 if($examen->id!=$idExamenExiste){
-                    $this->SetFont('Arial','B',8);
+                    $this->SetFont('Arial','',7.5);
                     $this->SetFillColor(213, 224, 241);
                     $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Método empleado: '.$examen->tecnica.')',1, 1 ,'C', true);
                 }
@@ -217,7 +219,7 @@ class ImprimirResultados extends FPDF{
                 }
                 $this->Cell(3.5,$y,$ordenExamen->resultado,1, 0 , 'C');
                 $this->SetTextColor(0, 0, 0);
-                $this->SetFont('Arial','B',8);
+                $this->SetFont('Arial','',7.5);
                 $this->Cell(2,$y, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
                 $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
                 $this->Cell(5,$y, $rango,1, 1 , 'C');
@@ -246,8 +248,10 @@ class ImprimirResultados extends FPDF{
         $y = 0.5;
         $grupo = Grupos::model()->findByPk($idGrupo);
         $this->SetFillColor(117, 163, 240);
+        $this->SetFont('Arial','B',8);
         $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
-        
+        $this->SetFont('Arial','',7.5);
+
         $perfilDePerfiles = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
         if(empty($perfilDePerfiles)){
             foreach ($grupo->grupoTiene as $grupoExamen) {
@@ -255,7 +259,7 @@ class ImprimirResultados extends FPDF{
                     if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
                         //Pintamos el examen
                         array_push($this->examenesImpresos, $detalleExamen->id_examenes);
-      
+
                         $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
                         $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
                         $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
@@ -266,7 +270,7 @@ class ImprimirResultados extends FPDF{
                         }
                         $this->Cell(3.5,$heightRow,$ordenExamen->resultado,1, 0 , 'C');
                         $this->SetTextColor(0, 0, 0);
-                        $this->SetFont('Arial','B',8);
+                        $this->SetFont('Arial','',7.5);
                         $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
                         $this->MultiCell(5,$y, $rango,1, 'C');
                     }
@@ -277,7 +281,7 @@ class ImprimirResultados extends FPDF{
             }
         }else{
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
-            
+
             foreach ($hijos as $grupoHijo) {
                 $this->nivelImpresionSubgrupo++;
                 $this->imprimirGrupo($grupoHijo->id_grupo_hijo);
@@ -293,12 +297,14 @@ class ImprimirResultados extends FPDF{
             }
             if(sizeof($grupo->grupoTiene)>sizeof($examenesEnGruposHijo)){
                 $this->SetFillColor(117, 163, 240);
+                $this->SetFont('Arial','B',8);
                 $this->Cell(19.5,$y, "OTROS" ,1, 1, 'C', true);
+                $this->SetFont('Arial','',7.5);
                 foreach ($grupo->grupoTiene as $grupoExamen) {
                     if(!in_array($grupoExamen->examen, $examenesEnGruposHijo) && !in_array($grupoExamen->examen->id, $this->examenesImpresos)){
-                        
+
                         array_push($this->examenesImpresos, $grupoExamen->examen->id);
-                        foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {                        
+                        foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
                             $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
                             $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
                             $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
@@ -309,7 +315,7 @@ class ImprimirResultados extends FPDF{
                             }
                             $this->Cell(3.5,$heightRow,$ordenExamen->resultado,1, 0 , 'C');
                             $this->SetTextColor(0, 0, 0);
-                            $this->SetFont('Arial','B',8);
+                            $this->SetFont('Arial','',7.5);
                             $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
                             $this->MultiCell(5,$y, $rango,1, 'C');
                         }

@@ -3,11 +3,19 @@
 /* @var $model Ordenes */
 /* @var $form CActiveForm */
 ?>
+<script type="text/javascript">
+	function showReport(){
+		if($("#BusquedaForm_fecha_inicial").val() && $("#BusquedaForm_fecha_final").val()){
+			$('#reportes-form').prop("target", "_blank");
+			return true;
+		}
+	}
+</script>
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
 			Parámetros de búsqueda
-		</div>		
+		</div>
 	</div>
 	<div class="portlet-body form" style="display: block;">
 
@@ -19,7 +27,7 @@
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 )); ?>
-<?php 
+<?php
 /*
 echo $form->errorSummary($model);
 echo "<br /><br />";
@@ -34,26 +42,26 @@ echo $form->errorSummary($datosFacturacion);
 ?>
 
 	<div class="form-body">
-					
-	
-	
-		
+
+
+
+
 				<div class="row">
 					<div class="form-group col-md-4  <?php if($form->error($model,'fecha_inicial')!=''){ echo 'has-error'; }?>">
 								<?php echo $form->labelEx($model,'fecha_inicial', array('class'=>'control-label')); ?>
-								<div class="input-group">	
-									<?php echo $form->textField($model,'fecha_inicial',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es')); ?>													
+								<div class="input-group">
+									<?php echo $form->textField($model,'fecha_inicial',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es')); ?>
 									<?php echo $form->error($model,'fecha_inicial', array('class'=>'help-block')); ?>
 								</div>
 							</div>
 							<div class="form-group col-md-4  <?php if($form->error($model,'fecha_final')!=''){ echo 'has-error'; }?>">
 								<?php echo $form->labelEx($model,'fecha_final', array('class'=>'control-label')); ?>
-								<div class="input-group">	
-									<?php echo $form->textField($model,'fecha_final',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es')); ?>													
+								<div class="input-group">
+									<?php echo $form->textField($model,'fecha_final',array('size'=>16,'maxlength'=>45,'class'=>'form-control form-control-inline date-picker','data-date-format'=>'yyyy-mm-dd','data-date-language'=>'es')); ?>
 									<?php echo $form->error($model,'fecha_final', array('class'=>'help-block')); ?>
 								</div>
 							</div>
-						
+
 					</div>
 					<div class="row">
 						<div class="form-group col-md-4 <?php if($form->error($model,'id_multitarifarios')!=''){ echo 'has-error'; }?>">
@@ -68,7 +76,7 @@ echo $form->errorSummary($datosFacturacion);
 							<div class="input-group">
 								<?php echo $form->dropDownList($model,'id_pacientes',Pacientes::model()->selectListWithMail(), array("empty"=>"Seleccione un paciente", 'class'=>'form-control input-medium select2me')); ?>
 							</div>
-						</div>				
+						</div>
 
 						<div class="form-group col-md-4 <?php if($form->error($model,'id_doctores')!=''){ echo 'has-error'; }?>">
 									<?php echo $form->labelEx($model,'id_doctores', array('class'=>'control-label')); ?>
@@ -79,13 +87,13 @@ echo $form->errorSummary($datosFacturacion);
 						</div>
 					</div>
 					<div class="row">
-						
+
 							<div class="form-group col-md-4">
 								<?php echo "<label class='control-label'>Examen</label>"?>
 								<div class="input-group">
 									<?php echo $form->dropDownList($model,'clave_examen', Examenes::model()->selectListWithClave(), array('class'=>'form-control input-medium select2me')); ?>
 								</div>
-							</div>					
+							</div>
 					</div>
 					<hr/>
 					<div class="heading">
@@ -203,18 +211,15 @@ echo $form->errorSummary($datosFacturacion);
 									</div>
 							</div>
 					</div>
-				
+
 <div class="form-actions" >
-			<?php echo CHtml::submitButton( 'Buscar' , array('class'=>'btn blue-stripe')); ?>
+			<?php echo CHtml::submitButton( 'Buscar' , array('class'=>'btn blue-stripe', 'target'=>'_blank', "onclick"=>"showReport();")); ?>
 		</div>
 
-	
+
 
 	</div>
 	<?php $this->endWidget(); ?>
 </div>
 
 </div><!-- form -->
-
-
-

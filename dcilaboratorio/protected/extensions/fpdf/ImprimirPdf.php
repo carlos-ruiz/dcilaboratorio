@@ -64,6 +64,10 @@ class ImprimirPdf extends FPDF{
     	$posY = $posYOriginal;
     	$this->setXY($posX,$posYOriginal);
     	$y = 0.5;
+        if (sizeof($coleccion)<1) {
+            $this->SetFont('Arial','',10);
+            $this->Cell(0,($y*$posYIncremento),"No se encontraron resultados", 0, 1, "C");
+        }
     	foreach ($cabecera as $i => $columna) {
     		if ($columna['id']=='day') {
     			foreach ($coleccion as $i => $value) {
