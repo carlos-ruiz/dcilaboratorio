@@ -778,11 +778,12 @@ class OrdenesController extends Controller
 		$precio=isset($tarifa->precio)?$tarifa->precio:0;
 		$precioText=isset($tarifa->precio)?'$ '.$tarifa->precio:'No hay precio para el tarifario seleccionado';
 		$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
+		$tienePrecio=strlen($agregarPrecio)>0?"true":"false";
 		echo "<tr class='row_$examen->id' data-id='$examen->id'>
 		<td>$examen->clave</td>
 		<td>$examen->nombre</td>
 		<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-		<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+		<td><a href='javascript:void(0)' data-tienePrecio='$tienePrecio' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 		</tr>";
 	}
 
@@ -823,7 +824,7 @@ class OrdenesController extends Controller
 		$tarifario = $_POST['tarifa'];
 
 		$examenesAgregados=array();
-		for($i=0; $i<sizeof($grupos); $i++){
+		for($i=0; $i<sizeof($grupos)&&strlen($grupos[$i])>0; $i++){
 			$precio=0;
 			$grupo=Grupos::model()->findByPk($grupos[$i]);
 			$cadenaIdsExamenesGrupo="";
@@ -835,6 +836,7 @@ class OrdenesController extends Controller
 					$precio+=$tarifa->precio;
 					array_push($examenesAgregados, $grupoExamenes->id_examenes);
 				}
+
 			}
 			$cadenaIdsExamenesGrupo=substr($cadenaIdsExamenesGrupo, 0, strlen($cadenaIdsExamenesGrupo)-1);
 
@@ -858,12 +860,14 @@ class OrdenesController extends Controller
 					$precio=isset($tarifa->precio)?$tarifa->precio:0;
 					$precioText=isset($tarifa->precio)?"$ ".$tarifa->precio:'No hay precio para el tarifario seleccionado';
 					$agregarPrecio = isset($tarifa->precio)?"":"<a href='javascript:void(0)' data-id='$examen->id' class='btn default blue-stripe agregarPrecio' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;'>Agregar precio</a><input type='text' class='form-control input-small' id='addPrecio_$examen->id' style='float:right; height:20px; padding:0px; padding-left:5px; padding-right:5px;' />";
+					$tienePrecio=strlen($agregarPrecio)>0?"true":"false";
 					echo "<tr class='row_$examen->id' data-id='$examen->id'>
 					<td>$examen->clave</td>
 					<td>$examen->nombre</td>
 					<td class='precioExamen' data-val='$precio'>$precioText $agregarPrecio</td>
-					<td><a href='javascript:void(0)' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
+					<td><a href='javascript:void(0)' data-tienePrecio='$tienePrecio' data-id='$examen->id' class='eliminarExamen'><span class='fa fa-trash'></span></a></td>
 					</tr>";
+					array_push($examenesAgregados, $examen->id);
 				}
 			}
 		}

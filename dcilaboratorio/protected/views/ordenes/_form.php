@@ -341,7 +341,7 @@ echo $form->errorSummary($datosFacturacion);
 							?>
 
 							<?php 
-								echo sizeof($ordenTieneGrupos);
+								
 							foreach ($ordenTieneGrupos as $ordenGrupo): ?>
 
 								<?php
@@ -805,9 +805,11 @@ var examenesGrupo=[];
 	function actualizarDecimalesPreciosTabla(){
 
 		$(".precioExamen").each(function(){
-			precio = $(this).data('val');
-			precio = parseFloat(Math.round(precio*100)/100).toFixed(2);
-			$(this).text("$ "+precio);
+			if($(this).data('tienePrecio')=="true"){
+				precio = $(this).data('val');
+				precio = parseFloat(Math.round(precio*100)/100).toFixed(2);
+				$(this).text("$ "+precio);
+			}
 		});
 		
 	}

@@ -231,7 +231,7 @@
 				 ?>
 			<?php }else{ ?>
 				<div style="width:100%" class="text-center">
-					<h1>Para vel el resultado debes cubrir el costo total de la orden</h1>
+					<h1>Para ver el resultado debes cubrir el costo total de la orden</h1>
 				</div>
 			<?php } ?>
 
