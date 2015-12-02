@@ -194,4 +194,8 @@ class UsuariosController extends Controller
 		return $nombre;
 	}
 
+	public function obtenerContrasena($data, $row){
+		return base64_decode($data->contrasena);
+	}
+
 }

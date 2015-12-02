@@ -1,6 +1,10 @@
 <h1>Administrar usuarios</h1>
 <?php 
-$columnas = array('usuario','perfil.nombre');
+$columnas = array('perfil.nombre', 'usuario');
+array_push($columnas, array(
+				'header'=>'Contraseña',
+				'value'=>array($this, 'obtenerContrasena'),
+			));
 array_push($columnas, array(
 				'header'=>'Nombre',
 				'value'=>array($this, 'obtenerNombre'),

@@ -164,12 +164,12 @@
 		    <?php
 
 		    //Aqui que solo aparezca los botones si esta pagado
-/*
+
 			if($total>=$totalOrden){
-			    echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
+			    // echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
 			    echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
 			}
-*/
+
 			?>
 		</div>
 

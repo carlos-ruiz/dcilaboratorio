@@ -116,12 +116,12 @@
 				<br />Código Postal 58260
 				<br />Teléfono Fax. (443) 232 0166
 				<br />Lunes a Sábado de 07:00 a 20:00 hrs.
-				<br /> Domingo 08:00 a 14:00 hrs.
+				<br />Domingo 08:00 a 14:00 hrs.
 			</div>
 			<div class="col-md-4 fontSize10">
 				<h5  class="heading" style="color:#1e90ff ">Unidad Cancerología</h5>
 				Francisco M. Díaz No. 145
-				<br />Colonia Ex Gobernador Gildardo Magaña
+				<br />Fracc. Ex Gobernador Gildardo Magaña
 				<br />Código Postal 58149
 				<br />Tel. Fax. (443) 232 01 65
 				<br />Lunes a Sábado de 07:00 a 15:00 hrs.
