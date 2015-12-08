@@ -83,7 +83,7 @@ class ImprimirResultadosArchivo extends FPDF{
     	$this->SetFont('Arial','',8);
     	$this->setXY(1,5);
         $y = 0.5;
-        $limiteY = $this->h-$this->bMargin-$y; //Límite de impresión abajo
+        $limiteY = $this->h-$this->bMargin-4.5; //Límite de impresión abajo
         $numeroColumna = 1;
         $ordenTieneExamenes = $model->ordenTieneExamenes;
         $idExamen = 0;
@@ -271,8 +271,8 @@ class ImprimirResultadosArchivo extends FPDF{
         }
 */
         if(sizeof($idsExamenes)!=sizeof($this->examenesImpresos)){
-            $this->SetFillColor(117, 163, 240);
-            $this->Cell(9.71,$y, "EXÁMENES INDIVIDUALES" ,1, 1, 'C', true);
+            //$this->SetFillColor(117, 163, 240);
+            //$this->Cell(9.71,$y, "EXÁMENES INDIVIDUALES" ,1, 1, 'C', true);
         }
         $idExamenExiste = 0;
         $examen = null;
@@ -305,37 +305,45 @@ class ImprimirResultadosArchivo extends FPDF{
                     $this->SetFillColor(213, 224, 241);
                     $this->Cell(9.71,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
                 }*/
-                $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-                $heightRow = $this->GetMultiCellHeight(4.39,$y,$ordenExamen->detalleExamen->descripcion,1, 'C');
-                $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
-                $rangoMasAlto=$heightRow>$heightRowRango?false:true;
-                $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
+                foreach ($examen->detallesExamenes as $detalleExamen) {
 
-                if($rangoMasAlto)
-                    $this->Cell(4.39,$heightRow,$ordenExamen->detalleExamen->descripcion ,'B', 0 , 'L');
-                else{
-                    $xActual=$this->x;
-                    $this->MultiCell(4.39,$y,$ordenExamen->detalleExamen->descripcion , 'B' , 'L');
-                    $this->setXY($xActual+4.39,$this->y-$heightRow);
-                }
-                if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
-                    $this->SetFont('Times','BI',8);
-                    $this->SetTextColor(255, 0, 0);
-                }
-                $this->Cell(1.74,$heightRow,$ordenExamen->resultado,'B', 0 , 'C');
-                $this->SetTextColor(0, 0, 0);
-                $this->SetFont('Arial','B',8);
-                $this->Cell(1.19,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
-                if(!$rangoMasAlto)
-                    $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
-                else{
-                    //$xActual=$this->x;
-                    $this->MultiCell(2.39,$y, $rango,'B', 'C');
-                    //$this->setXY($xActual+4.39,$this->y-$heightRow);
-                }
+                    $ordenExamen=OrdenTieneExamenes::model()->find("id_detalles_examen=? AND id_ordenes=?",array($detalleExamen->id,$model->id));
+                    $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
+                    $heightRow = $this->GetMultiCellHeight(4.39,$y,$ordenExamen->detalleExamen->descripcion,1, 'C');
+                    $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
+                    $rangoMasAlto=$heightRow>$heightRowRango?false:true;
+                    $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
 
-                //$this->Cell(2.39,$y, $rango,1, 1 , 'C');
-                $idExamenExiste = $examen->id;
+                    if($rangoMasAlto)
+                        $this->Cell(4.39,$heightRow,$ordenExamen->detalleExamen->descripcion ,'B', 0 , 'C');
+                    else{
+                        $xActual=$this->x;
+                        $this->MultiCell(4.39,$y,$ordenExamen->detalleExamen->descripcion , 'B' , 'C');
+                        $this->setXY($xActual+4.39,$this->y-$heightRow);
+                    }
+                    if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
+                        $this->SetFont('Times','BI',8);
+                        $this->SetTextColor(255, 0, 0);
+                    }
+                    $this->Cell(1.74,$heightRow,$ordenExamen->resultado,'B', 0 , 'C');
+                    $this->SetTextColor(0, 0, 0);
+                    $this->SetFont('Arial','B',8);
+                    $this->Cell(1.19,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
+                    if(!$rangoMasAlto)
+                        $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
+                    else{
+                        //$xActual=$this->x;
+                        $this->MultiCell(2.39,$y, $rango,'B', 'C');
+                        //$this->setXY($xActual+4.39,$this->y-$heightRow);
+                    }
+
+                    //$this->Cell(2.39,$y, $rango,1, 1 , 'C');
+                    $idExamenExiste = $examen->id;
+                }
+                if($examen->tecnica!=null){
+                    //$this->SetFont('Arial','',7.5);
+                    $this->MultiCell(9.71,$y, 'Método: '.$examen->tecnica,'B', 'L', false);
+                }
             }
 
         }
@@ -356,12 +364,12 @@ class ImprimirResultadosArchivo extends FPDF{
         if($model->comentarios_resultados)
             $this->MultiCell(9.71,$y,"COMENTARIOS: ".$model->comentarios_resultados, 0,'L' );
 
-        $this->ln(1);
-        $this->ln(1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(9.71,$y,'RESPONSABLE:', 0, 1, 'C');
-        $this->Cell(9.71,$y,'QFB. MARCO ANTONIO URTIS GARCÍA', 0, 1, 'C');
-        $this->Cell(9.71,$y,'CED. PROF. 1269174', 0, 1, 'C');
+        // $this->ln(1);
+        // $this->ln(1);
+        // $this->SetFont('Arial','B',8);
+        // $this->Cell(9.71,$y,'RESPONSABLE:', 0, 1, 'C');
+        // $this->Cell(9.71,$y,'QFB. MARCO ANTONIO URTIS GARCÍA', 0, 1, 'C');
+        // $this->Cell(9.71,$y,'CED. PROF. 1269174', 0, 1, 'C');
         $this->ln(1);
         $this->SetFont('Arial','B',8);
         $fecha = date("d/m/y  H:i");
@@ -421,7 +429,7 @@ class ImprimirResultadosArchivo extends FPDF{
                 }
             }
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
-                $this->Cell(9.71,$y, 'Método: '.$grupo->comentarios ,'B', 1, 'L', false);
+                $this->MultiCell(9.71,$y, 'Método: '.$grupo->comentarios ,'B', 'L', false);
             }
         }else{
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
@@ -482,18 +490,25 @@ class ImprimirResultadosArchivo extends FPDF{
                 }
             }
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
-                $this->Cell(9.71,$y, 'Método: '.$grupo->comentarios ,'B', 1, 'L', false);
+                $this->MultiCell(9.71,$y, 'Método: '.$grupo->comentarios ,'B', 'L', false);
             }
         }
     }
 
     function Footer()
 	{
-	//Position at 1.5 cm from bottom
-    $this->SetXY(1,-1.5);
+	    $this->SetXY(1,-4);
     //Arial italic 8
+    $y=0.5;
+    $this->SetFont('Arial','B',8);
+    $this->Cell(0,$y,'RESPONSABLE:', 0, 1, 'C');
+    $this->setX(1);
+    $this->Cell(0,$y,'QFB. MARCO ANTONIO URTIS GARCÍA', 0, 1, 'C');
+    $this->setX(1);
+    $this->Cell(0,$y,'CED. PROF. 1269174', 0, 1, 'C');
     $this->SetFont('Arial','I',8);
     //Page number
-    $this->Cell(0,0.5,'Página '.$this->PageNo(),0,0,'C');
+    $this->setX(1);
+    $this->Cell(0,$y*4,'Página '.$this->PageNo(),0,0,'C');
 	}
 }

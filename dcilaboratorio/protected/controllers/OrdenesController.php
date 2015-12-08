@@ -11,6 +11,9 @@ class OrdenesController extends Controller
 	public $subSection;
 	public $pageTitle="Ordenes";
 
+	public $examenesImpresos=array();
+	public $nivelImpresionSubgrupo=0;
+
 	/**
 	 * @return array action filters
 	 */
@@ -47,6 +50,112 @@ class OrdenesController extends Controller
 				),
 			);
 	}
+
+	public function imprimirGrupo($idGrupo,$idOrden){
+        $grupo = Grupos::model()->findByPk($idGrupo);
+        echo '<thead><tr>
+						<th colspan="4" style="color:#59F36D">'.$grupo->nombre.'</th>'.
+					'</tr></thead>';
+        $perfilDePerfiles = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
+        if(empty($perfilDePerfiles)){
+            foreach ($grupo->grupoTiene as $grupoExamen) {
+        		echo '<thead><tr>
+					<th colspan="4" style="color:#1e90ff">'.$grupoExamen->examen->nombre.'</th>'.
+				'</tr></thead>';
+				
+                foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
+                    if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
+                    	
+                        //Pintamos el examen
+                        array_push($this->examenesImpresos, $detalleExamen->id_examenes);
+                        $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
+
+                        //echo $detalleExamen->descripcion;
+                        $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
+                        if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                            //$this->SetFont('Times','BI',8);
+                            //$this->SetTextColor(255, 0, 0);
+                        }
+                        //echo $ordenExamen->resultado;
+                        //$this->SetTextColor(0, 0, 0);
+                        //$this->SetFont('Arial','',7.5);
+                        //echo $detalleExamen->unidadesMedida->abreviatura;
+                        //echo $rango;
+                        echo '
+					<tr>
+						<td>'.$detalleExamen->descripcion.'</td>'.
+						'<td>'.'</td>
+						<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
+						<td>'.$rango.'</td>
+					</tr>';
+                    }
+                }
+            }
+        }else{
+            $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
+
+            foreach ($hijos as $grupoHijo) {
+                $this->nivelImpresionSubgrupo++;
+                $this->imprimirGrupo($grupoHijo->id_grupo_hijo,$idOrden);
+                echo '<tr><td colspan="4"><textarea class="width-all" placeholder="Comentarios: '.$grupoHijo->idGrupoHijo->nombre.'" name="comentario_perfil['.$grupoHijo->id_grupo_hijo.']"></textarea></td></tr>';
+                $this->nivelImpresionSubgrupo--;
+            }
+
+            $examenesEnGruposHijo=array();
+            foreach ($hijos as $grupoHijo) {
+                $grupoExamenes=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupoHijo->id_grupo_hijo));
+                foreach ($grupoExamenes as $grupoExamen) {
+                    array_push($examenesEnGruposHijo, $grupoExamen->examen);
+                }
+            }
+            if(sizeof($grupo->grupoTiene)>sizeof($examenesEnGruposHijo)){
+                //echo "OTROS";
+                echo '<thead><tr>
+						<th colspan="4" style="color:#59F36D">OTROS</th>'.
+					'</tr></thead>';
+                foreach ($grupo->grupoTiene as $grupoExamen) {
+                	if(!in_array($grupoExamen->examen->id, $this->examenesImpresos)){
+	            		echo '<thead><tr>
+							<th colspan="4" style="color:#1e90ff">'.$grupoExamen->examen->nombre.'</th>'.
+						'</tr></thead>';
+					}
+                    if(!in_array($grupoExamen->examen, $examenesEnGruposHijo) && !in_array($grupoExamen->examen->id, $this->examenesImpresos)){
+
+                        array_push($this->examenesImpresos, $grupoExamen->examen->id);
+                        foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
+                        	$rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
+                            //echo $detalleExamen->descripcion;
+                            //echo $idOrden." --- ".$detalleExamen->id;
+
+                            $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
+                            //print_r($ordenExamen);
+                            //return;
+                            //if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                                //$this->SetFont('Times','BI',8);
+                                //$this->SetTextColor(255, 0, 0);
+                            //}
+                            //rojo o negro
+                            //echo isset($ordenExamen->resultado)?$ordenExamen->resultado:"";
+                            //negro
+                            //echo $detalleExamen->unidadesMedida->abreviatura;
+                            //echo $rango;
+                               echo '
+							<tr>
+								<td>'.$detalleExamen->descripcion.'</td>'.
+								'<td>'.'</td>
+								<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
+								<td>'.$rango.'</td>
+							</tr>';
+                        }
+                    }
+                }
+            }
+            
+        }
+        if($this->nivelImpresionSubgrupo==0){
+                 echo '<tr><td colspan="4"><textarea class="width-all" placeholder="Comentarios: '.$grupo->nombre.'" name="comentario_perfil['.$idGrupo.']"></textarea></td></tr>';
+            }
+    }
 
 	/**
 	 * Displays a particular model.
@@ -726,10 +835,19 @@ class OrdenesController extends Controller
 	public function actionCalificar($id){
 		$model = $this->loadModel($id);
 		$ordenExamenes = array();
+		$ordenGrupos = array();
+		$ordenGrupotes = array();
 
 		$ordenTieneExamenes = $model->ordenTieneExamenes;
 		foreach ($ordenTieneExamenes as $ordenExamen) {
 			array_push($ordenExamenes, $ordenExamen);
+		}
+		$ordenTieneGrupos = $model->ordenTieneGrupos;
+		foreach ($ordenTieneGrupos as $ordenGrupo) {
+			array_push($ordenGrupos, $ordenGrupo);
+			if(GruposPerfiles::model()->count("id_grupo_padre=?",array($ordenGrupo->id_grupos))>0){
+				array_push($ordenGrupotes,$ordenGrupo->grupo);
+			}
 		}
 		if(isset($_POST['Ordenes'])){
 			$model->comentarios_resultados=$_POST['Ordenes']['comentarios_resultados'];
@@ -768,6 +886,9 @@ class OrdenesController extends Controller
 		$this->render('_calificar',array(
 			'model'=>$model,
 			'ordenExamenesModel'=>$ordenExamenes,
+			'ordenGruposModel'=>$ordenGrupos,
+			'ordenGrupotesModel'=>$ordenGrupotes,
+
 			));
 	}
 

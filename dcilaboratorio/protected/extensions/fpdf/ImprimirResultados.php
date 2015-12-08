@@ -198,7 +198,7 @@ class ImprimirResultados extends FPDF{
         if(sizeof($idsExamenes)!=sizeof($this->examenesImpresos)){
             $this->SetFillColor(117, 163, 240);
             $this->SetFont('Arial','B',8);
-            $this->Cell(19.5,$y, "EXÁMENES INDIVIDUALES" ,1, 1, 'C', true);
+            //$this->Cell(19.5,$y, "EXÁMENES INDIVIDUALES" ,1, 1, 'C', true);
             $this->SetFont('Arial','',7.5);
         }
         $idExamenExiste = 0;
@@ -210,34 +210,43 @@ class ImprimirResultados extends FPDF{
                 if($examen->id!=$idExamenExiste){
                     $this->SetFont('Arial','',7.5);
                     $this->SetFillColor(213, 224, 241);
-                    $this->Cell(19.5,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Método empleado: '.$examen->tecnica.')',1, 1 ,'C', true);
+                    $this->Cell(19.5,$y, '"'.$examen->nombre.'"',1, 1 ,'C', true);
                 }
+                foreach ($examen->detallesExamenes as $detalleExamen) {
 
-                $this->Cell(9,$y,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
-                if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
-                    $this->SetFont('Times','BI',8);
-                    $this->SetTextColor(255, 0, 0);
+                    $ordenExamen=OrdenTieneExamenes::model()->find("id_detalles_examen=? AND id_ordenes=?",array($detalleExamen->id,$model->id));
+                    $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
+                    $heightRow=$this->GetMultiCellHeight(5,$y,$rango , 1 , 'C');
+                    
+                    $this->Cell(9,$heightRow,$ordenExamen->detalleExamen->descripcion ,1, 0 , 'C');
+                    if(isset($ordenExamen->resultado) && ($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior)){
+                        $this->SetFont('Times','BI',8);
+                        $this->SetTextColor(255, 0, 0);
+                    }
+                    $this->Cell(3.5,$heightRow,isset($ordenExamen->resultado)?$ordenExamen->resultado:"",1, 0 , 'C');
+                    $this->SetTextColor(0, 0, 0);
+                    $this->SetFont('Arial','',7.5);
+                    $this->Cell(2,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
+                    $this->MultiCell(5,$y,$rango , 1 , 'C');
+
+                    //$this->Cell(5,$y, $rango,1, 1 , 'C');
+                    $idExamenExiste = $examen->id;
                 }
-                $this->Cell(3.5,$y,$ordenExamen->resultado,1, 0 , 'C');
-                $this->SetTextColor(0, 0, 0);
-                $this->SetFont('Arial','',7.5);
-                $this->Cell(2,$y, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
-                $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-                $this->Cell(5,$y, $rango,1, 1 , 'C');
-                $idExamenExiste = $examen->id;
+                if($examen->tecnica!=null){
+                    $this->SetFont('Arial','',7.5);
+                    $this->MultiCell(19.5,$y, 'Método: '.$examen->tecnica,1, 'L', false);
+                }
             }
+
 
         }
         $this->ln(1);
         if($model->comentarios_resultados)
             $this->Cell(19.5,$y,"COMENTARIOS: ".$model->comentarios_resultados, 0, 1, 'L');
         //Observaciones
-        $this->ln(1);
-        $this->ln(1);
-        $this->SetFont('Arial','B',8);
-        $this->Cell(19.5,$y,'RESPONSABLE:', 0, 1, 'C');
-        $this->Cell(19.5,$y,'QFB. MARCO ANTONIO URTIS GARCÍA', 0, 1, 'C');
-        $this->Cell(19.5,$y,'CED. PROF. 1269174', 0, 1, 'C');
+        //$this->ln(1);
+        //$this->ln(1);
+        
         $this->ln(1);
         $this->SetFont('Arial','B',8);
         $fecha = date("d/m/y  H:i");
@@ -265,11 +274,12 @@ class ImprimirResultados extends FPDF{
                         $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
                         $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
                         $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
-                        if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                        if(isset($ordenExamen->resultado) && ($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior)){
                             $this->SetFont('Times','BI',8);
                             $this->SetTextColor(255, 0, 0);
                         }
-                        $this->Cell(3.5,$heightRow,$ordenExamen->resultado,1, 0 , 'C');
+
+                        $this->Cell(3.5,$heightRow,isset($ordenExamen->resultado)?$ordenExamen->resultado:"",1, 0 , 'C');
                         $this->SetTextColor(0, 0, 0);
                         $this->SetFont('Arial','',7.5);
                         $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
@@ -278,7 +288,7 @@ class ImprimirResultados extends FPDF{
                 }
             }
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
-                $this->Cell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 1, 'L', false);
+                $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
             }
         }else{
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
@@ -310,11 +320,12 @@ class ImprimirResultados extends FPDF{
                             $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
                             $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
                             $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
-                            if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                            
+                            if(isset($ordenExamen->resultado) && ($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior)){
                                 $this->SetFont('Times','BI',8);
                                 $this->SetTextColor(255, 0, 0);
                             }
-                            $this->Cell(3.5,$heightRow,$ordenExamen->resultado,1, 0 , 'C');
+                            $this->Cell(3.5,$heightRow,isset($ordenExamen->resultado)?$ordenExamen->resultado:"",1, 0 , 'C');
                             $this->SetTextColor(0, 0, 0);
                             $this->SetFont('Arial','',7.5);
                             $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
@@ -324,7 +335,7 @@ class ImprimirResultados extends FPDF{
                 }
             }
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
-                $this->Cell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 1, 'L', false);
+                $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
             }
         }
     }
@@ -332,10 +343,16 @@ class ImprimirResultados extends FPDF{
     function Footer()
 	{
 	//Position at 1.5 cm from bottom
-    $this->SetY(-6);
+    $this->SetY(-4);
     //Arial italic 8
+    $y=0.5;
+    $this->SetFont('Arial','B',8);
+    $this->Cell(19.5,$y,'RESPONSABLE:', 0, 1, 'C');
+    $this->Cell(19.5,$y,'QFB. MARCO ANTONIO URTIS GARCÍA', 0, 1, 'C');
+    $this->Cell(19.5,$y,'CED. PROF. 1269174', 0, 1, 'C');
     $this->SetFont('Arial','I',8);
     //Page number
-    $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
+    $this->Cell(0,$y*4,'Página '.$this->PageNo(),0,0,'C');
 	}
 }
+

@@ -310,6 +310,11 @@ class SiteController extends Controller
 			$correo->usuario_creacion=0;
 			$correo->save();
 		}
+		if(Slogan::model()->count()==0){
+			$slogan = new Slogan;
+			$slogan->slogan="Diagnóstico Clínico Integral.";
+			$slogan->save();
+		}
 	}
 
 	public function actionLoadModalSlogan(){

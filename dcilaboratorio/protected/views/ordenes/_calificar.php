@@ -1,6 +1,10 @@
 <?php
 /* @var $this OrdenesController */
 /* @var $model Ordenes */
+
+//$nivelImpresionSubgrupo=0;
+
+
 ?>
 <div class="portlet light">
 	<div class="row">
@@ -57,8 +61,13 @@
 			<?php
 
 			$anterior=0;
+
 			echo '<table class="table table-striped table-bordered dataTable">';
 
+			foreach ($ordenGruposModel as $grupote) {
+				echo $this->imprimirGrupo($grupote->id_grupos,$model->id);
+
+			}
 			foreach ($ordenExamenesModel as $i => $ordenExamen){
 				$detalleExamen=$ordenExamen->detalleExamen;
 				$examen=$detalleExamen->examenes;
@@ -101,6 +110,10 @@
 						</div>
 					</div>
 				</div>
+				
+				
+				<?php echo $form->textArea($model,'comentarios_resultados',array('rows'=>3, 'cols'=>45, 'class'=>'form-control width-all')); ?>
+				
 
 				<div class="form-actions" >
 						<?php echo CHtml::submitButton($model->isNewRecord ? 'Guardar' : 'Actualizar', array('class'=>'btn blue-stripe')); ?>
