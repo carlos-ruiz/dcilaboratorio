@@ -176,9 +176,9 @@ class ImprimirOrden extends FPDF{
             }
         }
 
-        if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
+       /* if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
             $this->Cell(19.5,$y, "Exámenes individuales" ,1, 1, 'C', true);
-        }
+        }*/
         $idExamenExiste = 0;
         foreach ($idsExamenes as $idExamen) {
             if(!in_array($idExamen,$examenesImpresos)){

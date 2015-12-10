@@ -84,7 +84,6 @@
 			            'type'=>'raw',
 			            'value'=>$this->obtenerSioNoComparteDr($model, $this),
 			        ),
-					'informacion_clinica_y_terapeutica',
 					'comentarios',
 				),
 			));
