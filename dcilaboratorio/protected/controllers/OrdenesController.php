@@ -51,13 +51,14 @@ class OrdenesController extends Controller
 			);
 	}
 
-	public function imprimirGrupo($idGrupo,$idOrden){
+	public function imprimirGrupo($idGrupo,$idOrden,$editable=true){
         $grupo = Grupos::model()->findByPk($idGrupo);
         echo '<thead><tr>
 						<th colspan="4" style="color:#59F36D">'.$grupo->nombre.'</th>'.
 					'</tr></thead>';
         $perfilDePerfiles = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
-        if(empty($perfilDePerfiles)){
+        
+        if(empty($perfilDePerfiles)){//Quiere decir que NO es es perfilote
             foreach ($grupo->grupoTiene as $grupoExamen) {
         		echo '<thead><tr>
 					<th colspan="4" style="color:#1e90ff">'.$grupoExamen->examen->nombre.'</th>'.
@@ -83,22 +84,36 @@ class OrdenesController extends Controller
                         //echo $rango;
                         echo '
 					<tr>
-						<td>'.$detalleExamen->descripcion.'</td>'.
-						'<td>'.'</td>
-						<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
-						<td>'.$rango.'</td>
-					</tr>';
-                    }
+						<td>'.$detalleExamen->descripcion.'</td>';
+						if($editable)
+							echo'<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenExamen->id.'][resultado]" id="OrdenTieneExamenes_'.$ordenExamen->id.'_resultado" value="'.$ordenExamen->resultado.'" type="text"></td>';
+						else {
+							echo'<td>';
+							if(isset($ordenExamen->resultado)&&strlen($ordenExamen->resultado)>0) echo $ordenExamen->resultado; else echo 'Sin Resultado';
+							echo '</td>';
+						}
+						echo '<td>'.$detalleExamen->unidadesMedida->nombre.'</td>'.
+						'<td>'.$rango.'</td>'.
+					'</tr>';
+					}
                 }
             }
         }else{
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
-
+  
             foreach ($hijos as $grupoHijo) {
+
                 $this->nivelImpresionSubgrupo++;
-                $this->imprimirGrupo($grupoHijo->id_grupo_hijo,$idOrden);
-                echo '<tr><td colspan="4"><textarea class="width-all" placeholder="Comentarios: '.$grupoHijo->idGrupoHijo->nombre.'" name="comentario_perfil['.$grupoHijo->id_grupo_hijo.']"></textarea></td></tr>';
-                $this->nivelImpresionSubgrupo--;
+                $this->imprimirGrupo($grupoHijo->id_grupo_hijo,$idOrden,$editable);
+                if($editable){
+                 echo '<tr><td colspan="4"><textarea class="width-all" value="asdasdasd" placeholder="Comentarios: '.$grupo->nombre.'" name="comentario_perfil['.$grupoHijo->id_grupo_hijo.']"></textarea></td></tr>';
+        		}else{
+        			$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$idGrupo));
+        			if(isset($ordenTieneGrupos->comentarios_perfil)){
+        				echo '<tr><td colspan="4">'.$ordenTieneGrupos->comentarios_perfil.'</td></tr>';
+        			}
+        		}
+        		$this->nivelImpresionSubgrupo--;
             }
 
             $examenesEnGruposHijo=array();
@@ -128,8 +143,10 @@ class OrdenesController extends Controller
                             //echo $idOrden." --- ".$detalleExamen->id;
 
                             $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
-                            //print_r($ordenExamen);
-                            //return;
+                           	$idOrdenExamen = $ordenExamen['id'];
+                           	$valueOrdenExamen = $ordenExamen['resultado'];
+                           	//echo $ordenExamen->id."<br />";
+         
                             //if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
                                 //$this->SetFont('Times','BI',8);
                                 //$this->SetTextColor(255, 0, 0);
@@ -139,13 +156,22 @@ class OrdenesController extends Controller
                             //negro
                             //echo $detalleExamen->unidadesMedida->abreviatura;
                             //echo $rango;
-                               echo '
+
+                            echo '
 							<tr>
-								<td>'.$detalleExamen->descripcion.'</td>'.
-								'<td>'.'</td>
-								<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
-								<td>'.$rango.'</td>
-							</tr>';
+								<td>'.$detalleExamen->descripcion.'</td>';
+								if($editable){
+									echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$idOrdenExamen.'][resultado]" id="OrdenTieneExamenes_'.$idOrdenExamen.'_resultado" value="'.$valueOrdenExamen.'" type="text"></td>';
+								}
+								else {
+									echo'<td>';
+									if(isset($ordenExamen->resultado)&&strlen($ordenExamen->resultado)>0) echo $ordenExamen->resultado; else echo 'Sin Resultado';
+									echo '</td>';
+								}
+								echo '<td>'.$detalleExamen->unidadesMedida->nombre.'</td>'.
+								'<td>'.$rango.'</td>'.
+							'</tr>';
+                            
                         }
                     }
                 }
@@ -153,7 +179,14 @@ class OrdenesController extends Controller
             
         }
         if($this->nivelImpresionSubgrupo==0){
-                 echo '<tr><td colspan="4"><textarea class="width-all" placeholder="Comentarios: '.$grupo->nombre.'" name="comentario_perfil['.$idGrupo.']"></textarea></td></tr>';
+        		if($editable){
+                 echo '<tr><td colspan="4"><textarea class="width-all" value="" placeholder="Comentarios: '.$grupo->nombre.'" name="comentario_perfil['.$idGrupo.']"></textarea></td></tr>';
+        		}else{
+        			$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$idGrupo));
+        			if(isset($ordenTieneGrupos->comentarios_perfil)){
+        				echo '<tr><td colspan="4">'.$ordenTieneGrupos->comentarios_perfil.'</td></tr>';
+        			}
+        		}
             }
     }
 
@@ -164,6 +197,22 @@ class OrdenesController extends Controller
 	public function actionView($id)
 	{
 		$orden = $this->loadModel($id);
+
+		$ordenExamenes = array();
+		$ordenGrupos = array();
+		$ordenGrupotes = array();
+
+		$ordenTieneExamenes = $orden->ordenTieneExamenes;
+		foreach ($ordenTieneExamenes as $ordenExamen) {
+			array_push($ordenExamenes, $ordenExamen);
+		}
+		$ordenTieneGrupos = $orden->ordenTieneGrupos;
+		foreach ($ordenTieneGrupos as $ordenGrupo) {
+			array_push($ordenGrupos, $ordenGrupo);
+			if(GruposPerfiles::model()->count("id_grupo_padre=?",array($ordenGrupo->id_grupos))>0){
+				array_push($ordenGrupotes,$ordenGrupo->grupo);
+			}
+		}
 		if(Yii::app()->user->getState('perfil')=='Doctor'){
 			$doctor = Doctores::model()->find("id_usuarios=?",array(Yii::app()->user->id));
 			if(!($orden->id_doctores==$doctor->id && $orden->compartir_con_doctor==1)){
@@ -193,6 +242,9 @@ class OrdenesController extends Controller
 			'pagos'=>$pagos,
 			'datosFacturacion'=>$datosFacturacion,
 			'examenes'=>$examenes,
+			'ordenExamenesModel'=>$ordenExamenes,
+			'ordenGruposModel'=>$ordenGrupos,
+			'ordenGrupotesModel'=>$ordenGrupotes,
 		));
 	}
 
@@ -224,6 +276,8 @@ class OrdenesController extends Controller
 			$fecha_edicion='2000-01-01 00:00:00';
 
 			$model->fecha_captura=$fecha_creacion;
+
+			$model->folio=$this->generateRandomString();
 
 			$pagos->fecha=$model->fecha_captura;
 			$validaRequiereFactura=true;
@@ -391,6 +445,9 @@ class OrdenesController extends Controller
 					$pagos->id_ordenes=$model->id;
 					if($totalPagado>0)
 						$pagos->save();
+
+					$model->folio= $model->folio.sprintf('%06d', $model->id);
+					$model->save();
 
 					$transaction->commit();
 					if(!isset($user))
@@ -854,15 +911,26 @@ class OrdenesController extends Controller
 		}
 		if (isset($_POST['OrdenTieneExamenes'])) {
 			$calificada = true;
-
+			
 			foreach ($_POST['OrdenTieneExamenes'] as $i => $value) {
-				$ordenExamenToSave = $ordenExamenes[$i];
+				
+				$ordenExamenToSave = OrdenTieneExamenes::model()->findByPk($i);
 				$ordenExamenToSave->resultado = $value['resultado'];
 				$ordenExamenToSave->save();
 				if ($calificada) {
 					$calificada = $ordenExamenToSave->resultado!="";
 				}
 			}
+			foreach ($_POST['comentario_perfil'] as $i => $value) {
+				echo $value."<br />";
+				//continue;
+				$ordenGrupoToSave = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($id,$i));
+				print_r($ordenGrupoToSave);
+				continue;
+				$ordenGrupoToSave->comentarios_perfil = $value;
+				$ordenGrupoToSave->save();
+			}
+			return;
 			$statusPagada=Status::model()->findByName("Pagada");
 			$statusCalificada=Status::model()->findByName("Calificada");
 			$statusFinalizada=Status::model()->findByName("Finalizada");
@@ -1124,5 +1192,15 @@ class OrdenesController extends Controller
 		}
 
 		echo $ids;
+	}
+
+	function generateRandomString($length = 6) {
+	    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+	    }
+	    return $randomString;
 	}
 }

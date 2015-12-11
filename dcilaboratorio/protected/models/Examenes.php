@@ -39,7 +39,7 @@ class Examenes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('clave, nombre, duracion_dias, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('nombre, duracion_dias, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
 			array('duracion_dias', 'numerical', 'integerOnly'=>true, 'min'=>0),
 			array('clave,nombre', 'unique'),
 			array('duracion_dias, usuario_ultima_edicion, usuario_creacion', 'numerical', 'integerOnly'=>true),

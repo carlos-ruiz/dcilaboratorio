@@ -29,7 +29,7 @@
 ?>
 <div class="portlet light">
 	<div class="row">
-		<h1>Orden con folio: <?php echo $model->id; ?></h1>
+		<h1>Orden con folio: <?php echo (isset($model->folio)&&strlen($model->folio)>0)?$model->folio:$model->id; ?></h1>
 		<div class="form-group col-md-4">
 
 			<div class="heading text-center">

@@ -9,6 +9,9 @@
 								'pagos'=>$pagos,
 								'datosFacturacion'=>$datosFacturacion,
 								'examenes'=>$examenes,
+								'ordenExamenesModel'=>$ordenExamenesModel,
+								'ordenGruposModel'=>$ordenGruposModel,
+								'ordenGrupotesModel'=>$ordenGrupotesModel,
 								)
 					 		);
  }
@@ -19,6 +22,9 @@
 								'pagos'=>$pagos,
 								'datosFacturacion'=>$datosFacturacion,
 								'examenes'=>$examenes,
+								'ordenExamenesModel'=>$ordenExamenesModel,
+								'ordenGruposModel'=>$ordenGruposModel,
+								'ordenGrupotesModel'=>$ordenGrupotesModel,
 								)
 					 		);
  }
@@ -29,6 +35,9 @@
 								'pagos'=>$pagos,
 								'datosFacturacion'=>$datosFacturacion,
 								'examenes'=>$examenes,
+								'ordenExamenesModel'=>$ordenExamenesModel,
+								'ordenGruposModel'=>$ordenGruposModel,
+								'ordenGrupotesModel'=>$ordenGrupotesModel,
 								)
 					 		);
  }

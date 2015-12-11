@@ -28,7 +28,7 @@ $pagado=$totalOrden-$total;
 ?>
 <div class="portlet light">
 	<div class="row">
-		<h1>Orden con folio: <?php echo $model->id; ?></h1>
+		<h1>Orden con folio: <?php echo (isset($model->folio)&&strlen($model->folio)>0)?$model->folio:$model->id; ?></h1>
 		<div class="form-group col-md-4">
 
 			<div class="heading text-center">
@@ -192,6 +192,47 @@ $pagado=$totalOrden-$total;
 							$aux=$model->ordenTieneExamenes;
 							$anterior=0;
 							$entrega=1;
+
+							echo '<table class="table table-striped table-bordered dataTable">';
+
+			// Muestra los examenes que perteneces a algun grupo
+			foreach ($ordenGruposModel as $grupote) {
+				echo $this->imprimirGrupo($grupote->id_grupos,$model->id, false);
+			}
+
+			// Muestra los examenes individuales
+			foreach ($ordenExamenesModel as $ordenTieneExamen) {
+				foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+					if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
+						if($detalleExamen->examenes->id!=$anterior){
+							echo '
+							<thead>
+								<tr>
+									<th colspan="4" style="color:#1e90ff ">'.$detalleExamen->examenes->nombre.'</th>
+								</tr>
+							</thead>
+							<tr>
+								<td>Descripción</td>
+								<td>Resultado</td>
+								<td>Unidad Medida</td>
+								<td>Rango normal</td>
+							</tr>';
+						}
+
+						echo '
+						<tr>
+							<td>'.$detalleExamen->descripcion.'</td>'.
+							'<td>'.(isset($ordenTieneExamen->resultado)?$ordenTieneExamen->resultado:("Sin Resultado")).'</td>
+							<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
+							<td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
+						</tr>';
+					$anterior=$detalleExamen->examenes->id;
+					}
+				}
+			}
+			 echo'</table>';
+
+			 /*
 							echo '<table class="table table-striped table-bordered dataTable">';
 
 
@@ -223,13 +264,15 @@ $pagado=$totalOrden-$total;
 								}
 
 								echo '</td><td>'.$detalleExamen->rango_inferior.'</td>
-								<td>'.$detalleExamen->rango_promedio.'</td>
-								<td>'.$detalleExamen->rango_superior.'</td>
-							</tr>';
+									<td>'.$detalleExamen->rango_promedio.'</td>
+									<td>'.$detalleExamen->rango_superior.'</td>
+								</tr>';
 
 							$anterior=$examen->id;
 							endforeach;
 							echo'</table>';
+
+				*/
 							?>
 							<br />
 							<?php if(isset($model->comentarios_resultados))

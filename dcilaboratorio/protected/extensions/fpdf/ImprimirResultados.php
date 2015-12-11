@@ -78,7 +78,7 @@ class ImprimirResultados extends FPDF{
         $this->SetTextColor(0, 0, 0);
         $this->Cell(3,$y,'Folio:', 0, 0);
         $this->SetFont('Arial','B',8);
-        $this->Cell(3,$y,$model->id, 0, 1);
+        $this->Cell(3,$y,(isset($model->folio)&&strlen($model->folio)>0)?$model->folio:$model->id, 0, 1);
         $this->setX(1.5);
         $this->SetFont('Arial','',8);
         $this->Cell(3,$y,'Paciente', 0, 0);

@@ -17,7 +17,7 @@ $this->renderPartial(
 		'model'=>$model,
 		'titulo'=>'Ordenes',
 		'columnas'=>array(
-			'id',
+			'folio',
 			'status.nombre',
 			array(
 				'name'=>'Paciente',
