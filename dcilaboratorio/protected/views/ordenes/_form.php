@@ -341,7 +341,6 @@ echo $form->errorSummary($datosFacturacion);
 							?>
 
 							<?php 
-								
 							foreach ($ordenTieneGrupos as $ordenGrupo): ?>
 
 								<?php
