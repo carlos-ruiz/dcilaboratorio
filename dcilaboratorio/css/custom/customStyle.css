@@ -98,3 +98,34 @@ input[type="radio"]{
 .width-all{
 	width:100%;
 }
+
+
+
+/*Fondo del cuadro de formulario*/
+.portlet.box > .portlet-body{
+	background-color: #04c !important;
+}
+
+
+/*Encabezado de tabla*/
+h3, h5{
+	color: white !important;
+}
+
+
+/*Colo de etiquetas formulario*/
+.control-label{
+	color: beige !important;
+}
+
+/*Parte de color del botón*/
+.form .form-actions{
+	    background-color: #04c !important;
+}
+
+/*Encabezado de tabla*/
+.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th{
+	color:beige !important;
+}
+
+/*Login*/

@@ -29,7 +29,16 @@ $pagado=$totalOrden-$total;
 <div class="portlet light">
 	<div class="row">
 		<h1>Orden con folio: <?php echo (isset($model->folio)&&strlen($model->folio)>0)?$model->folio:$model->id; ?></h1>
+		
 		<div class="form-group col-md-4">
+						<?php
+							echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
+							echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
+							echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados columnas',Yii::app()->createUrl('ordenes/imprimirResultadosArchivo',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
+							if (($model->status->nombre == 'Pagada' || $model->status->nombre == 'Finalizada') && $model->requiere_factura == 1) {
+								echo CHtml::link('<i class="icon-printer"></i> Imprimir factura',Yii::app()->createUrl('facturacion/generarFactura',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
+							}
+						?>
 
 			<div class="heading text-center">
 				<h3 style="color:#1e90ff ">Datos de la orden</h3>
@@ -158,29 +167,20 @@ $pagado=$totalOrden-$total;
 
 								echo '<table class="table table-striped table-bordered dataTable"><tr>
 								<th colspan="3" style="color:#1e90ff "> <center>Tarda '.$entrega.' día(s) para entregarse</center></th></<tr>'; ?>
-								<?php
-								if($total<$totalOrden) { ?>
-								<tr>
-									<td>
-										<a class="btn red" style="width:100%;" href="<?php echo CController::createUrl('ordenes/loadModalContent',array('id_ordenes'=>"$model->id"));?>" data-target="#modal" data-toggle="modal">Agregar pago</a>
-									</td>
-								</tr>
-
-								<?php } ?>
+							
 							</table>
-							<?php
-							echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
-							echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
-							echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados columnas',Yii::app()->createUrl('ordenes/imprimirResultadosArchivo',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
-							if (($model->status->nombre == 'Pagada' || $model->status->nombre == 'Finalizada') && $model->requiere_factura == 1) {
-								echo CHtml::link('<i class="icon-printer"></i> Imprimir factura',Yii::app()->createUrl('facturacion/generarFactura',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
-							}
-							?>
 						</div>
 
 
 						<div class="form-group col-md-8">
-
+						<div class="col-md-4">
+						<?php
+								if($total<$totalOrden) { ?>							
+									<div class="col-md-12">
+										<a class="btn red" style="width:100%;" href="<?php echo CController::createUrl('ordenes/loadModalContent',array('id_ordenes'=>"$model->id"));?>" data-target="#modal" data-toggle="modal">Agregar pago</a>
+									</div>					
+								<?php } ?>
+						</div>
 
 							<div class="heading text-center">
 								<h3 style="color:#1e90ff ">Examenes</h3>
