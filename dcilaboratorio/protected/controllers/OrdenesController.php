@@ -109,12 +109,16 @@ class OrdenesController extends Controller
                 $this->nivelImpresionSubgrupo++;
                 $this->imprimirGrupo($grupoHijo->id_grupo_hijo,$idOrden,$editable);
                 $grupoHijoModel=Grupos::model()->findByPk($grupoHijo->id_grupo_hijo);
+                $ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$grupoHijo->id_grupo_hijo));
                 if($editable){
-                 echo '<tr><td colspan="4"><textarea class="width-all" value="asdasdasd" placeholder="Comentarios: '.$grupoHijoModel->nombre.'" name="comentario_perfil['.$grupoHijo->id_grupo_hijo.']"></textarea></td></tr>';
+                 echo '<tr><td colspan="4"><textarea class="width-all" placeholder="Comentarios: '.$grupoHijoModel->nombre.'" name="comentario_perfil['.$grupoHijo->id_grupo_hijo.']">'.
+                 	(isset($ordenTieneGrupos->comentarios_perfil)?
+                 		$ordenTieneGrupos->comentarios_perfil
+                 		:'').
+                 	'</textarea></td></tr>';
         		}else{
-        			$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$grupoHijo->id));
         			if(isset($ordenTieneGrupos->comentarios_perfil)){
-        				echo '<tr><td colspan="4">'.$ordenTieneGrupos->comentarios_perfil.'</td></tr>';
+        				echo '<tr><td colspan="4">Comentarios sobre '.$grupoHijoModel->nombre.": ".$ordenTieneGrupos->comentarios_perfil.'</td></tr>';
         			}
         		}
         		$this->nivelImpresionSubgrupo--;
@@ -173,12 +177,17 @@ class OrdenesController extends Controller
             
         }
         if($this->nivelImpresionSubgrupo==0){
+        		$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$idGrupo));
+        		
         		if($editable){
-                 echo '<tr><td colspan="4"><textarea class="width-all" value="" placeholder="Comentarios: '.$grupo->nombre.'" name="comentario_perfil['.$idGrupo.']"></textarea></td></tr>';
+                 echo '<tr><td colspan="4"><textarea class="width-all" placeholder="Comentarios: '.$grupo->nombre.'" name="comentario_perfil['.$idGrupo.']">'.
+                 	(isset($ordenTieneGrupos->comentarios_perfil)?
+                 		$ordenTieneGrupos->comentarios_perfil
+                 		:'').
+                 	'</textarea></td></tr>';
         		}else{
-        			$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$idGrupo));
         			if(isset($ordenTieneGrupos->comentarios_perfil)){
-        				echo '<tr><td colspan="4">'.$ordenTieneGrupos->comentarios_perfil.'</td></tr>';
+        				echo '<tr><td colspan="4">Comentarios sobre '.$grupo->nombre.": ".$ordenTieneGrupos->comentarios_perfil.'</td></tr>';
         			}
         		}
             }
@@ -202,7 +211,21 @@ class OrdenesController extends Controller
 		}
 		$ordenTieneGrupos = $orden->ordenTieneGrupos;
 		foreach ($ordenTieneGrupos as $ordenGrupo) {
-			array_push($ordenGrupos, $ordenGrupo);
+			$grupitos=GruposPerfiles::model()->findAll("id_grupo_hijo=?",array($ordenGrupo->id_grupos)); 
+			if(isset($grupitos)){
+				$papaEstaEnLaOrden=false;
+				foreach ($grupitos as $grupito) {
+					$papa=OrdenTieneGrupos::model()->find("id_grupos=?",array($grupito->id_grupo_padre));
+					if(isset($papa)){
+						$papaEstaEnLaOrden=true;
+					}
+				}
+				if(!$papaEstaEnLaOrden){
+					array_push($ordenGrupos, $ordenGrupo);
+				}
+			}else{
+				array_push($ordenGrupos, $ordenGrupo);
+			}
 			if(GruposPerfiles::model()->count("id_grupo_padre=?",array($ordenGrupo->id_grupos))>0){
 				array_push($ordenGrupotes,$ordenGrupo->grupo);
 			}
@@ -914,7 +937,21 @@ class OrdenesController extends Controller
 		}
 		$ordenTieneGrupos = $model->ordenTieneGrupos;
 		foreach ($ordenTieneGrupos as $ordenGrupo) {
-			array_push($ordenGrupos, $ordenGrupo);
+			$grupitos=GruposPerfiles::model()->findAll("id_grupo_hijo=?",array($ordenGrupo->id_grupos)); 
+			if(isset($grupitos)){
+				$papaEstaEnLaOrden=false;
+				foreach ($grupitos as $grupito) {
+					$papa=OrdenTieneGrupos::model()->find("id_grupos=?",array($grupito->id_grupo_padre));
+					if(isset($papa)){
+						$papaEstaEnLaOrden=true;
+					}
+				}
+				if(!$papaEstaEnLaOrden){
+					array_push($ordenGrupos, $ordenGrupo);
+				}
+			}else{
+				array_push($ordenGrupos, $ordenGrupo);
+			}
 			if(GruposPerfiles::model()->count("id_grupo_padre=?",array($ordenGrupo->id_grupos))>0){
 				array_push($ordenGrupotes,$ordenGrupo->grupo);
 			}
