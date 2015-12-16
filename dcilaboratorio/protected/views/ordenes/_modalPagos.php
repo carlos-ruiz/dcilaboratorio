@@ -1,4 +1,5 @@
 <script type="text/javascript">
+	$("#modalAceptar").hide();
 	$("#modalCancelar").show();
 	$("#modalGuardar").show();
 	$("#modalTitle").text("Agregar pago");

@@ -136,140 +136,28 @@ class ImprimirResultadosArchivo extends FPDF{
         //$this->examenesImpresos=array();
         $ordenTieneGrupos = OrdenTieneGrupos::model()->findAll('id_ordenes=?',array($model->id));
         $gruposExistentesEnOrden=array();
-        foreach ($ordenTieneGrupos as $ordenTieneGrupo) {
-            array_push($gruposExistentesEnOrden,$ordenTieneGrupo->id_grupos);
+        foreach ($ordenTieneGrupos as $ordenGrupo) {
+            $grupitos=GruposPerfiles::model()->findAll("id_grupo_hijo=?",array($ordenGrupo->id_grupos)); 
+            if(isset($grupitos)){
+                $papaEstaEnLaOrden=false;
+                foreach ($grupitos as $grupito) {
+                    $papa=OrdenTieneGrupos::model()->find("id_grupos=?",array($grupito->id_grupo_padre));
+                    if(isset($papa)){
+                        $papaEstaEnLaOrden=true;
+                    }
+                }
+                if(!$papaEstaEnLaOrden){
+                    array_push($gruposExistentesEnOrden, $ordenGrupo->id_grupos);
+                }
+            }else{
+                array_push($gruposExistentesEnOrden, $ordenGrupo->id_grupos);
+            }
         }
 
         foreach ($gruposExistentesEnOrden as $grupo) {
-            $this->imprimirGrupo($grupo);
+            $this->imprimirGrupo($grupo,$model->id);
         }
-/*
-        foreach ($gruposExistentesEnOrden as $grupo) {
-            if($numeroColumna==1 && $this->y>$limiteY){
-                $numeroColumna = 2;
-                $this->SetLeftMargin(11);
-                $this->setY(4.5);
-                $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
-                $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
-                $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
-                $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
-            }
-            if($numeroColumna==2 && $this->y>$limiteY){
-                $numeroColumna = 1;
-                $this->Cell(4.39,$y, '',0, 0 , 'C', false);
-                $this->SetLeftMargin(1);
-                $this->setY(2);
-                $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
-                $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
-                $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
-                $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
-            }
-            $grupo = Grupos::model()->findByPk($grupo);
-            $examenesEnGrupo=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupo->id));
-            $examenesIds=array();
 
-            foreach ($examenesEnGrupo as $grupoExamen) {
-                array_push($examenesIds, $grupoExamen->id_examenes);
-            }
-            if(sizeof($idsExamenes)!=sizeof($examenesImpresos)){
-                $this->SetFillColor(117, 163, 240);
-                $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupo->id));
-                if(isset($ordenTieneGrupo)){
-                    $this->Cell(9.71,$y, $grupo->nombre ,1, 1, 'C', true);
-                }
-            }
-
-
-            foreach($gruposExistentesEnOrden as $grupoY){
-                if($grupoY!=$grupo->id){
-                    $examenesEnGrupoY=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupoY));
-                    $examenesIdsY=array();
-                    foreach ($examenesEnGrupoY as $grupoExamenY) {
-                        array_push($examenesIdsY, $grupoExamenY->id_examenes);
-                    }
-                    if(count(array_intersect($examenesIdsY, $examenesIds)) == count($examenesIdsY)&&sizeof($idsExamenes)!=sizeof($examenesImpresos)){
-                        $grupoY=Grupos::model()->findByPk($grupoY);
-                        $this->SetFillColor(117, 163, 240);
-                        $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupoY->id));
-                        if(isset($ordenTieneGrupo)){
-                            $this->Cell(9.71,$y, $grupoY->nombre ,1, 1, 'C', true);
-                        }
-                    }
-                }
-            }
-
-            foreach ($ordenTieneExamenes as $ordenExamen) {
-                if($numeroColumna==1 && $this->y>$limiteY){
-                    $numeroColumna = 2;
-                    $this->SetLeftMargin(11);
-                    $this->setY(4.5);
-                    $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
-                    $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
-                    $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
-                    $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
-                }
-                if($numeroColumna==2 && $this->y>$limiteY){
-                    $numeroColumna = 1;
-                    $this->Cell(4.39,$y, '',0, 0 , 'C', false);
-                    $this->SetLeftMargin(1);
-                    $this->setY(2);
-                    $this->Cell(4.39,$y, 'Determinación Análitica',1, 0 , 'C', true);
-                    $this->Cell(1.74,$y, 'Resultado',1, 0 , 'C', true);
-                    $this->Cell(1.19,$y, 'Unidad',1, 0 , 'C', true);
-                    $this->Cell(2.39,$y, 'Rango Normal',1, 1 , 'C', true);
-                }
-                $examen = $ordenExamen->detalleExamen->examenes;
-                if(in_array($examen->id, $examenesIds)&&!in_array($examen->id, $examenesImpresos)){
-                    //Pintamos el examen
-                    array_push($examenesImpresos, $examen->id);
-                    //if($examen->id!=$idExamen){
-                        //$this->SetFont('Arial','B',8);
-                        //$this->SetFillColor(213, 224, 241);
-                        //$this->Cell(9.71,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
-                    //}
-
-                    $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-                    $heightRow = $this->GetMultiCellHeight(4.39,$y,$ordenExamen->detalleExamen->descripcion,1, 'C');
-                    $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
-                    $rangoMasAlto=$heightRow>$heightRowRango?false:true;
-                    $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
-
-                    if($rangoMasAlto)
-                        $this->Cell(4.39,$heightRow,$ordenExamen->detalleExamen->descripcion ,'B', 0 , 'L');
-                    else{
-                        $xActual=$this->x;
-                        $this->MultiCell(4.39,$y,$ordenExamen->detalleExamen->descripcion , 'B' , 'L');
-                        $this->setXY($xActual+4.39,$this->y-$heightRow);
-                    }
-                    if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
-                        $this->SetFont('Times','BI',8);
-                        $this->SetTextColor(255, 0, 0);
-                    }
-                    $this->Cell(1.74,$heightRow,$ordenExamen->resultado,'B', 0 , 'C');
-                    $this->SetTextColor(0, 0, 0);
-                    $this->SetFont('Arial','B',8);
-                    $this->Cell(1.19,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
-                    if(!$rangoMasAlto)
-                        $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
-                    else{
-                        //$xActual=$this->x;
-                        $this->MultiCell(2.39,$y, $rango,'B', 'C');
-                        //$this->setXY($xActual+4.39,$this->y-$heightRow);
-                    }
-
-                }
-                $idExamen = $examen->id;
-            }
-
-            $ordenTieneGrupo = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?", array($model->id, $grupo->id));
-            if(isset($ordenTieneGrupo)){
-                if($grupo->comentarios!=null){
-                 $this->Cell(9.71,$y, 'MÉTODO: '.$grupo->comentarios ,"B", 1, 'L', false);
-                }
-            }this->
-
-        }
-*/
         if(sizeof($idsExamenes)!=sizeof($this->examenesImpresos)){
             //$this->SetFillColor(117, 163, 240);
             //$this->Cell(9.71,$y, "EXÁMENES INDIVIDUALES" ,1, 1, 'C', true);
@@ -306,39 +194,41 @@ class ImprimirResultadosArchivo extends FPDF{
                     $this->Cell(9.71,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
                 }*/
                 foreach ($examen->detallesExamenes as $detalleExamen) {
-
+                    
                     $ordenExamen=OrdenTieneExamenes::model()->find("id_detalles_examen=? AND id_ordenes=?",array($detalleExamen->id,$model->id));
-                    $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
-                    $heightRow = $this->GetMultiCellHeight(4.39,$y,$ordenExamen->detalleExamen->descripcion,1, 'C');
-                    $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
-                    $rangoMasAlto=$heightRow>$heightRowRango?false:true;
-                    $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
+                    if(isset($ordenExamen)){
+                        $rango=$ordenExamen->detalleExamen->rango_inferior.'-'.$ordenExamen->detalleExamen->rango_promedio.'-'.$ordenExamen->detalleExamen->rango_superior;
+                        $heightRow = $this->GetMultiCellHeight(4.39,$y,$ordenExamen->detalleExamen->descripcion,1, 'C');
+                        $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
+                        $rangoMasAlto=$heightRow>$heightRowRango?false:true;
+                        $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
 
-                    if($rangoMasAlto)
-                        $this->Cell(4.39,$heightRow,$ordenExamen->detalleExamen->descripcion ,'B', 0 , 'C');
-                    else{
-                        $xActual=$this->x;
-                        $this->MultiCell(4.39,$y,$ordenExamen->detalleExamen->descripcion , 'B' , 'C');
-                        $this->setXY($xActual+4.39,$this->y-$heightRow);
-                    }
-                    if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
-                        $this->SetFont('Times','BI',8);
-                        $this->SetTextColor(255, 0, 0);
-                    }
-                    $this->Cell(1.74,$heightRow,$ordenExamen->resultado,'B', 0 , 'C');
-                    $this->SetTextColor(0, 0, 0);
-                    $this->SetFont('Arial','B',8);
-                    $this->Cell(1.19,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
-                    if(!$rangoMasAlto)
-                        $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
-                    else{
-                        //$xActual=$this->x;
-                        $this->MultiCell(2.39,$y, $rango,'B', 'C');
-                        //$this->setXY($xActual+4.39,$this->y-$heightRow);
-                    }
+                        if($rangoMasAlto)
+                            $this->Cell(4.39,$heightRow,$ordenExamen->detalleExamen->descripcion ,'B', 0 , 'C');
+                        else{
+                            $xActual=$this->x;
+                            $this->MultiCell(4.39,$y,$ordenExamen->detalleExamen->descripcion , 'B' , 'C');
+                            $this->setXY($xActual+4.39,$this->y-$heightRow);
+                        }
+                        if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
+                            $this->SetFont('Times','BI',8);
+                            $this->SetTextColor(255, 0, 0);
+                        }
+                        $this->Cell(1.74,$heightRow,$ordenExamen->resultado,'B', 0 , 'C');
+                        $this->SetTextColor(0, 0, 0);
+                        $this->SetFont('Arial','B',8);
+                        $this->Cell(1.19,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
+                        if(!$rangoMasAlto)
+                            $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
+                        else{
+                            //$xActual=$this->x;
+                            $this->MultiCell(2.39,$y, $rango,'B', 'C');
+                            //$this->setXY($xActual+4.39,$this->y-$heightRow);
+                        }
 
-                    //$this->Cell(2.39,$y, $rango,1, 1 , 'C');
-                    $idExamenExiste = $examen->id;
+                        //$this->Cell(2.39,$y, $rango,1, 1 , 'C');
+                        $idExamenExiste = $examen->id;
+                    }
                 }
                 if($examen->tecnica!=null){
                     //$this->SetFont('Arial','',7.5);
@@ -377,7 +267,7 @@ class ImprimirResultadosArchivo extends FPDF{
 
     }
 
-    function imprimirGrupo($idGrupo){
+    function imprimirGrupo($idGrupo,$idOrden){
         $y = 0.5;
         $grupo = Grupos::model()->findByPk($idGrupo);
         $this->SetFillColor(117, 163, 240);
@@ -388,55 +278,71 @@ class ImprimirResultadosArchivo extends FPDF{
         if(empty($perfilDePerfiles)){
             foreach ($grupo->grupoTiene as $grupoExamen) {
                 foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
+                    
                     if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
                         //Pintamos el examen
                         array_push($this->examenesImpresos, $detalleExamen->id_examenes);
-
-                        $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
-                        $heightRow = $this->GetMultiCellHeight(4.39,$y, $rango,1, 'C');
-                        $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
-                        $rangoMasAlto=$heightRow>$heightRowRango?false:true;
-                        $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
-
-                        if(!$rangoMasAlto)
-                            $this->Cell(4.39,$heightRow,$detalleExamen->descripcion ,'B', 0 , 'C');
-                        else{
-                            $xActual=$this->x;
-                            $this->MultiCell(4.39,$y,$detalleExamen->descripcion , 'B' , 'C');
-                            $this->setXY($xActual+4.39,$this->y-$heightRow);
-                        }
-                        
-
-                        
                         $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
-                        if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
-                            $this->SetFont('Times','BI',8);
-                            $this->SetTextColor(255, 0, 0);
-                        }
-                        $this->Cell(1.74,$heightRow,$ordenExamen->resultado,'B', 0 , 'C');
-                        $this->SetTextColor(0, 0, 0);
-                        $this->SetFont('Arial','B',8);
-                        $this->Cell(1.19,$heightRow, $detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
-                        if($rangoMasAlto)
-                            $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
-                        else{
-                            //$xActual=$this->x;
-                            $this->MultiCell(2.39,$y, $rango,'B', 'C');
-                            //$this->setXY($xActual+4.39,$this->y-$heightRow);
-                        }
+                        if(isset($ordenExamen)){
+                            $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
+                            $heightRow = $this->GetMultiCellHeight(4.39,$y, $rango,1, 'C');
+                            $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
+                            $rangoMasAlto=$heightRow>$heightRowRango?false:true;
+                            $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
 
+                            if(!$rangoMasAlto)
+                                $this->Cell(4.39,$heightRow,$detalleExamen->descripcion ,'B', 0 , 'C');
+                            else{
+                                $xActual=$this->x;
+                                $this->MultiCell(4.39,$y,$detalleExamen->descripcion , 'B' , 'C');
+                                $this->setXY($xActual+4.39,$this->y-$heightRow);
+                            }
+                            
+
+                            
+                            $checaColor=substr($ordenExamen->resultado, 0,1);
+                            if(!isset($ordenExamen->resultado)){
+                                $resultado=$ordenExamen->resultado;
+                            }elseif($checaColor=="*"){//color negro y negritas
+                                $resultado=substr($ordenExamen->resultado, 1);
+                            }elseif($checaColor=="#"){//color rojo
+                                $this->SetFont('Times','BI',8);
+                                $this->SetTextColor(255, 0, 0);
+                                $resultado=substr($ordenExamen->resultado, 1);
+                            }elseif($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                                $resultado=$ordenExamen->resultado;
+                                $this->SetFont('Times','BI',8);
+                                $this->SetTextColor(255, 0, 0);
+                            }
+                            $this->Cell(1.74,$heightRow,$resultado,'B', 0 , 'C');
+                            $this->SetTextColor(0, 0, 0);
+                            $this->SetFont('Arial','B',8);
+                            $this->Cell(1.19,$heightRow, $detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
+                            if($rangoMasAlto)
+                                $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
+                            else{
+                                //$xActual=$this->x;
+                                $this->MultiCell(2.39,$y, $rango,'B', 'C');
+                                //$this->setXY($xActual+4.39,$this->y-$heightRow);
+                            }
+
+                        }
                     }
                 }
             }
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
                 $this->MultiCell(9.71,$y, 'Método: '.$grupo->comentarios ,'B', 'L', false);
             }
+            $ordenTieneGrupos = OrdenTieneGrupos::model()->find('id_ordenes=? AND id_grupos=?',array($idOrden,$grupo->id));
+            if($ordenTieneGrupos->comentarios_perfil!=null){
+                $this->MultiCell(9.71,$y, 'Comentarios: '.$ordenTieneGrupos->comentarios_perfil ,'B', 'L', false);
+            }
         }else{
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
             
             foreach ($hijos as $grupoHijo) {
                 $this->nivelImpresionSubgrupo++;
-                $this->imprimirGrupo($grupoHijo->id_grupo_hijo);
+                $this->imprimirGrupo($grupoHijo->id_grupo_hijo,$idOrden);
                 $this->nivelImpresionSubgrupo--;
             }
 
@@ -455,35 +361,49 @@ class ImprimirResultadosArchivo extends FPDF{
                         
                         array_push($this->examenesImpresos, $grupoExamen->examen->id);
                         foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {                        
-
-                            $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
-                            $heightRow = $this->GetMultiCellHeight(4.39,$y, $rango,1, 'C');
-                            $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
-                            $rangoMasAlto=$heightRow>$heightRowRango?false:true;
-                            $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
-                            $this->SetFont('Arial','B',8);
-                            if($rangoMasAlto)
-                                $this->Cell(4.39,$heightRow,$detalleExamen->descripcion ,'B', 0 , 'C');
-                            else{
-                                $xActual=$this->x;
-                                $this->MultiCell(4.39,$y,$detalleExamen->descripcion , 'B' , 'C');
-                                $this->setXY($xActual+4.39,$this->y-$heightRow);
-                            }
+                            
                             $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
-                            if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
-                                $this->SetFont('Times','BI',8);
-                                $this->SetTextColor(255, 0, 0);
-                            }
-                            $this->Cell(1.74,$heightRow,$ordenExamen->resultado,'B', 0 , 'C');
-                            $this->SetTextColor(0, 0, 0);
-                            $this->SetFont('Arial','B',8);
-                            $this->Cell(1.19,$heightRow, $detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
-                            if(!$rangoMasAlto)
-                                $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
-                            else{
-                                //$xActual=$this->x;
-                                $this->MultiCell(2.39,$y, $rango,'B', 'C');
-                                //$this->setXY($xActual+4.39,$this->y-$heightRow);
+                            if(isset($ordenExamen)){
+                                $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
+                                $heightRow = $this->GetMultiCellHeight(4.39,$y, $rango,1, 'C');
+                                $heightRowRango = $this->GetMultiCellHeight(2.39,$y,$rango,1, 'C');
+                                $rangoMasAlto=$heightRow>$heightRowRango?false:true;
+                                $heightRow=$heightRow>$heightRowRango?$heightRow:$heightRowRango;
+                                $this->SetFont('Arial','B',8);
+                                if($rangoMasAlto)
+                                    $this->Cell(4.39,$heightRow,$detalleExamen->descripcion ,'B', 0 , 'C');
+                                else{
+                                    $xActual=$this->x;
+                                    $this->MultiCell(4.39,$y,$detalleExamen->descripcion , 'B' , 'C');
+                                    $this->setXY($xActual+4.39,$this->y-$heightRow);
+                                }
+                                
+                                $checaColor=substr($ordenExamen->resultado, 0,1);
+                                if(!isset($ordenExamen->resultado)){
+                                    $resultado="s/r";
+                                }elseif($checaColor=="*"){//color negro y negritas
+                                    $resultado=substr($ordenExamen->resultado, 1);
+                                }elseif($checaColor=="#"){//color rojo
+                                    $this->SetFont('Times','BI',8);
+                                    $this->SetTextColor(255, 0, 0);
+                                    $resultado=substr($ordenExamen->resultado, 1);
+                                }elseif($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                                    $resultado=$ordenExamen->resultado;
+                                    $this->SetFont('Times','BI',8);
+                                    $this->SetTextColor(255, 0, 0);
+                                }
+                          
+                                $this->Cell(1.74,$heightRow,$resultado,'B', 0 , 'C');
+                                $this->SetTextColor(0, 0, 0);
+                                $this->SetFont('Arial','B',8);
+                                $this->Cell(1.19,$heightRow, $detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
+                                if(!$rangoMasAlto)
+                                    $this->Cell(2.39,$heightRow,$rango ,'B', 1 , 'C');
+                                else{
+                                    //$xActual=$this->x;
+                                    $this->MultiCell(2.39,$y, $rango,'B', 'C');
+                                    //$this->setXY($xActual+4.39,$this->y-$heightRow);
+                                }
                             }
                         }
                     }
@@ -491,6 +411,10 @@ class ImprimirResultadosArchivo extends FPDF{
             }
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
                 $this->MultiCell(9.71,$y, 'Método: '.$grupo->comentarios ,'B', 'L', false);
+            }
+            $ordenTieneGrupos = OrdenTieneGrupos::model()->find('id_ordenes=? AND id_grupos=?',array($idOrden,$grupo->id));
+            if($ordenTieneGrupos->comentarios_perfil!=null){
+                $this->MultiCell(9.71,$y, 'Comentarios: '.$ordenTieneGrupos->comentarios_perfil ,'B', 'L', false);
             }
         }
     }

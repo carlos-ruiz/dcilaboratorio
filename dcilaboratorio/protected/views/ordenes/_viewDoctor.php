@@ -87,42 +87,41 @@
 				$anterior=0;
 
 				echo '<table class="table table-striped table-bordered dataTable">';
-
-				 foreach ($aux as $ordenExamen):
-					$detalleExamen=$ordenExamen->detalleExamen;
-					$examen=$detalleExamen->examenes;
-					if($examen->id!=$anterior){
-						if($examen->duracion_dias>$entrega)
-							$entrega=$examen->duracion_dias;
-
-						echo '<thead><tr><th colspan="5" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
-				   		<tr><td>Descripción</td>
+							echo '
+				   		<thead><tr><td>Descripción</td>
 				   		<td>Resultado</td>
-				   		<td>R. I.</td>
-				   		<td>R. P.</td>
-				   		<td>R. S.</td></tr>';
-					}
+				   		<td>Unidad de medida</td>
+				   		<td>Rango normal</td></tr></thead>';
+			// Muestra los examenes que perteneces a algun grupo
+			foreach ($ordenGruposModel as $grupote) {
+				echo $this->imprimirGrupo($grupote->id_grupos,$model->id, false);
+			}
 
-					echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
-					if ($ordenExamen->resultado=='') {
-						echo "Sin resultado";
-					}
-					else{
-						$color = "#000";
-						if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
-							$color = "#f00";
+			// Muestra los examenes individuales
+			foreach ($ordenExamenesModel as $ordenTieneExamen) {
+				foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+					if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
+						if($detalleExamen->examenes->id!=$anterior){
+							echo '
+							<thead>
+								<tr>
+									<th colspan="4" style="color:#1e90ff ">'.$detalleExamen->examenes->nombre.'</th>
+								</tr>
+							</thead>';
 						}
-						echo "<span style='color: $color;'>".$ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura."</span>";
+
+						echo '
+						<tr>
+							<td>'.$detalleExamen->descripcion.'</td>'.
+							'<td>'.(isset($ordenTieneExamen->resultado)?$ordenTieneExamen->resultado:("Sin Resultado")).'</td>
+							<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
+							<td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
+						</tr>';
+					$anterior=$detalleExamen->examenes->id;
 					}
-
-					echo '</td><td>'.$detalleExamen->rango_inferior.'</td>
-					<td>'.$detalleExamen->rango_promedio.'</td>
-					<td>'.$detalleExamen->rango_superior.'</td>
-					</tr>';
-
-					$anterior=$examen->id;
-				 endforeach;
-				 echo'</table>';
+				}
+			}
+			 echo'</table>';
 				 ?>
 				 <br />
 				<?php if(isset($model->comentarios_resultados))

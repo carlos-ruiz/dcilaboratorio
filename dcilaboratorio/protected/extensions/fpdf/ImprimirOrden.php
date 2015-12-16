@@ -138,6 +138,27 @@ class ImprimirOrden extends FPDF{
             }
         }
 
+        //Para quitar los grupitos de los grupotes existetes en la orden y que no se impriman
+        $gruposExistentesEnOrdenAux=array();
+        foreach ($gruposExistentesEnOrden as $filtroOrdenTieneGrupos) {
+            $grupitos=GruposPerfiles::model()->findAll("id_grupo_hijo=?",array($filtroOrdenTieneGrupos)); 
+            if(isset($grupitos)){
+                $papaEstaEnLaOrden=false;
+                foreach ($grupitos as $grupito) {
+                    $papa=OrdenTieneGrupos::model()->find("id_grupos=?",array($grupito->id_grupo_padre));
+                    if(isset($papa)){
+                        $papaEstaEnLaOrden=true;
+                    }
+                }
+                if(!$papaEstaEnLaOrden){
+                    array_push($gruposExistentesEnOrdenAux, $filtroOrdenTieneGrupos);
+                }
+            }else{
+                array_push($gruposExistentesEnOrdenAux, $filtroOrdenTieneGrupos);
+            }
+        }
+        $gruposExistentesEnOrden=$gruposExistentesEnOrdenAux;
+
         $examenesImpresos=array();
         foreach ($gruposExistentesEnOrden as $grupo) {
             $grupo = Grupos::model()->findByPk($grupo);
@@ -185,7 +206,7 @@ class ImprimirOrden extends FPDF{
                 $examen=Examenes::model()->findByPk($idExamen);
                 if($examen->id!=$idExamenExiste){
                     $this->Cell(3.5,$y, $examen->clave,1, 0);
-                    $this->Cell(12,$y, $examen->nombre,1, 0 );
+                    $this->Cell(12,$y, $examen->nombre,1, 0, 'C' );
                     $precio = OrdenPrecioExamen::model()->findByAttributes(array('id_ordenes'=>$model->id, 'id_examenes'=>$examen->id));
                     $this->Cell(4,$y, '$ '.number_format($precio->precio, 2),1, 1, 'R');
                     $totalOrden += $precio->precio;

@@ -99,6 +99,12 @@ input[type="radio"]{
 	width:100%;
 }
 
+.error-style{
+	font-style: italic;
+    font-weight: bold;
+    color: #ff0000;
+}
+
 
 
 /*Fondo del cuadro de formulario*/

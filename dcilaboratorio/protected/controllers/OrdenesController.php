@@ -34,7 +34,7 @@ class OrdenesController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','view', 'create','admin','update','loadModalContent','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen','imprimirResultadosArchivo'),
+				'actions'=>array('index','view', 'create','admin','update','loadModalContent','loadModalEmail','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen','imprimirResultadosArchivo'),
 				'users'=>Usuarios::model()->obtenerPorPerfil('Administrador'),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -64,34 +64,39 @@ class OrdenesController extends Controller
         		echo '<thead><tr>
 					<th colspan="4" style="color:#1e90ff">'.$grupoExamen->examen->nombre.'</th>'.
 				'</tr></thead>';
+
 				
                 foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
-                	if($detalleExamen->activo==1){
-	                    if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
-	                    	
-	                        //Pintamos el examen
-	                        array_push($this->examenesImpresos, $detalleExamen->id_examenes);
+                	
+                    if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
+                    	
+                        //Pintamos el examen
+                        array_push($this->examenesImpresos, $detalleExamen->id_examenes);
+                        $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
+                        if(isset($ordenExamen)){
 	                        $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
 
-	                        //echo $detalleExamen->descripcion;
-	                        $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
-	                        if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
-	                            //$this->SetFont('Times','BI',8);
-	                            //$this->SetTextColor(255, 0, 0);
+	                        $checaColor=substr($ordenExamen->resultado, 0,1);
+	                        $styleClass="";
+	                        if(!isset($ordenExamen->resultado)){
+	                        	$resultado=$ordenExamen->resultado;
+	                        }elseif($checaColor=="*"){//color negro y negritas
+	                        	$resultado=substr($ordenExamen->resultado, 1);
+	                        }elseif($checaColor=="#"){//color rojo
+	                        	$styleClass="error-style";
+	                        	$resultado=substr($ordenExamen->resultado, 1);
+	                        }elseif($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+	                            $resultado=$ordenExamen->resultado;
+	                            $styleClass="error-style";
 	                        }
-	                        //echo $ordenExamen->resultado;
-	                        //$this->SetTextColor(0, 0, 0);
-	                        //$this->SetFont('Arial','',7.5);
-	                        //echo $detalleExamen->unidadesMedida->abreviatura;
-	                        //echo $rango;
 	                        echo '
 						<tr>
 							<td>'.$detalleExamen->descripcion.'</td>';
 							if($editable)
 								echo'<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenExamen->id.'][resultado]" id="OrdenTieneExamenes_'.$ordenExamen->id.'_resultado" value="'.$ordenExamen->resultado.'" type="text"></td>';
 							else {
-								echo'<td>';
-								if(isset($ordenExamen->resultado)&&strlen($ordenExamen->resultado)>0) echo $ordenExamen->resultado; else echo 'Sin Resultado';
+								echo'<td class="'.$styleClass.'">';
+								if(isset($resultado)&&strlen($resultado)>0) echo $resultado; else echo 'Sin Resultado';
 								echo '</td>';
 							}
 							echo '<td>'.$detalleExamen->unidadesMedida->nombre.'</td>'.
@@ -146,14 +151,26 @@ class OrdenesController extends Controller
 
                         array_push($this->examenesImpresos, $grupoExamen->examen->id);
                         foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
-                        	if($detalleExamen->activo==1){
+                        	$ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
+	                        if(isset($ordenExamen)){
 	                        	$rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
 	         
-	                            $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
-	                           	$idOrdenExamen = $ordenExamen['id'];
+	                            $idOrdenExamen = $ordenExamen['id'];
 	                           	$valueOrdenExamen = $ordenExamen['resultado'];
 
-
+	                           	$checaColor=substr($ordenExamen->resultado, 0,1);
+		                        $styleClass="";
+		                        if(!isset($ordenExamen->resultado)){
+		                        	$resultado=$ordenExamen->resultado;
+		                        }elseif($checaColor=="*"){//color negro y negritas
+		                        	$resultado=substr($ordenExamen->resultado, 1);
+		                        }elseif($checaColor=="#"){//color rojo
+		                        	$styleClass="error-style";
+		                        	$resultado=substr($ordenExamen->resultado, 1);
+		                        }elseif($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+		                            $resultado=$ordenExamen->resultado;
+		                            $styleClass="error-style";
+		                        }
 	                            echo '
 								<tr>
 									<td>'.$detalleExamen->descripcion.'</td>';
@@ -161,8 +178,8 @@ class OrdenesController extends Controller
 										echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$idOrdenExamen.'][resultado]" id="OrdenTieneExamenes_'.$idOrdenExamen.'_resultado" value="'.$valueOrdenExamen.'" type="text"></td>';
 									}
 									else {
-										echo'<td>';
-										if(isset($ordenExamen->resultado)&&strlen($ordenExamen->resultado)>0) echo $ordenExamen->resultado; else echo 'Sin Resultado';
+										echo'<td class="'.$styleClass.'">';
+										if(isset($resultado)&&strlen($resultado)>0) echo $resultado; else echo 'Sin Resultado';
 										echo '</td>';
 									}
 									echo '<td>'.$detalleExamen->unidadesMedida->nombre.'</td>'.
@@ -613,26 +630,39 @@ class OrdenesController extends Controller
 						$examenesCalificados[$ordenExamen->id_detalles_examen]=$ordenExamen->resultado;
 					$ordenExamen->delete();
 				}
-				foreach ($ordenGrupos as $ordenGrupo) {
-					$ordenGrupo->delete();
-				}
+				
 
 				if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
 					$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
 				}else{
 					$gruposIds=array();
 				}
-
+				foreach($gruposIds as $grupoId){
+					$hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?',array($grupoId));
+					foreach ($hijos as $hijo) {
+						if(!in_array($hijo->id_grupo_hijo, $gruposIds))
+							array_push($gruposIds, $hijo->id_grupo_hijo);
+					}
+				}
+				$gruposOriginales=array();
+				foreach ($ordenGrupos as $ordenGrupo) {
+					if(!in_array($ordenGrupo->id_grupos, $gruposIds)){
+						$ordenGrupo->delete();
+					}
+					array_push($gruposOriginales, $ordenGrupo->id_grupos);
+				}
 				foreach ($gruposIds as $grupoId) {
-					$ordenTieneGrupo = new OrdenTieneGrupos;
-					$ordenTieneGrupo->id_ordenes = $model->id;
-					$ordenTieneGrupo->id_grupos = $grupoId;
-					$ordenTieneGrupo->ultima_edicion=$fecha_edicion;
-					$ordenTieneGrupo->usuario_ultima_edicion=Yii::app()->user->id;;
-					$ordenTieneGrupo->creacion=$fecha_creacion;
-					$ordenTieneGrupo->usuario_creacion=Yii::app()->user->id;
+					if(!in_array($grupoId, $gruposOriginales)){
+						$ordenTieneGrupo = new OrdenTieneGrupos;
+						$ordenTieneGrupo->id_ordenes = $model->id;
+						$ordenTieneGrupo->id_grupos = $grupoId;
+						$ordenTieneGrupo->ultima_edicion=$fecha_edicion;
+						$ordenTieneGrupo->usuario_ultima_edicion=Yii::app()->user->id;;
+						$ordenTieneGrupo->creacion=$fecha_creacion;
+						$ordenTieneGrupo->usuario_creacion=Yii::app()->user->id;
 
-					array_push($ordenTieneGrupos, $ordenTieneGrupo);
+						array_push($ordenTieneGrupos, $ordenTieneGrupo);
+					}
 				}
 
 
@@ -924,6 +954,47 @@ class OrdenesController extends Controller
 		$this->endWidget();
 	}
 
+	public function actionLoadModalEmail($id_ordenes){
+		$modelEmail = new EnviarCorreoForm;
+		if(isset($_POST['EnviarCorreoForm'])){
+			$modelEmail->attributes=$_POST['EnviarCorreoForm'];
+			//creamos el pdf
+			$model = $this->loadModel($id_ordenes);
+			$pdf = new ImprimirResultados('P','cm','letter');
+			$pdf->AddPage();
+			$pdf->model = $model;
+			$pdf->cabeceraEmail();
+			$pdf->contenido($model);
+			$stream=$pdf->Output(dirname(__FILE__).DIRECTORY_SEPARATOR."../../resultados.pdf", "F");
+
+			//Definimos el email
+			$mail = new YiiMailer();
+			$mail->setFrom('clientes@dcilaboratorio.com', 'DCI Laboratorio');
+			$mail->setTo($modelEmail->email);
+			$mail->setSubject('Resultados DCI Laboratorio');
+			//adjuntamos el archivo
+			$mail->setAttachment(dirname(__FILE__).DIRECTORY_SEPARATOR."../../resultados.pdf");
+
+			//enviamos el correo
+			if ($mail->send()) {
+				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
+			} else {
+				Yii::app()->user->setFlash('error','Error while sending email: '.$mail->getError());
+			}
+			
+		}
+		$form=$this->beginWidget('CActiveForm', array(
+			'id'=>'email-form',
+			// Please note: When you enable ajax validation, make sure the corresponding
+			// controller action is handling ajax validation correctly.
+			// There is a call to performAjaxValidation() commented in generated controller code.
+			// See class documentation of CActiveForm for details on this.
+			'enableAjaxValidation'=>false,
+			));
+		$this->renderPartial("_modalEmail",array('model'=>$modelEmail,'form'=>$form));
+		$this->endWidget();
+	}
+
 	public function actionCalificar($id){
 		$model = $this->loadModel($id);
 		$ordenExamenes = array();
@@ -935,6 +1006,7 @@ class OrdenesController extends Controller
 			if($ordenExamen->detalleExamen->activo==1)
 				array_push($ordenExamenes, $ordenExamen);
 		}
+		//Para que nos se impriman los grupitos pertenecientes a los grupotes de la orden
 		$ordenTieneGrupos = $model->ordenTieneGrupos;
 		foreach ($ordenTieneGrupos as $ordenGrupo) {
 			$grupitos=GruposPerfiles::model()->findAll("id_grupo_hijo=?",array($ordenGrupo->id_grupos)); 
