@@ -210,11 +210,24 @@ class ImprimirResultadosArchivo extends FPDF{
                             $this->MultiCell(4.39,$y,$ordenExamen->detalleExamen->descripcion , 'B' , 'C');
                             $this->setXY($xActual+4.39,$this->y-$heightRow);
                         }
-                        if($ordenExamen->resultado > $ordenExamen->detalleExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->detalleExamen->rango_inferior){
+                        $checaColor=substr($ordenExamen->resultado, 0,1);
+                        if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
+                            $resultado="s/r";
+                        }elseif($checaColor=="*"){//color negro y negritas
+                            $resultado=substr($ordenExamen->resultado, 1);
+                        }elseif($checaColor=="#"){//color rojo
                             $this->SetFont('Times','BI',8);
                             $this->SetTextColor(255, 0, 0);
+                            $resultado=substr($ordenExamen->resultado, 1);
+                        }elseif($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                            $resultado=$ordenExamen->resultado;
+                            $this->SetFont('Times','BI',8);
+                            $this->SetTextColor(255, 0, 0);
+                        }else{
+                            $resultado=$ordenExamen->resultado;
                         }
-                        $this->Cell(1.74,$heightRow,$ordenExamen->resultado,'B', 0 , 'C');
+
+                        $this->Cell(1.74,$heightRow,$resultado,'B', 0 , 'C');
                         $this->SetTextColor(0, 0, 0);
                         $this->SetFont('Arial','B',8);
                         $this->Cell(1.19,$heightRow, $ordenExamen->detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
@@ -301,8 +314,8 @@ class ImprimirResultadosArchivo extends FPDF{
 
                             
                             $checaColor=substr($ordenExamen->resultado, 0,1);
-                            if(!isset($ordenExamen->resultado)){
-                                $resultado=$ordenExamen->resultado;
+                            if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
+                                $resultado="s/r";
                             }elseif($checaColor=="*"){//color negro y negritas
                                 $resultado=substr($ordenExamen->resultado, 1);
                             }elseif($checaColor=="#"){//color rojo
@@ -313,6 +326,8 @@ class ImprimirResultadosArchivo extends FPDF{
                                 $resultado=$ordenExamen->resultado;
                                 $this->SetFont('Times','BI',8);
                                 $this->SetTextColor(255, 0, 0);
+                            }else{
+                                $resultado=$ordenExamen->resultado;
                             }
                             $this->Cell(1.74,$heightRow,$resultado,'B', 0 , 'C');
                             $this->SetTextColor(0, 0, 0);
@@ -379,7 +394,7 @@ class ImprimirResultadosArchivo extends FPDF{
                                 }
                                 
                                 $checaColor=substr($ordenExamen->resultado, 0,1);
-                                if(!isset($ordenExamen->resultado)){
+                                if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
                                     $resultado="s/r";
                                 }elseif($checaColor=="*"){//color negro y negritas
                                     $resultado=substr($ordenExamen->resultado, 1);
@@ -391,6 +406,8 @@ class ImprimirResultadosArchivo extends FPDF{
                                     $resultado=$ordenExamen->resultado;
                                     $this->SetFont('Times','BI',8);
                                     $this->SetTextColor(255, 0, 0);
+                                }else{
+                                    $resultado=$ordenExamen->resultado;
                                 }
                           
                                 $this->Cell(1.74,$heightRow,$resultado,'B', 0 , 'C');

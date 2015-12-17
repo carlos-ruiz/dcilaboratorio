@@ -1,14 +1,11 @@
 <?php
 require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'FPDF.php');
-class ImprimirResultados extends FPDF{
+class ImprimirResultadosEmail extends FPDF{
     public $model;
     public $examenesImpresos = array();
     public $nivelImpresionSubgrupo=0;
 
 	function Header(){
-        if(Yii::app()->user->getState('perfil')=='Administrador')
-            $this->ln(4);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
             $y = 0.5;
             $this->SetFont('Arial','B',18);
             $this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1,1.7,2.3,2.3);
@@ -45,16 +42,15 @@ class ImprimirResultados extends FPDF{
             $this->setX(4);
             $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');
             $this->ln();
-        }
+        
 	}
 
+   
 	function cabeceraHorizontal($model)
 	{
         $y = 0.5;
-        $this->SetXY(-5, 5.1);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
-            $this->SetXY(-5, 7.1);
-        }
+        $this->SetXY(-5, 7.1);
+        
         $this->SetFont('Arial','',8);
         $this->Cell(1,$y,'Fecha:', 0, 0);
         $this->SetFont('Arial','B',8);
@@ -69,10 +65,8 @@ class ImprimirResultados extends FPDF{
         $this->setX(1);
         $this->SetFont('Arial','B',12);
         $this->SetTextColor(75, 141, 248);
-        $this->setXY(1.5, 4.1);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
-            $this->setXY(1.5, 6.1);
-        }
+        $this->setXY(1.5, 6.1);
+        
         // $this->Cell(10,$y,'Resultados de Laboratorio', 0, 1);
         $this->SetFont('Arial','',8);
         $this->SetTextColor(0, 0, 0);
@@ -104,10 +98,8 @@ class ImprimirResultados extends FPDF{
         $this->SetTextColor(0, 0, 0);
 
 
-        $this->SetXY(1, 6.5);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
-            $this->SetXY(1, 8.5);
-        }
+        $this->SetXY(1, 8.5);
+        
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(75, 141, 248);//Fondo azul de celda
         $this->SetTextColor(0, 0, 0); //Letra color blanco
@@ -127,9 +119,8 @@ class ImprimirResultados extends FPDF{
     	$this->SetTextColor(0, 0, 0); //Letra color blanco
     	$this->SetFont('Arial','',8);
     	$this->setXY(1,7);
-        if(Yii::app()->user->getState('perfil')=='Doctor' || Yii::app()->user->getState('perfil')=='Paciente'){
-            $this->setXY(1,9);
-        }
+        $this->setXY(1,9);
+        
     	$y = 0.5;
         $ordenTieneExamenes = $model->ordenTieneExamenes;
         $idExamen = 0;

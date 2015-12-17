@@ -21,6 +21,7 @@ class EnviarCorreoForm extends CFormModel
 		return array(
 			// username and password are required
 			array('email', 'required'),
+			array('email', 'email'),
 		);
 	}
 

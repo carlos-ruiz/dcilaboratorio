@@ -15,10 +15,30 @@
 
 </section>
 <script>
-$("#modalAceptar").click(function(evt) {
-		evt.preventDefault();
-		
-		$("#email-form").submit();
+function send()
+	{
+	    var data=$("#email-form").serialize();
+	    //block("#modal-body");
+	  	$.ajax({
+		    type: 'POST',
+		    url: $("#email-form").attr('action'),
+		    data:data,
+			success:function(data){		
+								
+		                
+		                $("#modal").modal("hide");
+		              },
+		    error: function(data,status,message) { 
+		         html=data.responseText.replace('<h1>Exception</h1>','').replace('<p>','').replace('</p>','');
+		         html=html.substring(0,html.indexOf("(C:")-1);
+		         $(".modal-body").html(html);
+		    },
+		 
+		  	dataType:'html'
+	  	});
+	}
 
+	$("#modalAceptar").click(function(evt) {
+		send();
 	});
 </script>

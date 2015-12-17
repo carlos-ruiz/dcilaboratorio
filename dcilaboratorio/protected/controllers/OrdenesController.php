@@ -78,8 +78,8 @@ class OrdenesController extends Controller
 
 	                        $checaColor=substr($ordenExamen->resultado, 0,1);
 	                        $styleClass="";
-	                        if(!isset($ordenExamen->resultado)){
-	                        	$resultado=$ordenExamen->resultado;
+	                        if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
+	                        	$resultado="s/r";
 	                        }elseif($checaColor=="*"){//color negro y negritas
 	                        	$resultado=substr($ordenExamen->resultado, 1);
 	                        }elseif($checaColor=="#"){//color rojo
@@ -160,8 +160,8 @@ class OrdenesController extends Controller
 
 	                           	$checaColor=substr($ordenExamen->resultado, 0,1);
 		                        $styleClass="";
-		                        if(!isset($ordenExamen->resultado)){
-		                        	$resultado=$ordenExamen->resultado;
+		                        if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
+		                        	$resultado="s/r";
 		                        }elseif($checaColor=="*"){//color negro y negritas
 		                        	$resultado=substr($ordenExamen->resultado, 1);
 		                        }elseif($checaColor=="#"){//color rojo
@@ -958,30 +958,28 @@ class OrdenesController extends Controller
 		$modelEmail = new EnviarCorreoForm;
 		if(isset($_POST['EnviarCorreoForm'])){
 			$modelEmail->attributes=$_POST['EnviarCorreoForm'];
-			//creamos el pdf
-			$model = $this->loadModel($id_ordenes);
-			$pdf = new ImprimirResultados('P','cm','letter');
-			$pdf->AddPage();
-			$pdf->model = $model;
-			$pdf->cabeceraEmail();
-			$pdf->contenido($model);
-			$stream=$pdf->Output(dirname(__FILE__).DIRECTORY_SEPARATOR."../../resultados.pdf", "F");
+				if($modelEmail->validate()){
+				//creamos el pdf
+				$model = $this->loadModel($id_ordenes);
+				$pdf = new ImprimirResultadosEmail('P','cm','letter');
+				$pdf->AddPage();
+				$pdf->model = $model;
+				$pdf->contenido($model);
+				$stream=$pdf->Output(dirname(__FILE__).DIRECTORY_SEPARATOR."../../resultados.pdf", "F");
 
-			//Definimos el email
-			$mail = new YiiMailer();
-			$mail->setFrom('clientes@dcilaboratorio.com', 'DCI Laboratorio');
-			$mail->setTo($modelEmail->email);
-			$mail->setSubject('Resultados DCI Laboratorio');
-			//adjuntamos el archivo
-			$mail->setAttachment(dirname(__FILE__).DIRECTORY_SEPARATOR."../../resultados.pdf");
+				//Definimos el email
+				$mail = new YiiMailer();
+				$mail->setFrom('clientes@dcilaboratorio.com', 'DCI Laboratorio');
+				$mail->setTo($modelEmail->email);
+				$mail->setSubject('Resultados DCI Laboratorio');
+				//adjuntamos el archivo
+				$mail->setAttachment(dirname(__FILE__).DIRECTORY_SEPARATOR."../../resultados.pdf");
 
-			//enviamos el correo
-			if ($mail->send()) {
-				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
-			} else {
-				Yii::app()->user->setFlash('error','Error while sending email: '.$mail->getError());
+				//enviamos el correo
+				if ($mail->send()) {
+				} else {
+				}
 			}
-			
 		}
 		$form=$this->beginWidget('CActiveForm', array(
 			'id'=>'email-form',
@@ -989,7 +987,11 @@ class OrdenesController extends Controller
 			// controller action is handling ajax validation correctly.
 			// There is a call to performAjaxValidation() commented in generated controller code.
 			// See class documentation of CActiveForm for details on this.
-			'enableAjaxValidation'=>false,
+			'enableAjaxValidation'=>true,
+			'htmlOptions'=>array(
+               'onsubmit'=>"return false;",/* Disable normal form submit */
+               'onkeypress'=>" if(event.keyCode == 13){ send(); } " /* Do ajax call when user presses enter key */
+            ),
 			));
 		$this->renderPartial("_modalEmail",array('model'=>$modelEmail,'form'=>$form));
 		$this->endWidget();
