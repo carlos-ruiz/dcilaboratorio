@@ -188,11 +188,7 @@ class ImprimirResultadosArchivo extends FPDF{
             }
             if(!in_array($idExamen,$this->examenesImpresos)){
                 $examen=Examenes::model()->findByPk($idExamen);
-                /*if($examen->id!=$idExamenExiste){
-                    $this->SetFont('Arial','B',8);
-                    $this->SetFillColor(213, 224, 241);
-                    $this->Cell(9.71,$y, $examen->tecnica==null?'"'.$examen->nombre.'"':'"'.$examen->nombre.'"  (Técnica empleada: '.$examen->tecnica.')',1, 1 ,'C', true);
-                }*/
+
                 foreach ($examen->detallesExamenes as $detalleExamen) {
                     
                     $ordenExamen=OrdenTieneExamenes::model()->find("id_detalles_examen=? AND id_ordenes=?",array($detalleExamen->id,$model->id));

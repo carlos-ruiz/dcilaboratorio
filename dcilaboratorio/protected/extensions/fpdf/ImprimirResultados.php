@@ -266,8 +266,6 @@ class ImprimirResultados extends FPDF{
                     $this->MultiCell(19.5,$y, 'Método: '.$examen->tecnica,1, 'L', false);
                 }
             }
-
-
         }
         $this->ln(1);
         if($model->comentarios_resultados)

@@ -152,7 +152,6 @@ class ImprimirResultadosEmail extends FPDF{
         }
         krsort($gruposOrdenados);
         $grupos=$gruposOrdenados;
-        //return;
         //Obtener grupos incluidos en la orden
         foreach ($grupos as $grupo) {
             $examenes=GrupoExamenes::model()->findAll("id_grupos_examenes=?",array($grupo->id));
@@ -171,8 +170,6 @@ class ImprimirResultadosEmail extends FPDF{
                 $this->nivelImpresionSubgrupo--;
             }
         }
-
-//        $this->examenesImpresos=array();
 
         //AQUI VA  A EMPEZAR LA IMPRESION DE RESULTADOS
         $ordenTieneGrupos = OrdenTieneGrupos::model()->findAll('id_ordenes=?',array($model->id));
