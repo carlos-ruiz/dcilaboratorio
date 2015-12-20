@@ -8,6 +8,8 @@
 class EnviarCorreoForm extends CFormModel
 {
 	public $email;
+	public $resultados_archivo;
+	public $comentarios;
 
 
 
@@ -22,6 +24,7 @@ class EnviarCorreoForm extends CFormModel
 			// username and password are required
 			array('email', 'required'),
 			array('email', 'email'),
+			array('comentarios, resultados_archivo', 'safe'),
 		);
 	}
 
@@ -32,6 +35,8 @@ class EnviarCorreoForm extends CFormModel
 	{
 		return array(
 			'email'=>'Correo electrónico',
+			'resultados_archivo'=>'¿Enviar resultados de archivo?',
+			'comentarios'=>'Comentarios',
 		);
 	}
 

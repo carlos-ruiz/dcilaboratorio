@@ -971,6 +971,8 @@ class OrdenesController extends Controller
 				$mail = new YiiMailer();
 				$mail->setFrom('clientes@dcilaboratorio.com', 'DCI Laboratorio');
 				$mail->setTo($modelEmail->email);
+				$mail->setView('enviarResultados');
+				$mail->setData(array('comentarios' => $modelEmail->comentarios,));
 				$mail->setSubject('Resultados DCI Laboratorio');
 				//adjuntamos el archivo
 				$mail->setAttachment(dirname(__FILE__).DIRECTORY_SEPARATOR."../../resultados.pdf");

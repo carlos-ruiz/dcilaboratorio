@@ -135,3 +135,11 @@ h3, h5{
 }
 
 /*Login*/
+
+.label-black {
+	color: black !important;
+}
+
+.checkbox-resultados-archivo {
+	width: 19px !important;
+}
