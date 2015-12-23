@@ -245,13 +245,14 @@
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 							<h4 id="modalTitle" class="modal-title">Titulo</h4>
 						</div>
-						<div class="modal-body">
+						<div class="modal-body" id="modal-body">
 							 Cargando...
 						</div>
 						<div class="modal-footer">
 							<button type="button" id="modalCancelar" class="btn default" style="display:none" data-dismiss="modal">Cerrar</button>
 							<button type="button" id="modalGuardar" class="btn green" style="display:none" data-dismiss="modal">Guardar</button>
 							<button type="button" id="modalAceptar" class="btn red" style="display:none" data-dismiss="modal">Aceptar</button>
+							<button type="button" id="modalAceptarEmail" class="btn red" style="display:none">Aceptar</button>
 						</div>
 					</div>
 					<!-- /.modal-content -->
@@ -333,7 +334,7 @@
 jQuery(document).ready(function() {
 
    	Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
+   	Layout.init(); // init current layout
 	QuickSidebar.init(); // init quick sidebar
 	Demo.init(); // init demo features
 	ComponentsPickers.init();

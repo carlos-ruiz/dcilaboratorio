@@ -34,7 +34,7 @@ class OrdenesController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','view', 'create','admin','update','loadModalContent','loadModalEmail','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen','imprimirResultadosArchivo'),
+				'actions'=>array('index','view', 'create','admin','update','loadModalContent','loadModalEmail','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen','imprimirResultadosArchivo','actualizarFolios'),
 				'users'=>Usuarios::model()->obtenerPorPerfil('Administrador'),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -853,6 +853,10 @@ class OrdenesController extends Controller
 	public function loadModel($id)
 	{
 		$model=Ordenes::model()->findByPk($id);
+		if(!isset($orden->folio)||trim($orden->folio)==''){
+			$model->folio= $this->generateRandomString().sprintf('%06d', $model->id);
+			$model->save();
+		}
 		if($model===null)
 			throw new CHttpException(404,'La página solicitada no existe.');
 		return $model;
@@ -958,10 +962,13 @@ class OrdenesController extends Controller
 		$modelEmail = new EnviarCorreoForm;
 		if(isset($_POST['EnviarCorreoForm'])){
 			$modelEmail->attributes=$_POST['EnviarCorreoForm'];
-				if($modelEmail->validate()){
+			if($modelEmail->validate()){
 				//creamos el pdf
 				$model = $this->loadModel($id_ordenes);
-				$pdf = new ImprimirResultadosEmail('P','cm','letter');
+				if($modelEmail->resultados_archivo!=1)
+					$pdf = new ImprimirResultadosEmail('P','cm','letter');
+				else
+					$pdf = new ImprimirResultadosArchivo('P','cm','letter');
 				$pdf->AddPage();
 				$pdf->model = $model;
 				$pdf->contenido($model);
@@ -980,7 +987,10 @@ class OrdenesController extends Controller
 				//enviamos el correo
 				if ($mail->send()) {
 				} else {
+					echo 1;
 				}
+			}else{
+				echo 2;
 			}
 		}
 		$form=$this->beginWidget('CActiveForm', array(
@@ -1048,7 +1058,7 @@ class OrdenesController extends Controller
 				}
 			}
 			foreach ($_POST['comentario_perfil'] as $i => $value) {
-				echo $value."<br />";
+				//echo $value."<br />";
 				//continue;
 				$ordenGrupoToSave = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($id,$i));
 				if(!isset($ordenGrupoToSave->id)){
@@ -1337,4 +1347,17 @@ class OrdenesController extends Controller
 	    }
 	    return $randomString;
 	}
+
+	function actionActualizarFolios(){
+		$ordenes = Ordenes::model()->findAll();
+		foreach ($ordenes as $orden) {
+			if(!isset($orden->folio)||trim($orden->folio)==''){
+				$orden->folio= $this->generateRandomString().sprintf('%06d', $orden->id);
+				$orden->save();
+
+			}
+			echo "<br/>".$orden->folio." --- ".$orden->id;
+		}
+	}
 }
+
