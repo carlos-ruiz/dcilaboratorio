@@ -37,7 +37,7 @@ class SiteController extends Controller
 	{
 		//Para inicializar el sistema
 		$this->init();
-		$sloganActual = Slogan::model()->findByPk(1);
+		$sloganActual = Slogan::model()->find('1=1 order by id desc');
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		//$this->render('index');
@@ -318,7 +318,7 @@ class SiteController extends Controller
 	}
 
 	public function actionLoadModalSlogan(){
-		$slogan = Slogan::model()->findByPk(1);
+		$slogan = Slogan::model()->find('1=1 order by id desc');
 		if(!isset($slogan)){
 			$slogan = new Slogan;
 		}
