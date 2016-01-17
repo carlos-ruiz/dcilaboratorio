@@ -6,7 +6,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption">
-			Resultado de examen
+			Parámetro de determinación
 		</div>
 	</div>
 	<div class="portlet-body form" style="display: block;">
@@ -41,36 +41,90 @@
 	<div class="form-group <?php if($form->error($model,'id_unidades_medida')!=''){ echo 'has-error'; }?>">
 				<?php echo $form->labelEx($model,'id_unidades_medida', array('class'=>'control-label')); ?>
 				<div class="input-group">
-					<?php echo $form->dropDownList($model,'id_unidades_medida',$model->obtenerUnidadesMedida(), array("empty"=>"Seleccione una opción", 'class'=>'form-control')); ?>
-
+					<?php $idUnidadMedida=UnidadesMedida::model()->find('nombre="No Aplica"')->id;?>
+					<?php echo $form->dropDownList($model,'id_unidades_medida',$model->obtenerUnidadesMedida(), array('options'=>array($idUnidadMedida=>array('selected'=>true)),'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'id_unidades_medida', array('class'=>'help-block')); ?>
 				</div>
 	</div>
 
-	<div class="form-group <?php if($form->error($model,'rango_inferior')!=''){ echo 'has-error'; }?>">
+	<div class="form-group <?php if($form->error($model,'genero')!=''){ echo 'has-error'; }?>">
+		<?php echo $form->labelEx($model,'genero', array('class'=>'control-label')); ?>
+		<div class="input-group">
+			<?php $generos = array('Indistinto'=>'Indistinto','Hombre'=>'Hombre', 'Mujer'=>'Mujer');
+				  echo $form->radioButtonList($model,'genero',$generos,array('separator'=>'   ','class'=>'form-control'));?>
+			<?php echo $form->error($model,'genero', array('class'=>'help-block')); ?>
+		</div>
+	</div>
+
+	<div class="form-group <?php if($form->error($model,'edad_minima')!=''){ echo 'has-error'; }?>">
+			<?php echo $form->labelEx($model,'edad_minima', array('class'=>'control-label')); ?>
+			<div class="input-group">
+				<?php echo $form->textField($model,'edad_minima',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model,'edad_minima', array('class'=>'help-block')); ?>
+			</div>
+	</div>
+
+	<div class="form-group <?php if($form->error($model,'edad_maxima')!=''){ echo 'has-error'; }?>">
+			<?php echo $form->labelEx($model,'edad_maxima', array('class'=>'control-label')); ?>
+			<div class="input-group">
+				<?php echo $form->textField($model,'edad_maxima',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model,'edad_maxima', array('class'=>'help-block')); ?>
+			</div>
+	</div>
+
+	<div class="form-group <?php if($form->error($model,'tipo')!=''){ echo 'has-error'; }?>">
+		<?php echo $form->labelEx($model,'tipo', array('class'=>'control-label')); ?>
+		<div class="input-group">
+			<?php $tipos = array('Normal'=>'Normal','Antibiótico'=>'Antibiótico', 'Multirango'=>'Multirango');
+				  echo $form->radioButtonList($model,'tipo',$tipos,array('separator'=>'   ','class'=>'form-control tipo-test', $model->isNewRecord ?"":"disabled"=>"disabled"));?>
+			<?php echo $form->error($model,'tipo', array('class'=>'help-block')); ?>
+		</div>
+	</div>
+
+	<div id="camposNormal" style="display:<?php echo $model->tipo=='Normal'?'block':'none'; ?>">
+		<div class="form-group col-md-4 <?php if($form->error($model,'rango_inferior')!=''){ echo 'has-error'; }?>">
 			<?php echo $form->labelEx($model,'rango_inferior', array('class'=>'control-label')); ?>
 			<div class="input-group">
 				<?php echo $form->textField($model,'rango_inferior',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'rango_inferior', array('class'=>'help-block')); ?>
 			</div>
-	</div>
+		</div>
 
-	<div class="form-group <?php if($form->error($model,'rango_promedio')!=''){ echo 'has-error'; }?>">
+		<div class="form-group col-md-4 <?php if($form->error($model,'rango_promedio')!=''){ echo 'has-error'; }?>">
 			<?php echo $form->labelEx($model,'rango_promedio', array('class'=>'control-label')); ?>
 			<div class="input-group">
 				<?php echo $form->textField($model,'rango_promedio',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'rango_promedio', array('class'=>'help-block')); ?>
 			</div>
-	</div>
+		</div>
 
-	<div class="form-group <?php if($form->error($model,'rango_superior')!=''){ echo 'has-error'; }?>">
+		<div class="form-group col-md-4 <?php if($form->error($model,'rango_superior')!=''){ echo 'has-error'; }?>">
 			<?php echo $form->labelEx($model,'rango_superior', array('class'=>'control-label')); ?>
 			<div class="input-group">
 				<?php echo $form->textField($model,'rango_superior',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'rango_superior', array('class'=>'help-block')); ?>
 			</div>
+		</div>
 	</div>
 
+	<div id="camposAntibiotico" style="display:<?php echo $model->tipo=='Antibiótico'?'block':'none'; ?>">
+		<div class="form-group <?php if($form->error($model,'concentracion')!=''){ echo 'has-error'; }?>">
+			<?php echo $form->labelEx($model,'concentracion', array('class'=>'control-label')); ?>
+			<div class="input-group">
+				<?php echo $form->textField($model,'concentracion',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model,'concentracion', array('class'=>'help-block')); ?>
+			</div>
+		</div>		
+	</div>
+
+	<div id="camposMultirangos" style="display:<?php echo $model->tipo=='Multirango'?'block':'none'; ?>">
+		<div class="form-group <?php if($form->error($model,'multirangos')!=''){ echo 'has-error'; }?>">
+			<label class="control-label" for="DetallesExamen_multirangos">Seleccione los multirangos.</label>
+			<div class="input-group">
+				<?php echo $form->dropDownList($model,'multirangos',multirangos::model()->selectListMultiple(), array("class" => "form-control select2","multiple"=>"multiple")); ?>
+			</div>
+		</div>
+	</div>
 	<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>
 
 
@@ -79,3 +133,23 @@
 	</div>
 
 <?php $this->endWidget(); ?>
+
+<script type="text/javascript">
+	$(".tipo-test").click(function(){
+		if($(this).val()=="Normal"){
+			$("#camposAntibiotico").hide();
+			$("#camposMultirangos").hide();
+			$("#camposNormal").show(400);
+		}
+		if($(this).val()=="Antibiótico"){
+			$("#camposNormal").hide();
+			$("#camposMultirangos").hide();
+			$("#camposAntibiotico").show(400);
+		}
+		if($(this).val()=="Multirango"){
+			$("#camposAntibiotico").hide();
+			$("#camposNormal").hide();
+			$("#camposMultirangos").show(400);
+		}
+	});
+</script>

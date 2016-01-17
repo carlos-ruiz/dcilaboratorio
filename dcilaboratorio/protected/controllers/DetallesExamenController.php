@@ -9,7 +9,7 @@ class DetallesExamenController extends Controller
 	public $layout='//layouts/column2';
 	public $section = "Examenes";
 	public $subSection;
-	public $pageTitle="Resultados de Examenes";
+	public $pageTitle="Configura test";
 	/**
 	 * @return array action filters
 	 */
@@ -66,15 +66,27 @@ class DetallesExamenController extends Controller
 	{
 		$this->subSection = "Grupos";
 		$model=new DetallesExamen;
-
+		$model->genero='Indistinto';
+		$model->tipo='Normal';
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['DetallesExamen']))
 		{
+
 			$model->attributes=$_POST['DetallesExamen'];
-			if($model->save())
+			$model->multirangos=$_POST['DetallesExamen']['multirangos'];
+			if($model->save()){
+				if($model->tipo == 'Multirango'){
+					foreach ($model->multirangos as $multirangoSeleccionado) {
+						$detalleTieneMultirango = new DetallesExamenTieneMultirangos;
+						$detalleTieneMultirango->id_detalles_examen=$model->id;
+						$detalleTieneMultirango->id_multirangos=$multirangoSeleccionado;
+						$detalleTieneMultirango->save();
+					}
+				}
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('create',array(
@@ -90,15 +102,31 @@ class DetallesExamenController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+		$model->multirangos=array();
+		$multirangosAnteriores=DetallesExamenTieneMultirangos::model()->findAll('id_detalles_examen=?',array($id));
+		foreach ($multirangosAnteriores as $multirango) {
+			array_push($model->multirangos, $multirango->id_multirangos);
+		}
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
+		$tipo=$model->tipo;
 		if(isset($_POST['DetallesExamen']))
 		{
 			$model->attributes=$_POST['DetallesExamen'];
-			if($model->save())
+			$model->tipo=$tipo;
+			$model->multirangos=$_POST['DetallesExamen']['multirangos'];
+			if($model->save()){
+				DetallesExamenTieneMultirangos::model()->deleteAll('id_detalles_examen=?',array($id));
+				if($model->tipo == 'Multirango'){
+					foreach ($model->multirangos as $multirangoSeleccionado) {
+						$detalleTieneMultirango = new DetallesExamenTieneMultirangos;
+						$detalleTieneMultirango->id_detalles_examen=$model->id;
+						$detalleTieneMultirango->id_multirangos=$multirangoSeleccionado;
+						$detalleTieneMultirango->save();
+					}
+				}
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(

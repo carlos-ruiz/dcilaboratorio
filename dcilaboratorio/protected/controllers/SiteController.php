@@ -203,6 +203,17 @@ class SiteController extends Controller
 			$status3->save();
 		}
 
+		if(UnidadesMedida::model()->count('nombre="No Aplica"')==0){
+			$unidadMedida= new UnidadesMedida;
+			$unidadMedida->nombre="No Aplica";
+			$unidadMedida->abreviatura="N/A";
+			$unidadMedida->ultima_edicion=date('2000-01-01 00:00:00');
+			$unidadMedida->usuario_ultima_edicion=0;
+			$unidadMedida->creacion=date('Y-m-d H:i:s');
+			$unidadMedida->usuario_creacion=0;
+			$unidadMedida->save();
+		}
+
 		if(Usuarios::model()->count()==0){
 			$nuevoUsuario = new Usuarios;
 			$nuevoUsuario->usuario="admin";

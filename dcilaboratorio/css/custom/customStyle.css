@@ -143,3 +143,7 @@ h3, h5{
 .checkbox-resultados-archivo {
 	width: 19px !important;
 }
+
+.hidden{
+	display: none;
+}
