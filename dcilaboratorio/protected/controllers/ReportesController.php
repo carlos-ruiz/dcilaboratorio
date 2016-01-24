@@ -58,7 +58,8 @@ class ReportesController extends Controller
 	{
 
 		$model=new BusquedaForm;
-
+		$resultados = array();
+		$resultadosMostrar = array();
 
 		if(isset($_POST['BusquedaForm']))
 		{
@@ -150,13 +151,22 @@ class ReportesController extends Controller
 			if($model->tarifa==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'size'=>'1.7', 'id'=>'tarifa'));
 
+			echo "<br/>Resultados:<br/>";
+			print_r($resultados);
+			echo "<br/><br/>Resultados Mostrar:<br/>";
+			print_r($resultadosMostrar);
+			return;
 			$pdf = new ImprimirPdf('L','cm','letter');
 			$pdf->AddPage();
 			$pdf->cabeceraHorizontal($resultadosMostrar);
 			$pdf->contenido($resultados, $resultadosMostrar);
 			$pdf->Output();
 		}
-		$this->render('generar', array('model'=>$model));
+		$this->render('generar', array(
+			'model'=>$model,
+			'resultados'=>$resultados,
+			'resultadosMostrar'=>$resultadosMostrar,
+			));
 	}
 
 	/**
