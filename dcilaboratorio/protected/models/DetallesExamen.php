@@ -27,6 +27,9 @@ class DetallesExamen extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
+
+	public $multirangos;
+
 	public function tableName()
 	{
 		return 'detalles_examen';
@@ -40,10 +43,10 @@ class DetallesExamen extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('descripcion, id_unidades_medida, id_examenes, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
-			array('id_unidades_medida, id_examenes, usuario_ultima_edicion, usuario_creacion, activo', 'numerical', 'integerOnly'=>true),
+			array('descripcion, genero, tipo, id_unidades_medida, id_examenes, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion', 'required'),
+			array('edad_minima, edad_maxima, id_unidades_medida, id_examenes, usuario_ultima_edicion, usuario_creacion, activo', 'numerical', 'integerOnly'=>true),
 			array('descripcion', 'length', 'max'=>250),
-			array('rango_inferior, rango_promedio, rango_superior', 'length', 'max'=>45),
+			array('rango_inferior, rango_promedio, rango_superior, concentracion', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, descripcion, id_unidades_medida, id_examenes, rango_inferior, rango_promedio, rango_superior, ultima_edicion, usuario_ultima_edicion, creacion, usuario_creacion, activo', 'safe', 'on'=>'search'),
@@ -61,6 +64,7 @@ class DetallesExamen extends CActiveRecord
 			'examenes' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
 			'unidadesMedida' => array(self::BELONGS_TO, 'UnidadesMedida', 'id_unidades_medida'),
 			'ordenTieneExamenes' => array(self::HAS_MANY, 'OrdenTieneExamenes', 'id_detalles_examen'),
+			'multirrangos'=>array(self::HAS_MANY,'DetallesExamenTieneMultirangos','id_detalles_examen'),
 		);
 	}
 
@@ -83,6 +87,10 @@ class DetallesExamen extends CActiveRecord
 			'usuario_creacion' => 'Usuario Creacion',
 			'activo' => 'Activo',
 			'unidadesMedida.nombre'=>'Unidad Medida',
+			'genero'=>'Género',
+			'edad_minima'=>'Edad Mínima',
+			'edad_maxima'=>'Edad Máxima',
+			'concentracion'=>'Concentración'
 		);
 	}
 
@@ -136,7 +144,7 @@ class DetallesExamen extends CActiveRecord
 
 
 	public function obtenerUnidadesMedida(){
-		return CHtml::listData(UnidadesMedida::model()->findAll('activo=1'), 'id', 'nombre');
+		return CHtml::listData(UnidadesMedida::model()->findAll('activo=1 Order By abreviatura'), 'id', 'nombre');
 	}
 
 	public function obtenerExamenes(){

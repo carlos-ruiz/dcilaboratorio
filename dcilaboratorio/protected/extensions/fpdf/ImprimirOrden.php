@@ -126,7 +126,6 @@ class ImprimirOrden extends FPDF{
         foreach ($grupos as $grupo) {
             $examenes=GrupoExamenes::model()->findAll("id_grupos_examenes=?",array($grupo->id));
             $tiene=true;
-            // print_r($examenes);return;
             foreach($examenes as $grupoExamen){
                 if(!in_array($grupoExamen->id_examenes, $idsExamenes)){
                     $tiene=false;
@@ -137,15 +136,15 @@ class ImprimirOrden extends FPDF{
              array_push($gruposExistentesEnOrden,$grupo->id);
             }
         }
-
         //Para quitar los grupitos de los grupotes existetes en la orden y que no se impriman
         $gruposExistentesEnOrdenAux=array();
         foreach ($gruposExistentesEnOrden as $filtroOrdenTieneGrupos) {
             $grupitos=GruposPerfiles::model()->findAll("id_grupo_hijo=?",array($filtroOrdenTieneGrupos)); 
+            
             if(isset($grupitos)){
                 $papaEstaEnLaOrden=false;
                 foreach ($grupitos as $grupito) {
-                    $papa=OrdenTieneGrupos::model()->find("id_grupos=?",array($grupito->id_grupo_padre));
+                    $papa=OrdenTieneGrupos::model()->find("id_grupos=? AND id_ordenes=?",array($grupito->id_grupo_padre,$model->id));
                     if(isset($papa)){
                         $papaEstaEnLaOrden=true;
                     }
@@ -157,8 +156,8 @@ class ImprimirOrden extends FPDF{
                 array_push($gruposExistentesEnOrdenAux, $filtroOrdenTieneGrupos);
             }
         }
+        
         $gruposExistentesEnOrden=$gruposExistentesEnOrdenAux;
-
         $examenesImpresos=array();
         foreach ($gruposExistentesEnOrden as $grupo) {
             $grupo = Grupos::model()->findByPk($grupo);

@@ -202,6 +202,7 @@ $pagado=$totalOrden-$total;
 				   		<td>Unidad de medida</td>
 				   		<td>Rango normal</td></tr></thead>';
 			// Muestra los examenes que perteneces a algun grupo
+				   		
 			foreach ($ordenGruposModel as $grupote) {
 				echo $this->imprimirGrupo($grupote->id_grupos,$model->id, false);
 			}

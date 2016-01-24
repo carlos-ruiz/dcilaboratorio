@@ -20,7 +20,9 @@ $form=$this->beginWidget('CActiveForm', array(
 	'clientOptions'=>array(
 		'validateOnSubmit'=>true,
 	),
-)); ?>
+)); 
+
+?>
 
 
 		<h3 class="form-title" style="color:#1e90ff !important;">Iniciar sesión</h3>

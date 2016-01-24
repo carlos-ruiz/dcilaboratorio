@@ -180,7 +180,7 @@ class ImprimirResultadosEmail extends FPDF{
             if(isset($grupitos)){
                 $papaEstaEnLaOrden=false;
                 foreach ($grupitos as $grupito) {
-                    $papa=OrdenTieneGrupos::model()->find("id_grupos=?",array($grupito->id_grupo_padre));
+                    $papa=OrdenTieneGrupos::model()->find("id_grupos=? AND id_ordenes=?",array($grupito->id_grupo_padre,$model->id));
                     if(isset($papa)){
                         $papaEstaEnLaOrden=true;
                     }
