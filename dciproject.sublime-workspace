@@ -544,10 +544,10 @@
 			}
 		},
 		{
-			"file": "dcilaboratorio/protected/views/comunes/_comunAdmin.php",
+			"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
 			"settings":
 			{
-				"buffer_size": 9959,
+				"buffer_size": 15674,
 				"line_ending": "Windows"
 			}
 		},
@@ -665,11 +665,9 @@
 		"/C/xampp/htdocs/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected",
+		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/controllers",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/comunes",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/detallesExamen",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/doctores",
-		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/facturacion",
 		"/C/xampp/htdocs/dcilaboratorio/dcilaboratorio/protected/views/ordenes"
 	],
 	"file_history":
@@ -1052,8 +1050,8 @@
 						"selection":
 						[
 							[
-								7778,
-								7906
+								11340,
+								11340
 							]
 						],
 						"settings":
@@ -1065,7 +1063,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1853.0,
+						"translation.y": 3608.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -1073,19 +1071,19 @@
 				},
 				{
 					"buffer": 3,
-					"file": "dcilaboratorio/protected/views/comunes/_comunAdmin.php",
+					"file": "dcilaboratorio/protected/controllers/DoctoresController.php",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 9959,
+						"buffer_size": 15674,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3525,
-								3561
+								12991,
+								12991
 							]
 						],
 						"settings":
@@ -1097,7 +1095,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5265.0,
+						"translation.y": 13157.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,

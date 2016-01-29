@@ -17,48 +17,77 @@
                 <table class="table table-bordered table-striped table-condensed flip-content">
                     <thead class="flip-content">
                         <tr>
-                            <th width="20%"> Code </th>
-                            <th> Company </th>
-                            <th class="numeric"> Price </th>
-                            <th class="numeric"> Change </th>
-                            <th class="numeric"> Change % </th>
-                            <th class="numeric"> Open </th>
-                            <th class="numeric"> High </th>
-                            <th class="numeric"> Low </th>
-                            <th class="numeric"> Volume </th>
+                            <?php foreach ($resultadosMostrar as $resultadoMostrar) { ?>
+                                <th><?= utf8_decode($resultadoMostrar['nombre']) ?></th>
+                            <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td> AAC </td>
-                            <td> AUSTRALIAN AGRICULTURAL COMPANY LIMITED. </td>
-                            <td class="numeric"> &nbsp; </td>
-                            <td class="numeric"> -0.01 </td>
-                            <td class="numeric"> -0.36% </td>
-                            <td class="numeric"> $1.39 </td>
-                            <td class="numeric"> $1.39 </td>
-                            <td class="numeric"> &nbsp; </td>
-                            <td class="numeric"> 9,395 </td>
-                        </tr>
-                        <tr>
-                            <td> AAD </td>
-                            <td> ARDENT LEISURE GROUP </td>
-                            <td class="numeric"> $1.15 </td>
-                            <td class="numeric"> +0.02 </td>
-                            <td class="numeric"> 1.32% </td>
-                            <td class="numeric"> $1.14 </td>
-                            <td class="numeric"> $1.15 </td>
-                            <td class="numeric"> $1.13 </td>
-                            <td class="numeric"> 56,431 </td>
-                        </tr>
+                        <?php 
+                        foreach ($resultados as $resultado) { 
+                            $orden = Ordenes::model()->findByPk($resultado['id']);
+                            if (isset($orden)) { ?>
+                            <tr>
+
+                        <?php   foreach ($resultadosMostrar as $resultadoMostrar) { 
+                                    if ($resultadoMostrar['id']=='day') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='month') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='year') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='week') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='hr') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='folio') {
+                                        echo "<td>$orden->id</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='idp') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='namep') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='ur') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='dr') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='exam') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='cost') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='discp') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='disa') {
+                                        echo "<td>dia</td>";
+                                    }
+                                    if ($resultadoMostrar['id']=='tarifa') {
+                                        echo "<td>dia</td>";
+                                    }
+                                } ?>
+                            </tr>
+                        <?php
+                            }
+                        } 
+                        ?>
                     </tbody>
                 </table>
             </div>
         </div>
 	</div>
 	<div class="col-md-3">
-		<?php
-			$this->renderPartial("_form",array('model'=>$model));
-		?>
+		<?php $this->renderPartial("_form",array('model'=>$model)); ?>
 	</div>
 </div>
