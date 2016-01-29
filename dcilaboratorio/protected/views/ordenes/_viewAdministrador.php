@@ -209,7 +209,8 @@ $pagado=$totalOrden-$total;
 
 			// Muestra los examenes individuales
 			foreach ($ordenExamenesModel as $ordenTieneExamen) {
-				foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+				//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+				$detalleExamen = $ordenTieneExamen->detalleExamen;
 					if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
 						if($detalleExamen->examenes->id!=$anterior){
 							echo '
@@ -229,7 +230,7 @@ $pagado=$totalOrden-$total;
 						</tr>';
 					$anterior=$detalleExamen->examenes->id;
 					}
-				}
+				//}
 			}
 			 echo'</table>';
 

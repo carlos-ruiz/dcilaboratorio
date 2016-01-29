@@ -310,7 +310,6 @@ class OrdenesController extends Controller
 			$fecha_edicion='2000-01-01 00:00:00';
 
 			$model->fecha_captura=$fecha_creacion;
-
 			$model->folio=$this->generateRandomString();
 
 			$pagos->fecha=$model->fecha_captura;
@@ -322,11 +321,7 @@ class OrdenesController extends Controller
 				$direccion->attributes=$_POST['Direcciones'];
 				$validaRequiereFactura=($datosFacturacion->validate()&$direccion->validate());
 			}
-
-			if($paciente->id>0){
-				$paciente->sexo=0;
-			}
-
+			
 			$totalAPagar=0;
 			$validateExamenes=true;
 			$examenesIds=array();
@@ -409,19 +404,44 @@ class OrdenesController extends Controller
 						$examen_precio->id_ordenes = $model->id;
 						$examen_precio->save();
 					}
+					//Calculamos la edad del paciente para ver cuales parametros se agregaran a la orden
+					$fecha_nacimiento = date('Y-m-d',strtotime($paciente->fecha_nacimiento));
 
+					$intervalo = date_diff(date_create($paciente->fecha_nacimiento), date_create(date('Y-m-d')));
+					$edad = $intervalo->y;
+					$genero = $paciente->sexo==0?"Hombre":"Mujer";
+		
 					foreach ($examenesIds as $idExamen) {
 						array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=? AND activo=1', array($idExamen,$model->id_multitarifarios)));
-						$detallesExamen = DetallesExamen::model()->findByExamenId($idExamen);
+						$detallesExamen = DetallesExamen::model()->findAll("id_examenes=? AND edad_minima <= ? AND edad_maxima >= ? AND (genero ='' OR genero is null OR genero=?) AND activo=1", array($idExamen,$edad,$edad,$genero));
+												
 						foreach ($detallesExamen as $detalle) {
 							$ordenTieneExamenes = new OrdenTieneExamenes;
 							$ordenTieneExamenes->id_ordenes=$model->id;
 							$ordenTieneExamenes->id_detalles_examen=$detalle->id;
 							$ordenTieneExamenes->ultima_edicion=$fecha_edicion;
+							$ordenTieneExamenes->rango_inferior = $detalle->rango_inferior;
+							$ordenTieneExamenes->rango_promedio = $detalle->rango_promedio;
+							$ordenTieneExamenes->rango_superior = $detalle->rango_superior;
 							$ordenTieneExamenes->usuario_ultima_edicion=Yii::app()->user->id;;
 							$ordenTieneExamenes->creacion=$fecha_creacion;
 							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;
 							$ordenTieneExamenes->save();
+	
+							if($detalle->tipo=="Multirango"){
+								$detalleTieneMultirangos = DetallesExamenTieneMultirangos::model()->findAll("id_detalles_examen=?",array($detalle->id));
+	
+								foreach ($detalleTieneMultirangos as $detalleTiene) {
+									if($detalleTiene->multirango->activo==1){
+										$ordenTieneMultirango = new OrdenTieneMultirangos;
+										$ordenTieneMultirango->id_orden_tiene_examenes = $ordenTieneExamenes->id;
+										$ordenTieneMultirango->id_multirangos = $detalleTiene->multirango->id;
+										$ordenTieneMultirango->rango_inferior=$detalleTiene->multirango->rango_inferior;
+										$ordenTieneMultirango->rango_superior=$detalleTiene->multirango->rango_superior;
+										$ordenTieneMultirango->save();						
+									}
+								}
+							}
 						}
 					}
 
