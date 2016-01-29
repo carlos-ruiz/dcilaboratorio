@@ -58,7 +58,8 @@ class ReportesController extends Controller
 	{
 
 		$model=new BusquedaForm;
-
+		$resultados = array();
+		$resultadosMostrar = array();
 
 		if(isset($_POST['BusquedaForm']))
 		{
@@ -120,43 +121,52 @@ class ReportesController extends Controller
 
 			$resultadosMostrar = array();
 			if($model->dia==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>utf8_encode('  Día'), 'size'=>'0.7', 'id'=>'day'));
+				array_push($resultadosMostrar, array('nombre'=>utf8_encode('Día'), 'id'=>'day'));
 			if($model->mes==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Mes', 'size'=>'0.7', 'id'=>'month'));
+				array_push($resultadosMostrar, array('nombre'=>'Mes', 'id'=>'month'));
 			if($model->año==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>utf8_encode('  Año'), 'size'=>'0.9', 'id'=>'year'));
+				array_push($resultadosMostrar, array('nombre'=>utf8_encode('Año'), 'id'=>'year'));
 			if($model->semana==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Sem', 'size'=>'0.7', 'id'=>'week'));
+				array_push($resultadosMostrar, array('nombre'=>'Sem', 'id'=>'week'));
 			if($model->hora==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Hora', 'size'=>'1', 'id'=>'hr'));
+				array_push($resultadosMostrar, array('nombre'=>'Hora', 'id'=>'hr'));
 			if($model->folio==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Folio', 'size'=>'1', 'id'=>'folio'));
+				array_push($resultadosMostrar, array('nombre'=>'Folio', 'id'=>'folio'));
 			if($model->id_paciente==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Id P', 'size'=>'0.8', 'id'=>'idp'));
+				array_push($resultadosMostrar, array('nombre'=>'Id P', 'id'=>'idp'));
 			if($model->nombre_paciente==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Paciente', 'size'=>'4.2', 'id'=>'namep'));
+				array_push($resultadosMostrar, array('nombre'=>'Paciente', 'id'=>'namep'));
 			if($model->unidad==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'UR', 'size'=>'3', 'id'=>'ur'));
+				array_push($resultadosMostrar, array('nombre'=>'UR', 'id'=>'ur'));
 			if($model->doctor==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Doctor', 'size'=>'4.2', 'id'=>'dr'));
+				array_push($resultadosMostrar, array('nombre'=>'Doctor', 'id'=>'dr'));
 			if($model->id_examen==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Examen', 'size'=>'3.5', 'id'=>'exam'));
+				array_push($resultadosMostrar, array('nombre'=>'Examen', 'id'=>'exam'));
 			if($model->costo==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Costo', 'size'=>'1.5', 'id'=>'cost'));
+				array_push($resultadosMostrar, array('nombre'=>'Costo', 'id'=>'cost'));
 			if($model->porcentaje_descuento==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'% Desc', 'size'=>'1', 'id'=>'discp'));
+				array_push($resultadosMostrar, array('nombre'=>'% Desc', 'id'=>'discp'));
 			if($model->monto_descuento==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'$ Desc', 'size'=>'1', 'id'=>'disa'));
+				array_push($resultadosMostrar, array('nombre'=>'$ Desc', 'id'=>'disa'));
 			if($model->tarifa==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'size'=>'1.7', 'id'=>'tarifa'));
+				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'id'=>'tarifa'));
 
-			$pdf = new ImprimirPdf('L','cm','letter');
-			$pdf->AddPage();
-			$pdf->cabeceraHorizontal($resultadosMostrar);
-			$pdf->contenido($resultados, $resultadosMostrar);
-			$pdf->Output();
+			echo "<br/>Resultados:<br/>";
+			print_r($resultados);
+			echo "<br/><br/>Resultados Mostrar:<br/>";
+			print_r($resultadosMostrar);
+			// return;
+			// $pdf = new ImprimirPdf('L','cm','letter');
+			// $pdf->AddPage();
+			// $pdf->cabeceraHorizontal($resultadosMostrar);
+			// $pdf->contenido($resultados, $resultadosMostrar);
+			// $pdf->Output();
 		}
-		$this->render('generar', array('model'=>$model));
+		$this->render('generar', array(
+			'model'=>$model,
+			'resultados'=>$resultados,
+			'resultadosMostrar'=>$resultadosMostrar,
+			));
 	}
 
 	/**
