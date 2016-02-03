@@ -127,13 +127,13 @@ class ReportesController extends Controller
 			if($model->año==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>utf8_encode('Año'), 'id'=>'year'));
 			if($model->semana==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Sem', 'id'=>'week'));
+				array_push($resultadosMostrar, array('nombre'=>'Semana', 'id'=>'week'));
 			if($model->hora==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Hora', 'id'=>'hr'));
 			if($model->folio==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Folio', 'id'=>'folio'));
 			if($model->id_paciente==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Id P', 'id'=>'idp'));
+				array_push($resultadosMostrar, array('nombre'=>'Id Paciente', 'id'=>'idp'));
 			if($model->nombre_paciente==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Paciente', 'id'=>'namep'));
 			if($model->unidad==1 || $mostrarTodos==1)
@@ -141,20 +141,15 @@ class ReportesController extends Controller
 			if($model->doctor==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Doctor', 'id'=>'dr'));
 			if($model->id_examen==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'Examen', 'id'=>'exam'));
+				array_push($resultadosMostrar, array('nombre'=>'Determinaciones', 'id'=>'exam'));
 			if($model->costo==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Costo', 'id'=>'cost'));
 			if($model->porcentaje_descuento==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'% Desc', 'id'=>'discp'));
+				array_push($resultadosMostrar, array('nombre'=>'% Descuento', 'id'=>'discp'));
 			if($model->monto_descuento==1 || $mostrarTodos==1)
-				array_push($resultadosMostrar, array('nombre'=>'$ Desc', 'id'=>'disa'));
+				array_push($resultadosMostrar, array('nombre'=>'$ Descuento', 'id'=>'disa'));
 			if($model->tarifa==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'id'=>'tarifa'));
-
-			echo "<br/>Resultados:<br/>";
-			print_r($resultados);
-			echo "<br/><br/>Resultados Mostrar:<br/>";
-			print_r($resultadosMostrar);
 			// return;
 			// $pdf = new ImprimirPdf('L','cm','letter');
 			// $pdf->AddPage();
