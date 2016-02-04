@@ -612,7 +612,7 @@ class OrdenesController extends Controller
 
 			$validateExamenes = true;
 			$transaction = Yii::app()->db->beginTransaction();
-			//try{
+			try{
 				$model->attributes=$_POST['Ordenes'];
 				if($model->requiere_factura==1){
 					$datosFacturacion->attributes=$_POST['DatosFacturacion'];
@@ -815,10 +815,10 @@ class OrdenesController extends Controller
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
 				}
-			//}catch(Exception $ex){
-			//	$mensaje="Error inesperado";
-			//	$titulo="Error";
-			//}
+			}catch(Exception $ex){
+				$mensaje="Error inesperado";
+				$titulo="Error";
+			}
 		}
 		$grupos=Grupos::model()->findAll("activo=1");
 		$gruposTieneExamenes=array();
