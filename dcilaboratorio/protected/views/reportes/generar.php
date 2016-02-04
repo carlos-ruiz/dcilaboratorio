@@ -6,9 +6,6 @@
 <h1>Reportes</h1>
 <div class="col-md-12">
 	<div class="col-md-9">
-	<?php print_r($resultadosMostrar); ?>
-	<?= '<br/><br/>' ?>
-	<?php print_r($resultados); ?>
 		<div class="portlet box blue">
             <div class="portlet-title">
                 <div class="caption">Resultados</div>
@@ -32,49 +29,91 @@
 
                         <?php   foreach ($resultadosMostrar as $resultadoMostrar) { 
                                     if ($resultadoMostrar['id']=='day') {
-                                        echo "<td>dia</td>";
+                                        $fecha = explode('-', $orden->fecha_captura);
+                                        $fecha = explode(' ', $fecha[2]);
+                                        echo "<td>".$fecha[0]."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='month') {
-                                        echo "<td>dia</td>";
+                                        $fecha = explode('-', $orden->fecha_captura);
+                                        echo "<td>".$fecha[1]."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='year') {
-                                        echo "<td>dia</td>";
+                                        $fecha = explode('-', $orden->fecha_captura);
+                                        echo "<td>".$fecha[0]."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='week') {
-                                        echo "<td>dia</td>";
+                                        $fecha = new DateTime($orden->fecha_captura);
+                                        $week = $fecha->format("W");
+                                        echo "<td>".$week."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='hr') {
-                                        echo "<td>dia</td>";
+                                        $fecha = explode('-', $orden->fecha_captura);
+                                        $fecha = explode(' ', $fecha[2]);
+                                        $fecha = explode(':', $fecha[1]);
+                                        $fecha = $fecha[0].':'.$fecha[1];
+                                        echo "<td>".$fecha."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='folio') {
                                         echo "<td>$orden->id</td>";
                                     }
                                     if ($resultadoMostrar['id']=='idp') {
-                                        echo "<td>dia</td>";
+                                        $paciente = $orden->ordenFacturacion->id_pacientes;
+                                        echo "<td>".$paciente."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='namep') {
-                                        echo "<td>dia</td>";
+                                        $paciente = $orden->ordenFacturacion->paciente;
+                                        $nombre = $paciente->nombre.' '.$paciente->a_paterno.' '.$paciente->a_materno;
+                                        // $nombre = substr($nombre, 0, 29);
+                                        echo "<td>".$nombre."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='ur') {
-                                        echo "<td>dia</td>";
+                                        $ur = $orden->idUnidadesResponsables;
+                                        $ur = isset($ur)?$ur->nombre:'';
+                                        // $ur = substr($ur, 0, 19);
+                                        echo "<td>".$ur."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='dr') {
-                                        echo "<td>dia</td>";
+                                        $dr = $orden->doctor;
+                                        $dr = isset($dr)?$dr->titulo->nombre.' '.$dr->nombre.' '.$dr->a_paterno:'';
+                                        // $dr = substr($dr, 0, 29);
+                                        echo "<td>".$dr."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='exam') {
-                                        echo "<td>dia</td>";
+                                        $ordenTieneExamenes = $orden->ordenTieneExamenes;
+                                        $examenes = '';
+                                        $idExamen = 0;
+                                        foreach ($ordenTieneExamenes as $ordenExamen) {
+                                            if($ordenExamen->detalleExamen->examenes->id!=$idExamen){
+                                                $examenes .= ', '.$ordenExamen->detalleExamen->examenes->clave;
+                                            }
+                                            $idExamen = $ordenExamen->detalleExamen->examenes->id;
+                                        }
+                                        $examenes = substr($examenes, 1);
+                                        echo "<td>".$examenes."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='cost') {
-                                        echo "<td>dia</td>";
+                                        $ordenPreciosExamen = $orden->precios;
+                                        $costoTotal = 0;
+                                        foreach ($ordenPreciosExamen as $precioExamen) {
+                                            $costoTotal += $precioExamen->precio;
+                                        }
+                                        echo "<td>$".$costoTotal."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='discp') {
-                                        echo "<td>dia</td>";
+                                        echo "<td>".$orden->descuento."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='disa') {
-                                        echo "<td>dia</td>";
+                                        $ordenPreciosExamen = $orden->precios;
+                                        $costoTotal = 0;
+                                        foreach ($ordenPreciosExamen as $precioExamen) {
+                                            $costoTotal += $precioExamen->precio;
+                                        }
+                                        $costoTotal = $costoTotal*$orden->descuento/100;
+                                        echo "<td>$".$costoTotal."</td>";
                                     }
                                     if ($resultadoMostrar['id']=='tarifa') {
-                                        echo "<td>dia</td>";
+                                        $multitarifario = $orden->multitarifarios;
+                                        echo "<td>".$multitarifario->nombre."</td>";
                                     }
                                 } ?>
                             </tr>
