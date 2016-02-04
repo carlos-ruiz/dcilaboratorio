@@ -612,7 +612,7 @@ class OrdenesController extends Controller
 
 			$validateExamenes = true;
 			$transaction = Yii::app()->db->beginTransaction();
-			try{
+			//try{
 				$model->attributes=$_POST['Ordenes'];
 				if($model->requiere_factura==1){
 					$datosFacturacion->attributes=$_POST['DatosFacturacion'];
@@ -636,6 +636,7 @@ class OrdenesController extends Controller
 						$direccion->delete();
 					}
 				}
+				
 				if(isset($_POST['Examenes']['ids']) && !empty($_POST['Examenes']['ids'])){
 					$examenesIds = array_unique(split(',',$_POST['Examenes']['ids']));
 				}else{
@@ -644,13 +645,20 @@ class OrdenesController extends Controller
 					$validateExamenes=false;
 				}
 
+				
+				//Eliminamos los multirangos anteriores de la orden
+				$ordenTieneExamenesAnt = OrdenTieneExamenes::model()->findAll('id_ordenes=?',array($id));
+				foreach ($ordenTieneExamenesAnt as $ordenExamenAnt) {
+					//echo "orden examen id: ".$ordenExamenAnt->id."<br />"; 
+					OrdenTieneMultirangos::model()->deleteAll('id_orden_tiene_examenes=?',array($ordenExamenAnt->id));
+				}
+
 				$examenesCalificados=array();
 				foreach ($ordenExamenes as $ordenExamen) {
-					if(isset($ordenExamen->resultado))
+					if(isset($ordenExamen) && isset($ordenExamen->resultado))
 						$examenesCalificados[$ordenExamen->id_detalles_examen]=$ordenExamen->resultado;
 					$ordenExamen->delete();
 				}
-				
 
 				if(isset($_POST['Examenes']['idsGrupos']) && !empty($_POST['Examenes']['idsGrupos'])){
 					$gruposIds = split(',',$_POST['Examenes']['idsGrupos']);
@@ -685,7 +693,6 @@ class OrdenesController extends Controller
 					}
 				}
 
-
 				$examenes_precio = array();
 				$totalAPagar = 0;
 				$ordenPrecioExamenes = $model->precios;
@@ -717,21 +724,47 @@ class OrdenesController extends Controller
 						$examen_precio->id_ordenes = $model->id;
 						$examen_precio->save();
 					}
+					$fecha_nacimiento = date('Y-m-d',strtotime($paciente->fecha_nacimiento));
+
+					$intervalo = date_diff(date_create($paciente->fecha_nacimiento), date_create(date('Y-m-d')));
+					$edad = $intervalo->y;
+					$genero = $paciente->sexo==0?"Hombre":"Mujer";
 
 					foreach ($examenesIds as $idExamen) {
 					// array_push($listaTarifasExamenes, TarifasActivas::model()->find('id_examenes=? AND id_multitarifarios=?', array($idExamen,$model->id_multitarifarios)));
-						$detallesExamen = DetallesExamen::model()->findByExamenId($idExamen);
+						//$detallesExamen = DetallesExamen::model()->findByExamenId($idExamen);
+						$detallesExamen = DetallesExamen::model()->findAll("id_examenes=? AND edad_minima <= ? AND edad_maxima >= ? AND (genero ='' OR genero is null OR genero=?) AND activo=1", array($idExamen,$edad,$edad,$genero));
+						
 						foreach ($detallesExamen as $detalle) {
+
 							$ordenTieneExamenes = new OrdenTieneExamenes;
 							$ordenTieneExamenes->id_ordenes=$model->id;
 							$ordenTieneExamenes->id_detalles_examen=$detalle->id;
 							$ordenTieneExamenes->ultima_edicion=$fecha_edicion;
+							$ordenTieneExamenes->rango_inferior = $detalle->rango_inferior;
+							$ordenTieneExamenes->rango_promedio = $detalle->rango_promedio;
+							$ordenTieneExamenes->rango_superior = $detalle->rango_superior;
 							$ordenTieneExamenes->usuario_ultima_edicion=Yii::app()->user->id;;
 							$ordenTieneExamenes->creacion=$fecha_creacion;
 							$ordenTieneExamenes->usuario_creacion=Yii::app()->user->id;
 							if(isset($examenesCalificados[$detalle->id]))
 								$ordenTieneExamenes->resultado=$examenesCalificados[$detalle->id];
 							$ordenTieneExamenes->save();
+
+							//agregamos los  nuevos multirangos
+							if($detalle->tipo=="Multirango"){
+								$detalleTieneMultirangos = DetallesExamenTieneMultirangos::model()->findAll("id_detalles_examen=?",array($detalle->id));
+								foreach ($detalleTieneMultirangos as $detalleTiene) {
+									if($detalleTiene->multirango->activo==1){
+										$ordenTieneMultirango = new OrdenTieneMultirangos;
+										$ordenTieneMultirango->id_orden_tiene_examenes = $ordenTieneExamenes->id;
+										$ordenTieneMultirango->id_multirangos = $detalleTiene->multirango->id;
+										$ordenTieneMultirango->rango_inferior=$detalleTiene->multirango->rango_inferior;
+										$ordenTieneMultirango->rango_superior=$detalleTiene->multirango->rango_superior;
+										$ordenTieneMultirango->save();						
+									}
+								}
+							}
 						}
 					}
 
@@ -782,10 +815,10 @@ class OrdenesController extends Controller
 					$transaction->commit();
 					$this->redirect(array('view','id'=>$model->id));
 				}
-			}catch(Exception $ex){
-				$mensaje="Error inesperado";
-				$titulo="Error";
-			}
+			//}catch(Exception $ex){
+			//	$mensaje="Error inesperado";
+			//	$titulo="Error";
+			//}
 		}
 		$grupos=Grupos::model()->findAll("activo=1");
 		$gruposTieneExamenes=array();

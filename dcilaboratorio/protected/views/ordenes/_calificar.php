@@ -71,32 +71,31 @@
 
 			// Muestra los examenes individuales
 			foreach ($ordenExamenesModel as $ordenTieneExamen) {
-				foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
-					if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
-						if($detalleExamen->examenes->id!=$anterior){
-							echo '
-							<thead>
-								<tr>
-									<th colspan="4" style="color:#1e90ff ">'.$detalleExamen->examenes->nombre.'</th>
-								</tr>
-							</thead>
-							<tr>
-								<td>Descripción</td>
-								<td>Resultado</td>
-								<td>Unidad Medida</td>
-								<td>Rango normal</td>
-							</tr>';
-						}
-
+				$detalleExamen = $ordenTieneExamen->detalleExamen;
+				if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
+					if($detalleExamen->examenes->id!=$anterior){
 						echo '
+						<thead>
+							<tr>
+								<th colspan="4" style="color:#1e90ff ">'.$detalleExamen->examenes->nombre.'</th>
+							</tr>
+						</thead>
 						<tr>
-							<td>'.$detalleExamen->descripcion.'</td>'.
-							'<td>'.$form->textField($ordenTieneExamen,"[$ordenTieneExamen->id]resultado",array('size'=>25,'maxlength'=>25,'class'=>'form-control')).'</td>
-							<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
-							<td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
+							<td>Descripción</td>
+							<td>Resultado</td>
+							<td>Unidad Medida</td>
+							<td>Rango normal</td>
 						</tr>';
-					$anterior=$detalleExamen->examenes->id;
 					}
+
+					echo '
+					<tr>
+						<td>'.$detalleExamen->descripcion.'</td>'.
+						'<td>'.$form->textField($ordenTieneExamen,"[$ordenTieneExamen->id]resultado",array('size'=>25,'maxlength'=>25,'class'=>'form-control')).'</td>
+						<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
+						<td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
+					</tr>';
+				$anterior=$detalleExamen->examenes->id;
 				}
 			}
 			 echo'</table>';
