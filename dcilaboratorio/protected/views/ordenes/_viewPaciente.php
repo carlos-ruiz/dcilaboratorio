@@ -1,3 +1,4 @@
+
 <?php
 /* @var $this OrdenesController */
 /* @var $model Ordenes */
@@ -187,11 +188,11 @@
 				$anterior=0;
 
 								echo '<table class="table table-striped table-bordered dataTable">';
-								echo '
-				   		<thead><tr><td>Descripción</td>
-				   		<td>Resultado</td>
-				   		<td>Unidad de medida</td>
-				   		<td>Rango normal</td></tr></thead>';
+							echo '
+				   		<thead class="encabezados" ><tr><td style="color:#04C !important">Descripción</td>
+				   		<td style="color:#04C !important">Resultado</td>
+				   		<td style="color:#04C !important">Unidad de medida</td>
+				   		<td style="color:#04C !important">Rango normal</td></tr></thead>';
 			// Muestra los examenes que perteneces a algun grupo
 			foreach ($ordenGruposModel as $grupote) {
 				echo $this->imprimirGrupo($grupote->id_grupos,$model->id, false);

@@ -147,3 +147,7 @@ h3, h5{
 .hidden{
 	display: none;
 }
+.encabezados{
+	color: blue !important;
+    font-size: 120%;
+}
