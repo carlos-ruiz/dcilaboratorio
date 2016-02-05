@@ -107,8 +107,33 @@
 		</div>
 	</div>
 
-	<div id="camposAntibiotico" style="display:<?php echo $model->tipo=='Antibiótico'?'block':'none'; ?>">
-		<div class="form-group <?php if($form->error($model,'concentracion')!=''){ echo 'has-error'; }?>">
+	<div id="camposAntibiotico" class="row" style="display:<?php echo $model->tipo=='Antibiótico'?'block':'none'; ?>">
+		
+		<div class="form-group col-md-4 <?php if($form->error($model,'rango_inferior')!=''){ echo 'has-error'; }?>">
+			<?php echo $form->labelEx($model,'rango_inferior', array('class'=>'control-label')); ?>
+			<div class="input-group">
+				<?php echo $form->textField($model,'rango_inferior',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model,'rango_inferior', array('class'=>'help-block')); ?>
+			</div>
+		</div>
+
+		<div class="form-group col-md-4 <?php if($form->error($model,'rango_promedio')!=''){ echo 'has-error'; }?>">
+			<?php echo $form->labelEx($model,'rango_promedio', array('class'=>'control-label')); ?>
+			<div class="input-group">
+				<?php echo $form->textField($model,'rango_promedio',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model,'rango_promedio', array('class'=>'help-block')); ?>
+			</div>
+		</div>
+
+		<div class="form-group col-md-4 <?php if($form->error($model,'rango_superior')!=''){ echo 'has-error'; }?>">
+			<?php echo $form->labelEx($model,'rango_superior', array('class'=>'control-label')); ?>
+			<div class="input-group">
+				<?php echo $form->textField($model,'rango_superior',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model,'rango_superior', array('class'=>'help-block')); ?>
+			</div>
+		</div>
+
+		<div class="form-group col-md-4 <?php if($form->error($model,'concentracion')!=''){ echo 'has-error'; }?>">
 			<?php echo $form->labelEx($model,'concentracion', array('class'=>'control-label')); ?>
 			<div class="input-group">
 				<?php echo $form->textField($model,'concentracion',array('size'=>45,'maxlength'=>65, 'class'=>'form-control')); ?>

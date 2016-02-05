@@ -75,7 +75,10 @@ class DetallesExamenController extends Controller
 		{
 
 			$model->attributes=$_POST['DetallesExamen'];
-			$model->multirangos=$_POST['DetallesExamen']['multirangos'];
+			if(isset($_POST['DetallesExamen']['multirangos']))
+				$model->multirangos=$_POST['DetallesExamen']['multirangos'];
+			if(isset($_POST['DetallesExamen']['concentracion']))
+				$model->concentracion=$_POST['DetallesExamen']['concentracion'];
 			if($model->save()){
 				if($model->tipo == 'Multirango'){
 					foreach ($model->multirangos as $multirangoSeleccionado) {
@@ -114,7 +117,10 @@ class DetallesExamenController extends Controller
 		{
 			$model->attributes=$_POST['DetallesExamen'];
 			$model->tipo=$tipo;
-			$model->multirangos=$_POST['DetallesExamen']['multirangos'];
+			if(isset($_POST['DetallesExamen']['multirangos']))
+				$model->multirangos=$_POST['DetallesExamen']['multirangos'];
+			if(isset($_POST['DetallesExamen']['concentracion']))
+				$model->concentracion=$_POST['DetallesExamen']['concentracion'];
 			if($model->save()){
 				DetallesExamenTieneMultirangos::model()->deleteAll('id_detalles_examen=?',array($id));
 				if($model->tipo == 'Multirango'){

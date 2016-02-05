@@ -25,6 +25,7 @@ foreach ($pagos as $pago):
 endforeach;
 
 $pagado=$totalOrden-$total;
+
 ?>
 <div class="portlet light">
 	<div class="row">
@@ -195,44 +196,35 @@ $pagado=$totalOrden-$total;
 							$anterior=0;
 							$entrega=1;
 
-							echo '<table class="table table-striped table-bordered dataTable">';
+							
+			// Muestra los examenes que perteneces a algun grupo
+			$examenesImpresos=array();
+			foreach ($ordenGruposModel as $grupote) {
+				echo '<table class="table table-striped table-bordered dataTable">';
 							echo '
 				   		<thead class="encabezados" ><tr><td style="color:#04C !important">Descripción</td>
 				   		<td style="color:#04C !important">Resultado</td>
 				   		<td style="color:#04C !important">Unidad de medida</td>
-				   		<td style="color:#04C !important">Rango normal</td></tr></thead>';
-			// Muestra los examenes que perteneces a algun grupo
+				   		<td colspan="3" style="color:#04C !important">Parámetros de referencia</td></tr></thead>';
 				   		
-			foreach ($ordenGruposModel as $grupote) {
-				echo $this->imprimirGrupo($grupote->id_grupos,$model->id, false);
-			}
+				$examenesImpresos=$this->imprimirGrupo($grupote->id_grupos,$model->id, false);
 
-			// Muestra los examenes individuales
-			foreach ($ordenExamenesModel as $ordenTieneExamen) {
-				//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
-				$detalleExamen = $ordenTieneExamen->detalleExamen;
-					if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
-						if($detalleExamen->examenes->id!=$anterior){
-							echo '
-							<thead>
-								<tr>
-									<th colspan="4" style="color:#1e90ff ">'.$detalleExamen->examenes->nombre.'</th>
-								</tr>
-							</thead>';
-						}
-
-						echo '
-						<tr>
-							<td>'.$detalleExamen->descripcion.'</td>'.
-							'<td>'.(isset($ordenTieneExamen->resultado)?$ordenTieneExamen->resultado:("Sin Resultado")).'</td>
-							<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
-							<td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
-						</tr>';
-					$anterior=$detalleExamen->examenes->id;
-					}
-				//}
+				echo "</table>";
 			}
-			 echo'</table>';
+			echo "<br />";
+			// Muestra los examenes individuales normales
+
+			$this->imprimirNormal($model,$examenesImpresos);
+
+			 echo "<br />";
+			// Muestra los examenes individuales antibioticos
+
+			$this->imprimirAntibiotico($model,$examenesImpresos);
+
+			 echo "<br />";
+			// Muestra los examenes individuales multirangos
+
+			$this->imprimirMultirango($model,$examenesImpresos);
 
 			 /*
 							echo '<table class="table table-striped table-bordered dataTable">';

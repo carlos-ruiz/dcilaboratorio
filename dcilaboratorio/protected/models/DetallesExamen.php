@@ -64,7 +64,7 @@ class DetallesExamen extends CActiveRecord
 			'examenes' => array(self::BELONGS_TO, 'Examenes', 'id_examenes'),
 			'unidadesMedida' => array(self::BELONGS_TO, 'UnidadesMedida', 'id_unidades_medida'),
 			'ordenTieneExamenes' => array(self::HAS_MANY, 'OrdenTieneExamenes', 'id_detalles_examen'),
-			'multirrangos'=>array(self::HAS_MANY,'DetallesExamenTieneMultirangos','id_detalles_examen'),
+			'multirangos'=>array(self::HAS_MANY,'DetallesExamenTieneMultirangos','id_detalles_examen'),
 		);
 	}
 

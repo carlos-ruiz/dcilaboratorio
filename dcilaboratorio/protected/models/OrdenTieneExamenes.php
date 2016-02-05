@@ -54,6 +54,8 @@ class OrdenTieneExamenes extends CActiveRecord
 		return array(
 			'detalleExamen' => array(self::BELONGS_TO, 'DetallesExamen', 'id_detalles_examen','order'=>'detalleExamen.id_examenes ASC'),
 			'orden' => array(self::BELONGS_TO, 'Ordenes', 'id_ordenes'),
+			'multirango' => array(self::HAS_MANY, 'OrdenTieneMultirangos', 'id_orden_tiene_examenes'),
+			
 		);
 	}
 

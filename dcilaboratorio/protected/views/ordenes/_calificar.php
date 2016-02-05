@@ -60,45 +60,33 @@
 				
 			<?php
 
-			$anterior=0;
-
-			echo '<table class="table table-striped table-bordered dataTable">';
-
-			// Muestra los examenes que perteneces a algun grupo
+			$examenesImpresos=array();
 			foreach ($ordenGruposModel as $grupote) {
-				echo $this->imprimirGrupo($grupote->id_grupos,$model->id);
-			}
+				echo '<table class="table table-striped table-bordered dataTable">';
+							echo '
+				   		<thead class="encabezados" ><tr><td style="color:#04C !important">Descripción</td>
+				   		<td style="color:#04C !important">Resultado</td>
+				   		<td style="color:#04C !important">Unidad de medida</td>
+				   		<td colspan="3" style="color:#04C !important">Parámetros de referencia</td></tr></thead>';
+				   		
+				$examenesImpresos=$this->imprimirGrupo($grupote->id_grupos,$model->id);
 
-			// Muestra los examenes individuales
-			foreach ($ordenExamenesModel as $ordenTieneExamen) {
-				$detalleExamen = $ordenTieneExamen->detalleExamen;
-				if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
-					if($detalleExamen->examenes->id!=$anterior){
-						echo '
-						<thead>
-							<tr>
-								<th colspan="4" style="color:#1e90ff ">'.$detalleExamen->examenes->nombre.'</th>
-							</tr>
-						</thead>
-						<tr>
-							<td>Descripción</td>
-							<td>Resultado</td>
-							<td>Unidad Medida</td>
-							<td>Rango normal</td>
-						</tr>';
-					}
-
-					echo '
-					<tr>
-						<td>'.$detalleExamen->descripcion.'</td>'.
-						'<td>'.$form->textField($ordenTieneExamen,"[$ordenTieneExamen->id]resultado",array('size'=>25,'maxlength'=>25,'class'=>'form-control')).'</td>
-						<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
-						<td>'.$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_superior.'</td>
-					</tr>';
-				$anterior=$detalleExamen->examenes->id;
-				}
+				echo "</table>";
 			}
-			 echo'</table>';
+			echo "<br />";
+			// Muestra los examenes individuales normales
+
+			$this->imprimirNormal($model,$examenesImpresos,true);
+
+			 echo "<br />";
+			// Muestra los examenes individuales antibioticos
+
+			$this->imprimirAntibiotico($model,$examenesImpresos,true);
+
+			 echo "<br />";
+			// Muestra los examenes individuales multirangos
+
+			$this->imprimirMultirango($model,$examenesImpresos,true);
 
 			 ?>
 
