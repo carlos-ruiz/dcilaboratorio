@@ -153,6 +153,11 @@
 				Perfiles</a>
 
 			</li>
+			<li <?php if($this->section=="Examenes" && $this->subSection=="Multirangos"){ echo 'class="active"';}?>>
+				<a href="<?php echo Yii::app()->request->baseUrl; ?>/multirangos/admin">
+				<i class="icon-note"></i>
+				Multirangos</a>
+			</li>
 			<li <?php if($this->section=="Examenes" && $this->subSection=="Resultados"){ echo 'class="active"';}?>>
 				<a href="<?php echo Yii::app()->request->baseUrl; ?>/detallesExamen/admin">
 				<i class="icon-note"></i>

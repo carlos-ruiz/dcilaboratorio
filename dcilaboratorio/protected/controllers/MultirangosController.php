@@ -7,8 +7,8 @@ class MultirangosController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $section = "Multirangos";
-	public $subSection;
+	public $section = "Examenes";
+	public $subSection ="Multirangos";
 	public $pageTitle="Multirangos";
 
 	/**
