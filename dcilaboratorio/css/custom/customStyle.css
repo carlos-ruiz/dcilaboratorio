@@ -163,3 +163,31 @@ h3, h5{
 .paginate_button next {
     color: white !important;
 }
+
+.button-toggle-reports {
+	padding: 11px;
+	background-color: rgba(191, 191, 191, 0.38);
+	position: absolute;
+	top: 0;
+	right: 15px;
+	cursor: pointer; 
+	z-index: 3;
+	border: solid 1px black;
+	border-radius: 5px;
+}
+
+.button-toggle-reports:hover {
+	background-color: rgb(233, 236, 243);
+}
+
+.form-filter-report {
+	position: absolute !important;
+	right: 10px;
+	top: 0;
+	height: 100%;
+	overflow: auto;
+}
+
+.full-height {
+	height: 100%;
+}

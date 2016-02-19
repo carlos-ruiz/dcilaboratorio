@@ -79,6 +79,14 @@
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="form-group col-md-12">
+					<?php echo "<label class='control-label'>Estatus</label>"?>
+					<div class="input-group">
+						<?php echo $form->dropDownList($model,'estatus', Status::model()->selectList(), array('class'=>'form-control input-medium select2me')); ?>
+					</div>
+				</div>
+			</div>
 			<hr/>
 			<div class="heading">
 				<h5 style="color:#1e90ff ">¿Qué resultados va a tener?</h5>
@@ -196,6 +204,13 @@
 					<div class="input-group" >
 						<?php echo $form->checkBox($model,'tarifa',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
 						<?php echo $form->error($model,'tarifa', array('class'=>'help-block')); ?>
+					</div>
+				</div>
+				<div class="form-group col-md-3 <?php if($form->error($model,'id_estatus')!=''){ echo 'has-error'; }?>">
+					<?php echo $form->labelEx($model,'id_estatus', array('class'=>'control-label')); ?>
+					<div class="input-group" >
+						<?php echo $form->checkBox($model,'id_estatus',array('size'=>45,'maxlength'=>45,'class'=>'form-control')); ?>
+						<?php echo $form->error($model,'id_estatus', array('class'=>'help-block')); ?>
 					</div>
 				</div>
 			</div>

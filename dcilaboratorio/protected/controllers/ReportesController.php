@@ -99,6 +99,9 @@ class ReportesController extends Controller
 			if (isset($model->clave_examen) && $model->clave_examen > 0) {
 				$query->andWhere('detalles_examen.id_examenes=:idExamen', array('idExamen'=>$model->clave_examen));
 			}
+			if (isset($model->estatus) && $model->estatus > 0) {
+				$query->andWhere('ordenes.id_status=:idStatus', array('idStatus'=>$model->estatus));
+			}
 
 			$resultados=$query->queryAll();
 			$mostrarTodos = (
@@ -116,7 +119,8 @@ class ReportesController extends Controller
 				$model->costo==0 &&
 				$model->porcentaje_descuento==0 &&
 				$model->monto_descuento==0 &&
-				$model->tarifa==0
+				$model->tarifa==0 &&
+				$model->id_estatus==0
 			);
 
 			$resultadosMostrar = array();
@@ -150,6 +154,8 @@ class ReportesController extends Controller
 				array_push($resultadosMostrar, array('nombre'=>'$ Descuento', 'id'=>'disa'));
 			if($model->tarifa==1 || $mostrarTodos==1)
 				array_push($resultadosMostrar, array('nombre'=>'Tarifa', 'id'=>'tarifa'));
+			if($model->id_estatus==1 || $mostrarTodos==1)
+				array_push($resultadosMostrar, array('nombre'=>'Estatus', 'id'=>'estatus'));
 			// return;
 			// $pdf = new ImprimirPdf('L','cm','letter');
 			// $pdf->AddPage();

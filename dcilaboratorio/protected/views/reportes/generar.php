@@ -4,8 +4,8 @@
 ?>
 
 <h1>Reportes</h1>
-<div class="col-md-12">
-	<div class="col-md-9">
+<div class="col-md-12 full-height">
+	<div class="resultados col-md-9">
 		<div class="portlet box blue">
             <div class="portlet-title">
                 <div class="caption">Resultados</div>
@@ -125,8 +125,22 @@
                 </table>
             </div>
         </div>
+        <div class="button-toggle-reports"><i class="fa fa-exchange"></i></div>
 	</div>
-	<div class="col-md-3">
+	<div class="form-filter-report col-md-3 slimScrollDiv"  data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" data-height="410" data-initialized="1">
 		<?php $this->renderPartial("_form",array('model'=>$model)); ?>
 	</div>
 </div>
+
+<script type="text/javascript">
+    var ind = 0;
+    $('.button-toggle-reports').click(function(){
+        ind++;
+        $('.resultados').toggleClass('col-md-12', (ind%2===1), 500);
+        $('.resultados').toggleClass('col-md-9', (ind%2===0), 500);
+        setTimeout(function(){ $('.form-filter-report').toggle(500); }, (ind%2===0)?500:0);
+    });
+    height = $('.page-content-wrapper').height()-($('.form-filter-report').offset().top - $('.page-content-wrapper').offset().top);
+    $('.full-height').css('height', height);
+
+</script>

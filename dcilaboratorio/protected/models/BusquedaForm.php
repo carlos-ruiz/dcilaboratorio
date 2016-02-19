@@ -27,9 +27,11 @@ class BusquedaForm extends CFormModel
 	public $porcentaje_descuento;
 	public $monto_descuento;
 	public $tarifa;
+	public $estatus;
 
 	public $check;
 	public $id_examen;
+	public $id_estatus;
 
 
 	/**
@@ -43,9 +45,9 @@ class BusquedaForm extends CFormModel
 			// username and password are required
 			array('fecha_inicial, fecha_final', 'required'),
 			// boolean
-			array('dia, mes, año, semana, id_paciente, hora, folio, nombre_paciente, unidad, doctor, id_examen, costo, porcentaje_descuento, monto_descuento, tarifa', 'boolean'),
+			array('dia, mes, año, semana, id_paciente, hora, folio, nombre_paciente, unidad, doctor, id_examen, costo, porcentaje_descuento, monto_descuento, tarifa, id_estatus', 'boolean'),
 			// numerical
-			array('id_doctores, id_pacientes, id_doctores, id_multitarifarios, clave_examen', 'numerical', 'integerOnly'=>true),
+			array('id_doctores, id_pacientes, id_doctores, id_multitarifarios, clave_examen, estatus', 'numerical', 'integerOnly'=>true),
 		);
 	}
 
@@ -75,13 +77,13 @@ class BusquedaForm extends CFormModel
 			'porcentaje_descuento'=>'% Desc',
 			'monto_descuento'=>'Monto descuento',
 			'tarifa'=>'Tarifa',
-
-
-
+			'estatus'=>'Estatus',
+			'id_estatus'=>'Estatus',
 		);
 	}
+
 public function generar()
-	{
+{
 
 }
 

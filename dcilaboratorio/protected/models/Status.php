@@ -117,4 +117,13 @@ class Status extends CActiveRecord
 	public function findByName($name){
 		return $this->model()->find("nombre=?",array($name));
 	}
+
+	public function selectList(){
+		$statuses = $this->model()->findAll();
+		$data = array(null=>"--Seleccione--");
+		foreach ($statuses as $status) {
+			$data[$status->id]=$status->descripcion;
+		}
+		return $data;
+	}
 }

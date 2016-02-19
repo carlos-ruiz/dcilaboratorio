@@ -74,7 +74,7 @@ class OrdenesController extends Controller
                         array_push($this->examenesImpresos, $detalleExamen->id_examenes);
                         $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
                         if(isset($ordenExamen)){
-	                        $rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
+	                        $rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
 
 	                        $checaColor=substr($ordenExamen->resultado, 0,1);
 	                        $styleClass="";
@@ -85,7 +85,7 @@ class OrdenesController extends Controller
 	                        }elseif($checaColor=="#"){//color rojo
 	                        	$styleClass="error-style";
 	                        	$resultado=substr($ordenExamen->resultado, 1);
-	                        }elseif($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+	                        }elseif($ordenExamen->resultado > $ordenExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->rango_inferior){
 	                            $resultado=$ordenExamen->resultado;
 	                            $styleClass="error-style";
 	                        }
@@ -153,7 +153,7 @@ class OrdenesController extends Controller
                         foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
                         	$ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
 	                        if(isset($ordenExamen)){
-	                        	$rango=$detalleExamen->rango_inferior.'-'.$detalleExamen->rango_promedio.'-'.$detalleExamen->rango_superior;
+	                        	$rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
 	         
 	                            $idOrdenExamen = $ordenExamen['id'];
 	                           	$valueOrdenExamen = $ordenExamen['resultado'];
@@ -167,7 +167,7 @@ class OrdenesController extends Controller
 		                        }elseif($checaColor=="#"){//color rojo
 		                        	$styleClass="error-style";
 		                        	$resultado=substr($ordenExamen->resultado, 1);
-		                        }elseif($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+		                        }elseif($ordenExamen->resultado > $ordenExamen->rango_superior || $ordenExamen->resultado < $ordenExamen->rango_inferior){
 		                            $resultado=$ordenExamen->resultado;
 		                            $styleClass="error-style";
 		                        }
@@ -241,17 +241,17 @@ class OrdenesController extends Controller
 					<td>'.$detalleExamen->descripcion.'</td>'.
 					'<td>'.$detalleExamen->concentracion.'</td>';
 					if(!$editable){
-						echo '<td>'.(isset($ordenTieneExamen->resultado)?$ordenTieneExamen->resultado:("Sin Resultado")).'</td>';
-						echo '<td>'.(isset($ordenTieneExamen->interpretacion)?$ordenTieneExamen->interpretacion:("Sin Interpretación")).'</td>';
+						echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
+						echo '<td>'.((isset($ordenTieneExamen->interpretacion) && !empty($ordenTieneExamen->interpretacion))?$ordenTieneExamen->interpretacion:("s/i")).'</td>';
 					}
 					else{
 						echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
 						echo '<td><input size="25" maxlength="128" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][interpretacion]" value="'.$ordenTieneExamen->interpretacion.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_interpretacion" type="text"></td>';
 					}
 					echo '
-					<td>'.$detalleExamen->rango_inferior.'</td>
-					<td>'.$detalleExamen->rango_promedio.'</td>
-					<td>'.$detalleExamen->rango_superior.'</td>
+					<td>'.$ordenTieneExamen->rango_inferior.'</td>
+					<td>'.$ordenTieneExamen->rango_promedio.'</td>
+					<td>'.$ordenTieneExamen->rango_superior.'</td>
 				</tr>';
 				$anterior=$detalleExamen->examenes->id;
 			}
@@ -292,14 +292,14 @@ class OrdenesController extends Controller
 				<tr>
 					<td>'.$detalleExamen->descripcion.'</td>';
 					if(!$editable)
-						echo '<td>'.(isset($ordenTieneExamen->resultado)?$ordenTieneExamen->resultado:("Sin Resultado")).'</td>';
+						echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
 					else
 						echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
 					echo '
 					<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
-					<td>'.$detalleExamen->rango_inferior.'</td>
-					<td>'.$detalleExamen->rango_promedio.'</td>
-					<td>'.$detalleExamen->rango_superior.'</td>
+					<td>'.$ordenTieneExamen->rango_inferior.'</td>
+					<td>'.$ordenTieneExamen->rango_promedio.'</td>
+					<td>'.$ordenTieneExamen->rango_superior.'</td>
 				</tr>';
 				$anterior=$detalleExamen->examenes->id;
 			}
@@ -334,8 +334,8 @@ class OrdenesController extends Controller
 				<tr>
 					<td>'.$detalleExamen->descripcion.'</td>';
 					if(!$editable){
-						echo '<td>'.(isset($ordenTieneExamen->resultado)?$ordenTieneExamen->resultado:("Sin Resultado")).'</td>';
-						echo '<td>'.(isset($ordenTieneExamen->interpretacion)?$ordenTieneExamen->interpretacion:("Sin Interpretación")).'</td>';
+						echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
+						echo '<td>'.((isset($ordenTieneExamen->interpretacion) && !empty($ordenTieneExamen->interpretacion))?$ordenTieneExamen->interpretacion:("s/i")).'</td>';
 					}
 					else{
 						echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
