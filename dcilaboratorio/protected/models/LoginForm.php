@@ -103,9 +103,11 @@ class LoginForm extends CFormModel
 			if($user->perfil->nombre=="Administrador")
 				return true;
 
-			//$unidadResponsable=UnidadesResponsables::model()->find('id_usuarios=?',array($user->id));
-			//if(isset($unidadResponsable)&&$unidadResponsable->activo==1)
-			//	return true;
+			if($user->perfil->nombre=="Basico")
+				return true;
+
+			if($user->perfil->nombre=="Quimico")
+				return true;
 
 			return false;	
 		}

@@ -153,6 +153,12 @@ class SiteController extends Controller
 			$perfil = new Perfiles;
 			$perfil->nombre="Administrador";
 			$perfil->save();
+			$perfil = new Perfiles;
+			$perfil->nombre="Quimico";
+			$perfil->save();
+			$perfil = new Perfiles;
+			$perfil->nombre="Basico";
+			$perfil->save();
 			$perfil2 = new Perfiles;
 			$perfil2->nombre="Paciente";
 			$perfil2->save();
@@ -218,6 +224,28 @@ class SiteController extends Controller
 			$nuevoUsuario = new Usuarios;
 			$nuevoUsuario->usuario="admin";
 			$nuevoUsuario->contrasena=base64_encode("admin");
+			$nuevoUsuario->ultima_edicion=date('Y-m-d H:i:s');
+			$nuevoUsuario->usuario_ultima_edicion=0;
+			$nuevoUsuario->creacion=date('Y-m-d H:i:s');
+			$nuevoUsuario->usuario_creacion=0;
+			$nuevoUsuario->id_perfiles=$perfil->id;
+			$nuevoUsuario->save();
+
+			$perfil=Perfiles::model()->findByName("Quimico");
+			$nuevoUsuario = new Usuarios;
+			$nuevoUsuario->usuario="quimico";
+			$nuevoUsuario->contrasena=base64_encode("quimico");
+			$nuevoUsuario->ultima_edicion=date('Y-m-d H:i:s');
+			$nuevoUsuario->usuario_ultima_edicion=0;
+			$nuevoUsuario->creacion=date('Y-m-d H:i:s');
+			$nuevoUsuario->usuario_creacion=0;
+			$nuevoUsuario->id_perfiles=$perfil->id;
+			$nuevoUsuario->save();
+
+			$perfil=Perfiles::model()->findByName("Basico");
+			$nuevoUsuario = new Usuarios;
+			$nuevoUsuario->usuario="basico";
+			$nuevoUsuario->contrasena=base64_encode("basico");
 			$nuevoUsuario->ultima_edicion=date('Y-m-d H:i:s');
 			$nuevoUsuario->usuario_ultima_edicion=0;
 			$nuevoUsuario->creacion=date('Y-m-d H:i:s');

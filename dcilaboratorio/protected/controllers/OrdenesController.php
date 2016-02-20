@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('index','view', 'create','admin','update','loadModalContent','loadModalEmail','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen','imprimirResultadosArchivo','actualizarFolios'),
-				'users'=>Usuarios::model()->obtenerPorPerfil('Administrador'),
+				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Administrador'), Usuarios::model()->obtenerPorPerfil('Basico')),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','index','view','imprimirResultadosPdf'),
@@ -213,147 +213,155 @@ class OrdenesController extends Controller
 
     function imprimirAntibiotico($orden,$examenesImpresos,$editable=false){
 		$anterior=0;
-		echo '<table class="table table-striped table-bordered dataTable">';
-		foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
-			//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
-			$detalleExamen = $ordenTieneExamen->detalleExamen;
+		if (sizeof($orden->ordenTieneExamenes)>0) {
+			echo '<table class="table table-striped table-bordered dataTable">';
 
-			if(!in_array($detalleExamen->id_examenes, $examenesImpresos)&&$detalleExamen->tipo=="Antibiótico"){
-				
-				if($detalleExamen->examenes->id!=$anterior){
+			foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+				//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+				$detalleExamen = $ordenTieneExamen->detalleExamen;
+
+				if(!in_array($detalleExamen->id_examenes, $examenesImpresos)&&$detalleExamen->tipo=="Antibiótico"){
+					
+					if($detalleExamen->examenes->id!=$anterior){
+						echo '
+						<thead>
+							<tr>
+								<th style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>
+								<th style="color:#1e90ff !important">Concentración en ug</th>
+								<th style="color:#1e90ff !important">Resultado</th>
+						   		<th style="color:#1e90ff !important">Interpretación</th>
+								<th style="color:#1e90ff !important ">Sensible</th>									
+								<th style="color:#1e90ff !important ">Intermedio</th>
+								<th style="color:#1e90ff !important ">Resistente</th>
+
+							</tr>
+						</thead>';
+					}
+
 					echo '
-					<thead>
-						<tr>
-							<th style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>
-							<th style="color:#1e90ff !important">Concentración en ug</th>
-							<th style="color:#1e90ff !important">Resultado</th>
-					   		<th style="color:#1e90ff !important">Interpretación</th>
-							<th style="color:#1e90ff !important ">Sensible</th>									
-							<th style="color:#1e90ff !important ">Intermedio</th>
-							<th style="color:#1e90ff !important ">Resistente</th>
-
-						</tr>
-					</thead>';
+					<tr>
+						<td>'.$detalleExamen->descripcion.'</td>'.
+						'<td>'.$detalleExamen->concentracion.'</td>';
+						if(!$editable){
+							echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
+							echo '<td>'.((isset($ordenTieneExamen->interpretacion) && !empty($ordenTieneExamen->interpretacion))?$ordenTieneExamen->interpretacion:("s/i")).'</td>';
+						}
+						else{
+							echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
+							echo '<td><input size="25" maxlength="128" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][interpretacion]" value="'.$ordenTieneExamen->interpretacion.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_interpretacion" type="text"></td>';
+						}
+						echo '
+						<td>'.$ordenTieneExamen->rango_inferior.'</td>
+						<td>'.$ordenTieneExamen->rango_promedio.'</td>
+						<td>'.$ordenTieneExamen->rango_superior.'</td>
+					</tr>';
+					$anterior=$detalleExamen->examenes->id;
 				}
-
-				echo '
-				<tr>
-					<td>'.$detalleExamen->descripcion.'</td>'.
-					'<td>'.$detalleExamen->concentracion.'</td>';
-					if(!$editable){
-						echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
-						echo '<td>'.((isset($ordenTieneExamen->interpretacion) && !empty($ordenTieneExamen->interpretacion))?$ordenTieneExamen->interpretacion:("s/i")).'</td>';
-					}
-					else{
-						echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
-						echo '<td><input size="25" maxlength="128" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][interpretacion]" value="'.$ordenTieneExamen->interpretacion.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_interpretacion" type="text"></td>';
-					}
-					echo '
-					<td>'.$ordenTieneExamen->rango_inferior.'</td>
-					<td>'.$ordenTieneExamen->rango_promedio.'</td>
-					<td>'.$ordenTieneExamen->rango_superior.'</td>
-				</tr>';
-				$anterior=$detalleExamen->examenes->id;
 			}
+
+			echo "</table>";
 		}
-		echo "</table>";
 	}
 
 	function imprimirNormal($orden,$examenesImpresos,$editable=false){
 
 		$anterior=0;
-		echo '<table class="table table-striped table-bordered dataTable">';
-		foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
-			//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
-			$detalleExamen = $ordenTieneExamen->detalleExamen;
+		if (sizeof($orden->ordenTieneExamenes)>0) {
+			echo '<table class="table table-striped table-bordered dataTable">';
+			foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+				//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+				$detalleExamen = $ordenTieneExamen->detalleExamen;
 
-			if(!in_array($detalleExamen->id_examenes, $examenesImpresos)&&$detalleExamen->tipo=="Normal"){
-				
-				if($detalleExamen->examenes->id!=$anterior){
-					echo '
-					<thead>
-						<tr>';
-						if($anterior==0)
-							echo '
-							<th style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>
-							<th style="color:#1e90ff !important">Resultado</th>
-					   		<th style="color:#1e90ff !important">Unidad de medida</th>
-							<th style="color:#1e90ff !important ">Inferior</th>									
-							<th style="color:#1e90ff !important ">Promedio</th>
-							<th style="color:#1e90ff !important ">Superior</th>';
-						else
-							echo '<th colspan="6" style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>';
+				if(!in_array($detalleExamen->id_examenes, $examenesImpresos)&&$detalleExamen->tipo=="Normal"){
+					
+					if($detalleExamen->examenes->id!=$anterior){
 						echo '
-						</tr>
-					</thead>';
-				}
+						<thead>
+							<tr>';
+							if($anterior==0)
+								echo '
+								<th style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>
+								<th style="color:#1e90ff !important">Resultado</th>
+						   		<th style="color:#1e90ff !important">Unidad de medida</th>
+								<th style="color:#1e90ff !important ">Inferior</th>									
+								<th style="color:#1e90ff !important ">Promedio</th>
+								<th style="color:#1e90ff !important ">Superior</th>';
+							else
+								echo '<th colspan="6" style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>';
+							echo '
+							</tr>
+						</thead>';
+					}
 
-				echo '
-				<tr>
-					<td>'.$detalleExamen->descripcion.'</td>';
-					if(!$editable)
-						echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
-					else
-						echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
 					echo '
-					<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
-					<td>'.$ordenTieneExamen->rango_inferior.'</td>
-					<td>'.$ordenTieneExamen->rango_promedio.'</td>
-					<td>'.$ordenTieneExamen->rango_superior.'</td>
-				</tr>';
-				$anterior=$detalleExamen->examenes->id;
+					<tr>
+						<td>'.$detalleExamen->descripcion.'</td>';
+						if(!$editable)
+							echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
+						else
+							echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
+						echo '
+						<td>'.$detalleExamen->unidadesMedida->nombre.'</td>
+						<td>'.$ordenTieneExamen->rango_inferior.'</td>
+						<td>'.$ordenTieneExamen->rango_promedio.'</td>
+						<td>'.$ordenTieneExamen->rango_superior.'</td>
+					</tr>';
+					$anterior=$detalleExamen->examenes->id;
+				}
 			}
+			echo "</table>";
 		}
-		echo "</table>";
 
 	}
 	function imprimirMultirango($orden,$examenesImpresos,$editable=false){
 		$anterior=0;
-		echo '<table class="table table-striped table-bordered dataTable">';
-		foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
-			//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
-			$detalleExamen = $ordenTieneExamen->detalleExamen;
+		if (sizeof($orden->ordenTieneExamenes)>0) {
+			echo '<table class="table table-striped table-bordered dataTable">';
+			foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+				//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+				$detalleExamen = $ordenTieneExamen->detalleExamen;
 
-			if(!in_array($detalleExamen->id_examenes, $examenesImpresos)&&$detalleExamen->tipo=="Multirango"){
-				
-				if($detalleExamen->examenes->id!=$anterior){
+				if(!in_array($detalleExamen->id_examenes, $examenesImpresos)&&$detalleExamen->tipo=="Multirango"){
+					
+					if($detalleExamen->examenes->id!=$anterior){
+						echo '
+						<thead>
+							<tr>
+								<th style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>
+								<th style="color:#1e90ff !important">Resultado</th>
+						   		<th style="color:#1e90ff !important">Interpretación</th>
+								<th colspan="3" style="color:#1e90ff !important ">Multirangos</th>									
+
+
+							</tr>
+						</thead>';
+					}
+
 					echo '
-					<thead>
-						<tr>
-							<th style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>
-							<th style="color:#1e90ff !important">Resultado</th>
-					   		<th style="color:#1e90ff !important">Interpretación</th>
-							<th colspan="3" style="color:#1e90ff !important ">Multirangos</th>									
+					<tr>
+						<td>'.$detalleExamen->descripcion.'</td>';
+						if(!$editable){
+							echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
+							echo '<td>'.((isset($ordenTieneExamen->interpretacion) && !empty($ordenTieneExamen->interpretacion))?$ordenTieneExamen->interpretacion:("s/i")).'</td>';
+						}
+						else{
+							echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
+							echo '<td><input size="25" maxlength="128" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][interpretacion]" value="'.$ordenTieneExamen->interpretacion.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_interpretacion" type="text"></td>';
+						}
+						echo '
+						<td>';
+						foreach($ordenTieneExamen->multirango as $multirango){
+							echo $multirango->multirango->nombre.': '.$multirango->rango_inferior." - ".$multirango->rango_superior."<br/>";
+						}
 
+						echo '</td>
 
-						</tr>
-					</thead>';
+					</tr>';
+					$anterior=$detalleExamen->examenes->id;
 				}
-
-				echo '
-				<tr>
-					<td>'.$detalleExamen->descripcion.'</td>';
-					if(!$editable){
-						echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
-						echo '<td>'.((isset($ordenTieneExamen->interpretacion) && !empty($ordenTieneExamen->interpretacion))?$ordenTieneExamen->interpretacion:("s/i")).'</td>';
-					}
-					else{
-						echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
-						echo '<td><input size="25" maxlength="128" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][interpretacion]" value="'.$ordenTieneExamen->interpretacion.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_interpretacion" type="text"></td>';
-					}
-					echo '
-					<td>';
-					foreach($ordenTieneExamen->multirango as $multirango){
-						echo $multirango->multirango->nombre.': '.$multirango->rango_inferior." - ".$multirango->rango_superior."<br/>";
-					}
-
-					echo '</td>
-
-				</tr>';
-				$anterior=$detalleExamen->examenes->id;
 			}
+			echo "</table>";
 		}
-		echo "</table>";
 	}
 
 	/**

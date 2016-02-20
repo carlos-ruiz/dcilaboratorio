@@ -11,7 +11,7 @@
                 <div class="caption">Resultados</div>
             </div>
             <div class="portlet-body flip-scroll">
-                <table class="table table-bordered table-striped table-condensed flip-content">
+                <table class="table table-bordered table-striped table-condensed flip-content tabla-reportes">
                     <thead class="flip-content">
                         <tr>
                             <?php foreach ($resultadosMostrar as $resultadoMostrar) { ?>
@@ -115,6 +115,10 @@
                                         $multitarifario = $orden->multitarifarios;
                                         echo "<td>".$multitarifario->nombre."</td>";
                                     }
+                                    if ($resultadoMostrar['id']=='estatus') {
+                                        $estatus = $orden->status->nombre;
+                                        echo "<td>".$estatus."</td>";
+                                    }
                                 } ?>
                             </tr>
                         <?php
@@ -127,13 +131,22 @@
         </div>
         <div class="button-toggle-reports"><i class="fa fa-exchange"></i></div>
 	</div>
-	<div class="form-filter-report col-md-3 slimScrollDiv"  data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" data-height="410" data-initialized="1">
+
+	<div class="form-filter-report col-md-3 slimScrollDiv" style="<?php if(sizeof($resultados)>0){ echo 'display: none';} ?>"  data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" data-height="410" data-initialized="1">
 		<?php $this->renderPartial("_form",array('model'=>$model)); ?>
 	</div>
 </div>
 
 <script type="text/javascript">
+<?php 
+ echo "numero_resultados =".sizeof($resultados).';';
+ ?>
     var ind = 0;
+    if(numero_resultados>0){
+        ind++;
+        $('.resultados').toggleClass('col-md-12', (ind%2===1), 0);
+        $('.resultados').toggleClass('col-md-9', (ind%2===0), 0);
+    }
     $('.button-toggle-reports').click(function(){
         ind++;
         $('.resultados').toggleClass('col-md-12', (ind%2===1), 500);
