@@ -67,12 +67,12 @@ class OrdenesController extends Controller
 
 				
                 foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
-                	
                     if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
-                    	
+       
                         //Pintamos el examen
-                        array_push($this->examenesImpresos, $detalleExamen->id_examenes);
+                        
                         $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
+                        
                         if(isset($ordenExamen)){
 	                        $rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
 
@@ -105,6 +105,7 @@ class OrdenesController extends Controller
 						}
 					}
                 }
+				array_push($this->examenesImpresos, $detalleExamen->id_examenes);
             }
         }else{
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
