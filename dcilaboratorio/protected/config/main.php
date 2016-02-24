@@ -17,6 +17,8 @@ return array(
 		'application.models.*',
 		'application.components.*',
 		'ext.YiiMailer.YiiMailer',
+		'ext.fpdf.Imprimir',
+		'ext.fpdf.FPDF',
 		'ext.fpdf.ImprimirPdf',
 		'ext.fpdf.ImprimirOrden',
 		'ext.fpdf.ImprimirResultados',
