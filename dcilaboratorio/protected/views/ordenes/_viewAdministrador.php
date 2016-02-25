@@ -226,47 +226,6 @@ $pagado=$totalOrden-$total;
 
 			$this->imprimirMultirango($model,$examenesImpresos);
 
-			 /*
-							echo '<table class="table table-striped table-bordered dataTable">';
-
-
-							foreach ($aux as $ordenExamen):
-								$detalleExamen=$ordenExamen->detalleExamen;
-							$examen=$detalleExamen->examenes;
-							if($examen->id!=$anterior){
-								if($examen->duracion_dias>$entrega)
-									$entrega=$examen->duracion_dias;
-
-								echo '<thead><tr><th colspan="5" style="color:#1e90ff ">'.$examen->nombre.'</th></tr></thead>
-								<tr><td>Descripción</td>
-									<td>Resultado</td>
-									<td>R. I.</td>
-									<td>R. P.</td>
-									<td>R. S.</td></tr>';
-								}
-
-								echo '<tr><td>'.$detalleExamen->descripcion.' </td><td>';
-								if ($ordenExamen->resultado=='') {
-									echo "Sin resultado";
-								}
-								else{
-									$color = "#000";
-									if($ordenExamen->resultado > $detalleExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
-										$color = "#f00";
-									}
-									echo "<span style='color: $color;'>".$ordenExamen->resultado.' '.$detalleExamen->unidadesMedida->abreviatura."</span>";
-								}
-
-								echo '</td><td>'.$detalleExamen->rango_inferior.'</td>
-									<td>'.$detalleExamen->rango_promedio.'</td>
-									<td>'.$detalleExamen->rango_superior.'</td>
-								</tr>';
-
-							$anterior=$examen->id;
-							endforeach;
-							echo'</table>';
-
-				*/
 							?>
 							<br />
 							<?php if(isset($model->comentarios_resultados))

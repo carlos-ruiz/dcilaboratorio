@@ -192,6 +192,11 @@ h3, h5{
 	height: 100%;
 }
 
+
 #Pacientes_sexo{
 	color:white;
 }
+.check-filters label, .fechas-filters input, table.tabla-reportes td{
+	font-size: 8pt;
+}
+

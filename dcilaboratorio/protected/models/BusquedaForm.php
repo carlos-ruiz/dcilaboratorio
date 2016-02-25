@@ -70,7 +70,7 @@ class BusquedaForm extends CFormModel
 			'hora'=>'Hora',
 			'folio'=>'Folio',
 			'nombre_paciente'=>'Nombre del paciente',
-			'unidad'=>'Unidad Responsable',
+			'unidad'=>'Unidad Resp.',
 			'doctor'=>'Doctor',
 			'id_examen'=>'Examen',
 			'costo'=>'Costo',

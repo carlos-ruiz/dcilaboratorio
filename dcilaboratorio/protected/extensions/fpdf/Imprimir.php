@@ -1,0 +1,369 @@
+<?php
+class Imprimir extends FPDF{
+
+    public $model;
+    public $ordenGrupos = array();
+    public $ordenExamenes = array();
+    public $examenesImpresos=array();
+    public $nivelImpresionSubgrupo=0;
+
+    public function init($model){
+        $this->model=$model;
+
+        $ordenTieneExamenes = $model->ordenTieneExamenes;
+        foreach ($ordenTieneExamenes as $ordenExamen) {
+            if($ordenExamen->detalleExamen->activo==1)
+                array_push($this->ordenExamenes, $ordenExamen);
+        }
+        //Para que nos se impriman los grupitos pertenecientes a los grupotes de la orden
+        $ordenTieneGrupos = $model->ordenTieneGrupos;
+        foreach ($ordenTieneGrupos as $ordenGrupo) {
+            $grupitos=GruposPerfiles::model()->findAll("id_grupo_hijo=?",array($ordenGrupo->id_grupos)); 
+            if(isset($grupitos)){
+                $papaEstaEnLaOrden=false;
+                foreach ($grupitos as $grupito) {
+                    $papa=OrdenTieneGrupos::model()->find("id_grupos=? AND id_ordenes=?",array($grupito->id_grupo_padre,$model->id));
+                    if(isset($papa)){
+                        $papaEstaEnLaOrden=true;
+                    }
+                }
+                if(!$papaEstaEnLaOrden){
+                    array_push($this->ordenGrupos, $ordenGrupo);
+                }
+            }else{
+                array_push($this->ordenGrupos, $ordenGrupo);
+            }
+            
+        }
+        $this->addPage();
+    }
+    
+    function imprimirGrupos(){
+        foreach ($this->ordenGrupos as $ordenTieneGrupo) {
+            $this->imprimirGrupo($ordenTieneGrupo->id_grupos);
+        }
+    }
+    function imprimirGrupo($idGrupo){
+        
+        $idOrden=$this->model->id;
+        $y = 0.5;
+        $grupo = Grupos::model()->findByPk($idGrupo);
+        $this->SetFillColor(117, 163, 240);
+        $this->SetFont('Arial','B',8);
+        $this->SetTextColor(0,0,0);
+        $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
+        $this->SetFont('Arial','',7.5);
+
+        $perfilDePerfiles = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
+        if(empty($perfilDePerfiles)){
+            foreach ($grupo->grupoTiene as $grupoExamen) {
+                $this->ln($y);
+                $this->SetTextColor(0,0,0);
+                $this->SetFillColor(117, 163, 240);
+                $this->Cell(19.5,$y, $grupoExamen->examen->nombre ,1, 1, 'C', true);
+                $this->cabeceraTabla('Normal');
+                foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
+                    if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo=="Normal"){
+                        //Pintamos el examen
+                        $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
+                        if(isset($ordenExamen)){
+                            $rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
+                            $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
+                            $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
+                            
+                            $checaColor=substr($ordenExamen->resultado, 0,1);
+                            if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
+                                $resultado="s/r";
+                            }elseif($checaColor=="*"){//color negro y negritas
+                                $resultado=substr($ordenExamen->resultado, 1);
+                            }elseif($checaColor=="#"){//color rojo
+                                $this->SetFont('Times','BI',8);
+                                $this->SetTextColor(255, 0, 0);
+                                $resultado=substr($ordenExamen->resultado, 1);
+                            }elseif($ordenExamen->resultado > $ordenExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                                $resultado=$ordenExamen->resultado;
+                                $this->SetFont('Times','BI',8);
+                                $this->SetTextColor(255, 0, 0);
+                            }else{
+                                $resultado=$ordenExamen->resultado;
+                            }
+
+                            $this->Cell(3.5,$heightRow,$resultado,1, 0 , 'C');
+                            $this->SetTextColor(0, 0, 0);
+                            $this->SetFont('Arial','',7.5);
+                            $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
+                            $this->MultiCell(5,$y, $rango,1, 'C');
+                        }
+                    }
+                }
+            }
+            array_push($this->examenesImpresos, $detalleExamen->id_examenes);
+            if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
+                $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
+            }
+            $ordenTieneGrupos = OrdenTieneGrupos::model()->find('id_ordenes=? AND id_grupos=?',array($idOrden,$grupo->id));
+            if(isset($ordenTieneGrupos)){
+                if($ordenTieneGrupos->comentarios_perfil!=null){
+                    $this->MultiCell(19.5,$y, 'Comentarios: '.$ordenTieneGrupos->comentarios_perfil ,1, 'L', false);
+                }
+            }
+            
+        }else{
+            $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
+
+            foreach ($hijos as $grupoHijo) {
+                $this->nivelImpresionSubgrupo++;
+                $this->imprimirGrupo($grupoHijo->id_grupo_hijo);
+                $this->nivelImpresionSubgrupo--;
+            }
+            
+            $examenesEnGruposHijo=array();
+            foreach ($hijos as $grupoHijo) {
+                $grupoExamenes=GrupoExamenes::model()->findAll('id_grupos_examenes=?',array($grupoHijo->id_grupo_hijo));
+                foreach ($grupoExamenes as $grupoExamen) {
+                    array_push($examenesEnGruposHijo, $grupoExamen->examen);
+                }
+            }
+            if(sizeof($grupo->grupoTiene)>sizeof($examenesEnGruposHijo)){
+                $this->SetFillColor(117, 163, 240);
+                $this->SetFont('Arial','B',8);
+                $this->Cell(19.5,$y, "OTROS" ,1, 1, 'C', true);
+                $this->SetFont('Arial','',7.5);
+                foreach ($grupo->grupoTiene as $grupoExamen) {
+                    if(!in_array($grupoExamen->examen, $examenesEnGruposHijo) && !in_array($grupoExamen->examen->id, $this->examenesImpresos)){
+                        $this->ln($y);
+                        $this->SetTextColor(0,0,0);
+                        $this->SetFillColor(117, 163, 240);
+                        $this->Cell(19.5,$y, $grupoExamen->examen->nombre ,1, 1, 'C', true);
+                        $this->cabeceraTabla('Normal');
+                        foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
+                            if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo == "Normal"){
+                                $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
+                                if(isset($ordenExamen)){
+                                    $rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
+                                    $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
+                                    $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
+                                    
+                                    $checaColor=isset($ordenExamen->resultado)?substr($ordenExamen->resultado, 0,1):"";
+                                    if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
+                                        $resultado="s/r";
+                                    }elseif($checaColor=="*"){//color negro y negritas
+                                        $resultado=substr($ordenExamen->resultado, 1);
+                                    }elseif($checaColor=="#"){//color rojo
+                                        $this->SetFont('Times','BI',8);
+                                        $this->SetTextColor(255, 0, 0);
+                                        $resultado=substr($ordenExamen->resultado, 1);
+                                    }elseif($ordenExamen->resultado > $ordenExamen->rango_superior || $ordenExamen->resultado < $detalleExamen->rango_inferior){
+                                        $resultado=$ordenExamen->resultado;
+                                        $this->SetFont('Times','BI',8);
+                                        $this->SetTextColor(255, 0, 0);
+                                    }else{
+                                        $resultado=$ordenExamen->resultado;
+                                    }
+                                    $this->Cell(3.5,$heightRow,$resultado,1, 0 , 'C');
+                                    $this->SetTextColor(0, 0, 0);
+                                    $this->SetFont('Arial','',7.5);
+                                    $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
+                                    $this->MultiCell(5,$y, $rango,1, 'C');
+                                }
+                            }
+                        }
+                        array_push($this->examenesImpresos, $grupoExamen->examen->id);
+                        
+                    }
+                }
+            }
+            
+            if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
+                $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
+            }
+            $ordenTieneGrupos = OrdenTieneGrupos::model()->find('id_ordenes=? AND id_grupos=?',array($idOrden,$grupo->id));
+            if($ordenTieneGrupos->comentarios_perfil!=null && $this->nivelImpresionSubgrupo==0){
+                $this->MultiCell(19.5,$y, 'Comentarios: '.$ordenTieneGrupos->comentarios_perfil ,1, 'L', false);
+            }
+        }
+    
+        //imprimirAntibioticos($idGrupo);
+    }
+
+    function imprimirAntibioticos($idGrupo=0){
+        $anterior=0;
+        $detallesExamenDelGrupo=array();
+        if($idGrupo>0){
+            $examenes = Grupos::model()->findByPk($idGrupo);
+            foreach ($examenes as $examen) {
+                foreach ($examen->detallesExamen as $detalleExamen) {
+                    array_push($detallesExamenDelGrupo, $detalleExamen->id);
+                }
+            }
+        }
+        if (sizeof($orden->ordenTieneExamenes)>0) {
+            echo '<table class="table table-striped table-bordered dataTable">';
+
+            foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+                //foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+                $detalleExamen = $ordenTieneExamen->detalleExamen;
+
+                if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos )&&$detalleExamen->tipo=="Antibiótico" && (in_array($detalleExamen->id, $detallesExamenDelGrupo) || $idGrupo==0)){
+                    
+                    if($detalleExamen->examenes->id!=$anterior){
+                        echo '
+                        <thead>
+                            <tr>
+                                <th style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>
+                                <th style="color:#1e90ff !important">Concentración en ug</th>
+                                <th style="color:#1e90ff !important">Resultado</th>
+                                <th style="color:#1e90ff !important">Interpretación</th>
+                                <th style="color:#1e90ff !important ">Sensible</th>                                 
+                                <th style="color:#1e90ff !important ">Intermedio</th>
+                                <th style="color:#1e90ff !important ">Resistente</th>
+
+                            </tr>
+                        </thead>';
+                    }
+
+                    echo '
+                    <tr>
+                        <td>'.$detalleExamen->descripcion.'</td>'.
+                        '<td>'.$detalleExamen->concentracion.'</td>';
+                        if(!$editable){
+                            echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
+                            echo '<td>'.((isset($ordenTieneExamen->interpretacion) && !empty($ordenTieneExamen->interpretacion))?$ordenTieneExamen->interpretacion:("s/i")).'</td>';
+                        }
+                        else{
+                            echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
+                            echo '<td><input size="25" maxlength="128" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][interpretacion]" value="'.$ordenTieneExamen->interpretacion.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_interpretacion" type="text"></td>';
+                        }
+                        echo '
+                        <td>'.$ordenTieneExamen->rango_inferior.'</td>
+                        <td>'.$ordenTieneExamen->rango_promedio.'</td>
+                        <td>'.$ordenTieneExamen->rango_superior.'</td>
+                    </tr>';
+                    $anterior=$detalleExamen->examenes->id;
+                }
+            }
+
+            echo "</table>";
+        }
+    }
+
+	function Header(){
+        $y = 0.5;
+		$this->SetFont('Arial','B',18);
+		$this->Image(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../css/layout/img/logoNuevo.png',1,1.7,2.3,2.3);
+		$this->SetXY(4, .75);
+        $this->Cell(0,2.54,'DIAGNOSTICO CLÍNICO INTEGRAL',0,0,'C');
+        $this->ln(0.75);
+        $this->SetFont('Times','B',8);
+        $this->SetXY(4, 2.75);
+        $this->Cell(4, $y, 'UNIDAD CHAPULTEPEC', 0, 0, 'C');
+        $this->Cell(6.9, $y, 'UNIDAD AMADO NERVO', 0, 0, 'C');
+        $this->Cell(5, $y, 'UNIDAD DE CANCEROLOGÍA', 0, 1, 'C');
+        $this->SetX(4);
+        $this->SetFont('Times','',8);
+        $y = 0.4;
+        $this->Cell(4.3, $y, 'General Nicolás Bravo #170', 0, 0, 'C');
+        $this->Cell(6.5, $y, 'Amado Nervo #392-A', 0, 0, 'C');
+        $this->Cell(5, $y, 'Francisco M. Díaz #145', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Colonia Chapultepec Norte', 0, 0, 'C');
+        $this->Cell(6.5, $y, 'Colonia Centro', 0, 0, 'C');
+        $this->Cell(5, $y, 'Fracc. Ex Gobernador Gildardo Magaña', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'C.P. 58260', 0, 0, 'C');
+        $this->Cell(6.5, $y, 'C.P. 58000', 0, 0, 'C');
+        $this->Cell(5, $y, 'C.P. 58149', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Tel.(443)232-0166', 0, 0, 'C');
+        $this->Cell(6.5, $y, 'Tel.(443)312-3490', 0, 0, 'C');
+        $this->Cell(5, $y, 'Tel.(443)232-0165', 0, 1, 'C');
+        $this->SetX(4);
+        $this->Cell(4.3, $y, 'Lunes-Viernes 07:00 a 20:00', 0, 0, 'C');
+        $this->Cell(6.5, $y, 'Lunes-Sábado 07:00 a 15:00', 0, 0, 'C');
+        $this->Cell(5, $y, 'Lunes-Sábado 07:00 a 15:00', 0, 1, 'C');
+        $this->setX(4);
+        $this->Cell(4.3, $y, 'Domingo 08:00 a 14:00', 0, 0, 'C');
+    }
+
+	function cabeceraHorizontal($model)
+	{
+        $y = 0.5;
+        $this->SetXY(-5, 6);
+        $this->SetFont('Arial','',8);
+        $this->Cell(1,$y,'Fecha:', 0, 0);
+        $this->SetFont('Arial','B',8);
+        $fecha = explode('-', $model->fecha_captura);
+        $dia= substr($fecha[2], 0, 2);
+        $hora = explode(' ', $fecha[2]);
+        $hora = explode(':', $hora[1]);
+
+
+        $fecha = $dia.'/'.$fecha[1].'/'.$fecha[0].'   '. $hora[0].':'.$hora[1];
+        $this->Cell(2,$y,$fecha, 0, 1);
+        $this->setY(6);
+        $this->setX(1);
+        $this->SetFont('Arial','B',12);
+        $this->SetTextColor(75, 141, 248);
+        // $this->Cell(10,$y,'Orden de Trabajo', 0, 1);
+        $this->SetFont('Arial','',8);
+        $this->SetTextColor(0, 0, 0);
+        $this->Cell(3,$y,'Folio:', 0, 0);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(3,$y,(isset($model->folio)&&strlen($model->folio)>0)?$model->folio:$model->id, 0, 1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(3,$y,'Paciente', 0, 0);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(10,$y,$model->ordenFacturacion->paciente->obtenerNombreCompleto(), 0, 0);
+        $this->setX(-5);
+        $this->SetFont('Arial','',8);
+        $this->Cell(1,$y,'Sexo:', 0, 0);
+        $this->SetFont('Arial','B',8);
+        $this->Cell(2,$y,$model->ordenFacturacion->paciente->sexo==0?'Masculino':'Femenino', 0, 1);
+        $this->setX(1);
+        $this->SetFont('Arial','',8);
+        $this->Cell(3,$y,'Médico:', 0, 0);
+        $this->SetFont('Arial','B',8);
+        if($model->doctor)
+            $this->Cell(10,$y,$model->doctor->obtenerNombreCompleto(), 0, 1);
+        else
+            $this->Cell(10,$y,'Sin Dr. asignado', 0, 1);
+        $this->ln(0.5);
+        $this->SetFont('Arial','B',12);
+        $this->SetTextColor(75, 141, 248);
+        // $this->Cell(3,$y,'Estudios Solicitados', 0, 1);
+
+        //Atención!! el parámetro true rellena la celda con el color elegido
+		//$this->Cell(120,7, utf8_decode("hola mundo"),1, 0 , 'C', true);
+		//$this->Cell(20,7, utf8_decode($cabecera[2]),1, 0 , 'C', true);
+    }
+
+    public function cabeceraTabla($tipo){
+        $this->SetTextColor(0, 0, 0);
+        $this->SetFont('Arial','B',8);
+        $this->SetFillColor(75, 141, 248);//Fondo azul de celda
+        $y=0.5;
+        switch ($tipo) {
+            case 'Normal':
+                $this->Cell(9,$y, 'Descripción',1, 0 , 'C', true);
+                $this->Cell(3.5,$y, 'Resultado',1, 0 , 'C', true);
+                $this->Cell(2,$y, 'U. medida',1, 0 , 'C', true);
+                $this->Cell(5,$y, 'Parámetros de referencia',1, 1 , 'C', true);
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        $this->SetFont('Arial','',8);
+    }
+
+    function Footer()
+	{
+    	//Position at 1.5 cm from bottom
+        $this->SetY(-6);
+        //Arial italic 8
+        $this->SetFont('Arial','I',8);
+        //Page number
+        $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
+	}
+}

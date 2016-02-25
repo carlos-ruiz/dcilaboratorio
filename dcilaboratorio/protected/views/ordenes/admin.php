@@ -2,7 +2,7 @@
 <h1>Administrar ordenes</h1>
 
 <?php 
-if(Yii::app()->user->getState('perfil')=="Administrador") {
+if(Yii::app()->user->getState('perfil')=="Administrador" || Yii::app()->user->getState('perfil')=="Basico") {
 	$btnTemplate = '{view} {rate} {updateOrden}';
  }
  if(Yii::app()->user->getState('perfil')=="Doctor") {
@@ -11,6 +11,7 @@ if(Yii::app()->user->getState('perfil')=="Administrador") {
  if(Yii::app()->user->getState('perfil')=="Paciente") {
  	$btnTemplate = '{view} ';
  }
+
 $this->renderPartial(
 	'/comunes/_comunAdmin', 
 	array(

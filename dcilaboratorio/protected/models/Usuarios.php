@@ -126,6 +126,9 @@ class Usuarios extends CActiveRecord
 
 	public function obtenerPorPerfil($perfil) {
 		$perfil = Perfiles::model()->findByName($perfil);
+		if(!isset($perfil)){
+			return array();
+		}
 		$usuarios = $this->model()->findAll("id_perfiles=?", array($perfil->id));
 		$nombresDeUsuario = array();
 		foreach ($usuarios as $usuario) {
