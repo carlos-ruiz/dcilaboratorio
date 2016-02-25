@@ -1523,6 +1523,7 @@ class OrdenesController extends Controller
 		$pdf->init($model);
 		$pdf->cabeceraHorizontal($model);
 		$pdf->imprimirGrupos();
+		$pdf->imprimirAntibioticos();
 		$pdf->Output();
 	}
 
