@@ -1519,11 +1519,11 @@ class OrdenesController extends Controller
 
 	public function actionImprimirResultadosPdf($id){
 		$model = $this->loadModel($id);
-		$pdf = new ImprimirResultados('P','cm','letter');
-		$pdf->AddPage();
-		$pdf->model = $model;
-		//$pdf->cabeceraHorizontal($model);
-		$pdf->contenido($model);
+		$pdf= new Imprimir('P','cm','letter');
+		$pdf->init($model);
+		$pdf->cabeceraHorizontal($model);
+		$pdf->imprimirGrupos();
+		$pdf->imprimirAntibioticos();
 		$pdf->Output();
 	}
 

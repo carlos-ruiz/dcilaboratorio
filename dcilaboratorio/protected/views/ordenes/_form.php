@@ -424,8 +424,8 @@ echo $form->errorSummary($datosFacturacion);
 						<div class="form-group col-md-8"></div>
 						<div class="form-group col-md-4">
 							<div class="row">
-								<div class="form-group col-md-6 "> <center> Subtotal $</center></div>
-								<div class="form-group col-md-6 align-right total">0.00 <?php $total ?></div>
+								<div class="form-group col-md-6 control-label "> <center> Subtotal $</center></div>
+								<div class="form-group col-md-6 align-right  control-label total">0.00 <?php $total ?></div>
 							</div>
 							<div class="row">
 								<div class="form-group col-md-6  <?php if($form->error($model,'descuento')!=''){ echo 'has-error'; }?>">
