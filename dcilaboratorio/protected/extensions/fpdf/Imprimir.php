@@ -110,6 +110,8 @@ class Imprimir extends FPDF{
 
     
             $this->imprimirAntibioticos($idGrupo);
+            $this->imprimirMultirango($idGrupo);
+            $this->imprimirMicroorganismo($idGrupo);
 
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
                 $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
@@ -313,6 +315,207 @@ class Imprimir extends FPDF{
         }
     }
 
+    function imprimirMultirango($idGrupo=0){
+        $anterior=0;
+        $detallesExamenDelGrupo=array();
+        $orden = $this->model;
+        $y = 0.5;
+        $hayMultirangos = false;
+        $todosLosMultirangosImpresos = true;
+
+        if($idGrupo>0){
+            $grupoTiene = Grupos::model()->findByPk($idGrupo)->grupoTiene;
+            foreach ($grupoTiene as $grupoExamen) {
+                $examen=$grupoExamen->examen;
+                foreach ($examen->detallesExamenes as $detalleExamen) {
+                    array_push($detallesExamenDelGrupo, $detalleExamen->id);
+                    if($detalleExamen->tipo==="Multirango"){
+                        $hayMultirangos=true;
+                        if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosMultirangosImpresos=false;
+                    }
+                }
+            }
+        }else{
+            foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+                if($ordenTieneExamen->detalleExamen->tipo==="Multirango"){
+                    $hayMultirangos=true;
+                    if(!in_array($ordenTieneExamen->detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosMultirangosImpresos=false;
+                }
+            }
+        }
+
+        if(!$hayMultirangos){
+            return;
+        }elseif(sizeof($this->examenesImpresos)>0 && !$todosLosMultirangosImpresos){
+            $this->addPage();
+            $this->setXY(1,6);
+        }
+
+        if (sizeof($orden->ordenTieneExamenes)>0) {
+            
+            foreach ($orden->ordenTieneExamenes as $ind => $ordenTieneExamen) {
+                //foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+                $detalleExamen = $ordenTieneExamen->detalleExamen;
+
+                if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo=="Multirango" && (in_array($detalleExamen->id, $detallesExamenDelGrupo) || $idGrupo == 0)){
+                    
+                    if($detalleExamen->examenes->id!=$anterior){
+                        if ($anterior != 0) {
+                            $this->ln($y);
+                        }
+                        $this->SetFillColor(117, 163, 240);
+                        $this->SetFont('Arial','B',8);
+                        $this->SetTextColor(0,0,0);
+                        $this->Cell(19.5,$y,$detalleExamen->examenes->nombre,1,1,'C',1);
+                        $this->cabeceraTabla("Multirango");
+                    }
+
+                    $anterior=$detalleExamen->examenes->id;
+                    if(isset($orden->ordenTieneExamenes[$ind+1]))
+                        $siguiente = $orden->ordenTieneExamenes[$ind+1]->detalleExamen->id_examenes;
+                    else
+                        $siguiente=0;
+
+                    if($anterior!=$siguiente)
+                        array_push($this->examenesImpresos,$detalleExamen->examenes->id);
+
+                    $numeroMultirangos = sizeof($ordenTieneExamen->multirango);
+                    $alto = $y * $numeroMultirangos;
+                    $this->Cell(5,$alto,$detalleExamen->descripcion,1, 0 , 'C');
+
+                    $checaColor=substr($ordenTieneExamen->resultado, 0,1);
+                    if(!isset($ordenTieneExamen->resultado)||strlen(trim($ordenTieneExamen->resultado))==0){
+                        $resultado="s/r";
+                        $interpretacion="s/i";
+                    }elseif($checaColor=="*"){//color negro y negritas
+                        $resultado=substr($ordenTieneExamen->resultado, 1);
+                        $interpretacion=($ordenTieneExamen->interpretacion);
+                    }elseif($checaColor=="#"){//color rojo
+                        $this->SetFont('Times','BI',8);
+                        $this->SetTextColor(255, 0, 0);
+                        $resultado=substr($ordenTieneExamen->resultado, 1);
+                        $interpretacion=$ordenTieneExamen->interpretacion;
+                    }else{
+                        $resultado=$ordenTieneExamen->resultado;
+                        $interpretacion=$ordenTieneExamen->interpretacion;
+                    }
+                    $this->Cell(4,$alto,$resultado,1, 0 , 'C');
+                    $this->Cell(4,$alto,$interpretacion,1, 0 , 'C');
+                    $x_multirango = $this->getX();
+
+                    foreach($ordenTieneExamen->multirango as $ind => $multirango){
+                        if ($ind == 0) {
+                            $borde = 'LTR';
+                        }else if($ind == $numeroMultirangos-1){
+                            $borde = 'LBR';
+                        }else{
+                            $borde = 'LR';
+                        }
+                        $this->Cell(6.5,$y,$multirango->multirango->nombre.': '.$multirango->rango_inferior." - ".$multirango->rango_superior,$borde, 1 , 'C');
+                        $this->setX($x_multirango);
+                    }
+                    $this->setX(1);
+                }
+            }
+        }
+    }
+
+    function imprimirMicroorganismo($idGrupo=0){
+
+        $anterior=0;
+        $detallesExamenDelGrupo=array();
+        $orden=$this->model;
+        $y=0.5;
+        $hayMicroorganismos=false;
+        $todosLosMicroorganismosYaImpresos=true;
+        if($idGrupo>0){
+            $grupoTiene = Grupos::model()->findByPk($idGrupo)->grupoTiene;
+            foreach ($grupoTiene as $grupoExamen) {
+                $examen=$grupoExamen->examen;
+                foreach ($examen->detallesExamenes as $detalleExamen) {
+                    array_push($detallesExamenDelGrupo, $detalleExamen->id);
+                    if($detalleExamen->tipo==="Microorganismo"){
+                        $hayMicroorganismos=true;
+                        if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosMicroorganismosYaImpresos=false;
+                    }
+                }
+            }
+        }else{
+            foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+                if($ordenTieneExamen->detalleExamen->tipo==="Microorganismo"){
+                    $hayMicroorganismos=true;
+                    if(!in_array($ordenTieneExamen->detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosMicroorganismosYaImpresos=false;
+                }
+            }
+        }
+
+        if(!$hayMicroorganismos){
+            return;
+        }elseif(sizeof($this->examenesImpresos)>0 && !$todosLosMicroorganismosYaImpresos){
+            $this->addPage();
+            $this->setXY(1,6);
+        }
+        if (sizeof($orden->ordenTieneExamenes)>0) {
+            foreach ($orden->ordenTieneExamenes as $ind=>$ordenTieneExamen) {
+                //foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+                $detalleExamen = $ordenTieneExamen->detalleExamen;
+
+                if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos )&&$detalleExamen->tipo=="Microorganismo" && (in_array($detalleExamen->id, $detallesExamenDelGrupo) || $idGrupo==0)){
+
+                    if($detalleExamen->examenes->id!=$anterior){
+                        $this->SetFillColor(117, 163, 240);
+                        $this->SetFont('Arial','B',8);
+                        $this->SetTextColor(0,0,0);
+                        $this->Cell(19.5,$y,$detalleExamen->examenes->nombre,1,1,'C',1);
+                        $this->cabeceraTabla("Microorganismo");
+                        
+                    }
+                    $anterior=$detalleExamen->examenes->id;
+                    if(isset($orden->ordenTieneExamenes[$ind+1]))
+                        $siguiente = $orden->ordenTieneExamenes[$ind+1]->detalleExamen->id_examenes;
+                    else
+                        $siguiente=0;
+                    if($anterior!=$siguiente)
+                        array_push($this->examenesImpresos,$detalleExamen->examenes->id);
+                        
+                    $this->Cell(5,$y,$detalleExamen->descripcion ,1, 0 , 'C');
+                    
+                    $checaColor=substr($ordenTieneExamen->resultado, 0,1);
+                    if(!isset($ordenTieneExamen->resultado)||strlen(trim($ordenTieneExamen->resultado))==0){
+                        $resultado="s/r";
+                        $desarrollo="s/d";
+                        $observaciones="s/o";
+                    }elseif($checaColor=="*"){//color negro y negritas
+                        $resultado=substr($ordenTieneExamen->resultado, 1);
+                        $desarrollo=$ordenTieneExamen->interpretacion;
+                        $observaciones=$ordenTieneExamen->comentarios;
+                    }elseif($checaColor=="#"){//color rojo
+                        $this->SetFont('Times','BI',8);
+                        $this->SetTextColor(255, 0, 0);
+                        $resultado=substr($ordenTieneExamen->resultado, 1);
+                        $desarrollo=$ordenTieneExamen->interpretacion;
+                        $observaciones=$ordenTieneExamen->comentarios;
+                    }else{
+                        $resultado=$ordenTieneExamen->resultado;
+                        $desarrollo=$ordenTieneExamen->interpretacion;
+                        $observaciones=$ordenTieneExamen->comentarios;
+                    }
+
+                    $this->Cell(4,$y,$resultado,1, 0 , 'C');
+                    $this->Cell(4,$y,$desarrollo,1, 0 , 'C');
+                    $this->Cell(6.5,$y,$observaciones,1, 1, 'C');
+                    $this->SetTextColor(0, 0, 0);
+                    $this->SetFont('Arial','',7.5);
+                }
+            }
+
+        }
+    }
+
 	function Header(){
         $y = 0.5;
 		$this->SetFont('Arial','B',18);
@@ -423,6 +626,18 @@ class Imprimir extends FPDF{
                 $this->Cell(2,$y, 'Sensible',1, 0 , 'C', true);
                 $this->Cell(2,$y, 'Intermedio',1, 0 , 'C', true);
                 $this->Cell(2,$y, 'Resistente',1, 1 , 'C', true);
+                break;
+            case 'Multirango':
+                $this->Cell(5,$y, 'Parámetro',1, 0 , 'C', true);
+                $this->Cell(4,$y, 'Resultado',1, 0 , 'C', true);
+                $this->Cell(4,$y, 'Interpretación',1, 0 , 'C', true);
+                $this->Cell(6.5,$y, 'Multirangos',1, 1 , 'C', true);
+                break;
+            case 'Microorganismo':
+                $this->Cell(5,$y, 'Parámetro',1, 0 , 'C', true);
+                $this->Cell(4,$y, 'Resultado',1, 0 , 'C', true);
+                $this->Cell(4,$y, 'Desarrollo',1, 0 , 'C', true);
+                $this->Cell(6.5,$y, 'Observaciones',1, 1 , 'C', true);
                 break;
             
             default:

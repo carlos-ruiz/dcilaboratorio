@@ -365,6 +365,51 @@ class OrdenesController extends Controller
 		}
 	}
 
+	function imprimirMicroorganismo($orden,$examenesImpresos,$editable=false){
+		$anterior=0;
+		if (sizeof($orden->ordenTieneExamenes)>0) {
+			echo '<table class="table table-striped table-bordered dataTable">';
+
+			foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+				//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+				$detalleExamen = $ordenTieneExamen->detalleExamen;
+
+				if(!in_array($detalleExamen->id_examenes, $examenesImpresos)&&$detalleExamen->tipo=="Microorganismo"){
+					
+					if($detalleExamen->examenes->id!=$anterior){
+						echo '
+						<thead>
+							<tr>
+								<th style="color:#1e90ff !important">'.$detalleExamen->examenes->nombre.'</th>
+								<th style="color:#1e90ff !important">Resultado</th>
+								<th style="color:#1e90ff !important">Desarrollo</th>
+						   		<th style="color:#1e90ff !important">Observaciones</th>
+							</tr>
+						</thead>';
+					}
+
+					echo '
+					<tr>
+						<td>'.$detalleExamen->descripcion.'</td>';
+						if(!$editable){
+							echo '<td>'.((isset($ordenTieneExamen->resultado) && !empty($ordenTieneExamen->resultado))?$ordenTieneExamen->resultado:("s/r")).'</td>';
+							echo '<td>'.((isset($ordenTieneExamen->interpretacion) && !empty($ordenTieneExamen->interpretacion))?$ordenTieneExamen->interpretacion:("s/i")).'</td>';
+							echo '<td>'.((isset($ordenTieneExamen->comentarios) && !empty($ordenTieneExamen->comentarios))?$ordenTieneExamen->comentarios:("s/c")).'</td>';
+						}
+						else{
+							echo '<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][resultado]" value="'.$ordenTieneExamen->resultado.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_resultado" type="text"></td>';
+							echo '<td><input size="25" maxlength="128" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][interpretacion]" value="'.$ordenTieneExamen->interpretacion.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_interpretacion" type="text"></td>';
+							echo '<td><input size="25" maxlength="128" class="form-control" name="OrdenTieneExamenes['.$ordenTieneExamen->id.'][comentarios]" value="'.$ordenTieneExamen->comentarios.'" id="OrdenTieneExamenes_'.$ordenTieneExamen->id.'_comentarios" type="text"></td>';
+						}
+						echo '</tr>';
+					$anterior=$detalleExamen->examenes->id;
+				}
+			}
+
+			echo "</table>";
+		}
+	}
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -1264,28 +1309,32 @@ class OrdenesController extends Controller
 				$ordenExamenToSave->resultado = $value['resultado'];
 				if(isset($value['interpretacion']))
 					$ordenExamenToSave->interpretacion = $value['interpretacion'];
+				if(isset($value['comentarios']))
+					$ordenExamenToSave->comentarios = $value['comentarios'];
 				$ordenExamenToSave->save();
 				if ($calificada) {
 					$calificada = $ordenExamenToSave->resultado!="";
 				}
 			}
-			foreach ($_POST['comentario_perfil'] as $i => $value) {
-				//echo $value."<br />";
-				//continue;
-				$ordenGrupoToSave = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($id,$i));
-				if(!isset($ordenGrupoToSave->id)){
-					$ordenGrupoToSave = new OrdenTieneGrupos;
-					$ordenGrupoToSave->id_ordenes=$id;
-					$ordenGrupoToSave->id_grupos=$i;
-					$ordenGrupoToSave->comentarios_perfil=$value;
-					$ordenGrupoToSave->ultima_edicion = '2000-01-01 00:00:00';
-					$ordenGrupoToSave->usuario_ultima_edicion = Yii::app()->user->id;
-					$ordenGrupoToSave->creacion = date('Y-m-d H:i:s');
-					$ordenGrupoToSave->usuario_creacion = Yii::app()->user->id;
-				}
+			if(isset($_POST['comentario_perfil'])){
+				foreach ($_POST['comentario_perfil'] as $i => $value) {
+					//echo $value."<br />";
+					//continue;
+					$ordenGrupoToSave = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($id,$i));
+					if(!isset($ordenGrupoToSave->id)){
+						$ordenGrupoToSave = new OrdenTieneGrupos;
+						$ordenGrupoToSave->id_ordenes=$id;
+						$ordenGrupoToSave->id_grupos=$i;
+						$ordenGrupoToSave->comentarios_perfil=$value;
+						$ordenGrupoToSave->ultima_edicion = '2000-01-01 00:00:00';
+						$ordenGrupoToSave->usuario_ultima_edicion = Yii::app()->user->id;
+						$ordenGrupoToSave->creacion = date('Y-m-d H:i:s');
+						$ordenGrupoToSave->usuario_creacion = Yii::app()->user->id;
+					}
 
-				$ordenGrupoToSave->comentarios_perfil = $value;
-				$ordenGrupoToSave->save();
+					$ordenGrupoToSave->comentarios_perfil = $value;
+					$ordenGrupoToSave->save();
+				}
 			}
 			$statusPagada=Status::model()->findByName("Pagada");
 			$statusCalificada=Status::model()->findByName("Calificada");
@@ -1524,6 +1573,8 @@ class OrdenesController extends Controller
 		$pdf->cabeceraHorizontal($model);
 		$pdf->imprimirGrupos();
 		$pdf->imprimirAntibioticos();
+		$pdf->imprimirMultirango();
+		$pdf->imprimirMicroorganismo();
 		$pdf->Output();
 	}
 

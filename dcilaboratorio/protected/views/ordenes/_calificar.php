@@ -88,6 +88,11 @@
 
 			$this->imprimirMultirango($model,$examenesImpresos,true);
 
+			echo "<br />";
+			// Muestra los examenes individuales microorganismos
+
+			$this->imprimirMicroorganismo($model,$examenesImpresos, true);
+
 			 ?>
 
 				<?php $this->renderPartial('/umodif/_modifandcreate', array('form'=>$form, 'model'=>$model)); ?>

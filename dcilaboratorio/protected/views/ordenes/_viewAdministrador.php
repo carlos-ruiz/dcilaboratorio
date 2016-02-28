@@ -226,6 +226,11 @@ $pagado=$totalOrden-$total;
 
 			$this->imprimirMultirango($model,$examenesImpresos);
 
+			echo "<br />";
+			// Muestra los examenes individuales microorganismos
+
+			$this->imprimirMicroorganismo($model,$examenesImpresos);
+
 							?>
 							<br />
 							<?php if(isset($model->comentarios_resultados))

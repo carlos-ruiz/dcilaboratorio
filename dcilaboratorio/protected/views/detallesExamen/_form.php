@@ -75,7 +75,7 @@
 	<div class="form-group <?php if($form->error($model,'tipo')!=''){ echo 'has-error'; }?>">
 		<?php echo $form->labelEx($model,'tipo', array('class'=>'control-label')); ?>
 		<div class="input-group">
-			<?php $tipos = array('Normal'=>'Normal','Antibiótico'=>'Antibiótico', 'Multirango'=>'Multirango');
+			<?php $tipos = array('Normal'=>'Normal','Antibiótico'=>'Antibiótico', 'Multirango'=>'Multirango', 'Microorganismo'=>'Microorganismo');
 				  echo $form->radioButtonList($model,'tipo',$tipos,array('separator'=>'   ','class'=>'form-control tipo-test', $model->isNewRecord ?"":"disabled"=>"disabled"));?>
 			<?php echo $form->error($model,'tipo', array('class'=>'help-block')); ?>
 		</div>
@@ -166,15 +166,20 @@
 			$("#camposMultirangos").hide();
 			$("#camposNormal").show(400);
 		}
-		if($(this).val()=="Antibiótico"){
+		else if($(this).val()=="Antibiótico"){
 			$("#camposNormal").hide();
 			$("#camposMultirangos").hide();
 			$("#camposAntibiotico").show(400);
 		}
-		if($(this).val()=="Multirango"){
+		else if($(this).val()=="Multirango"){
 			$("#camposAntibiotico").hide();
 			$("#camposNormal").hide();
 			$("#camposMultirangos").show(400);
+		}
+		else if($(this).val()=="Microorganismo"){
+			$("#camposAntibiotico").hide(400);
+			$("#camposNormal").hide(400);
+			$("#camposMultirangos").hide(400);
 		}
 	});
 </script>
