@@ -200,13 +200,16 @@ class Imprimir extends FPDF{
                     }
                 }
                 $this->imprimirAntibioticos($idGrupo);
+                $this->imprimirMultirango($idGrupo);
+                $this->imprimirMicroorganismo($idGrupo);
             }
             
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
                 $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
             }
             $ordenTieneGrupos = OrdenTieneGrupos::model()->find('id_ordenes=? AND id_grupos=?',array($idOrden,$grupo->id));
-            if($ordenTieneGrupos->comentarios_perfil!=null && $this->nivelImpresionSubgrupo==0){
+
+            if(isset($ordenTieneGrupos) && $ordenTieneGrupos->comentarios_perfil!=null && $this->nivelImpresionSubgrupo==0){
                 $this->MultiCell(19.5,$y, 'Comentarios: '.$ordenTieneGrupos->comentarios_perfil ,1, 'L', false);
             }
         }

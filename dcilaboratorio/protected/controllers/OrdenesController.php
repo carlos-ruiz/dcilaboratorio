@@ -61,14 +61,14 @@ class OrdenesController extends Controller
         if(empty($perfilDePerfiles)){//Quiere decir que NO es es perfilote
             foreach ($grupo->grupoTiene as $grupoExamen) {
 
-        		echo '<thead><tr>
-					<th colspan="4" style="color:#1e90ff">'.$grupoExamen->examen->nombre.'</th>'.
-				'</tr></thead>';
 
-				
+				$agregarAImpresos=false;
                 foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
-                    if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)){
-       
+                    if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo=="Normal"){
+		        		echo '<thead><tr>
+							<th colspan="4" style="color:#1e90ff">'.$grupoExamen->examen->nombre.'</th>'.
+						'</tr></thead>';
+       					$agregarAImpresos=true;
                         //Pintamos el examen
                         
                         $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
@@ -105,7 +105,9 @@ class OrdenesController extends Controller
 						}
 					}
                 }
-				array_push($this->examenesImpresos, $detalleExamen->id_examenes);
+                if($agregarAImpresos){
+					array_push($this->examenesImpresos, $detalleExamen->id_examenes);
+				}
             }
         }else{
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
@@ -150,10 +152,12 @@ class OrdenesController extends Controller
 					}
                     if(!in_array($grupoExamen->examen, $examenesEnGruposHijo) && !in_array($grupoExamen->examen->id, $this->examenesImpresos)){
 
-                        array_push($this->examenesImpresos, $grupoExamen->examen->id);
                         foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
-                        	$ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
-	                        if(isset($ordenExamen)){
+                        	$agregarAImpresos=false;
+                            if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo == "Normal"){
+                                $agregarAImpresos=true;
+                        		$ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));
+	                        	if(isset($ordenExamen)){
 	                        	$rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
 	         
 	                            $idOrdenExamen = $ordenExamen['id'];
@@ -186,13 +190,18 @@ class OrdenesController extends Controller
 									echo '<td>'.$detalleExamen->unidadesMedida->nombre.'</td>'.
 									'<td>'.$rango.'</td>'.
 								'</tr>';
-							}
-                            
+								}
+							}  
                         }
+                        if($agregarAImpresos)
+                            array_push($this->examenesImpresos, $grupoExamen->examen->id);
                     }
                 }
+                $orden = Ordenes::model()->findByPk($idOrden);
+                $this->imprimirAntibiotico($orden, $this->examenesImpresos);
+                $this->imprimirMultirango($orden, $this->examenesImpresos);
+            	$this->imprimirMicroorganismo($orden, $this->examenesImpresos);
             }
-            
         }
         if($this->nivelImpresionSubgrupo==0){
         		$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$idGrupo));
