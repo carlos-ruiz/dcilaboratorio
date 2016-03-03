@@ -61,6 +61,8 @@ class Imprimir extends FPDF{
             $this->SetTextColor(0,0,0);
             $this->Cell(19.5,$y, $grupo->nombre ,1, 1, 'C', true);
             $this->SetFont('Arial','',7.5);
+
+            //IMPRIME NORMALES
             foreach ($grupo->grupoTiene as $grupoExamen) {
                 $this->ln($y);
                 $this->SetTextColor(0,0,0);
@@ -107,11 +109,9 @@ class Imprimir extends FPDF{
                 if($agregarAImpresos)
                     array_push($this->examenesImpresos, $detalleExamen->id_examenes);
             }
-
-    
+            $this->imprimirMicroorganismo($idGrupo);
             $this->imprimirAntibioticos($idGrupo);
             $this->imprimirMultirango($idGrupo);
-            $this->imprimirMicroorganismo($idGrupo);
 
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
                 $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
@@ -145,7 +145,48 @@ class Imprimir extends FPDF{
                     array_push($examenesEnGruposHijo, $grupoExamen->examen);
                 }
             }
-            if(sizeof($grupo->grupoTiene)>sizeof($examenesEnGruposHijo)){
+            $contMicroorganismos = Examenes::model()->with(
+                                                            array(
+                                                                'detallesExamenes'=>array('alias'=>'de','joinType'=>'INNER JOIN','select'=>array()),
+                                                                'detallesExamenes.ordenTieneExamenes'=>array('alias'=>'ote','select'=>array(),'joinType'=>'INNER JOIN'),
+                                                                'detallesExamenes.ordenTieneExamenes.orden'=>array('alias'=>'o','joinType'=>'INNER JOIN','select'=>array()),
+                                                                'detallesExamenes.ordenTieneExamenes.orden.ordenTieneGrupos'=>array('joinType'=>'INNER JOIN','alias'=>'otg','select'=>array()))
+                                                        )->count(
+                                                            array(
+                                                                'select'=>array('t.id'),
+                                                                'condition'=>'o.id=? AND de.tipo="Microorganismo" AND otg.id_grupos=?',
+                                                                'params'=>array($this->model->id,$grupo->id)
+                                                                )
+                                                        );
+            $contAntibioticos = Examenes::model()->with(
+                                                            array(
+                                                                'detallesExamenes'=>array('alias'=>'de','joinType'=>'INNER JOIN','select'=>array()),
+                                                                'detallesExamenes.ordenTieneExamenes'=>array('alias'=>'ote','select'=>array(),'joinType'=>'INNER JOIN'),
+                                                                'detallesExamenes.ordenTieneExamenes.orden'=>array('alias'=>'o','joinType'=>'INNER JOIN','select'=>array()),
+                                                                'detallesExamenes.ordenTieneExamenes.orden.ordenTieneGrupos'=>array('joinType'=>'INNER JOIN','alias'=>'otg','select'=>array()))
+                                                        )->count(
+                                                            array(
+                                                                'select'=>array('t.id'),
+                                                                'condition'=>'o.id=? AND de.tipo="Antibiótico" AND otg.id_grupos=?',
+                                                                'params'=>array($this->model->id,$grupo->id)
+                                                                )
+                                                        );
+            $contMultirangos = Examenes::model()->with(
+                                                            array(
+                                                                'detallesExamenes'=>array('alias'=>'de','joinType'=>'INNER JOIN','select'=>array()),
+                                                                'detallesExamenes.ordenTieneExamenes'=>array('alias'=>'ote','select'=>array(),'joinType'=>'INNER JOIN'),
+                                                                'detallesExamenes.ordenTieneExamenes.orden'=>array('alias'=>'o','joinType'=>'INNER JOIN','select'=>array()),
+                                                                'detallesExamenes.ordenTieneExamenes.orden.ordenTieneGrupos'=>array('joinType'=>'INNER JOIN','alias'=>'otg','select'=>array()))
+                                                        )->count(
+                                                            array(
+                                                                'select'=>array('t.id'),
+                                                                'condition'=>'o.id=? AND de.tipo="Multirango" AND otg.id_grupos=?',
+                                                                'params'=>array($this->model->id,$grupo->id)
+                                                                )
+                                                        );
+
+            $totalExamenesEspeciales=($contMultirangos+$contAntibioticos+$contMicroorganismos);
+            if((sizeof($grupo->grupoTiene)-$totalExamenesEspeciales)>sizeof($examenesEnGruposHijo)){
                 $this->addPage();
                 $this->setXY(1,6);
                 $this->SetFillColor(117, 163, 240);
@@ -158,8 +199,10 @@ class Imprimir extends FPDF{
                         $this->ln($y);
                         $this->SetTextColor(0,0,0);
                         $this->SetFillColor(117, 163, 240);
-                        $this->Cell(19.5,$y, $grupoExamen->examen->nombre ,1, 1, 'C', true);
-                        $this->cabeceraTabla('Normal');
+                        if($grupoExamen->examen->detallesExamenes[0]->tipo=="Normal"){
+                            $this->Cell(19.5,$y, $grupoExamen->examen->nombre ,1, 1, 'C', true);
+                            $this->cabeceraTabla('Normal');
+                        }
                         foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
                             $agregarAImpresos=false;
                             if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo == "Normal"){
@@ -199,11 +242,12 @@ class Imprimir extends FPDF{
                         
                     }
                 }
-                $this->imprimirAntibioticos($idGrupo);
-                $this->imprimirMultirango($idGrupo);
-                $this->imprimirMicroorganismo($idGrupo);
+                
             }
-            
+            $this->imprimirMicroorganismo($idGrupo);
+            $this->imprimirAntibioticos($idGrupo);
+            $this->imprimirMultirango($idGrupo);
+
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
                 $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
             }
@@ -416,7 +460,7 @@ class Imprimir extends FPDF{
                         }else{
                             $borde = 'LR';
                         }
-                        $this->Cell(6.5,$y,$multirango->multirango->nombre.': '.$multirango->rango_inferior." - ".$multirango->rango_superior,$borde, 1 , 'C');
+                        $this->Cell(6.5,$y,$multirango->multirango->nombre.': '.$multirango->rango_inferior." - ".$multirango->rango_superior,1, 1 , 'C');
                         $this->setX($x_multirango);
                     }
                     $this->setX(1);
@@ -459,8 +503,9 @@ class Imprimir extends FPDF{
         if(!$hayMicroorganismos){
             return;
         }elseif(sizeof($this->examenesImpresos)>0 && !$todosLosMicroorganismosYaImpresos){
-            $this->addPage();
-            $this->setXY(1,6);
+            $this->ln($y);
+            //$this->addPage();
+            //$this->setXY(1,6);
         }
         if (sizeof($orden->ordenTieneExamenes)>0) {
             foreach ($orden->ordenTieneExamenes as $ind=>$ordenTieneExamen) {
