@@ -1588,12 +1588,21 @@ class OrdenesController extends Controller
 	}
 
 	public function actionImprimirResultadosArchivo($id){
+		// $model = $this->loadModel($id);
+		// $pdf = new ImprimirResultadosArchivo('P','cm','letter');
+		// $pdf->AddPage();
+		// $pdf->model = $model;
+		// //$pdf->cabeceraHorizontal($model);
+		// $pdf->contenido($model);
+		// $pdf->Output();
 		$model = $this->loadModel($id);
-		$pdf = new ImprimirResultadosArchivo('P','cm','letter');
-		$pdf->AddPage();
-		$pdf->model = $model;
-		//$pdf->cabeceraHorizontal($model);
-		$pdf->contenido($model);
+		$pdf= new ImprimirResultadosArchivo('P','cm','letter');
+		$pdf->init($model);
+		$pdf->cabeceraHorizontal($model);
+		$pdf->imprimirGrupos();
+		$pdf->imprimirAntibioticos();
+		$pdf->imprimirMultirango();
+		$pdf->imprimirMicroorganismo();
 		$pdf->Output();
 	}
 
