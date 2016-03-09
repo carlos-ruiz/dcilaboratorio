@@ -198,7 +198,7 @@ $pagado=$totalOrden-$total;
 
 							
 			// Muestra los examenes que perteneces a algun grupo
-			$examenesImpresos=array();
+			
 			foreach ($ordenGruposModel as $grupote) {
 				echo '<table class="table table-striped table-bordered dataTable">';
 							echo '
@@ -207,29 +207,30 @@ $pagado=$totalOrden-$total;
 				   		<td style="color:#04C !important">Unidad de medida</td>
 				   		<td colspan="3" style="color:#04C !important">Parámetros de referencia</td></tr></thead>';
 				   		
-				$examenesImpresos=$this->imprimirGrupo($grupote->id_grupos,$model->id, false);
+				$this->examenesImpresos=$this->imprimirGrupo($grupote->id_grupos,$model->id, false);
 
 				echo "</table>";
 			}
 			echo "<br />";
 			// Muestra los examenes individuales normales
 
-			$this->imprimirNormal($model,$examenesImpresos);
+			//$this->imprimirNormal($model);
 
 			 echo "<br />";
 			// Muestra los examenes individuales antibioticos
 
-			$this->imprimirAntibiotico($model,$examenesImpresos);
+			
+			//$this->imprimirAntibiotico($model);
 
 			 echo "<br />";
 			// Muestra los examenes individuales multirangos
 
-			$this->imprimirMultirango($model,$examenesImpresos);
+			//$this->imprimirMultirango($model);
 
 			echo "<br />";
 			// Muestra los examenes individuales microorganismos
 
-			$this->imprimirMicroorganismo($model,$examenesImpresos);
+			//$this->imprimirMicroorganismo($model);
 
 							?>
 							<br />

@@ -95,8 +95,7 @@ class Imprimir extends FPDF{
                                 $this->SetFont('Times','BI',8);
                                 $this->SetTextColor(255, 0, 0);
                                  $resultado=$ordenExamen->resultado;
-                          }else{
-                             }
+                            }
 
                             $this->Cell(3.5,$heightRow,$resultado,1, 0 , 'C');
                             $this->SetTextColor(0, 0, 0);
