@@ -1459,6 +1459,8 @@ class OrdenesController extends Controller
 				
 				$ordenExamenToSave = OrdenTieneExamenes::model()->findByPk($i);
 				$ordenExamenToSave->resultado = $value['resultado'];
+				$ordenExamenToSave->ultima_edicion = date('Y-m-d H:i:s');
+				$ordenExamenToSave->usuario_ultima_edicion = Yii::app()->user->id;
 				if(isset($value['interpretacion']))
 					$ordenExamenToSave->interpretacion = $value['interpretacion'];
 				if(isset($value['comentarios']))
@@ -1473,6 +1475,7 @@ class OrdenesController extends Controller
 					//echo $value."<br />";
 					//continue;
 					$ordenGrupoToSave = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($id,$i));
+					
 					if(!isset($ordenGrupoToSave->id)){
 						$ordenGrupoToSave = new OrdenTieneGrupos;
 						$ordenGrupoToSave->id_ordenes=$id;
@@ -1482,6 +1485,9 @@ class OrdenesController extends Controller
 						$ordenGrupoToSave->usuario_ultima_edicion = Yii::app()->user->id;
 						$ordenGrupoToSave->creacion = date('Y-m-d H:i:s');
 						$ordenGrupoToSave->usuario_creacion = Yii::app()->user->id;
+					}else{
+						$ordenGrupoToSave->ultima_edicion = date('Y-m-d H:i:s');
+						$ordenGrupoToSave->usuario_ultima_edicion = Yii::app()->user->id;
 					}
 
 					$ordenGrupoToSave->comentarios_perfil = $value;

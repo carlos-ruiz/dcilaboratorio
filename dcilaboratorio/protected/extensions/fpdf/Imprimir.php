@@ -310,6 +310,8 @@ class Imprimir extends FPDF{
                         $this->SetFillColor(117, 163, 240);
                         $this->SetFont('Arial','B',8);
                         $this->SetTextColor(0,0,0);
+                        $this->Cell(12,$y,$detalleExamen->examenes->nombre,'LT',0,'C',1);
+                        $this->Cell(7.5,$y,'Fecha Resultado:'.$this->obtenerFecha($ordenTieneExamen->ultima_edicion),'TR',1,'C',1);
                         $this->Cell(19.5,$y,$detalleExamen->examenes->nombre,1,1,'C',1);
                         $this->cabeceraTabla("Antibiótico");
                         
@@ -606,9 +608,9 @@ class Imprimir extends FPDF{
 	function cabeceraHorizontal($model)
 	{
         $y = 0.5;
-        $this->SetXY(-5, 6);
+        $this->SetXY(-6, 6);
         $this->SetFont('Arial','',8);
-        $this->Cell(1,$y,'Fecha:', 0, 0);
+        $this->Cell(2,$y,'Fecha de toma:', 0, 0);
         $this->SetFont('Arial','B',8);
         $fecha = explode('-', $model->fecha_captura);
         $dia= substr($fecha[2], 0, 2);
@@ -632,11 +634,14 @@ class Imprimir extends FPDF{
         $this->Cell(3,$y,'Paciente', 0, 0);
         $this->SetFont('Arial','B',8);
         $this->Cell(10,$y,$model->ordenFacturacion->paciente->obtenerNombreCompleto(), 0, 0);
-        $this->setX(-5);
+        $this->setXY(-6, 6.5);
+        $ordenTieneExamen = $model->ordenTieneExamenes[0];
+        $this->Cell(2,$y,'Fecha Resultado: '.$this->obtenerFecha($ordenTieneExamen->ultima_edicion), 0, 0);
+        $this->setXY(-6, 7);
         $this->SetFont('Arial','',8);
         $this->Cell(1,$y,'Sexo:', 0, 0);
         $this->SetFont('Arial','B',8);
-        $this->Cell(2,$y,$model->ordenFacturacion->paciente->sexo==0?'Masculino':'Femenino', 0, 1);
+        $this->Cell(2,$y,$model->ordenFacturacion->paciente->sexo==0?'Masculino':'Femenino', 0, 0);
         $this->setX(1);
         $this->SetFont('Arial','',8);
         $this->Cell(3,$y,'Médico:', 0, 0);
@@ -705,4 +710,13 @@ class Imprimir extends FPDF{
         //Page number
         $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
 	}
+
+    public function obtenerFecha($fecha)
+    {
+        $fecha = explode('-', $fecha);
+        $dia= substr($fecha[2], 0, 2);
+        
+        $fecha = $dia.'/'.$fecha[1].'/'.$fecha[0];
+        return $fecha;
+    }
 }
