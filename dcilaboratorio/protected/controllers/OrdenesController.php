@@ -61,18 +61,18 @@ class OrdenesController extends Controller
         if(empty($perfilDePerfiles)){//Quiere decir que NO es es perfilote
             //IMPRIME NORMALES
             foreach ($grupo->grupoTiene as $grupoExamen) {
-				$agregarAImpresos=false;
         		if($grupoExamen->examen->detallesExamenes[0]->tipo=="Normal"){
            			echo '<thead><tr>
 					<th colspan="4" style="color:#1e90ff">'.$grupoExamen->examen->nombre.'</th>'.
 				'</tr></thead>';
         		}
 				
+                //CONFIGURA TEST DE LOS NORMALES
+				$agregarAImpresos=false;
                 foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
                     if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo=="Normal"){
        					$agregarAImpresos=true;
                         $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($idOrden, $detalleExamen->id));                       
-                        
                         if(isset($ordenExamen)){
 	                        $rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
 
@@ -90,18 +90,18 @@ class OrdenesController extends Controller
 	                            $styleClass="error-style";
 	                        }
 	                        echo '
-						<tr>
-							<td>'.$detalleExamen->descripcion.'</td>';
-							if($editable)
-								echo'<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenExamen->id.'][resultado]" id="OrdenTieneExamenes_'.$ordenExamen->id.'_resultado" value="'.$ordenExamen->resultado.'" type="text"></td>';
-							else {
-								echo'<td class="'.$styleClass.'">';
-								if(isset($resultado)&&strlen($resultado)>0) echo $resultado; else echo 'Sin Resultado';
-								echo '</td>';
-							}
-							echo '<td>'.$detalleExamen->unidadesMedida->nombre.'</td>'.
-							'<td>'.$rango.'</td>'.
-						'</tr>';
+							<tr>
+								<td>'.$detalleExamen->descripcion.'</td>';
+								if($editable)
+									echo'<td><input size="25" maxlength="25" class="form-control" name="OrdenTieneExamenes['.$ordenExamen->id.'][resultado]" id="OrdenTieneExamenes_'.$ordenExamen->id.'_resultado" value="'.$ordenExamen->resultado.'" type="text"></td>';
+								else {
+									echo'<td class="'.$styleClass.'">';
+									if(isset($resultado)&&strlen($resultado)>0) echo $resultado; else echo 'Sin Resultado';
+									echo '</td>';
+								}
+								echo '<td>'.$detalleExamen->unidadesMedida->nombre.'</td>'.
+								'<td>'.$rango.'</td>'.
+							'</tr>';
 						}
 					}
                 }
@@ -110,30 +110,31 @@ class OrdenesController extends Controller
 					array_push($this->examenesImpresos, $detalleExamen->id_examenes);
 				}
             }
+            echo "<tr><td colspan='4'>";
             $model = Ordenes::model()->findByPk($idOrden);
-            $this->imprimirMicroorganismo($model,$this->examenesImpresos);
+            $this->imprimirMicroorganismo($model,$editable,$idGrupo);
 			// Muestra los examenes individuales antibioticos
-			$this->imprimirAntibiotico($model,$this->examenesImpresos);
+			$this->imprimirAntibiotico($model,$editable,$idGrupo);
 			// Muestra los examenes individuales multirangos
-			$this->imprimirMultirango($model,$this->examenesImpresos);
-        	
-        		$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$grupo->id));
-                if($editable){
-                 echo '<tr><td colspan="4"><textarea class="width-all" placeholder="Comentarios: '.$grupo->nombre.'" name="comentario_perfil['.$grupo->id.']">'.
-                 	(isset($ordenTieneGrupos->comentarios_perfil)?
-                 		$ordenTieneGrupos->comentarios_perfil
-                 		:'').
-                 	'</textarea></td></tr>';
-        		}else{
-        			if(isset($ordenTieneGrupos->comentarios_perfil)){
-        				echo '<tr><td colspan="4">Comentarios sobre '.$grupo->nombre.": ".$ordenTieneGrupos->comentarios_perfil.'</td></tr>';
-        			}
-        		}
+			$this->imprimirMultirango($model,$editable,$idGrupo);
+        	echo "</td></tr>";
+    		$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$grupo->id));
+            if($editable){
+             echo '<tr><td colspan="4"><textarea class="width-all" placeholder="Comentarios: '.$grupo->nombre.'" name="comentario_perfil['.$grupo->id.']">'.
+             	(isset($ordenTieneGrupos->comentarios_perfil)?
+             		$ordenTieneGrupos->comentarios_perfil
+             		:'').
+             	'</textarea></td></tr>';
+    		}else{
+    			if(isset($ordenTieneGrupos->comentarios_perfil)){
+    				echo '<tr><td colspan="4">Comentarios sobre '.$grupo->nombre.": ".$ordenTieneGrupos->comentarios_perfil.'</td></tr>';
+    			}
+    		}
             
        
         }else{
         	$model=Ordenes::model()->findByPk($idOrden);
-        	echo '<tr><td colspan="4">'.$grupo->nombre.'</td></tr>';
+        	//echo '<tr><td colspan="4">'.$grupo->nombre.'</td></tr>';
 
             $hijos = GruposPerfiles::model()->findAll('id_grupo_padre=?', array($idGrupo));
             foreach ($hijos as $grupoHijo) {
@@ -247,12 +248,15 @@ class OrdenesController extends Controller
                     }
                 }
             }
-            $orden = Ordenes::model()->findByPk($idOrden);
-            $this->imprimirAntibiotico($orden, $this->examenesImpresos);
-            $this->imprimirMultirango($orden, $this->examenesImpresos);
-        	$this->imprimirMicroorganismo($orden, $this->examenesImpresos);
-        
-   
+            if($totalExamenesEspeciales>0){
+	            echo "<tr><td colspan='4'>";
+
+	            $orden = Ordenes::model()->findByPk($idOrden);
+	        	$this->imprimirMicroorganismo($orden,$editable,$idGrupo);
+	            $this->imprimirAntibiotico($orden,$editable,$idGrupo);
+	            $this->imprimirMultirango($orden,$editable,$idGrupo);
+	        	echo "</td></tr>";
+   			}
     		$ordenTieneGrupos = OrdenTieneGrupos::model()->find("id_ordenes=? AND id_grupos=?",array($idOrden,$idGrupo));
     		
     		if($editable){
@@ -269,8 +273,37 @@ class OrdenesController extends Controller
           } 
     }
 
-    function imprimirAntibiotico($orden,$editable=false){
+    function imprimirAntibiotico($orden,$editable=false,$idGrupo=0){
 		$anterior=0;
+		$detallesExamenDelGrupo=array();
+        $hayAntibioticos=false;
+        $todosLosAntibioticosYaImpresos=true;
+        if($idGrupo>0){
+            $grupoTiene = Grupos::model()->findByPk($idGrupo)->grupoTiene;
+            foreach ($grupoTiene as $grupoExamen) {
+                $examen=$grupoExamen->examen;
+                foreach ($examen->detallesExamenes as $detalleExamen) {
+                    array_push($detallesExamenDelGrupo, $detalleExamen->id);
+                    if($detalleExamen->tipo==="Antibiótico"){
+                        $hayAntibioticos=true;
+                        if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosAntibioticosYaImpresos=false;
+                    }
+                }
+            }
+        }else{
+            foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+                if($ordenTieneExamen->detalleExamen->tipo==="Antibiótico"){
+                    $hayAntibioticos=true;
+                    if(!in_array($ordenTieneExamen->detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosAntibioticosYaImpresos=false;
+                }
+            }
+        }
+
+        if(!$hayAntibioticos){
+            return;
+        }
 		if (sizeof($orden->ordenTieneExamenes)>0) {
 			echo "<br />";
 			echo '<table class="table table-striped table-bordered dataTable">';
@@ -322,7 +355,7 @@ class OrdenesController extends Controller
 		}
 	}
 
-	function imprimirNormal($orden,$editable=false){
+	function imprimirNormal($orden,$editable=false,$idGrupo=0){
 
 		$anterior=0;
 		if (sizeof($orden->ordenTieneExamenes)>0) {
@@ -330,7 +363,6 @@ class OrdenesController extends Controller
 			foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
 				//foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
 				$detalleExamen = $ordenTieneExamen->detalleExamen;
-				echo "<script>alert('".($this->examenesImpresos)."')</script>";
 				if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo=="Normal"){
 					
 					if($detalleExamen->examenes->id!=$anterior){
@@ -372,8 +404,38 @@ class OrdenesController extends Controller
 		}
 
 	}
-	function imprimirMultirango($orden,$editable=false){
+	function imprimirMultirango($orden,$editable=false,$idGrupo=0){
 		$anterior=0;
+		$detallesExamenDelGrupo=array();
+        $hayMultirangos = false;
+        $todosLosMultirangosImpresos = true;
+
+        if($idGrupo>0){
+            $grupoTiene = Grupos::model()->findByPk($idGrupo)->grupoTiene;
+            foreach ($grupoTiene as $grupoExamen) {
+                $examen=$grupoExamen->examen;
+                foreach ($examen->detallesExamenes as $detalleExamen) {
+                    array_push($detallesExamenDelGrupo, $detalleExamen->id);
+                    if($detalleExamen->tipo==="Multirango"){
+                        $hayMultirangos=true;
+                        if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosMultirangosImpresos=false;
+                    }
+                }
+            }
+        }else{
+            foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+                if($ordenTieneExamen->detalleExamen->tipo==="Multirango"){
+                    $hayMultirangos=true;
+                    if(!in_array($ordenTieneExamen->detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosMultirangosImpresos=false;
+                }
+            }
+        }
+
+        if(!$hayMultirangos){
+            return;
+        }
 		if (sizeof($orden->ordenTieneExamenes)>0) {
 			echo "<br />";
 			echo '<table class="table table-striped table-bordered dataTable">';
@@ -424,9 +486,38 @@ class OrdenesController extends Controller
 		}
 	}
 
-	function imprimirMicroorganismo($orden,$editable=false){
+	function imprimirMicroorganismo($orden,$editable=false,$idGrupo=0){
 
 		$anterior=0;
+		$detallesExamenDelGrupo=array();
+        $hayMicroorganismos=false;
+        $todosLosMicroorganismosYaImpresos=true;
+        if($idGrupo>0){
+            $grupoTiene = Grupos::model()->findByPk($idGrupo)->grupoTiene;
+            foreach ($grupoTiene as $grupoExamen) {
+                $examen=$grupoExamen->examen;
+                foreach ($examen->detallesExamenes as $detalleExamen) {
+                    array_push($detallesExamenDelGrupo, $detalleExamen->id);
+                    if($detalleExamen->tipo==="Microorganismo"){
+                        $hayMicroorganismos=true;
+                        if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosMicroorganismosYaImpresos=false;
+                    }
+                }
+            }
+        }else{
+            foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+                if($ordenTieneExamen->detalleExamen->tipo==="Microorganismo"){
+                    $hayMicroorganismos=true;
+                    if(!in_array($ordenTieneExamen->detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosMicroorganismosYaImpresos=false;
+                }
+            }
+        }
+
+        if(!$hayMicroorganismos){
+            return;
+        }
 		if (sizeof($orden->ordenTieneExamenes)>0) {
 			echo "<br />";
 			echo '<table class="table table-striped table-bordered dataTable">';

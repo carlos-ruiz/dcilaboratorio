@@ -60,7 +60,6 @@
 				
 			<?php
 
-			$examenesImpresos=array();
 			foreach ($ordenGruposModel as $grupote) {
 				echo '<table class="table table-striped table-bordered dataTable">';
 							echo '
@@ -69,29 +68,22 @@
 				   		<td style="color:#04C !important">Unidad de medida</td>
 				   		<td colspan="3" style="color:#04C !important">Parámetros de referencia</td></tr></thead>';
 				   		
-				$examenesImpresos=$this->imprimirGrupo($grupote->id_grupos,$model->id);
+				$this->imprimirGrupo($grupote->id_grupos,$model->id, true);
 
 				echo "</table>";
 			}
-			echo "<br />";
 			// Muestra los examenes individuales normales
 
-			$this->imprimirNormal($model,$examenesImpresos,true);
+			$this->imprimirNormal($model,true);
 
-			 echo "<br />";
 			// Muestra los examenes individuales antibioticos
+			$this->imprimirAntibiotico($model,true);
 
-			$this->imprimirAntibiotico($model,$examenesImpresos,true);
-
-			 echo "<br />";
 			// Muestra los examenes individuales multirangos
+			$this->imprimirMultirango($model,true);
 
-			$this->imprimirMultirango($model,$examenesImpresos,true);
-
-			echo "<br />";
 			// Muestra los examenes individuales microorganismos
-
-			$this->imprimirMicroorganismo($model,$examenesImpresos, true);
+			$this->imprimirMicroorganismo($model,true);
 
 			 ?>
 

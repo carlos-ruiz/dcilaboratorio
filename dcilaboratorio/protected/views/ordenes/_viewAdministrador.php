@@ -31,7 +31,7 @@ $pagado=$totalOrden-$total;
 	<div class="row">
 		<h1>Orden con folio: <?php echo (isset($model->folio)&&strlen($model->folio)>0)?$model->folio:$model->id; ?></h1>
 		
-		<div class="form-group col-md-4">
+		<div class="form-group col-md-3">
 						<?php
 							echo CHtml::link('<i class="icon-printer"></i> Recibo',Yii::app()->createUrl('ordenes/generarPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
 							echo CHtml::link('<i class="icon-printer"></i> Imprimir resultados',Yii::app()->createUrl('ordenes/imprimirResultadosPdf',array('id'=>$model->id)), array('class'=>'btn', 'target'=>'_blank'));
@@ -175,7 +175,7 @@ $pagado=$totalOrden-$total;
 						</div>
 
 
-						<div class="form-group col-md-8">
+						<div class="form-group col-md-9">
 						<div class="col-md-4">
 						<?php
 								if($total<$totalOrden) { ?>							
@@ -207,30 +207,22 @@ $pagado=$totalOrden-$total;
 				   		<td style="color:#04C !important">Unidad de medida</td>
 				   		<td colspan="3" style="color:#04C !important">Parámetros de referencia</td></tr></thead>';
 				   		
-				$this->examenesImpresos=$this->imprimirGrupo($grupote->id_grupos,$model->id, false);
+				$this->imprimirGrupo($grupote->id_grupos,$model->id, false);
 
 				echo "</table>";
 			}
-			echo "<br />";
 			// Muestra los examenes individuales normales
 
-			//$this->imprimirNormal($model);
+			$this->imprimirNormal($model);
 
-			 echo "<br />";
 			// Muestra los examenes individuales antibioticos
+			$this->imprimirAntibiotico($model);
 
-			
-			//$this->imprimirAntibiotico($model);
-
-			 echo "<br />";
 			// Muestra los examenes individuales multirangos
+			$this->imprimirMultirango($model);
 
-			//$this->imprimirMultirango($model);
-
-			echo "<br />";
 			// Muestra los examenes individuales microorganismos
-
-			//$this->imprimirMicroorganismo($model);
+			$this->imprimirMicroorganismo($model);
 
 							?>
 							<br />

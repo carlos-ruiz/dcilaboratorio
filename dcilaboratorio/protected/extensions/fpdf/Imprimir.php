@@ -71,6 +71,7 @@ class Imprimir extends FPDF{
                     $this->Cell(19.5,$y, $grupoExamen->examen->nombre ,1, 1, 'C', true);
                     $this->cabeceraTabla('Normal');
                 }
+                //CONFIGURA TEST DE LOS NORMALES
                 $agregarAImpresos=false;
                 foreach ($grupoExamen->examen->detallesExamenes as $detalleExamen) {
                     if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos)&&$detalleExamen->tipo=="Normal"){
@@ -248,7 +249,8 @@ class Imprimir extends FPDF{
             $this->imprimirMultirango($idGrupo);
 
             if($grupo->comentarios!=null && $this->nivelImpresionSubgrupo==0){
-                $this->MultiCell(19.5,$y, 'Método: '.$grupo->comentarios ,1, 'L', false);
+                $this->ln();
+                $this->MultiCell(19.5,$y, 'Método de '.$grupo->nombre.': '.$grupo->comentarios ,1, 'L', false);
             }
             $ordenTieneGrupos = OrdenTieneGrupos::model()->find('id_ordenes=? AND id_grupos=?',array($idOrden,$grupo->id));
 
