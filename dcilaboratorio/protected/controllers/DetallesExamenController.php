@@ -29,17 +29,9 @@ class DetallesExamenController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'actions'=>array('index','view','create','update','admin','delete', 'obtenerTipoExamen'),
+				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Administrador'), Usuarios::model()->obtenerPorPerfil('Quimico')),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -79,6 +71,10 @@ class DetallesExamenController extends Controller
 				$model->multirangos=$_POST['DetallesExamen']['multirangos'];
 			if(isset($_POST['DetallesExamen']['concentracion']))
 				$model->concentracion=$_POST['DetallesExamen']['concentracion'];
+			if (!isset($model->tipo) || strlen($model->tipo)<1) {
+				$examen = Examenes::model()->findByPk($model->id_examenes);
+				$model->tipo = $examen->detallesExamenes[0]->tipo;
+			}
 			if($model->save()){
 				if($model->tipo == 'Multirango'){
 					foreach ($model->multirangos as $multirangoSeleccionado) {
@@ -202,5 +198,14 @@ class DetallesExamenController extends Controller
 		}
 	}
 
-
+	public function actionObtenerTipoExamen()
+	{
+		$idExamen = $_POST['DetallesExamen']['id_examenes'];
+		$examen = Examenes::model()->findByPk($idExamen);
+		$tipo = 'ninguno';
+		if (isset($examen) && isset($examen->detallesExamenes[0])) {
+			$tipo = $examen->detallesExamenes[0]->tipo;
+		}
+		echo $tipo;
+	}
 }

@@ -2,7 +2,7 @@
 <h1>Administrar ordenes</h1>
 
 <?php 
-if(Yii::app()->user->getState('perfil')=="Administrador" || Yii::app()->user->getState('perfil')=="Basico") {
+if(Yii::app()->user->getState('perfil')=="Administrador" || Yii::app()->user->getState('perfil')=="Basico" || Yii::app()->user->getState('perfil')=="Quimico") {
 	$btnTemplate = '{view} {rate} {updateOrden}';
  }
  if(Yii::app()->user->getState('perfil')=="Doctor") {

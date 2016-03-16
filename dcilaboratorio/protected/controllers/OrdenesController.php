@@ -35,7 +35,7 @@ class OrdenesController extends Controller
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('index','view', 'create','admin','update','loadModalContent','loadModalEmail','agregarExamen','agregarGrupoExamen','ActualizarPrecios', 'calificar','datosPacienteExistente','agregarPrecio', "accesoPorCorreo", 'generarPdf', 'imprimirResultadosPdf', 'delete', 'gruposPorExamen','imprimirResultadosArchivo','actualizarFolios'),
-				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Administrador'), Usuarios::model()->obtenerPorPerfil('Basico')),
+				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Administrador'), Usuarios::model()->obtenerPorPerfil('Basico'), Usuarios::model()->obtenerPorPerfil('Quimico')),
 				),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','index','view','imprimirResultadosPdf'),

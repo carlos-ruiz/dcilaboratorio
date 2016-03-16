@@ -31,7 +31,7 @@ class PacientesController extends Controller
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('index','view', 'admin','delete','create','update'),
-				'users'=>array('admin', 'basico'),
+				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Administrador'), Usuarios::model()->obtenerPorPerfil('Basico'), Usuarios::model()->obtenerPorPerfil('Quimico')),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

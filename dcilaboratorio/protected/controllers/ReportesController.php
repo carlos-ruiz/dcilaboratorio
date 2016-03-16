@@ -30,9 +30,9 @@ class ReportesController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','generar'),
-				'users'=>array('admin', 'basico'),
-				),
+				'actions'=>array('admin', 'generar'),
+				'users'=>array_merge(Usuarios::model()->obtenerPorPerfil('Administrador'), Usuarios::model()->obtenerPorPerfil('Quimico'), Usuarios::model()->obtenerPorPerfil('Basico')),
+			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 				),
