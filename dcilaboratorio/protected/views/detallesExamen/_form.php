@@ -208,11 +208,13 @@
 
 	function mostrarCamposRespectoTipo(tipo){
 		if(tipo=="Normal" || tipo == "ninguno"){
+			cambiarNombreAInputsOcultos('antibiotico');
 			$("#camposAntibiotico").hide();
 			$("#camposMultirangos").hide();
 			$("#camposNormal").show(400);
 		}
 		else if(tipo=="Antibiótico"){
+			cambiarNombreAInputsOcultos('normal');
 			$("#camposNormal").hide();
 			$("#camposMultirangos").hide();
 			$("#camposAntibiotico").show(400);
@@ -226,6 +228,31 @@
 			$("#camposAntibiotico").hide(400);
 			$("#camposNormal").hide(400);
 			$("#camposMultirangos").hide(400);
+		}
+	}
+
+	function cambiarNombreAInputsOcultos(ocultos){
+		if (ocultos === 'antibiotico') {
+			$('#camposAntibiotico input').each(function(){
+				name = $(this).attr('name');
+				if (name.indexOf("x_") == -1) {
+					$(this).attr('name', 'x_' + name);
+				}
+			});
+			$('#camposNormal input').each(function(){
+				$(this).attr('name', $(this).attr('name').replace('x_', ''));
+			});
+		}
+		else if (ocultos === 'normal') {
+			$('#camposNormal input').each(function(){
+				name = $(this).attr('name');
+				if (name.indexOf("x_") == -1) {
+					$(this).attr('name', 'x_' + name);
+				}
+			});
+			$('#camposAntibiotico input').each(function(){
+				$(this).attr('name', $(this).attr('name').replace('x_', ''));
+			});
 		}
 	}
 </script>

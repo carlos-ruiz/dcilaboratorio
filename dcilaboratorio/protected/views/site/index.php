@@ -3,14 +3,7 @@
 
 header('Content-Type: text/html; charset=UTF-8');
 mb_internal_encoding('UTF-8');
-if(Yii::app()->user->isGuest){
-?>
 
-<?php
-}
-?>
-
-<?php
 if(Yii::app()->user->isGuest){
 
 $form=$this->beginWidget('CActiveForm', array(

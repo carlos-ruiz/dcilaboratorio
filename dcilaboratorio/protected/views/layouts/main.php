@@ -351,8 +351,7 @@ jQuery(document).ready(function() {
 	    language: 'es',
 	});
 
-	$('.page-container').css('margin-top', $('.page-header').height());
-
+	// $('.page-container').css('margin-top', $('.page-header').height());
 });
 
 </script>
