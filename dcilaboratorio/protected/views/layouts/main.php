@@ -59,7 +59,7 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
 
 	<!-- END THEME STYLES -->
-	<link rel="shortcut icon" href="fav	icon.ico"/>
+	<link rel="shortcut icon" href="<?= Yii::app()->request->baseUrl ?>/css/layout/img/favicon.png"/>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/css/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 
@@ -102,7 +102,7 @@
 		<!-- BEGIN LOGO -->
 		<div class="page-logo" >
 			<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php" >
-			<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/logoNuevo.png" alt="logo" height="65" width="65" class="logo-default"/></center>
+			<center><img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/logo.png" alt="logo" height="65" width="65" class="logo-default"/></center>
 			</a>
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->

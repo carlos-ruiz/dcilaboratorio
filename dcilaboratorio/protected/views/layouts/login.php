@@ -42,7 +42,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/css/custom.css" rel="stylesheet" type="text/css"/>
 		<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/custom/customStyle.css" rel="stylesheet" type="text/css"/>
 		<!-- END THEME STYLES -->
-		<link rel="shortcut icon" href="favicon.ico"/>
+		<link rel="shortcut icon" href="<?= Yii::app()->request->baseUrl ?>/css/layout/img/favicon.png"/>
 	</head>
 	<!-- END HEAD -->
 	<!-- BEGIN BODY -->
@@ -55,7 +55,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!-- BEGIN LOGO -->
 		<div class="side-bar col-md-3 col-sm-12">
 			<div class="row col-12" style="text-align:center;">
-				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/logoNuevo.png" height="100" alt="Laboratorio"/>
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/logo.png" height="100" alt="Laboratorio"/>
 			</div>
 			<br/>
 			<div class="">

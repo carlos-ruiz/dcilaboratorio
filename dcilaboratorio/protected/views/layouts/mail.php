@@ -6,7 +6,7 @@
 				<tr>
 					<td>
 						<a href="http://www.dcilaboratorio.com/" style="float:left;">
-							<img class="img" src="logoNuevo.png" alt="logo"  height="50" width="60" class="logo-default" alt="dcilaboratorio.com" />
+							<img class="img" src="logo.png" alt="logo"  height="50" width="60" class="logo-default" alt="dcilaboratorio.com" />
 						</a>
 					</td>
 					<td style="text-align: center;" width="100%">

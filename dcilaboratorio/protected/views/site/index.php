@@ -55,10 +55,10 @@ else{
 		<div class="col-md-3"></div>
 		<div  id="slider" class=" col-md-6 text-right">
 			<figure>
-				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab5.png" WIDTH=470 HEIGHT=365 alt="">
-				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab1.jpg" WIDTH=470 HEIGHT=365  alt="">
-				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab2.jpg" WIDTH=470 HEIGHT=365 alt="">
-				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab.jpg" WIDTH=470 HEIGHT=365 alt="">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab5.png" WIDTH=421 HEIGHT=400 alt="">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab1.jpg" WIDTH=581 HEIGHT=400  alt="">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab2.jpg" WIDTH=495 HEIGHT=400 alt="">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/css/layout/img/lab.jpg" WIDTH=474 HEIGHT=400 alt="">
 			</figure>
 		</div>
 	</div>
@@ -88,7 +88,7 @@ else{
 }
 
 body { margin: 0; }
-div#slider { overflow: hidden; }
+div#slider { overflow: hidden; padding: 0; margin-top: 20px;}
 div#slider figure img { width: 20%; float: left; }
 div#slider figure {
   position: relative;
