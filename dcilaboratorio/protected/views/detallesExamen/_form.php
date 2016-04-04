@@ -188,7 +188,7 @@
 		<div class="form-group <?php if($form->error($model,'multirangos')!=''){ echo 'has-error'; }?>">
 			<label class="control-label" for="DetallesExamen_multirangos">Seleccione los multirangos.</label>
 			<div class="input-group">
-				<?php echo $form->dropDownList($model,'multirangos',multirangos::model()->selectListMultiple(), array("class" => "form-control select2","multiple"=>"multiple")); ?>
+				<?php echo $form->dropDownList($model,'multirangos',Multirangos::model()->selectListMultiple(), array("class" => "form-control select2","multiple"=>"multiple")); ?>
 			</div>
 		</div>
 	</div>
