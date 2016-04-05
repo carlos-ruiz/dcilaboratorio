@@ -101,8 +101,28 @@ class ImprimirResultadosArchivo extends FPDF{
                         if(isset($ordenExamen)){
                             $rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
                             $heightRow = $this->GetMultiCellHeight(2.39,$y, $rango,1, 'C');
+                            $heightRowName = $this->GetMultiCellHeight(4.39, $y, $detalleExamen->descripcion, 1 , 'C');
+                            $nameBig = false;
+                            $esIgual = false;
+                            if ($heightRowName > $heightRow) {
+                                $heightRow = $heightRowName;
+                                $nameBig = true;
+                            }
+                            if ($heightRowName == $heightRow) {
+                                $esIgual = true;
+                            }
                             $this->posicionarCursor();
-                            $this->Cell(4.39,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
+                            $currentX = $this->getX();
+                            $currentY = $this->getY();
+                            $heightCellName = $y;
+                            if(!$nameBig){
+                                $heightCellName = $heightRow/$this->obtenerNumeroDeLineas($detalleExamen->descripcion, 30);
+                            }
+                            if ($esIgual) {
+                                $heightCellName = $y;
+                            }
+                            $this->MultiCell(4.39,$heightCellName,$detalleExamen->descripcion, 'B', 'C');
+                            $this->setXY($currentX+4.39, $currentY);
                             
                             $checaColor=substr($ordenExamen->resultado, 0,1);
                             if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
@@ -120,11 +140,18 @@ class ImprimirResultadosArchivo extends FPDF{
                                  $resultado=$ordenExamen->resultado;
                             }
 
-                            $this->Cell(1.74,$heightRow,$resultado,1, 0 , 'C');
+                            $this->Cell(1.74,$heightRow,$resultado,'B', 0 , 'C');
                             $this->SetTextColor(0, 0, 0);
                             $this->SetFont('Arial','',7.5);
-                            $this->Cell(1.19,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
-                            $this->MultiCell(2.39,$y, $rango,1, 'C');
+                            $this->Cell(1.19,$heightRow, $detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
+                            $heightCellRange = $y;
+                            if($nameBig){
+                                $heightCellRange = $heightRow/$this->obtenerNumeroDeLineas($rango, 15);
+                            }
+                            if ($esIgual) {
+                                $heightCellRange = $y;
+                            }
+                            $this->MultiCell(2.39,$heightCellRange, $rango,'B', 'C');
                         }
                     }
                 }
@@ -237,9 +264,30 @@ class ImprimirResultadosArchivo extends FPDF{
                                 $ordenExamen = OrdenTieneExamenes::model()->find('id_ordenes=? AND id_detalles_examen=?', array($this->model->id, $detalleExamen->id));
                                 if(isset($ordenExamen)){
                                     $rango=$ordenExamen->rango_inferior.'-'.$ordenExamen->rango_promedio.'-'.$ordenExamen->rango_superior;
-                                    $this->posicionarCursor();
                                     $heightRow = $this->GetMultiCellHeight(2.39,$y, $rango,1, 'C');
-                                    $this->Cell(4.39,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
+                                    $heightRowName = $this->GetMultiCellHeight(4.39, $y, $detalleExamen->descripcion, 1 , 'C');
+                                    $nameBig = false;
+                                    $esIgual = false;
+                                    if ($heightRowName > $heightRow) {
+                                        $heightRow = $heightRowName;
+                                        $nameBig = true;
+                                    }
+                                    else if($heightRow == $heightRowName){
+                                        $esIgual = true;
+                                    }
+
+                                    $this->posicionarCursor();
+                                    $currentX = $this->getX();
+                                    $currentY = $this->getY();
+                                    $heightCellName = $y;
+                                    if(!$nameBig){
+                                        $heightCellName = $heightRow/$this->obtenerNumeroDeLineas($detalleExamen->descripcion, 30);
+                                    }
+                                    if ($esIgual) {
+                                        $heightCellName = $y;
+                                    }
+                                    $this->MultiCell(4.39,$heightCellName,$detalleExamen->descripcion, 'B', 'C');
+                                    $this->setXY($currentX+4.39, $currentY);
                                     
                                     $checaColor=isset($ordenExamen->resultado)?substr($ordenExamen->resultado, 0,1):"";
                                     if(!isset($ordenExamen->resultado)||strlen(trim($ordenExamen->resultado))==0){
@@ -257,11 +305,18 @@ class ImprimirResultadosArchivo extends FPDF{
                                     }else{
                                         $resultado=$ordenExamen->resultado;
                                     }
-                                    $this->Cell(1.74,$heightRow,$resultado,1, 0 , 'C');
+                                    $this->Cell(1.74,$heightRow,$resultado,'B', 0 , 'C');
                                     $this->SetTextColor(0, 0, 0);
                                     $this->SetFont('Arial','',7.5);
-                                    $this->Cell(1.19,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
-                                    $this->MultiCell(2.39,$y, $rango,1, 'C');
+                                    $this->Cell(1.19,$heightRow, $detalleExamen->unidadesMedida->abreviatura,'B', 0 , 'C');
+                                    $heightCellRange = $y;
+                                    if($nameBig){
+                                        $heightCellRange = $heightRow/$this->obtenerNumeroDeLineas($rango, 15);
+                                    }
+                                    if($esIgual){
+                                        $heightCellRange = $y;
+                                    }
+                                    $this->MultiCell(2.39,$heightCellRange, $rango,'B', 'C');
                                 }
                             }
                         }
@@ -354,8 +409,8 @@ class ImprimirResultadosArchivo extends FPDF{
                     
                     $this->posicionarCursor();
                     $heightRow = $this->GetMultiCellHeight(1,$y, $ordenTieneExamen->rango_inferior,1, 'C');
-                    $this->Cell(2.73,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
-                    $this->Cell(1.24,$heightRow,$detalleExamen->concentracion ,1, 0 , 'C');
+                    $this->Cell(2.73,$heightRow,$detalleExamen->descripcion ,'B', 0 , 'C');
+                    $this->Cell(1.24,$heightRow,$detalleExamen->concentracion ,'B', 0 , 'C');
                     
                     $checaColor=substr($ordenTieneExamen->resultado, 0,1);
                     if(!isset($ordenTieneExamen->resultado)||strlen(trim($ordenTieneExamen->resultado))==0){
@@ -379,13 +434,13 @@ class ImprimirResultadosArchivo extends FPDF{
                         $interpretacion=$ordenTieneExamen->interpretacion;
                     }
 
-                    $this->Cell(1,$heightRow,$resultado,1, 0 , 'C');
-                    $this->Cell(1.74,$heightRow,$interpretacion,1, 0 , 'C');
+                    $this->Cell(1,$heightRow,$resultado,'B', 0 , 'C');
+                    $this->Cell(1.74,$heightRow,$interpretacion,'B', 0 , 'C');
                     $this->SetTextColor(0, 0, 0);
                     $this->SetFont('Arial','',7);
-                    $this->Cell(1,$y, $ordenTieneExamen->rango_inferior,1,0, 'C');
-                    $this->Cell(1,$y, $ordenTieneExamen->rango_promedio,1,0, 'C');
-                    $this->Cell(1,$y, $ordenTieneExamen->rango_superior,1,1, 'C');
+                    $this->Cell(1,$y, $ordenTieneExamen->rango_inferior,'B',0, 'C');
+                    $this->Cell(1,$y, $ordenTieneExamen->rango_promedio,'B',0, 'C');
+                    $this->Cell(1,$y, $ordenTieneExamen->rango_superior,'B',1, 'C');
 
                     
                 }
@@ -463,7 +518,7 @@ class ImprimirResultadosArchivo extends FPDF{
                     $numeroMultirangos = sizeof($ordenTieneExamen->multirango);
                     $alto = $y * $numeroMultirangos;
                     $this->posicionarCursor();
-                    $this->Cell(2.50,$alto,$detalleExamen->descripcion,1, 0 , 'C');
+                    $this->Cell(2.50,$alto,$detalleExamen->descripcion,'B', 0 , 'C');
 
                     $checaColor=substr($ordenTieneExamen->resultado, 0,1);
                     if(!isset($ordenTieneExamen->resultado)||strlen(trim($ordenTieneExamen->resultado))==0){
@@ -481,8 +536,8 @@ class ImprimirResultadosArchivo extends FPDF{
                         $resultado=$ordenTieneExamen->resultado;
                         $interpretacion=$ordenTieneExamen->interpretacion;
                     }
-                    $this->Cell(1.99,$alto,$resultado,1, 0 , 'C');
-                    $this->Cell(1.99,$alto,$interpretacion,1, 0 , 'C');
+                    $this->Cell(1.99,$alto,$resultado,'B', 0 , 'C');
+                    $this->Cell(1.99,$alto,$interpretacion,'B', 0 , 'C');
                     $x_multirango = $this->getX();
 
                     foreach($ordenTieneExamen->multirango as $ind => $multirango){
@@ -493,7 +548,7 @@ class ImprimirResultadosArchivo extends FPDF{
                         }else{
                             $borde = 'LR';
                         }
-                        $this->Cell(3.23,$y,$multirango->multirango->nombre.': '.$multirango->rango_inferior." - ".$multirango->rango_superior,1, 1 , 'C');
+                        $this->Cell(3.23,$y,$multirango->multirango->nombre.': '.$multirango->rango_inferior." - ".$multirango->rango_superior,'B', 1 , 'C');
                         $this->setX($x_multirango);
                     }
                     $this->setX(1);
@@ -564,7 +619,7 @@ class ImprimirResultadosArchivo extends FPDF{
                         array_push($this->examenesImpresos,$detalleExamen->examenes->id);
                         
                     $this->posicionarCursor();
-                    $this->Cell(2.50,$y,$detalleExamen->descripcion ,1, 0 , 'C');
+                    $this->Cell(2.50,$y,$detalleExamen->descripcion ,'B', 0 , 'C');
                     
                     $checaColor=substr($ordenTieneExamen->resultado, 0,1);
                     if(!isset($ordenTieneExamen->resultado)||strlen(trim($ordenTieneExamen->resultado))==0){
@@ -587,9 +642,9 @@ class ImprimirResultadosArchivo extends FPDF{
                         $observaciones=$ordenTieneExamen->comentarios;
                     }
 
-                    $this->Cell(1.99,$y,$resultado,1, 0 , 'C');
-                    $this->Cell(1.99,$y,$desarrollo,1, 0 , 'C');
-                    $this->Cell(3.23,$y,$observaciones,1, 1, 'C');
+                    $this->Cell(1.99,$y,$resultado,'B', 0 , 'C');
+                    $this->Cell(1.99,$y,$desarrollo,'B', 0 , 'C');
+                    $this->Cell(3.23,$y,$observaciones,'B', 1, 'C');
                     $this->SetTextColor(0, 0, 0);
                     $this->SetFont('Arial','',7.5);
                 }
@@ -1056,5 +1111,11 @@ class ImprimirResultadosArchivo extends FPDF{
         $this->SetFont('Arial','I',8);
         //Page number
         $this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
+    }
+
+    public function obtenerNumeroDeLineas($cadena, $caracateresPorLinea)
+    {
+        $totalCaracateres = strlen($cadena);
+        return ceil($totalCaracateres/$caracateresPorLinea);
     }
 }
