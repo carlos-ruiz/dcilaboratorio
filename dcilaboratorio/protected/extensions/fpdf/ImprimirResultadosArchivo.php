@@ -380,8 +380,7 @@ class ImprimirResultadosArchivo extends FPDF{
         if(!$hayAntibioticos){
             return;
         }elseif(sizeof($this->examenesImpresos)>0 && !$todosLosAntibioticosYaImpresos){
-            // $this->addPage();
-            // $this->setXY(1,6);
+            $this->ln($y);
         }
         if (sizeof($orden->ordenTieneExamenes)>0) {
             foreach ($orden->ordenTieneExamenes as $ind=>$ordenTieneExamen) {
@@ -408,8 +407,11 @@ class ImprimirResultadosArchivo extends FPDF{
                         array_push($this->examenesImpresos,$detalleExamen->examenes->id);
                     
                     $this->posicionarCursor();
-                    $heightRow = $this->GetMultiCellHeight(1,$y, $ordenTieneExamen->rango_inferior,1, 'C');
-                    $this->Cell(2.73,$heightRow,$detalleExamen->descripcion ,'B', 0 , 'C');
+                    $heightRow = $this->GetMultiCellHeight(2.73,$y, $detalleExamen->descripcion,1, 'C');
+                    $yActual = $this->getY();
+                    $xActual = $this->getX();
+                    $this->MultiCell(2.73,$y,$detalleExamen->descripcion ,'B', 'C');
+                    $this->setXY($xActual+2.73,$yActual);
                     $this->Cell(1.24,$heightRow,$detalleExamen->concentracion ,'B', 0 , 'C');
                     
                     $checaColor=substr($ordenTieneExamen->resultado, 0,1);
@@ -438,11 +440,9 @@ class ImprimirResultadosArchivo extends FPDF{
                     $this->Cell(1.74,$heightRow,$interpretacion,'B', 0 , 'C');
                     $this->SetTextColor(0, 0, 0);
                     $this->SetFont('Arial','',7);
-                    $this->Cell(1,$y, $ordenTieneExamen->rango_inferior,'B',0, 'C');
-                    $this->Cell(1,$y, $ordenTieneExamen->rango_promedio,'B',0, 'C');
-                    $this->Cell(1,$y, $ordenTieneExamen->rango_superior,'B',1, 'C');
-
-                    
+                    $this->Cell(1,$heightRow, $ordenTieneExamen->rango_inferior,'B',0, 'C');
+                    $this->Cell(1,$heightRow, $ordenTieneExamen->rango_promedio,'B',0, 'C');
+                    $this->Cell(1,$heightRow, $ordenTieneExamen->rango_superior,'B',1, 'C');
                 }
             }
 
@@ -483,6 +483,7 @@ class ImprimirResultadosArchivo extends FPDF{
         if(!$hayMultirangos){
             return;
         }elseif(sizeof($this->examenesImpresos)>0 && !$todosLosMultirangosImpresos){
+            $this->ln($y);
             // $this->addPage();
             // $this->setXY(1,6);
         }
@@ -558,7 +559,6 @@ class ImprimirResultadosArchivo extends FPDF{
     }
 
     function imprimirMicroorganismo($idGrupo=0){
-
         $anterior=0;
         $detallesExamenDelGrupo=array();
         $orden=$this->model;
@@ -619,7 +619,11 @@ class ImprimirResultadosArchivo extends FPDF{
                         array_push($this->examenesImpresos,$detalleExamen->examenes->id);
                         
                     $this->posicionarCursor();
-                    $this->Cell(2.50,$y,$detalleExamen->descripcion ,'B', 0 , 'C');
+                    $heightRow = $this->GetMultiCellHeight(2.50,$y,$detalleExamen->descripcion,1, 'C');
+                    $yActual = $this->getY();
+                    $xActual = $this->getX();
+                    $this->MultiCell(2.50,$y,$detalleExamen->descripcion ,'B', 'C');
+                    $this->setXY($xActual+2.50,$yActual);
                     
                     $checaColor=substr($ordenTieneExamen->resultado, 0,1);
                     if(!isset($ordenTieneExamen->resultado)||strlen(trim($ordenTieneExamen->resultado))==0){
@@ -642,14 +646,13 @@ class ImprimirResultadosArchivo extends FPDF{
                         $observaciones=$ordenTieneExamen->comentarios;
                     }
 
-                    $this->Cell(1.99,$y,$resultado,'B', 0 , 'C');
-                    $this->Cell(1.99,$y,$desarrollo,'B', 0 , 'C');
-                    $this->Cell(3.23,$y,$observaciones,'B', 1, 'C');
+                    $this->Cell(1.99,$heightRow,$resultado,'B', 0 , 'C');
+                    $this->Cell(1.99,$heightRow,$desarrollo,'B', 0 , 'C');
+                    $this->Cell(3.23,$heightRow,$observaciones,'B', 1, 'C');
                     $this->SetTextColor(0, 0, 0);
                     $this->SetFont('Arial','',7.5);
                 }
             }
-
         }
     }
 

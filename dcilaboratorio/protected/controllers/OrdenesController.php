@@ -1376,9 +1376,13 @@ class OrdenesController extends Controller
 					$pdf = new ImprimirResultadosEmail('P','cm','letter');
 				else
 					$pdf = new ImprimirResultadosArchivo('P','cm','letter');
-				$pdf->AddPage();
-				$pdf->model = $model;
-				$pdf->contenido($model);
+				$pdf->init($model);
+				$pdf->cabeceraHorizontal($model);
+				$pdf->imprimirGrupos();
+				$pdf->imprimirAntibioticos();
+				$pdf->imprimirMultirango();
+				$pdf->imprimirMicroorganismo();
+
 				$stream=$pdf->Output(dirname(__FILE__).DIRECTORY_SEPARATOR."../../resultados.pdf", "F");
 
 				//Definimos el email

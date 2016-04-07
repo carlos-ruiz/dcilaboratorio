@@ -181,7 +181,7 @@ class ImprimirResultados extends FPDF{
             }
         }
 
-//        $this->examenesImpresos=array();
+        //$this->examenesImpresos=array();
 
         //AQUI VA  A EMPEZAR LA IMPRESION DE RESULTADOS
         $ordenTieneGrupos = OrdenTieneGrupos::model()->findAll('id_ordenes=?',array($model->id));
@@ -409,17 +409,17 @@ class ImprimirResultados extends FPDF{
 
     function Footer()
 	{
-	//Position at 1.5 cm from bottom
-    $this->SetY(-4);
-    //Arial italic 8
-    $y=0.5;
-    $this->SetFont('Arial','B',8);
-    $this->Cell(19.5,$y,'RESPONSABLE:', 0, 1, 'C');
-    $this->Cell(19.5,$y,'QFB. MARCO ANTONIO URTIS GARCÍA', 0, 1, 'C');
-    $this->Cell(19.5,$y,'CED. PROF. 1269174', 0, 1, 'C');
-    $this->SetFont('Arial','I',8);
-    //Page number
-    $this->Cell(0,$y*4,'Página '.$this->PageNo(),0,0,'C');
+    	//Position at 1.5 cm from bottom
+        $this->SetY(-4);
+        //Arial italic 8
+        $y=0.5;
+        $this->SetFont('Arial','B',8);
+        $this->Cell(19.5,$y,'RESPONSABLE:', 0, 1, 'C');
+        $this->Cell(19.5,$y,'QFB. MARCO ANTONIO URTIS GARCÍA', 0, 1, 'C');
+        $this->Cell(19.5,$y,'CED. PROF. 1269174', 0, 1, 'C');
+        $this->SetFont('Arial','I',8);
+        //Page number
+        $this->Cell(0,$y*4,'Página '.$this->PageNo(),0,0,'C');
 	}
 }
 
