@@ -60,6 +60,8 @@ class DetallesExamenController extends Controller
 		$model=new DetallesExamen;
 		$model->genero='Indistinto';
 		$model->tipo='Normal';
+		$model->edad_maxima = null;
+		$model->edad_minima = null;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -67,6 +69,12 @@ class DetallesExamenController extends Controller
 		{
 
 			$model->attributes=$_POST['DetallesExamen'];
+			if ($model->edad_maxima == null) {
+				$model->edad_maxima = 200;
+			}
+			if ($model->edad_minima == null) {
+				$edad_minima = 0;
+			}
 			if(isset($_POST['DetallesExamen']['multirangos']))
 				$model->multirangos=$_POST['DetallesExamen']['multirangos'];
 			if(isset($_POST['DetallesExamen']['concentracion']))
