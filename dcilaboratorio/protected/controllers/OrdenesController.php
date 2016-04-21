@@ -1734,6 +1734,7 @@ class OrdenesController extends Controller
 		$pdf->init($model);
 		$pdf->cabeceraHorizontal($model);
 		$pdf->imprimirGrupos();
+		$pdf->imprimirNormales();
 		$pdf->imprimirAntibioticos();
 		$pdf->imprimirMultirango();
 		$pdf->imprimirMicroorganismo();
@@ -1753,6 +1754,7 @@ class OrdenesController extends Controller
 		$pdf->init($model);
 		$pdf->cabeceraHorizontal($model);
 		$pdf->imprimirGrupos();
+		$pdf->imprimirNormales();
 		$pdf->imprimirAntibioticos();
 		$pdf->imprimirMultirango();
 		$pdf->imprimirMicroorganismo();

@@ -262,6 +262,100 @@ class Imprimir extends FPDF{
         //imprimirAntibioticos($idGrupo);
     }
 
+    function imprimirNormales($idGrupo=0){
+        $anterior=0;
+        $detallesExamenDelGrupo=array();
+        $orden=$this->model;
+        $y=0.5;
+        $hayNormales=false;
+        $todosLosNormalesYaImpresos=true;
+        if($idGrupo>0){
+            $grupoTiene = Grupos::model()->findByPk($idGrupo)->grupoTiene;
+            foreach ($grupoTiene as $grupoExamen) {
+                $examen=$grupoExamen->examen;
+                foreach ($examen->detallesExamenes as $detalleExamen) {
+                    array_push($detallesExamenDelGrupo, $detalleExamen->id);
+                    if($detalleExamen->tipo==="Normal"){
+                        $hayNormales=true;
+                        if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosNormalesYaImpresos=false;
+                    }
+                }
+            }
+        }else{
+            foreach ($orden->ordenTieneExamenes as $ordenTieneExamen) {
+                if($ordenTieneExamen->detalleExamen->tipo==="Normal"){
+                    $hayNormales=true;
+                    if(!in_array($ordenTieneExamen->detalleExamen->id_examenes, $this->examenesImpresos))
+                            $todosLosNormalesYaImpresos=false;
+                }
+            }
+        }
+
+        if(!$hayNormales){
+            return;
+        }elseif(sizeof($this->examenesImpresos)>0 && !$todosLosNormalesYaImpresos){
+            $this->addPage();
+            $this->setXY(1,6);
+        }
+        if (sizeof($orden->ordenTieneExamenes)>0) {
+            foreach ($orden->ordenTieneExamenes as $ind=>$ordenTieneExamen) {
+                //foreach ($ordenTieneExamen->detalleExamen->examenes->detallesExamenes as $detalleExamen) {
+                $detalleExamen = $ordenTieneExamen->detalleExamen;
+
+                if(!in_array($detalleExamen->id_examenes, $this->examenesImpresos )&&$detalleExamen->tipo=="Normal" && (in_array($detalleExamen->id, $detallesExamenDelGrupo) || $idGrupo==0)){
+
+                    if($detalleExamen->examenes->id!=$anterior){
+                        $this->SetFillColor(117, 163, 240);
+                        $this->SetFont('Arial','B',8);
+                        $this->SetTextColor(0,0,0);
+                        $this->Cell(19.5,$y,$detalleExamen->examenes->nombre,1,1,'C',1);
+                        $this->cabeceraTabla("Normal");
+                        
+                    }
+                    $anterior=$detalleExamen->examenes->id;
+                    if(isset($orden->ordenTieneExamenes[$ind+1]))
+                        $siguiente = $orden->ordenTieneExamenes[$ind+1]->detalleExamen->id_examenes;
+                    else
+                        $siguiente=0;
+                    if($anterior!=$siguiente)
+                        array_push($this->examenesImpresos,$detalleExamen->examenes->id);
+                    $rango=$ordenTieneExamen->rango_inferior.'-'.$ordenTieneExamen->rango_promedio.'-'.$ordenTieneExamen->rango_superior;
+                    $heightRow = $this->GetMultiCellHeight(5,$y, $rango,1, 'C');
+                    $this->Cell(9,$heightRow,$detalleExamen->descripcion ,1, 0 , 'C');
+                    
+                    $checaColor=substr($ordenTieneExamen->resultado, 0,1);
+                    if(!isset($ordenTieneExamen->resultado)||strlen(trim($ordenTieneExamen->resultado))==0){
+                        $resultado="s/r";
+                        $interpretacion="s/i";
+                    }elseif($checaColor=="*"){//color negro y negritas
+                        $resultado=substr($ordenTieneExamen->resultado, 1);
+                        $interpretacion=($ordenTieneExamen->interpretacion);
+                    }elseif($checaColor=="#"){//color rojo
+                        $this->SetFont('Times','BI',8);
+                        $this->SetTextColor(255, 0, 0);
+                        $resultado=substr($ordenTieneExamen->resultado, 1);
+                        $interpretacion=$ordenTieneExamen->interpretacion;
+                    }elseif($ordenTieneExamen->resultado > $ordenTieneExamen->rango_superior || $ordenTieneExamen->resultado < $detalleExamen->rango_inferior){
+                        $resultado=$ordenTieneExamen->resultado;
+                        $interpretacion=$ordenTieneExamen->interpretacion;
+                        $this->SetFont('Times','BI',8);
+                        $this->SetTextColor(255, 0, 0);
+                    }else{
+                        $resultado=$ordenTieneExamen->resultado;
+                        $interpretacion=$ordenTieneExamen->interpretacion;
+                    }
+
+                    $this->Cell(3.5,$heightRow,$resultado,1, 0 , 'C');
+                    $this->SetTextColor(0, 0, 0);
+                    $this->SetFont('Arial','',7.5);
+                    $this->Cell(2,$heightRow, $detalleExamen->unidadesMedida->abreviatura,1, 0 , 'C');
+                    $this->MultiCell(5,$y, $rango,1, 'C');    
+                }
+            }
+        }
+    }
+
     function imprimirAntibioticos($idGrupo=0){
 
         $anterior=0;
