@@ -122,17 +122,12 @@ $pagado=$totalOrden-$total;
 							<?php
 
 							$aux=$model->pagos;
-							echo '<table class="table table-striped table-bordered dataTable">
-							<tr>
-								<td>Fecha</td>
-								<td>Efectivo</td>
-								<td>Tarjeta</td>
-								<td>Cheque</td>';
+							echo '<table class="table table-striped table-bordered dataTable">';
 								foreach ($aux as $pago):
-									echo '<tr><td>'.date("d/m/Y H:i", strtotime($pago->fecha)).'</td>';
-								echo '<td> $'.$pago->efectivo.'</td>';
-								echo '<td> $'.$pago->tarjeta.'</td>';
-								echo '<td> $'.$pago->cheque.'</td></tr>';
+									echo '<tr><td>Fecha</td><td>'.date("d/m/Y H:i", strtotime($pago->fecha)).'</td></tr>';
+								echo '<tr><td>Efectivo</td><td> $'.$pago->efectivo.'</td></tr>';
+								echo '<tr><td>Tarjeta</td><td> $'.$pago->tarjeta.'</td></tr>';
+								echo '<tr><td>Cheque</td><td> $'.$pago->cheque.'</td></tr>';
 								endforeach;
 								echo'</table>';
 
