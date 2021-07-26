@@ -1,1 +1,3 @@
 *.sublime-workspace
+sftp-config.json
+dcilaboratorio/protected/config/mail.php
